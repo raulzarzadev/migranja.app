@@ -1,10 +1,25 @@
 {
-    "name": "tempalte app",
-    "short_name": "my-pwa",
-    "theme_color": "#2196f3",
-    "background_color": "#2196f3",
-    "display": "fullscreen",
-    "orientation": "portrait",
-    "scope": "/",
-    "start_url": "/"
-  }
+  "name": "tempalte app",
+  "short_name": "my-pwa",
+  "theme_color": "#2196f3",
+  "background_color": "#2196f3",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "icons/icon.png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "icons/icon.png",
+      "sizes": "any"
+    },
+    {
+      "src": "icons/icon-b.png",
+      "purpose": "maskable",
+      "sizes": "512x512"
+    }
+  ]
+}
