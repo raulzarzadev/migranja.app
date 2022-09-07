@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { AppState } from "../store";
 
@@ -9,6 +9,13 @@ export interface CouterState {
 const initialState: CouterState = {
   value: 0,
 };
+
+export const incrementAsyncByAmount =
+  (amount: number) => (dispatch: Dispatch) => {
+    setTimeout(() => {
+      dispatch(incrementByAmount(amount));
+    }, 1000);
+  };
 
 export const counterSlice = createSlice({
   name: "counter",
@@ -27,7 +34,7 @@ export const counterSlice = createSlice({
 });
 
 // Actions creators are generated for each case reducer funtion
-export const { increment, decrement } = counterSlice.actions;
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 export const selectCountState = (state: AppState) => state.counter.value;
 
 export default counterSlice.reducer;

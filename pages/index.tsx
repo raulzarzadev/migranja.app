@@ -3,7 +3,12 @@ import Head from "next/head";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../components/layout";
 import { selectAuthState, setAuthState } from "../slices/authSlice";
-import { decrement, increment, selectCountState } from "../slices/couterSlice";
+import {
+  decrement,
+  increment,
+  incrementAsyncByAmount,
+  selectCountState,
+} from "../slices/couterSlice";
 
 const Home: NextPage = () => {
   const dispatch = useDispatch();
@@ -44,6 +49,12 @@ const Home: NextPage = () => {
               onClick={() => dispatch(increment())}
             >
               Increment
+            </button>
+            <button
+              className=" w-full h-10 bg-green-400/50"
+              onClick={() => dispatch(incrementAsyncByAmount(20) as any)}
+            >
+              Increment async
             </button>
             <button
               className=" w-full h-10 bg-red-400/50"
