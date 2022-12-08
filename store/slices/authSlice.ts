@@ -1,15 +1,16 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit'
 import { AppState } from '..'
 import { HYDRATE } from 'next-redux-wrapper'
+import { UserType } from '../../firebase/Users/user.model'
 
 // Type for our state
 export interface AuthState {
-  authState: boolean
+  user: UserType | null
 }
 
 // Initial state
 const initialState: AuthState = {
-  authState: false
+  user: null
 }
 
 // Actual Slice
@@ -19,14 +20,14 @@ export const authSlice = createSlice({
   reducers: {
     // Action to set the authentication status
     setAuthState(state, action) {
-      state.authState = action.payload
+      state.user = action.payload
     }
 
     // Special reducer for hydrating the state. Special case for next-redux-wrapper
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
-      console.log('HYDRATE', action.payload)
+      // console.log('HYDRATE', action.payload)
       return {
         ...state,
         ...action.payload.auth
@@ -37,6 +38,6 @@ export const authSlice = createSlice({
 
 export const { setAuthState } = authSlice.actions
 
-export const selectAuthState = (state: AppState) => state.auth.authState
+export const selectAuthState = (state: AppState) => state.auth.user
 
 export default authSlice.reducer
