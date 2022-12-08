@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth'
 
 export const Nav = () => {
   const { user } = useAuth()
+  console.log(user)
   return (
     <nav>
       <Head>
