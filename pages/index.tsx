@@ -1,20 +1,9 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { useDispatch, useSelector } from "react-redux";
-import Layout from "../components/layout";
-import { selectAuthState, setAuthState } from "../slices/authSlice";
-import {
-  decrement,
-  increment,
-  incrementAsyncByAmount,
-  selectCountState,
-} from "../slices/couterSlice";
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import Layout from '../components/layout'
+import { createUser, googleLogin, logout } from '../firebase/Users/main'
 
 const Home: NextPage = () => {
-  const dispatch = useDispatch();
-  const authState = useSelector(selectAuthState);
-  const counterValue = useSelector(selectCountState);
-
   return (
     <div>
       <Head>
@@ -23,50 +12,36 @@ const Home: NextPage = () => {
         <link rel="icon" href="/icons.icon.ico" />
       </Head>
       <Layout>
-        <div>Hola, bienvenido al tempalte de nextjs pwa tailwind</div>
+        <div className="font-bold">Nueva aplicación</div>
         <div>
-          <h1>Auth state</h1>
-          <div className="flex w-full justify-center flex-col items-center">
-            <div>{authState ? "Logged in" : "Not Logged In"}</div>
-            <button
-              className="bg-slate-500 p-2 rounded-lg  border-2 hover:border-transparent"
-              onClick={() =>
-                authState
-                  ? dispatch(setAuthState(false))
-                  : dispatch(setAuthState(true))
-              }
-            >
-              {authState ? "Logout" : "LogIn"}
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              googleLogin()
+            }}
+          >
+            Login
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              logout()
+            }}
+          >
+            logout
+          </button>
         </div>
-        <div>
-          <h1>Couter state</h1>
-          <div className="flex w-full justify-center flex-col items-center">
-            <div>The counter value is : {counterValue}</div>
-            <button
-              className=" w-full h-10 bg-green-400/50"
-              onClick={() => dispatch(increment())}
-            >
-              Increment
-            </button>
-            <button
-              className=" w-full h-10 bg-green-400/50"
-              onClick={() => dispatch(incrementAsyncByAmount(20) as any)}
-            >
-              Increment async
-            </button>
-            <button
-              className=" w-full h-10 bg-red-400/50"
-              onClick={() => dispatch(decrement())}
-            >
-              Decrement
-            </button>
-          </div>
-        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            createUser({ name: 'User name' })
+          }}
+        >
+          <input placeholder="Nombre" />
+          <button>Submit</button>
+        </form>
       </Layout>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
