@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
+import AnimalsTable from '../AnimalsTable'
 import AnimalForm from '../forms/AnimalForm'
 import SquareOption from '../SquareOption'
 import MenuOptions from './MenuOptions'
@@ -74,6 +75,7 @@ const UserHome = () => {
             }}
           />
         )}
+        {breadcrumb.animalOpt === 'showAll' && <AnimalsTable />}
       </div>
     </div>
   )

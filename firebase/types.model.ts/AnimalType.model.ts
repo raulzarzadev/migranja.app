@@ -9,4 +9,5 @@ export interface AnimalType extends TypeBase {
   gender: 'male' | 'female'
   breed: string
   type: 'ovine' | 'bovine'
+  status: string
 }

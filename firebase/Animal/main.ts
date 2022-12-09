@@ -1,3 +1,4 @@
+import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
@@ -21,3 +22,6 @@ export const getAnimal = async (itemId: string) =>
 
 export const listenAnimal = async (itemId: string, cb: CallableFunction) =>
   await AnimalsCRUD.listenItem(itemId, cb)
+
+export const getOvines = async () =>
+  await AnimalsCRUD.getUserItems([where('type', '==', 'ovine')])

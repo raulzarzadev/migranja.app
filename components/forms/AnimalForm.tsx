@@ -13,8 +13,6 @@ const AnimalForm = ({ animal }: { animal?: CreateAnimalDTO }) => {
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
   }
-  const formValues = watch()
-  console.log(formValues)
 
   return (
     <div>

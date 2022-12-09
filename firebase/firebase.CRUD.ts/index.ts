@@ -242,6 +242,28 @@ export class FirebaseCRUD {
     return res
   }
 
+  async getUserItems(filters: any[]) {
+    /**
+     * * get all documents in a collection implementing filters
+     * @param filters: where(itemField,'==','value')
+     */
+    const userId = getAuth().currentUser?.uid
+    this.validateFilters(
+      [...filters, where('userId', '==', userId)],
+      this.collectionName
+    )
+    const q: Query = query(collection(this.db, this.collectionName), ...filters)
+
+    const querySnapshot = await getDocs(q)
+    const res: any[] = []
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      // console.log(doc.id, " => ", doc.data());
+      res.push(this.normalizeItem(doc))
+    })
+    return res
+  }
+
   async listenItem(itemId: string, cb: CallableFunction) {
     if (!itemId) return console.error('invalid value', { itemId })
     const q = doc(this.db, this.collectionName, itemId)
