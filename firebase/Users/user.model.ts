@@ -1,19 +1,15 @@
-import { TypeBase } from '../TypeBase.model'
+import { ImageType } from '../types.model.ts/ImageType.model'
+import { TypeBase } from '../types.model.ts/TypeBase.model'
 
 export interface CreateUserDTO extends Partial<UserType> {}
 export interface UserType extends TypeBase {
   photoURL: any
-  image: any
+  image: string
   name?: string | null
   email: string
   isCoach?: boolean
   displayName?: string
   alias?: string | null
-  images: Image[]
+  images: ImageType[]
   emailVerified: boolean
-}
-
-interface Image {
-  url: string
-  metadata?: any
 }

@@ -26,16 +26,23 @@ import {
 } from 'firebase/firestore'
 import { Dates } from 'firebase-dates-util'
 import { es } from 'date-fns/locale'
-
+type Target = 'timestamp' | 'number' | 'date' | 'fieldDate'
+const TARGET_DATE: Target = 'number'
 export class FirebaseCRUD {
   collectionName: string
   db: any
   storage: any
-
-  constructor(collectionName = '', firebaseDB: any, firebaseStorage: any) {
+  dateTarget: 'timestamp' | 'number' | 'date' | 'fieldDate'
+  constructor(
+    collectionName = '',
+    firebaseDB: any,
+    firebaseStorage: any,
+    dateTarget: 'timestamp' | 'number' | 'date' | 'fieldDate' = 'number'
+  ) {
     this.collectionName = collectionName
     this.db = firebaseDB
     this.storage = firebaseStorage
+    this.dateTarget = dateTarget
   }
 
   // constructor(
@@ -140,9 +147,9 @@ export class FirebaseCRUD {
       ...item
     }
 
-    const itemDatesToFirebaseTimestamp = FirebaseCRUD.deepFormatFirebaseDates(
+    const itemDatesToFirebaseTimestamp = this.deepFormatFirebaseDates(
       newItem,
-      'number'
+      this.dateTarget
     )
     // console.log(itemDatesToFirebaseTimestamp);
 
@@ -151,7 +158,7 @@ export class FirebaseCRUD {
       itemDatesToFirebaseTimestamp
     )
       .then((res) =>
-        FirebaseCRUD.formatResponse(true, `${this.collectionName}_CREATED`, res)
+        this.formatResponse(true, `${this.collectionName}_CREATED`, res)
       )
       .catch((err) => console.error(err))
   }
@@ -166,8 +173,20 @@ export class FirebaseCRUD {
       userId: currentUser?.uid,
       ...newItem
     }
-    await setDoc(doc(this.db, this.collectionName, itemId), item)
-    return { ...item }
+
+    const itemDatesToFirebaseTimestamp = this.deepFormatFirebaseDates(
+      item,
+      this.dateTarget
+    )
+
+    return await setDoc(
+      doc(this.db, this.collectionName, itemId),
+      itemDatesToFirebaseTimestamp
+    )
+      .then((res) =>
+        this.formatResponse(true, `${this.collectionName}_CREATED`, res)
+      )
+      .catch((err) => console.error(err))
   }
 
   async getItem(itemId: string) {
@@ -179,20 +198,20 @@ export class FirebaseCRUD {
     const docSnap = await getDoc(ref)
     // FirebaseCRUD.showDataFrom(docSnap, this.collectionName);
 
-    return FirebaseCRUD.normalizeItem(docSnap)
+    return this.normalizeItem(docSnap)
   }
 
   async updateItem(itemId: string, item: object) {
     const newItem = {
-      ...FirebaseCRUD.deepFormatFirebaseDates(
+      ...this.deepFormatFirebaseDates(
         { ...item, updatedAt: new Date() },
-        'number'
+        this.dateTarget
       )
     }
     // console.log(newItem)
     return await updateDoc(doc(this.db, this.collectionName, itemId), newItem)
       .then((res) =>
-        FirebaseCRUD.formatResponse(true, `${this.collectionName}_UPDATED`, res)
+        this.formatResponse(true, `${this.collectionName}_UPDATED`, res)
       )
       .catch((err) => console.error(err))
   }
@@ -200,7 +219,7 @@ export class FirebaseCRUD {
   async deleteItem(itemId: string) {
     return await deleteDoc(doc(this.db, this.collectionName, itemId))
       .then((res) =>
-        FirebaseCRUD.formatResponse(true, `${this.collectionName}_DELETED`, res)
+        this.formatResponse(true, `${this.collectionName}_DELETED`, res)
       )
       .catch((err) => console.error(err))
   }
@@ -210,7 +229,7 @@ export class FirebaseCRUD {
      * * get all documents in a collection implementing filters
      * @param filters: where(itemField,'==','value')
      */
-    FirebaseCRUD.validateFilters(filters, this.collectionName)
+    this.validateFilters(filters, this.collectionName)
     const q: Query = query(collection(this.db, this.collectionName), ...filters)
 
     const querySnapshot = await getDocs(q)
@@ -218,7 +237,7 @@ export class FirebaseCRUD {
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       // console.log(doc.id, " => ", doc.data());
-      res.push(FirebaseCRUD.normalizeItem(doc))
+      res.push(this.normalizeItem(doc))
     })
     return res
   }
@@ -229,7 +248,7 @@ export class FirebaseCRUD {
     onSnapshot(q, (doc) => {
       // FirebaseCRUD.showDataFrom(doc, this.collectionName);
 
-      cb(FirebaseCRUD.normalizeItem(doc))
+      cb(this.normalizeItem(doc))
     })
   }
 
@@ -239,14 +258,14 @@ export class FirebaseCRUD {
      * @param filters[]: where(itemField,'==','value')
      */
 
-    FirebaseCRUD.validateFilters(filters, this.collectionName)
+    this.validateFilters(filters, this.collectionName)
 
     const q = query(collection(this.db, this.collectionName), ...filters)
 
     onSnapshot(q, (querySnapshot) => {
       const res: any[] = []
       querySnapshot.forEach((doc) => {
-        res.push(FirebaseCRUD.normalizeItem(doc))
+        res.push(this.normalizeItem(doc))
       })
       cb(res)
     })
@@ -259,12 +278,12 @@ export class FirebaseCRUD {
 
   // -------------------------------------------------------------> Helpers
 
-  static showDataFrom(querySnapshot: any, collection: string) {
+  showDataFrom(querySnapshot: any, collection: string) {
     const source = querySnapshot.metadata.fromCache ? 'local cache' : 'server'
     console.log('Data came from ' + source + ' collection ' + collection)
   }
 
-  static transformAnyToDate = (date: unknown): Date | null => {
+  transformAnyToDate = (date: unknown): Date | null => {
     if (!date) return null
     if (date instanceof Timestamp) {
       return date.toDate()
@@ -285,7 +304,7 @@ export class FirebaseCRUD {
     }
   }
 
-  static validateFilters(filters: any[], collectionName: string) {
+  validateFilters(filters: any[], collectionName: string) {
     if (!filters) return console.error('Should have filters implanted')
     if (!Array.isArray(filters))
       return console.error('filter is not an array', {
@@ -306,15 +325,14 @@ export class FirebaseCRUD {
     return filters
   }
 
-  static normalizeItems = (docs = []) =>
-    docs?.map((doc) => this.normalizeItem(doc))
+  normalizeItems = (docs = []) => docs?.map((doc) => this.normalizeItem(doc))
 
-  static normalizeItem = (doc: any) => {
+  normalizeItem = (doc: any) => {
     if (!doc?.exists()) return null // The document  not exist
     const data = doc.data()
     const id = doc.id
 
-    const res = FirebaseCRUD.deepFormatFirebaseDates(data, 'number')
+    const res = this.deepFormatFirebaseDates(data, this.dateTarget)
 
     return {
       id,
@@ -322,7 +340,7 @@ export class FirebaseCRUD {
     }
   }
 
-  static formatResponse = (ok: boolean, type: string, res: any) => {
+  formatResponse = (ok: boolean, type: string, res: any) => {
     if (!ok) throw new Error(type)
     const formattedType = type.toUpperCase()
     return { type: formattedType, ok, res }
@@ -330,7 +348,7 @@ export class FirebaseCRUD {
 
   // -------------------------------------------------------------> Dates
 
-  static formatDate = (
+  formatDate = (
     date: string | number | Date,
     stringFormat = 'dd/MM/yy'
   ): string => {
@@ -358,13 +376,13 @@ export class FirebaseCRUD {
       return 'NaD'
     }
   }
-  static dateToFirebase(date: string): Timestamp | null {
-    const dateFormatted = FirebaseCRUD.transformAnyToDate(date)
+  dateToFirebase(date: string): Timestamp | null {
+    const dateFormatted = this.transformAnyToDate(date)
     if (!dateFormatted) return null
     return Timestamp.fromDate(dateFormatted)
   }
 
-  static deepFormatFirebaseDates(
+  deepFormatFirebaseDates(
     object: any,
     target: 'timestamp' | 'number' | 'date' | 'fieldDate'
   ) {

@@ -1,52 +1,83 @@
-import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { Component } from 'react'
+import { googleLogin, logout } from '../../firebase/Users/main'
+import { UserType } from '../../firebase/Users/user.model'
 import useAuth from '../hooks/useAuth'
 
 export const Nav = () => {
   const { user } = useAuth()
   return (
-    <nav>
-      <div className="navbar bg-base-100">
+    <nav className="mb-2">
+      <div className="navbar bg-base-300 rounded-lg shadow-md ">
         <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+          <Link className="btn btn-ghost normal-case text-xl" href={'/'}>
+            MiRanchoDigital
+          </Link>
         </div>
-        <div className="flex-none">
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <Link href={'/'}>
-                  <Image
-                    alt="avatar"
-                    src={user?.image}
-                    width={40}
-                    height={40}
-                  />
-                </Link>
-              </div>
-            </label>
-            <ul
-              tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-            >
+
+        {user ? (
+          <UserMenu user={user} />
+        ) : (
+          <div>
+            <ul>
               <li>
-                <a className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </a>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
+                <button
+                  className="btn"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    googleLogin()
+                  }}
+                >
+                  Login with google
+                </button>
               </li>
             </ul>
           </div>
-        </div>
+        )}
       </div>
     </nav>
+  )
+}
+
+const UserMenu = ({ user }: { user: UserType }) => {
+  return (
+    <div className="flex-none">
+      <div className="dropdown dropdown-end">
+        <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+          <div className="w-10 rounded-full">
+            <Link href={'/'}>
+              <Image alt="avatar" src={user?.image} width={40} height={40} />
+            </Link>
+          </div>
+        </label>
+        <ul
+          tabIndex={0}
+          className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+        >
+          <li>
+            <a className="justify-between">
+              Profile
+              <span className="badge">New</span>
+            </a>
+          </li>
+          <li>
+            <a>Settings</a>
+          </li>
+          <li>
+            <button
+              className="border-error border "
+              onClick={(e) => {
+                e.preventDefault()
+                logout()
+              }}
+            >
+              Logout
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
   )
 }
 

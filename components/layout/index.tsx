@@ -1,3 +1,4 @@
+import { Html } from 'next/document'
 import Head from 'next/head'
 import React from 'react'
 import Nav from './nav'
@@ -6,7 +7,7 @@ export interface LayoutProps {
 }
 function Layout({ children }: LayoutProps) {
   return (
-    <div>
+    <div className="p-2">
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -32,10 +33,10 @@ function Layout({ children }: LayoutProps) {
           sizes="32x32"
         />
         <link rel="apple-touch-icon" href="/icons.icon.png"></link>
-        <meta name="theme-color" content="#317EFB" />
+        <meta name="theme-color" content="#000" />
       </Head>
       <Nav />
-      <main>{children}</main>
+      <main className="">{children}</main>
     </div>
   )
 }

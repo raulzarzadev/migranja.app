@@ -8,12 +8,13 @@ import {
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
-import { CreateUserDTO, User } from './user.model'
+import { CreateUserDTO, UserType } from './user.model'
 
 const auth = getAuth(app)
 const storage = getStorage(app)
 
-const usersCRUD = new FirebaseCRUD('users', db, storage)
+// CREATE A MAIN INSTANCE FOR USERS
+const usersCRUD = new FirebaseCRUD('users', db, storage, 'number')
 
 export const setUser = async (itemId: string, newItem: object) =>
   await usersCRUD.setItem(itemId, newItem)
@@ -31,9 +32,9 @@ export const createUserFromGoogleProvider = async (newItem: any) => {
     emailVerified,
     displayName
   }
-  await usersCRUD.setItem(uid, userFormatted)
+  return await usersCRUD.setItem(uid, userFormatted)
 }
-export const updateUser = async (itemId: string, newItem: Partial<User>) =>
+export const updateUser = async (itemId: string, newItem: Partial<UserType>) =>
   await usersCRUD.updateItem(itemId, newItem)
 
 export const deleteUser = async (itemId: string) =>
