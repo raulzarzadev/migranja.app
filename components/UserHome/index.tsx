@@ -24,7 +24,10 @@ const UserHome = () => {
               })
             }}
           >
-            <SquareOption selected={true} option={{ title: option.label }} />
+            <SquareOption
+              selected={breadcrumb.type === option.id}
+              option={{ title: option.label }}
+            />
           </button>
         ))}
       </div>
