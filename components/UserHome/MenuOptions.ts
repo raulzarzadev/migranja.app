@@ -26,12 +26,12 @@ const ANIMALS: MenuOptionType = {
       id: 'ovine',
       label: 'Borregos',
       options: COMMON_OPS
-    },
-    {
-      id: 'bovine',
-      label: 'Vacas',
-      options: COMMON_OPS
     }
+    // {
+    //   id: 'bovine',
+    //   label: 'Vacas',
+    //   options: COMMON_OPS
+    // }
   ]
 }
 
