@@ -10,4 +10,13 @@ export interface AnimalType extends TypeBase {
   breed: string
   type: 'ovine' | 'bovine'
   status: string
+  parents?: ParentsType
+}
+export interface ParentType
+  extends Pick<AnimalType, 'earring' | 'breed' | 'birthday' | 'gender'> {
+  inTheFarm: boolean
+}
+export interface ParentsType {
+  father?: ParentType | null
+  mother?: ParentType | null
 }

@@ -7,6 +7,7 @@ import {
   getSortedRowModel
 } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
+import { myFormatDate } from 'utils/dates/myDateUtils'
 import { getOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 
@@ -26,7 +27,12 @@ const AnimalsTable = () => {
       header: 'Sexo'
     }),
     columnHelper.accessor('birthday', {
-      header: 'Nac'
+      header: 'Nac',
+      cell: (props) => (
+        <span>
+          {props.getValue() ? myFormatDate(props.getValue(), 'dd-MMM-yy') : '-'}
+        </span>
+      )
     }),
     columnHelper.accessor('status', {
       header: 'Status'
@@ -46,8 +52,8 @@ const AnimalsTable = () => {
   console.log(data)
 
   return (
-    <div>
-      <table className="mx-auto">
+    <div className="p-2">
+      <table className="mx-aut table table-compact w-full ">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -78,7 +84,7 @@ const AnimalsTable = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr key={row.id} className="hover cursor-pointer">
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -25,3 +25,15 @@ export const listenAnimal = async (itemId: string, cb: CallableFunction) =>
 
 export const getOvines = async () =>
   await AnimalsCRUD.getUserItems([where('type', '==', 'ovine')])
+
+export const getMaleOvines = async () =>
+  await AnimalsCRUD.getUserItems([
+    where('type', '==', 'ovine'),
+    where('gender', '==', 'Male')
+  ])
+
+export const getFemaleOvines = async () =>
+  await AnimalsCRUD.getUserItems([
+    where('type', '==', 'ovine'),
+    where('gender', '==', 'Female')
+  ])
