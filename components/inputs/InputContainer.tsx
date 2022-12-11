@@ -94,7 +94,6 @@ const InputContainer = ({
             />
           )}
           {type === 'radio' && <input type={'radio'} />}
-          {console.log(error)}
 
           {error?.type && (
             <span className="label-text text-alt text-error ">

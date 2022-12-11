@@ -8,6 +8,19 @@ import AnimalParentsForm from './AnimalParentsForm'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import { CreateAnimalDTO } from 'firebase/Animal/animal.model'
 
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+const schema = yup
+  .object()
+  .shape({
+    earring: yup
+      .string()
+      .required('Este campo es necesario*')
+      .min(3, 'Al menos 3 letras')
+  })
+  .required()
+
 export const AnimalForm = ({
   animal,
   setEditing
@@ -17,26 +30,27 @@ export const AnimalForm = ({
 }) => {
   const [loading, setLoading] = useState(false)
   const methods = useForm({
+    resolver: yupResolver(schema),
     defaultValues: {
-      ...animal,
       birthday: new Date(),
       gender: 'female',
       birthType: '1',
+      lote: null,
       weight: {
         atBirth: null,
         atWeaning: null,
         at6Month: null,
         at12Month: null,
         ...animal.weight
-      }
+      },
+      ...animal
     }
   })
-  const { watch, register, handleSubmit, reset } = methods
+  const { watch, register, handleSubmit, reset, setValue } = methods
   const { id, parents, images } = watch()
 
-  // console.log(watch())
   const onSubmit = (data: any) => {
-    console.log(data)
+    //console.log(data)
     setLoading(true)
     if (id) {
       updateAnimal(id, data)
@@ -48,7 +62,10 @@ export const AnimalForm = ({
         })
     } else {
       createAnimal(data)
-        .then((res: any) => console.log(res))
+        .then(({ res }: any) => {
+          setValue('id', res?.id)
+          console.log(res)
+        })
         .catch((err: any) => console.log(err))
         .finally(() => {
           {
@@ -116,12 +133,7 @@ export const AnimalForm = ({
                 </div>
               </div>
               <div className="text-right ">
-                <InputContainer
-                  name="earring"
-                  type="text"
-                  label="Arete"
-                  rules={{ required: 'Este campo es necesario*', minLength: 3 }}
-                />
+                <InputContainer name="earring" type="text" label="Arete" />
                 <InputContainer name="lote" type="text" label="Lote" />
               </div>
             </header>

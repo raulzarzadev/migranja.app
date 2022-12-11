@@ -4,17 +4,18 @@ import {
   getCoreRowModel,
   useReactTable,
   SortingState,
-  getSortedRowModel
+  getSortedRowModel,
+  getPaginationRowModel,
+  FilterFn
 } from '@tanstack/react-table'
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
-import { FemaleOptions, MaleOptions } from 'components/forms/AnimalForm'
 import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { getOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
+import { rankItem } from '@tanstack/match-sorter-utils'
 
-// TODO crear tarjeta de animal y editarla en el mismo lugar
 const AnimalsTable = ({
   onRowClick,
   selectedRow
@@ -25,10 +26,12 @@ const AnimalsTable = ({
   const [data, setData] = useState<AnimalType[]>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
+
   useEffect(() => {
     getOvines().then((res: AnimalType[]) => setData(res))
     return () => setData([])
   }, [])
+
   const columns = [
     columnHelper.accessor('earring', {
       header: 'Arete'
@@ -88,21 +91,81 @@ const AnimalsTable = ({
       )
     })
   ]
+  const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+    // Rank the item
+    const itemRank = rankItem(row.getValue(columnId), value)
+
+    // Store the itemRank info
+    addMeta({
+      itemRank
+    })
+
+    // Return if the item should be filtered in/out
+    return itemRank.passed
+  }
+  const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
     data,
     columns,
     state: {
-      sorting
+      sorting,
+      globalFilter
     },
+    filterFns: {
+      fuzzy: fuzzyFilter
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onSortingChange: setSorting
+    onSortingChange: setSorting,
+    getPaginationRowModel: getPaginationRowModel()
   })
 
   console.log(data)
+  function DebouncedInput({
+    value: initialValue,
+    onChange,
+    debounce = 500,
+    ...props
+  }: {
+    value: string | number
+    onChange: (value: string | number) => void
+    debounce?: number
+  } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+    const [value, setValue] = useState(initialValue)
+
+    useEffect(() => {
+      setValue(initialValue)
+    }, [initialValue])
+
+    useEffect(() => {
+      const timeout = setTimeout(() => {
+        onChange(value)
+      }, debounce)
+
+      return () => clearTimeout(timeout)
+    }, [value])
+
+    return (
+      <input
+        {...props}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    )
+  }
 
   return (
     <div className="p-2">
+      <div className="w-full justify-center flex my-2">
+        <DebouncedInput
+          value={globalFilter ?? ''}
+          onChange={(value) => setGlobalFilter(String(value))}
+          className=" input input-sm"
+          placeholder="buscar..."
+        />
+      </div>
       <table className="mx-aut table table-compact w-full  ">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -153,6 +216,45 @@ const AnimalsTable = ({
         </tbody>
       </table>
       <div className="h-4" />
+      <div className="flex flex-col items-center gap-2 mx-auto justify-center">
+        <span className="flex items-center gap-1">
+          <div>Página</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} de{' '}
+            {table.getPageCount()}
+          </strong>
+        </span>
+        <div>
+          {/* <button
+            className="btn btn-outline btn-sm btn-square"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <Icon name="left" size="xs" />
+          </button> */}
+          <button
+            className="btn btn-outline btn-sm btn-square mx-2"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <Icon name="left" size="xs" />
+          </button>
+          <button
+            className="btn btn-outline btn-sm btn-square mx-2"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <Icon name="right" size="xs" />
+          </button>
+          {/* <button
+            className="btn btn-outline btn-sm btn-square"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            {'>>'}
+          </button> */}
+        </div>
+      </div>
     </div>
   )
 }
