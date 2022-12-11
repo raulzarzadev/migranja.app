@@ -29,11 +29,11 @@ export const getOvines = async () =>
 export const getMaleOvines = async () =>
   await AnimalsCRUD.getUserItems([
     where('type', '==', 'ovine'),
-    where('gender', '==', 'Male')
+    where('gender', '==', 'male')
   ])
 
 export const getFemaleOvines = async () =>
   await AnimalsCRUD.getUserItems([
     where('type', '==', 'ovine'),
-    where('gender', '==', 'Female')
+    where('gender', '==', 'female')
   ])

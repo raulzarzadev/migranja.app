@@ -6,12 +6,22 @@ import {
   SortingState,
   getSortedRowModel
 } from '@tanstack/react-table'
+import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
+import { FemaleOptions, MaleOptions } from 'components/forms/AnimalForm'
+import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { getOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 
-const AnimalsTable = () => {
+// TODO crear tarjeta de animal y editarla en el mismo lugar
+const AnimalsTable = ({
+  onRowClick,
+  selectedRow
+}: {
+  onRowClick?: (id: string | null) => void
+  selectedRow?: string
+}) => {
   const [data, setData] = useState<AnimalType[]>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
@@ -24,7 +34,8 @@ const AnimalsTable = () => {
       header: 'Arete'
     }),
     columnHelper.accessor('gender', {
-      header: 'Sexo'
+      header: 'Sexo',
+      cell: (props) => <span>{GENDER_OPTIONS[props.getValue()]?.label}</span>
     }),
     columnHelper.accessor('birthday', {
       header: 'Nac',
@@ -36,6 +47,45 @@ const AnimalsTable = () => {
     }),
     columnHelper.accessor('status', {
       header: 'Status'
+    }),
+
+    columnHelper.accessor('parents', {
+      header: 'Padres',
+      cell: (props) => (
+        <span className="flex w-full justify-between">
+          <button
+            className="btn btn-ghost btn-sm btn-circle"
+            onClick={(e) => {
+              e.stopPropagation()
+              e.preventDefault()
+              onRowClick?.(props.getValue()?.father?.earring ?? null)
+            }}
+          >
+            <span className="text-info">
+              <Icon size="xs" name="male" />
+            </span>
+            <span className="truncate">
+              {props.getValue()?.father?.earring}
+            </span>
+          </button>
+
+          <button
+            className="btn btn-ghost btn-sm btn-circle"
+            onClick={(e) => {
+              e.stopPropagation()
+              e.preventDefault()
+              onRowClick?.(props.getValue()?.mother?.earring ?? null)
+            }}
+          >
+            <span className="text-pink-00">
+              <Icon size="xs" name="female" />
+            </span>
+            <span className="truncate">
+              {props.getValue()?.mother?.earring}
+            </span>
+          </button>
+        </span>
+      )
     })
   ]
   const table = useReactTable({
@@ -53,7 +103,7 @@ const AnimalsTable = () => {
 
   return (
     <div className="p-2">
-      <table className="mx-aut table table-compact w-full ">
+      <table className="mx-aut table table-compact w-full  ">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -84,11 +134,19 @@ const AnimalsTable = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="hover cursor-pointer">
+            <tr
+              key={row.id}
+              className={`hover cursor-pointer  ${
+                selectedRow === row.original.id ?? 'bg-black'
+              }`}
+              onClick={() => {
+                onRowClick?.(row.original.id)
+              }}
+            >
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <th key={cell.id} className="font-normal">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                </th>
               ))}
             </tr>
           ))}

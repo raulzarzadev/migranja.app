@@ -11,7 +11,28 @@ export interface AnimalType extends TypeBase {
   type: 'ovine' | 'bovine'
   status: string
   parents?: ParentsType
+  weight?: AnimalWeight
+  lote: string
+  birthType: number
 }
+
+export interface GenderOptions {
+  id?: 'male' | 'female'
+  icon?: GenderOptions['id']
+  value?: GenderOptions['id']
+  gender?: AnimalType['gender']
+  label?: 'Macho' | 'Hembra'
+  parentLabel?: 'Padre' | 'Madre'
+  en_parent: 'mother' | 'father'
+}
+
+export interface AnimalWeight {
+  atBirth?: string | number
+  atWeaning?: string | number // Destete
+  at6Month: string | number
+  at12Month: string | number
+}
+
 export interface ParentType
   extends Pick<AnimalType, 'earring' | 'breed' | 'birthday' | 'gender'> {
   inTheFarm: boolean

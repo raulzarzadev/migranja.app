@@ -409,7 +409,8 @@ export class FirebaseCRUD {
     target: 'timestamp' | 'number' | 'date' | 'fieldDate'
   ) {
     return Dates.deepFormatObjectDates(object, target, {
-      includeFields: ['expireAt', 'validFrom']
+      includeFields: ['expireAt', 'validFrom', 'birthday'],
+      avoidFields: ['birth']
     })
   }
 }

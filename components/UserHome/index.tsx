@@ -3,15 +3,29 @@ import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import AnimalsTable from '../AnimalsTable'
 import AnimalForm from '../forms/AnimalForm'
 import SquareOption from '../SquareOption'
+import AnimalCard from './AnimalCard'
 import MenuOptions from './MenuOptions'
 
 interface BreadCrumb {
   type?: string
   animal?: string
   animalOpt?: string
+  animalSelected?: string
 }
+type BreadCrumbProps = 'type' | 'animal' | 'animalOpt' | 'animalSelected'
+
 const UserHome = () => {
   const [breadcrumb, setBreadcrumb] = useState<BreadCrumb>({})
+  const handleRowClick = (id: string) => {
+    setBreadcrumb({ ...breadcrumb, animalSelected: id })
+  }
+
+  const handleDeleteBreadcrumbProp = (prop: BreadCrumbProps) => {
+    const aux = { ...breadcrumb }
+    delete aux[prop]
+    setBreadcrumb({ ...aux })
+  }
+
   return (
     <div className="flex gap-2">
       <div className="flex flex-col gap-2">
@@ -58,6 +72,7 @@ const UserHome = () => {
             <button
               key={option.id}
               onClick={() => {
+                handleDeleteBreadcrumbProp('animalSelected')
                 setBreadcrumb((state) => {
                   return { ...state, animalOpt: option.id }
                 })
@@ -70,16 +85,33 @@ const UserHome = () => {
             </button>
           ))}
       </div>
-      <div className="bg-base-300 w-full rounded-lg shadow-md">
+
+      <div
+        className={`bg-base-300 rounded-lg shadow-md overflow-x-auto ${
+          breadcrumb?.animalSelected ? 'w-1/8' : 'w-full'
+        }`}
+      >
         {breadcrumb.animalOpt === 'add' && (
-          <AnimalForm
-            animal={{
-              type: breadcrumb.animal as AnimalType['type']
-            }}
+          <div className="p-2">
+            <AnimalForm
+              animal={{
+                type: breadcrumb.animal as AnimalType['type']
+              }}
+            />
+          </div>
+        )}
+        {breadcrumb.animalOpt === 'showAll' && (
+          <AnimalsTable
+            onRowClick={(id) => handleRowClick(id)}
+            selectedRow={breadcrumb?.animalSelected}
           />
         )}
-        {breadcrumb.animalOpt === 'showAll' && <AnimalsTable />}
       </div>
+      {breadcrumb?.animalSelected && (
+        <div className="bg-base-300 w-full rounded-lg shadow-md">
+          <AnimalCard animalId={breadcrumb?.animalSelected} />
+        </div>
+      )}
     </div>
   )
 }
