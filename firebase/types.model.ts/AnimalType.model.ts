@@ -1,9 +1,9 @@
 import { ImageType } from './ImageType.model'
-import { TypeBase } from './TypeBase.model'
+import { DateType, TypeBase } from './TypeBase.model'
 
 export interface AnimalType extends TypeBase {
   name: string
-  birthday: string | Date | number
+  birthday: DateType
   earring: string
   images: ImageType[]
   gender: 'male' | 'female'
@@ -14,6 +14,7 @@ export interface AnimalType extends TypeBase {
   weight?: AnimalWeight
   lote: string | null
   birthType: number | string
+  joinedAt: DateType
 }
 
 export interface GenderOptions {

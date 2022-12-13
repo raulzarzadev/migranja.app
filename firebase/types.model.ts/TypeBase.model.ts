@@ -3,3 +3,5 @@ export interface TypeBase {
   createdAt: string
   updatedAt: string
 }
+
+export type DateType = 'string' | 'number' | Date
