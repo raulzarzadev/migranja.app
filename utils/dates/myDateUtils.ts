@@ -1,16 +1,32 @@
 import { format, formatDistanceStrict } from 'date-fns'
+import { es } from 'date-fns/locale'
 
 type FormatType = 'input-datetime' | 'input' | string
-
+interface Options {
+  dateOnly?: boolean
+}
 export const myFormatDate = (
   date: string | number | Date | undefined,
-  strFormat: 'input-datetime' | 'input' | string
+  strFormat: 'input-datetime' | 'input' | string,
+  options?: Options
 ): string => {
   if (!date) {
     console.error('No date')
     return ''
   }
-  const res = format(validDateAsNumber(date), choseDateFormat(strFormat))
+  const dateOnly = options?.dateOnly
+
+  // format date without timezone to manage properly inputs
+  const dt = new Date(date)
+  const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000)
+
+  const res = format(
+    validDateAsNumber(dateOnly ? dtDateOnly : date),
+    choseDateFormat(strFormat),
+    {
+      locale: es
+    }
+  )
   return res
 }
 

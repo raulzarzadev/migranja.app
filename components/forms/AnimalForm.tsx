@@ -11,6 +11,8 @@ import { CreateAnimalDTO } from 'firebase/Animal/animal.model'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
+import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
+import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const schema = yup
   .object()
@@ -35,6 +37,9 @@ export const AnimalForm = ({
     defaultValues: {
       birthday: new Date(),
       gender: 'female',
+      joinedAt: new Date(),
+      breed: '',
+      name: '',
       birthType: 1,
       lote: null,
       weight: {
@@ -50,7 +55,7 @@ export const AnimalForm = ({
   })
 
   const { watch, handleSubmit, reset, setValue } = methods
-  const { id, parents, images } = watch()
+  const { id, images } = watch()
   const onSubmit = (data: any) => {
     //console.log(data)
     setLoading(true)
@@ -85,6 +90,12 @@ export const AnimalForm = ({
         .catch((err) => console.log(err))
   }
 
+  const dt = new Date(watch('joinedAt'))
+
+  const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000)
+
+  console.log(myFormatDate(dtDateOnly, 'dd/MM/yyyy'))
+
   return (
     <div>
       <FormProvider {...methods}>
@@ -98,7 +109,7 @@ export const AnimalForm = ({
                     title={'Eliminar animal'}
                     buttonLabel={null}
                     openButtonProps={{
-                      className: 'btn btn-error btn-circle btn-sm text-'
+                      className: ' btn btn-error btn-circle btn-sm text-'
                     }}
                   />
                 )}
@@ -151,7 +162,7 @@ export const AnimalForm = ({
             </div>
           </div>
           <div>
-            <header className="flex w-full justify-between">
+            <header className="flex w-full justify-between flex-col sm:flex-row">
               <div>
                 Detalles de animal
                 <div>
@@ -160,9 +171,35 @@ export const AnimalForm = ({
                   </div>
                 </div>
               </div>
-              <div className="text-right ">
-                <InputContainer name="earring" type="text" label="Arete" />
-                <InputContainer name="lote" type="text" label="Lote" />
+              <div>
+                <div className="text-right flex flex-wrap justify-end">
+                  <div className="w-[100px]">
+                    <InputContainer name="earring" type="text" label="Arete" />
+                  </div>
+                  <div className="w-[100px]">
+                    <InputContainer name="name" type="text" label="Nombre" />
+                  </div>
+                  <div className="w-[100px]">
+                    <InputContainer name="lote" type="text" label="Lote" />
+                  </div>
+                </div>
+                <div className="flex  justify-end flex-wrap text-end">
+                  <div className="w-[100px]">
+                    <InputContainer
+                      label="Raza"
+                      type="select"
+                      name="breed"
+                      selectOptions={sheep_breeds}
+                    />
+                  </div>
+                  <div className="w-[140px]">
+                    <InputContainer
+                      type="date"
+                      name="joinedAt"
+                      label="Incorporación"
+                    />
+                  </div>
+                </div>
               </div>
             </header>
             <main>

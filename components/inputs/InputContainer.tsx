@@ -1,3 +1,4 @@
+import { tr } from 'date-fns/locale'
 import { Controller, ControllerProps } from 'react-hook-form'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -59,7 +60,9 @@ const InputContainer = ({
               onBlur={onBlur}
               name={name}
               ref={ref}
-              value={myFormatDate(value || new Date(), 'input')}
+              value={myFormatDate(value || new Date(), 'input', {
+                dateOnly: true
+              })}
             />
           )}
           {type === 'select' && (

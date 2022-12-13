@@ -56,7 +56,10 @@ const Card = ({
     images,
     birthday,
     birthType,
-    weight
+    weight,
+    breed,
+    joinedAt,
+    name
   } = animal
 
   const genderLabel: Record<AnimalType['gender'], GenderOptions> = {
@@ -90,11 +93,30 @@ const Card = ({
             <span>Arete:</span>
             <span className="text-2xl font-bold">{earring}</span>
           </div>
-
-          <div>
-            <span>lote:</span>{' '}
-            <span className="text-2xl font-bold">{lote}</span>
-          </div>
+          {lote && (
+            <div>
+              <span>lote:</span>{' '}
+              <span className="text-2xl font-bold">{lote}</span>
+            </div>
+          )}
+          {name && (
+            <div>
+              <span>Nombre:</span> <span className=" font-bold">{name}</span>
+            </div>
+          )}
+          {breed && (
+            <div>
+              <span>Raza:</span> <span className=" font-bold">{breed}</span>
+            </div>
+          )}
+          {joinedAt && (
+            <div>
+              <span>Incorporado:</span>{' '}
+              <span className=" font-bold">
+                {myFormatDate(joinedAt, 'dd MMM yy')}
+              </span>
+            </div>
+          )}
         </div>
       </header>
       <main>
@@ -119,11 +141,13 @@ const Card = ({
           </div>
           <div className="w-1/2 flex justify-center items-center">
             <div className="w-full">
-              <figure className="border w-full aspect-video">
+              <figure className=" w-full aspect-video flex justify-center items-center bg-base-200 shadow-sm">
                 {images?.[0] ? (
                   <Image src={images[0].url} fill alt="animal-photo" />
                 ) : (
-                  <></>
+                  <>
+                    <Icon name="camera" />
+                  </>
                 )}
               </figure>
             </div>
