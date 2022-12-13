@@ -62,7 +62,7 @@ const ParentForm = ({
 
   const { parentLabel, en_parent, icon } = GENDER_OPTIONS[gender]
   const isPartOfTheFarm = watch(`inTheFarm`)
-  const [parents, setParents] = useState([])
+  const [parents, setParents] = useState<AnimalType[]>([])
 
   const formatParentsAsOptions = (parents: AnimalType[]): SelectOption[] => {
     return parents.map((animal) => {
@@ -75,14 +75,14 @@ const ParentForm = ({
       unregister('breed')
       unregister('birthday')
       if (gender === 'female') {
-        getFemaleOvines().then((res) => setParents(res))
+        getFemaleOvines().then((res: AnimalType[]) => setParents(res))
       } else {
-        getMaleOvines().then((res) => setParents(res))
+        getMaleOvines().then((res: AnimalType[]) => setParents(res))
       }
     }
-  }, [isPartOfTheFarm])
+  }, [gender, isPartOfTheFarm, unregister])
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     // console.log(data)
     setValue?.(data)
     setOpenModal(false)

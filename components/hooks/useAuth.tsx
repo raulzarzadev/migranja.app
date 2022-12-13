@@ -11,7 +11,7 @@ const useAuth = () => {
     authStateChanged((user: UserType) => {
       dispatch(setAuthState(user))
     })
-  }, [])
+  }, [dispatch])
 
   return { user }
 }

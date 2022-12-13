@@ -12,15 +12,17 @@ import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import { getOvines, listenOvines } from '../../firebase/Animal/main'
+import { listenOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 
 const AnimalsTable = ({
   onRowClick,
-  selectedRow
+  selectedRow,
+  onParentClick
 }: {
-  onRowClick?: (id: string | null) => void
+  onRowClick?: (id: string) => void
+  onParentClick?: (id: string | null) => void
   selectedRow?: string
 }) => {
   const [data, setData] = useState<AnimalType[]>([])
@@ -61,7 +63,7 @@ const AnimalsTable = ({
             onClick={(e) => {
               e.stopPropagation()
               e.preventDefault()
-              onRowClick?.(props.getValue()?.father?.earring ?? null)
+              onParentClick?.(props.getValue()?.father?.earring ?? null)
             }}
           >
             <span className="text-info">
@@ -77,7 +79,7 @@ const AnimalsTable = ({
             onClick={(e) => {
               e.stopPropagation()
               e.preventDefault()
-              onRowClick?.(props.getValue()?.mother?.earring ?? null)
+              onParentClick?.(props.getValue()?.mother?.earring ?? null)
             }}
           >
             <span className="text-pink-00">
@@ -145,6 +147,7 @@ const AnimalsTable = ({
       }, debounce)
 
       return () => clearTimeout(timeout)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
 
     return (
@@ -209,7 +212,6 @@ const AnimalsTable = ({
                 onRowClick?.(row.original.id)
               }}
             >
-              {console.log(row.original.id === selectedRow && '*')}
               {row.getVisibleCells().map((cell) => (
                 <th key={cell.id} className="font-normal">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

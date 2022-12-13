@@ -3,7 +3,10 @@ import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
 
 import Icon from 'components/Icon'
-import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
+import {
+  AnimalType,
+  GenderOptions
+} from 'firebase/types.model.ts/AnimalType.model'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
@@ -13,7 +16,7 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const [editing, setEditing] = useState<boolean>(false)
   useEffect(() => {
     if (animalId) {
-      getAnimal(animalId).then((res) => setAnimal(res))
+      getAnimal(animalId).then((res: any) => setAnimal(res))
     }
 
     return () => {

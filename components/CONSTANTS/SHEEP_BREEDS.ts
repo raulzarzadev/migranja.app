@@ -1,4 +1,4 @@
-export default [
+const sheep_breeds = [
   {
     label: 'Dorper',
     value: 'dorper'
@@ -8,3 +8,4 @@ export default [
     value: 'mix'
   }
 ]
+export default sheep_breeds

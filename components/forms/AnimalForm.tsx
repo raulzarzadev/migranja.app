@@ -79,10 +79,10 @@ export const AnimalForm = ({
   }
 
   const handleDelete = () => {
-    console.log('delete')
-    deleteAnimal(id)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
+    id &&
+      deleteAnimal(id)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
   }
 
   return (

@@ -71,6 +71,8 @@ const TEAM = {
     }
   ]
 }
-export default {
+const AnimalOptions = {
   options: [ANIMALS, EVENTS, TEAM]
 }
+
+export default AnimalOptions
