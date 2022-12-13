@@ -41,10 +41,10 @@ const ModalDelete = ({
         {...openButtonProps}
         className={` ${
           openButtonProps?.className ??
-          ' flex justify-evenly btn btn-outline border-error '
+          ' flex justify-evenly btn btn-outline border-error  text-error'
         }`}
       >
-        <span className="text-error">
+        <span className="">
           <Icon name="delete" />{' '}
         </span>
         {buttonLabel ?? <span>{buttonLabel}</span>}

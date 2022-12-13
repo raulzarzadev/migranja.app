@@ -12,7 +12,7 @@ import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import { getOvines } from '../../firebase/Animal/main'
+import { getOvines, listenOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 
@@ -28,7 +28,7 @@ const AnimalsTable = ({
   const columnHelper = createColumnHelper<AnimalType>()
 
   useEffect(() => {
-    getOvines().then((res: AnimalType[]) => setData(res))
+    listenOvines((res: AnimalType[]) => setData(res))
     return () => setData([])
   }, [])
 
@@ -156,6 +156,8 @@ const AnimalsTable = ({
     )
   }
 
+  console.log(selectedRow)
+
   return (
     <div className="p-2">
       <div className="w-full justify-center flex my-2">
@@ -199,13 +201,15 @@ const AnimalsTable = ({
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className={`hover cursor-pointer  ${
-                selectedRow === row.original.id ?? 'bg-black'
-              }`}
+              className={`hover cursor-pointer ${
+                row.original.id === selectedRow &&
+                ' border-4 border-base-content'
+              } `}
               onClick={() => {
                 onRowClick?.(row.original.id)
               }}
             >
+              {console.log(row.original.id === selectedRow && '*')}
               {row.getVisibleCells().map((cell) => (
                 <th key={cell.id} className="font-normal">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

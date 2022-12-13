@@ -11,7 +11,6 @@ const InputContainer = ({
   label,
   selectOptions,
   placeholder,
-  defaultValue,
   rules,
   ...rest
 }: {
@@ -27,52 +26,50 @@ const InputContainer = ({
   label?: string
   selectOptions?: SelectOption[]
   placeholder?: string
-  defaultValue?: string
   rules?: ControllerProps['rules']
 }) => {
   return (
     <Controller
       //control={control}
       rules={rules}
-      {...rest}
       name={name}
       render={({
-        field: { onChange, onBlur, ...rest },
+        field: { onChange, onBlur, value, name, ref },
         fieldState: { invalid, isTouched, isDirty, error },
         formState
       }) => (
         <label className="form-control">
           {label && <span className="label-text">{label}</span>}
-          {['text', 'datetime', 'number'].includes(type) && (
+          {['text', 'number'].includes(type) && (
             <input
               className="input input-bordered input-sm"
               type={type}
               onBlur={onBlur} // notify when input is touched
               onChange={onChange} // send value to hook form
               placeholder={placeholder}
-              defaultValue={defaultValue}
+              value={value ?? ''}
               {...rest}
             />
           )}
           {type === 'date' && (
             <input
-              // defaultValue={myFormatDate(new Date(), 'input')}
               className="input input-bordered input-sm"
               type={'date'}
-              onBlur={onBlur} // notify when input is touched
-              onChange={onChange} // send value to hook form
-              placeholder={placeholder}
-              {...rest}
-              value={myFormatDate(rest?.value || new Date(), 'input')}
+              onChange={onChange}
+              onBlur={onBlur}
+              name={name}
+              ref={ref}
+              value={myFormatDate(value || new Date(), 'input')}
             />
           )}
           {type === 'select' && (
             <select
-              //  defaultValue={defaultValue || ''}
               className="input input-bordered input-sm"
-              onBlur={onBlur} // notify when input is touched
-              onChange={onChange} // send value to hook form
-              {...rest}
+              onChange={onChange}
+              onBlur={onBlur}
+              name={name}
+              ref={ref}
+              value={value}
             >
               <option value="">{placeholder ?? 'Select'}</option>
               {selectOptions?.map(({ value, label }: SelectOption) => (
@@ -84,16 +81,15 @@ const InputContainer = ({
           )}
           {type === 'checkbox' && (
             <input
-              defaultValue={defaultValue}
               type={'checkbox'}
               className=" checkbox"
-              onBlur={onBlur} // notify when input is touched
-              onChange={onChange} // send value to hook form
-              defaultChecked={false}
-              {...rest}
+              onChange={onChange}
+              onBlur={onBlur}
+              name={name}
+              ref={ref}
+              value={value}
             />
           )}
-          {type === 'radio' && <input type={'radio'} />}
 
           {error?.type && (
             <span className="label-text text-alt text-error ">

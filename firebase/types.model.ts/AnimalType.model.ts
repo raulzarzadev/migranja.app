@@ -3,7 +3,7 @@ import { TypeBase } from './TypeBase.model'
 
 export interface AnimalType extends TypeBase {
   name: string
-  birthday: string
+  birthday: string | Date | number
   earring: string
   images: ImageType[]
   gender: 'male' | 'female'
@@ -12,8 +12,8 @@ export interface AnimalType extends TypeBase {
   status: string
   parents?: ParentsType
   weight?: AnimalWeight
-  lote: string
-  birthType: number
+  lote: string | null
+  birthType: number | string
 }
 
 export interface GenderOptions {
@@ -27,10 +27,10 @@ export interface GenderOptions {
 }
 
 export interface AnimalWeight {
-  atBirth?: string | number
-  atWeaning?: string | number // Destete
-  at6Month: string | number
-  at12Month: string | number
+  atBirth?: string | number | null
+  atWeaning?: string | number | null // Destete
+  at6Month: string | number | null
+  at12Month: string | number | null
 }
 
 export interface ParentType
