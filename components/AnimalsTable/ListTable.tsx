@@ -16,7 +16,7 @@ import { listenOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 
-const AnimalsTable = ({
+const AnimalsListTable = ({
   onRowClick,
   selectedRow,
   onParentClick
@@ -41,56 +41,6 @@ const AnimalsTable = ({
     columnHelper.accessor('gender', {
       header: 'Sexo',
       cell: (props) => <span>{GENDER_OPTIONS[props.getValue()]?.label}</span>
-    }),
-    columnHelper.accessor('birthday', {
-      header: 'Nac',
-      cell: (props) => (
-        <span>
-          {props.getValue() ? myFormatDate(props.getValue(), 'dd-MMM-yy') : '-'}
-        </span>
-      )
-    }),
-    // columnHelper.accessor('status', {
-    //   header: 'Status'
-    // }),
-
-    columnHelper.accessor('parents', {
-      header: 'Padres',
-      cell: (props) => (
-        <span className="flex w-full justify-between">
-          <button
-            className="btn btn-ghost btn-sm btn-circle"
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-              onParentClick?.(props.getValue()?.father?.earring ?? null)
-            }}
-          >
-            <span className="text-info">
-              <Icon size="xs" name="male" />
-            </span>
-            <span className="truncate">
-              {props.getValue()?.father?.earring}
-            </span>
-          </button>
-
-          <button
-            className="btn btn-ghost btn-sm btn-circle"
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-              onParentClick?.(props.getValue()?.mother?.earring ?? null)
-            }}
-          >
-            <span className="text-pink-00">
-              <Icon size="xs" name="female" />
-            </span>
-            <span className="truncate">
-              {props.getValue()?.mother?.earring}
-            </span>
-          </button>
-        </span>
-      )
     })
   ]
   const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -164,65 +114,60 @@ const AnimalsTable = ({
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
-          className=" input input-sm"
+          className=" input input-sm w-full"
           placeholder="buscar..."
         />
       </div>
-      <div
-        className={`overflow-x-auto ${selectedRow && ' w-[200px] '} mx-auto`}
-      >
-        <table className="mx-aut table table-compact mx-auto  ">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    {...{
-                      className: header.column.getCanSort()
-                        ? 'cursor-pointer select-none'
-                        : '',
-                      onClick: header.column.getToggleSortingHandler()
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    {{
-                      asc: ' 🔼',
-                      desc: ' 🔽'
-                    }[header.column.getIsSorted() as string] ?? null}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className={`hover cursor-pointer ${
-                  row.original.id === selectedRow &&
-                  ' border-4 border-base-content'
-                } `}
-                onClick={() => {
-                  onRowClick?.(row.original.id)
-                }}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <th key={cell.id} className="font-normal">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
+      <table className="mx-aut table table-compact   ">
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  {...{
+                    className: header.column.getCanSort()
+                      ? 'cursor-pointer select-none'
+                      : '',
+                    onClick: header.column.getToggleSortingHandler()
+                  }}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                  {{
+                    asc: ' 🔼',
+                    desc: ' 🔽'
+                  }[header.column.getIsSorted() as string] ?? null}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr
+              key={row.id}
+              className={`hover cursor-pointer ${
+                row.original.id === selectedRow &&
+                ' border-4 border-base-content'
+              } `}
+              onClick={() => {
+                onRowClick?.(row.original.id)
+              }}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <th key={cell.id} className="font-normal">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <div className="h-4" />
       <div className="flex flex-col items-center gap-2 mx-auto justify-center">
         <span className="flex items-center gap-1">
@@ -267,4 +212,4 @@ const AnimalsTable = ({
   )
 }
 
-export default AnimalsTable
+export default AnimalsListTable

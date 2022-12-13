@@ -1,3 +1,4 @@
+import AnimalsListTable from 'components/AnimalsTable/ListTable'
 import { useState } from 'react'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import AnimalsTable from '../AnimalsTable'
@@ -27,8 +28,8 @@ const UserHome = () => {
   }
 
   return (
-    <div className="flex gap-2">
-      <div className="flex flex-col gap-2">
+    <div className="flex gap-2  flex-col md:flex-row ">
+      <div className="flex md:flex-col gap-2 ">
         {MenuOptions.options.map((option) => (
           <button
             key={option.id}
@@ -45,7 +46,7 @@ const UserHome = () => {
           </button>
         ))}
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex md:flex-col gap-2">
         {MenuOptions?.options
           ?.find(({ id }) => id === breadcrumb?.type)
           ?.options?.map((option) => (
@@ -64,7 +65,7 @@ const UserHome = () => {
             </button>
           ))}
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex md:flex-col gap-2">
         {MenuOptions.options
           .find(({ id }) => id === breadcrumb?.type)
           ?.options?.find(({ id }) => id === breadcrumb?.animal)
@@ -86,11 +87,7 @@ const UserHome = () => {
           ))}
       </div>
 
-      <div
-        className={`bg-base-300 rounded-lg shadow-md overflow-x-auto ${
-          breadcrumb?.animalSelected ? 'w-1/8' : 'w-full'
-        }`}
-      >
+      <div className={`bg-base-300 rounded-lg shadow-md  `}>
         {breadcrumb.animalOpt === 'add' && (
           <div className="p-2">
             <AnimalForm
@@ -100,6 +97,8 @@ const UserHome = () => {
             />
           </div>
         )}
+      </div>
+      <div className={`bg-base-300 rounded-lg shadow-md  `}>
         {breadcrumb.animalOpt === 'showAll' && (
           <AnimalsTable
             onRowClick={(id) => handleRowClick(id)}
@@ -107,9 +106,12 @@ const UserHome = () => {
           />
         )}
       </div>
+
       {breadcrumb?.animalSelected && (
-        <div className="bg-base-300 w-full rounded-lg shadow-md">
-          <AnimalCard animalId={breadcrumb?.animalSelected} />
+        <div className="bg-base-300 w-full rounded-lg shadow-md flex justify-center items-center">
+          <div className="">
+            <AnimalCard animalId={breadcrumb?.animalSelected} />
+          </div>
         </div>
       )}
     </div>

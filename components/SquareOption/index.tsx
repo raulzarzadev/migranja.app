@@ -14,7 +14,7 @@ const SquareOption = ({
         selected ? ' border-base-content ' : 'border-transparent'
       } border-4  hover:border-base-content rounded-xl`}
     >
-      <div className=" flex w-32 h-32 rounded-lg bg-base-300 justify-center items-center shadow-md cursor-pointer">
+      <div className=" flex w-16 aspect-square rounded-lg bg-base-300 justify-center items-center shadow-md cursor-pointer">
         <span>{option.title}</span>
       </div>
     </div>

@@ -8,10 +8,10 @@ const COMMON_OPS: MenuOptionType[] = [
     id: 'add',
     label: 'Nuevo'
   },
-  {
-    id: 'find',
-    label: 'Buscar'
-  },
+  // {
+  //   id: 'find',
+  //   label: 'Buscar'
+  // },
   {
     id: 'showAll',
     label: 'Todos'
