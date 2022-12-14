@@ -26,19 +26,19 @@ function Layout({ children }: LayoutProps) {
 
         <link rel="manifest" href="/manifest.json" />
         <link
-          href="/icons.farm.png"
+          href="/icons/farm.png"
           rel="icon"
           type="image/png"
           sizes="16x16"
         />
         <link
-          href="/icons.farm.png"
+          href="/icons/farm.png"
           rel="icon"
           type="image/png"
           sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="/icons.farm.png"></link>
-        <meta name="theme-color" content="#000" />
+        <link rel="apple-touch-icon" href="/icons/farm.png"></link>
+        <meta name="theme-color" content="#C6B386" />
       </Head>
       <Nav />
       <main className="">{children}</main>
