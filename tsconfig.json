@@ -19,6 +19,13 @@
       "@firebase/*": ["firebase/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.jsx",
+
+    "components/InstallButton/index.jsx"
+  ],
   "exclude": ["node_modules"]
 }

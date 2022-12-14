@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Nav from './nav'
 export interface LayoutProps {
   children: React.ReactNode

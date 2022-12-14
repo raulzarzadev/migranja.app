@@ -1,3 +1,4 @@
+import InstallButton from 'components/InstallButton'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { Component } from 'react'
@@ -14,6 +15,9 @@ export const Nav = () => {
           <Link className="btn btn-ghost normal-case text-xl" href={'/'}>
             MiRanchoDigital
           </Link>
+        </div>
+        <div>
+          <InstallButton />
         </div>
 
         {user ? (

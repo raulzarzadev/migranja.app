@@ -9,7 +9,7 @@ export const app = initializeApp(JSON.parse(firebaseConfig))
 
 export const db = getFirestore(app)
 
-// call to enable persinstence just when any app has been created
+// call to enable persistence just when any app has been created
 apps[0] ||
   enableIndexedDbPersistence(db)
     .then(() => console.log('Enabled offline persistence'))
