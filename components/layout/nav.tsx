@@ -13,7 +13,7 @@ export const Nav = () => {
       <div className="navbar bg-base-300 rounded-lg shadow-md ">
         <div className="flex-1">
           <Link className="btn btn-ghost normal-case text-xl" href={'/'}>
-            MiRanchoDigital
+            MiRanchito
           </Link>
         </div>
         <div>

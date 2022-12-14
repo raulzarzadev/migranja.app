@@ -1,3 +1,4 @@
+import Icon from 'components/Icon'
 import { useEffect, useRef, useState } from 'react'
 
 const InstallButton = () => {
@@ -37,8 +38,9 @@ const InstallButton = () => {
 
   return (
     <div>
-      <button className="btn btn-info btn-sm mx-10" id="btn-install">
-        Install app
+      <button className="btn btn-info btn-sm m-2" id="btn-install">
+        <span className="hidden sm:block mr-1">Install app</span>
+        <Icon name="install" />
       </button>
     </div>
   )

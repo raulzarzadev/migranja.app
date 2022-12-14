@@ -4,6 +4,7 @@
 // Farmer icons
 //https://react-icons.github.io/react-icons/icons?name=gi
 import { GiCow, GiSheep, GiShepherdsCrook } from 'react-icons/gi'
+import { VscDesktopDownload } from 'react-icons/vsc'
 
 import { AiOutlineTeam } from 'react-icons/ai'
 
@@ -100,7 +101,8 @@ const ICON_LIST = {
   cow: GiCow,
   farm: FarmIcon,
   herd: GiShepherdsCrook,
-  team: AiOutlineTeam
+  team: AiOutlineTeam,
+  install: VscDesktopDownload
   // emergency: MdOutlineEmergency,
   // email: TiMail,
   // whatsapp: SiWhatsapp,
