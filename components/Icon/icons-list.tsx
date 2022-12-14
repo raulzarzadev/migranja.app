@@ -3,7 +3,9 @@
 
 // Farmer icons
 //https://react-icons.github.io/react-icons/icons?name=gi
-import { GiCow, GiSheep } from 'react-icons/gi'
+import { GiCow, GiSheep, GiShepherdsCrook } from 'react-icons/gi'
+
+import { AiOutlineTeam } from 'react-icons/ai'
 
 import {
   SlArrowDown,
@@ -47,6 +49,9 @@ import {
   SlUser,
   SlWrench
 } from 'react-icons/sl'
+import FarmIcon from './FarmIcon'
+import SheepFamilyIcon from './SheepFamilyIcon'
+import SheepIcon from './SheepIcon'
 
 const ICON_LIST = {
   cart: SlBasketLoaded,
@@ -90,8 +95,12 @@ const ICON_LIST = {
   plus: SlPlus,
   creditCard: SlCreditCard,
   close: SlClose,
-  sheep: GiSheep,
-  cow: GiCow
+  sheepFamily: SheepFamilyIcon,
+  sheep: SheepIcon,
+  cow: GiCow,
+  farm: FarmIcon,
+  herd: GiShepherdsCrook,
+  team: AiOutlineTeam
   // emergency: MdOutlineEmergency,
   // email: TiMail,
   // whatsapp: SiWhatsapp,

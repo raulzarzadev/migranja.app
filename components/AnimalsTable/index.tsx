@@ -168,9 +168,7 @@ const AnimalsTable = ({
           placeholder="buscar..."
         />
       </div>
-      <div
-        className={`overflow-x-auto ${selectedRow && ' w-[200px] '} mx-auto`}
-      >
+      <div className={`overflow-x-auto ${selectedRow && '  '} mx-auto`}>
         <table className="mx-aut table table-compact mx-auto  ">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (

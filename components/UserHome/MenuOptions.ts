@@ -1,78 +1,71 @@
-export interface MenuOptionType {
+import { IconName } from 'components/Icon/icons-list'
+interface OptionDef {
   id: string
   label: string
+  iconName: IconName
+}
+
+export interface MenuOptionType extends OptionDef {
   options?: MenuOptionType[]
 }
-const COMMON_OPS: MenuOptionType[] = [
-  {
-    id: 'add',
-    label: 'Nuevo'
+export const OPTIONS_DICTIONARY: Record<string, MenuOptionType> = {
+  event: {
+    id: 'event',
+    label: 'Eventos',
+    iconName: 'event'
   },
-  // {
-  //   id: 'find',
-  //   label: 'Buscar'
-  // },
-  {
+  team: {
+    id: 'team',
+    label: 'Equipo',
+    iconName: 'team'
+  },
+  ovine: {
+    id: 'ovine',
+    label: 'Borregos',
+    iconName: 'sheep'
+  },
+  add: {
+    id: 'add',
+    label: 'Nuevo',
+    iconName: 'plus'
+  },
+  showAll: {
     id: 'showAll',
-    label: 'Todos'
+    label: 'Todos',
+    iconName: 'list'
+  },
+  calendar: {
+    id: 'calendar',
+    label: 'Calendario',
+    iconName: 'calendar'
+  },
+  animals: {
+    id: 'animals',
+    label: 'Animales',
+    iconName: 'herd'
   }
-]
+} as const
 
-const ANIMALS: MenuOptionType = {
-  id: 'animals',
-  label: 'Animales',
+export const ANIMALS: MenuOptionType = {
+  ...OPTIONS_DICTIONARY.animals,
   options: [
     {
-      id: 'ovine',
-      label: 'Borregos',
-      options: COMMON_OPS
-    }
-    // {
-    //   id: 'bovine',
-    //   label: 'Vacas',
-    //   options: COMMON_OPS
-    // }
-  ]
-}
-
-const EVENTS: MenuOptionType = {
-  id: 'events',
-  label: 'Events',
-  options: [
-    {
-      id: 'calendar',
-      label: 'Calendario'
-    },
-    {
-      id: 'animals',
-      label: 'Animales',
-      options: [
-        {
-          id: 'sheep',
-          label: 'Borregos'
-        },
-        {
-          id: 'cows',
-          label: 'Vacas'
-        }
-      ]
+      ...OPTIONS_DICTIONARY.ovine,
+      options: [OPTIONS_DICTIONARY.add, OPTIONS_DICTIONARY.showAll]
     }
   ]
 }
 
-const TEAM = {
-  id: 'team',
-  label: 'Equipo',
-  options: [
-    {
-      id: 'members',
-      label: 'Miembros',
-      options: COMMON_OPS
-    }
-  ]
-}
-const AnimalOptions = {
-  options: [ANIMALS, EVENTS, TEAM]
+export const EVENTS: MenuOptionType = {
+  ...OPTIONS_DICTIONARY.event,
+  options: [OPTIONS_DICTIONARY.add, OPTIONS_DICTIONARY.showAll]
 }
 
-export default AnimalOptions
+export const TEAM: MenuOptionType = {
+  ...OPTIONS_DICTIONARY.team,
+  options: [OPTIONS_DICTIONARY.add, OPTIONS_DICTIONARY.showAll]
+}
+
+const MENU: MenuOptionType[] = [ANIMALS, EVENTS, TEAM]
+
+export default MENU

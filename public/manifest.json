@@ -1,10 +1,10 @@
 {
-  "name": "tempalte app",
-  "short_name": "my-pwa",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
-  "display": "fullscreen",
-  "orientation": "portrait",
+  "name": "MiRanchito",
+  "short_name": "MiRachito",
+  "theme_color": "#C6B386",
+  "background_color": "#C6B386",
+  "display": "standalone",
+  "orientation": "landscape",
   "scope": "/",
   "start_url": "/",
   "icons": [
