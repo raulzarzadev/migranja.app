@@ -229,13 +229,15 @@ export const AnimalForm = ({
                     {/* <span>{part}</span> */}
                   </div>
                 </div>
-                <div className="w-1/2 flex justify-center items-center">
-                  <div className="w-full">
-                    <figure className="border w-full aspect-video">
+                <div className="w-1/2 flex justify-center items-center p-4 ">
+                  <div className="w-full h-full ">
+                    <figure className=" w-full h-full flex justify-center items-center bg-base-200 shadow-sm">
                       {images?.[0] ? (
                         <Image src={images[0].url} fill alt="animal-photo" />
                       ) : (
-                        <></>
+                        <>
+                          <Icon name="camera" />
+                        </>
                       )}
                     </figure>
                   </div>
