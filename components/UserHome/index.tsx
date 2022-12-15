@@ -1,3 +1,4 @@
+import Farm from 'components/Farm'
 import { useState } from 'react'
 import AnimalsTable from '../AnimalsTable'
 import AnimalForm from '../forms/AnimalForm'
@@ -21,6 +22,8 @@ const UserHome = () => {
     menuOptions.column1 === 'animals' && menuOptions.column2 === 'sheep'
   return (
     <div className="flex gap-2 flex-col sm:flex-row">
+      {/****************  Farm *********************/}
+      <Farm />
       {/****************  menu columns *********************/}
       <div className="flex">
         {/****************  column 1 *********************/}
