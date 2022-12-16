@@ -28,12 +28,21 @@ export const getFarm = async (itemId: string) => await farmsCRUD.getItem(itemId)
 
 /** ************** LISTEN ONE ********** */
 
+export const getUserFarm = async (userId?: UserType['id']) => {
+  const currentUser = userId || getAuth().currentUser?.uid
+  return await farmsCRUD
+    .getItems([where('userId', '==', currentUser)])
+    .then((items) => items[0] || null)
+}
+/** ************** LISTEN ONE ********** */
+
 export const listenFarm = async (itemId: string, cb: CallableFunction) =>
   await farmsCRUD.listenItem(itemId, cb)
 
 /** ************** LISTEN CURRENT USER ********** */
-const currentUser = getAuth().currentUser
+
 export const listenUserFarms = async (cb: CallableFunction) => {
+  const currentUser = getAuth().currentUser?.uid
   return await farmsCRUD.listenItems(
     [where('directedTo', '==', currentUser)],
     cb

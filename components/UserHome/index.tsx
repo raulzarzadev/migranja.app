@@ -21,130 +21,132 @@ const UserHome = () => {
   const isSheepSelected =
     menuOptions.column1 === 'animals' && menuOptions.column2 === 'sheep'
   return (
-    <div className="flex gap-2 flex-col sm:flex-row">
-      {/****************  Farm *********************/}
+    <div>
       <Farm />
-      {/****************  menu columns *********************/}
-      <div className="flex">
-        {/****************  column 1 *********************/}
-        <div className="flex-col flex">
-          <SquareOption
-            title="Animals"
-            iconName="herd"
-            onClick={() => handleChangeOption('column1', 'animals')}
-            selected={menuOptions.column1 === 'animals'}
-          />
-
-          <SquareOption
-            title="Eventos"
-            iconName="event"
-            onClick={() => handleChangeOption('column1', 'events')}
-            selected={menuOptions.column1 === 'events'}
-          />
-
-          <SquareOption
-            title="Equipo"
-            iconName="team"
-            onClick={() => handleChangeOption('column1', 'team')}
-            selected={menuOptions.column1 === 'team'}
-          />
-        </div>
-
-        {/****************  column 2 *********************/}
-
-        <div className="flex flex-col ">
-          {menuOptions?.column1 === 'animals' && (
+      <div className="flex gap-2 flex-col sm:flex-row">
+        {/****************  Farm *********************/}
+        {/****************  menu columns *********************/}
+        <div className="flex">
+          {/****************  column 1 *********************/}
+          <div className="flex-col flex">
             <SquareOption
-              title="Borregas"
-              iconName="sheep"
-              onClick={() => handleChangeOption('column2', 'sheep')}
-              selected={menuOptions.column2 === 'sheep'}
+              title="Animals"
+              iconName="herd"
+              onClick={() => handleChangeOption('column1', 'animals')}
+              selected={menuOptions.column1 === 'animals'}
             />
-          )}
-          {menuOptions?.column1 === 'events' && (
-            <>
-              <SquareOption
-                title="Nuevo"
-                iconName="plus"
-                onClick={() => handleChangeOption('column2', 'add')}
-                selected={menuOptions.column2 === 'add'}
-              />
-              <SquareOption
-                title="Todos"
-                iconName="list"
-                onClick={() => handleChangeOption('column2', 'list')}
-                selected={menuOptions.column2 === 'list'}
-              />
-            </>
-          )}
-          {menuOptions?.column1 === 'team' && (
-            <>
-              <SquareOption
-                title="Nuevo"
-                iconName="plus"
-                onClick={() => handleChangeOption('column2', 'add')}
-                selected={menuOptions.column2 === 'add'}
-              />
-              <SquareOption
-                title="Todos"
-                iconName="list"
-                onClick={() => handleChangeOption('column2', 'list')}
-                selected={menuOptions.column2 === 'list'}
-              />
-            </>
-          )}
-        </div>
 
-        {/****************  column 3 *********************/}
+            <SquareOption
+              title="Eventos"
+              iconName="event"
+              onClick={() => handleChangeOption('column1', 'events')}
+              selected={menuOptions.column1 === 'events'}
+            />
 
-        <div className="flex flex-col">
-          {menuOptions?.column2 === 'sheep' && (
-            <>
-              <SquareOption
-                title="Nuevo"
-                iconName="plus"
-                onClick={() => handleChangeOption('column3', 'add')}
-                selected={menuOptions.column3 === 'add'}
-              />
-              <SquareOption
-                title="Todos"
-                iconName="list"
-                onClick={() => handleChangeOption('column3', 'list')}
-                selected={menuOptions.column3 === 'list'}
-              />
-            </>
-          )}
-        </div>
-      </div>
-
-      {/****************  information area  *********************/}
-      <div className=" flex w-full gap-2 mt-1 flex-col md:flex-row">
-        {isSheepSelected && menuOptions.column3 === 'add' && (
-          <div className="md:w-1/2  bg-base-300 rounded-md p-2">
-            <AnimalForm
-              animal={{
-                type: 'ovine'
-              }}
+            <SquareOption
+              title="Equipo"
+              iconName="team"
+              onClick={() => handleChangeOption('column1', 'team')}
+              selected={menuOptions.column1 === 'team'}
             />
           </div>
-        )}
 
-        {isSheepSelected && menuOptions.column3 === 'list' && (
-          <div className="md:w-1/2  bg-base-300 rounded-md">
-            <AnimalsTable
-              onRowClick={(id) => setListOptionSelected(id)}
-              selectedRow={listOptionSelected}
-            />
+          {/****************  column 2 *********************/}
+
+          <div className="flex flex-col ">
+            {menuOptions?.column1 === 'animals' && (
+              <SquareOption
+                title="Borregas"
+                iconName="sheep"
+                onClick={() => handleChangeOption('column2', 'sheep')}
+                selected={menuOptions.column2 === 'sheep'}
+              />
+            )}
+            {menuOptions?.column1 === 'events' && (
+              <>
+                <SquareOption
+                  title="Nuevo"
+                  iconName="plus"
+                  onClick={() => handleChangeOption('column2', 'add')}
+                  selected={menuOptions.column2 === 'add'}
+                />
+                <SquareOption
+                  title="Todos"
+                  iconName="list"
+                  onClick={() => handleChangeOption('column2', 'list')}
+                  selected={menuOptions.column2 === 'list'}
+                />
+              </>
+            )}
+            {menuOptions?.column1 === 'team' && (
+              <>
+                <SquareOption
+                  title="Nuevo"
+                  iconName="plus"
+                  onClick={() => handleChangeOption('column2', 'add')}
+                  selected={menuOptions.column2 === 'add'}
+                />
+                <SquareOption
+                  title="Todos"
+                  iconName="list"
+                  onClick={() => handleChangeOption('column2', 'list')}
+                  selected={menuOptions.column2 === 'list'}
+                />
+              </>
+            )}
           </div>
-        )}
 
-        {isSheepSelected &&
-          menuOptions.column3 === 'list' &&
-          listOptionSelected && (
-            <div className="md:w-1/2  bg-base-300 rounded-md">
-              <AnimalCard animalId={listOptionSelected} />{' '}
+          {/****************  column 3 *********************/}
+
+          <div className="flex flex-col">
+            {menuOptions?.column2 === 'sheep' && (
+              <>
+                <SquareOption
+                  title="Nuevo"
+                  iconName="plus"
+                  onClick={() => handleChangeOption('column3', 'add')}
+                  selected={menuOptions.column3 === 'add'}
+                />
+                <SquareOption
+                  title="Todos"
+                  iconName="list"
+                  onClick={() => handleChangeOption('column3', 'list')}
+                  selected={menuOptions.column3 === 'list'}
+                />
+              </>
+            )}
+          </div>
+        </div>
+
+        {/****************  information area  *********************/}
+        <div className=" flex w-full gap-2 mt-1 flex-col md:flex-row">
+          {isSheepSelected && menuOptions.column3 === 'add' && (
+            <div className="md:w-1/2  bg-base-300 rounded-md p-2">
+              <AnimalForm
+                animal={{
+                  type: 'ovine'
+                }}
+              />
             </div>
           )}
+
+          {isSheepSelected && menuOptions.column3 === 'list' && (
+            <div className="md:w-1/2  bg-base-300 rounded-md">
+              <AnimalsTable
+                onRowClick={(id) => setListOptionSelected(id)}
+                selectedRow={listOptionSelected}
+              />
+            </div>
+          )}
+
+          {isSheepSelected &&
+            menuOptions.column3 === 'list' &&
+            listOptionSelected && (
+              <div className="md:w-1/2  bg-base-300 rounded-md">
+                <AnimalCard animalId={listOptionSelected} />{' '}
+              </div>
+            )}
+        </div>
       </div>
     </div>
   )

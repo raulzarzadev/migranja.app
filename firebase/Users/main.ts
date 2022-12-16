@@ -82,17 +82,19 @@ export async function googleLogin() {
       return null
       // ...
     })
-
-  const dbUser = user?.uid && (await getUser(user?.uid))
-  if (!dbUser) {
-    //create user
-    createUserFromGoogleProvider(user)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-  } else {
-    console.log('user already exists')
-    // nothing
-  }
+  console.log(user?.uid)
+  const a = await getUser(user?.uid)
+  console.log(a)
+  // const dbUser = user?.uid && (await getUser(user?.uid))
+  // if (!dbUser) {
+  //   //create user
+  //   createUserFromGoogleProvider(user)
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err))
+  // } else {
+  //   console.log('user already exists')
+  //   // nothing
+  // }
 }
 
 export async function logout() {

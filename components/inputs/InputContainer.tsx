@@ -39,7 +39,7 @@ const InputContainer = ({
         fieldState: { invalid, isTouched, isDirty, error },
         formState
       }) => (
-        <label className="form-control">
+        <label className="form-control ">
           {label && <span className="label-text">{label}</span>}
           {['text', 'number'].includes(type) && (
             <input

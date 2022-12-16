@@ -1,9 +1,12 @@
+import { ImageType } from '@firebase/types.model.ts/ImageType.model'
 import { DateType, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
 import { UserType } from '@firebase/Users/user.model'
 
 export interface FarmType extends TypeBase {
   name: string
+  haveATeam?: boolean
   team: MemberTeam[]
+  images: ImageType[]
 }
 
 export interface PermissionOption {
@@ -19,6 +22,8 @@ export interface Permission {
 }
 
 export interface MemberTeam {
+  email: string
+  name: string
   id: UserType['id']
   permissions: Permission
 }

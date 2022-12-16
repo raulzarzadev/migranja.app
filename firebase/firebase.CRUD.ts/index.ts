@@ -357,7 +357,7 @@ export class FirebaseCRUD {
     const id = doc.id
 
     const res = this.deepFormatFirebaseDates(data, this.dateTarget)
-
+    console.log(res)
     return {
       id,
       ...res
