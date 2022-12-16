@@ -1,4 +1,5 @@
 import Farm from 'components/Farm'
+import FarmTeamList from 'components/FarmTeamList'
 import FarmTeamForm from 'components/forms/FarmTeamForm.tsx'
 import useFarm from 'components/hooks/useFarm'
 import { useState } from 'react'
@@ -84,22 +85,6 @@ const UserHome = () => {
                 />
               </>
             )}
-            {menuOptions?.column1 === 'team' && (
-              <>
-                <SquareOption
-                  title="Nuevo"
-                  iconName="plus"
-                  onClick={() => handleChangeOption('column2', 'add')}
-                  selected={menuOptions.column2 === 'add'}
-                />
-                <SquareOption
-                  title="Todos"
-                  iconName="list"
-                  onClick={() => handleChangeOption('column2', 'list')}
-                  selected={menuOptions.column2 === 'list'}
-                />
-              </>
-            )}
           </div>
 
           {/****************  column 3 *********************/}
@@ -128,18 +113,17 @@ const UserHome = () => {
 
         <div className=" flex w-full gap-2 mt-1 flex-col md:flex-row">
           {/* ********************************+ FARM MEMBER FORM *************************************** */}
-          {farmIncludeTeam &&
-            menuOptions.column1 === 'team' &&
-            menuOptions.column2 === 'add' && (
-              <div className="md:w-1/2  bg-base-300 rounded-md p-2">
+          {menuOptions?.column1 === 'team' && (
+            <>
+              <div className="  bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
                 <FarmTeamForm />
               </div>
-            )}
-
+            </>
+          )}
           {/* ********************************+ SHEEP FORM *************************************** */}
 
           {isSheepSelected && menuOptions.column3 === 'add' && (
-            <div className="md:w-1/2  bg-base-300 rounded-md p-2">
+            <div className="md:w-1/2  bg-base-300 shadow-md rounded-md p-2">
               <AnimalForm
                 animal={{
                   type: 'ovine'
@@ -149,7 +133,7 @@ const UserHome = () => {
           )}
 
           {isSheepSelected && menuOptions.column3 === 'list' && (
-            <div className="md:w-1/2  bg-base-300 rounded-md">
+            <div className="md:w-1/2  bg-base-300 shadow-md rounded-md">
               <AnimalsTable
                 onRowClick={(id) => setListOptionSelected(id)}
                 selectedRow={listOptionSelected}
@@ -160,7 +144,7 @@ const UserHome = () => {
           {isSheepSelected &&
             menuOptions.column3 === 'list' &&
             listOptionSelected && (
-              <div className="md:w-1/2  bg-base-300 rounded-md">
+              <div className="md:w-1/2  bg-base-300 shadow-md rounded-md">
                 <AnimalCard animalId={listOptionSelected} />{' '}
               </div>
             )}

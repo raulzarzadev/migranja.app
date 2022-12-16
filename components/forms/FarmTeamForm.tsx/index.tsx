@@ -23,12 +23,23 @@ const FarmTeamForm = () => {
     console.log(data)
     farm?.id &&
       updateFarm(farm?.id, data).then((res) => {
+        setShowButtonSave(false)
         console.log(res)
       })
   }
   const handleSetMember = (user: MemberTeam | null) => {
-    if (user) return append(user)
+    if (user) {
+      setShowButtonSave(true)
+      append(user)
+    }
   }
+
+  const handleRemove = (index: number) => {
+    setShowButtonSave(true)
+    remove(index)
+  }
+
+  const [showButtonSave, setShowButtonSave] = useState(false)
 
   return (
     <div>
@@ -40,6 +51,7 @@ const FarmTeamForm = () => {
           </div>
         </div>
       )}
+      <SearchUserForm setNewUser={handleSetMember} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
         {fields.map((field, index) => (
@@ -56,6 +68,7 @@ const FarmTeamForm = () => {
             </div>
             <div className="form-control w-full min-w-0">
               <input
+                disabled
                 className="input input-sm  "
                 placeholder="email"
                 // important to include key with field's id
@@ -66,29 +79,29 @@ const FarmTeamForm = () => {
             </div>
             {/* ************************** TODO should add permissions for each team member **************************** */}
 
-            <div className="flex w-24 gap-1 border justify-center ">
+            <div className="flex w-24 gap-1  justify-center ">
               <button
                 className="btn btn-sm btn-circle btn-warning "
                 onClick={(e) => {
                   e.preventDefault()
-                  remove(index)
+                  handleRemove(index)
                 }}
               >
                 <Icon name="close" />
                 <span className="hidden">Eliminar</span>
               </button>
-              <button
-                className="btn btn-sm btn-circle btn-success "
-                type="submit"
-              >
-                <Icon name="done" />
-                <span className="hidden">Guardar</span>
-              </button>
             </div>
           </div>
         ))}
+        {showButtonSave && (
+          <div className="flex w-full justify-center">
+            <button className="btn btn-sm btn-info " type="submit">
+              <span className="mr-2">Guardar cambios</span>
+              <Icon name="done" />
+            </button>
+          </div>
+        )}
       </form>
-      <SearchUserForm setNewUser={handleSetMember} />
     </div>
   )
 }
@@ -103,7 +116,11 @@ const SearchUserForm = ({
     message: string
   }
   const { searchUser } = useSearchUsers()
-  const { handleSubmit, register } = useForm()
+  const {
+    handleSubmit,
+    register,
+    formState: { errors }
+  } = useForm()
   const [helperText, setHelperText] = useState<HelperText | null>(null)
   const onSubmit = (data: any) => {
     searchUser({ email: data.email }).then((res) => {
@@ -129,13 +146,13 @@ const SearchUserForm = ({
       "
     >
       <div className="form-control">
-        <label htmlFor="member-mail">Buscar usuario</label>
+        <label htmlFor="member-mail">Agregar miembro</label>
         <div className="flex mb-0">
           <input
             id="member-mail"
             className="input input-sm w-full rounded-r-none "
             placeholder="Buscar usuario"
-            {...register('email')}
+            {...register('email', { required: 'Este campo es necesario' })}
           />
           <button className="btn btn-info btn-sm rounded-l-none">
             <Icon name="search" />
@@ -143,6 +160,11 @@ const SearchUserForm = ({
         </div>
         {helperText?.type === 'error' && (
           <span className="text-error label-text  ">{helperText.message}*</span>
+        )}
+        {errors.email && (
+          <span className="text-error label-text  ">
+            <>{errors.email.message}*</>
+          </span>
         )}
         {helperText?.type === 'success' && (
           <span className="text-success label-text  ">
