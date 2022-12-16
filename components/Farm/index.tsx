@@ -1,28 +1,12 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import {
-  createFarm,
-  getFarm,
-  getUserFarm,
-  updateFarm
-} from '@firebase/Farm/main'
-import useAuth from 'components/hooks/useAuth'
+import FarmForm from 'components/forms/FarmForm'
+import useFarm from 'components/hooks/useFarm'
 import Icon from 'components/Icon'
-import InputContainer from 'components/inputs/InputContainer'
-import { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 const Farm = () => {
-  const { user } = useAuth()
-  const [farm, setFarm] = useState<FarmType | null>(null)
-  useEffect(() => {
-    /** ************** LISTEN ONE ********** */
-    getUserFarm().then((res) => {
-      setFarm(res)
-    })
-  }, [user])
-
   const [editing, setEditing] = useState(false)
-
+  const { farm } = useFarm({ onEditingChange: editing })
   return (
     <div>
       {editing ? (
@@ -30,59 +14,6 @@ const Farm = () => {
       ) : (
         <FarmInfo farm={farm} setEditing={setEditing} />
       )}
-    </div>
-  )
-}
-
-const FarmForm = ({
-  farm,
-  setEditing
-}: {
-  farm?: FarmType
-  setEditing: (bool: boolean) => void
-}) => {
-  const methods = useForm({ defaultValues: farm })
-  const { handleSubmit, register, setValue } = methods
-  const onSubmit = (data: any) => {
-    console.log(data)
-    alert(JSON.stringify(data))
-    data.id
-      ? updateFarm(data.id, data).then((res) => {
-          console.log(res)
-          setEditing(false)
-        })
-      : createFarm(data).then((res) => {
-          const newFormId = res?.res?.id
-          console.log({ newFormId })
-          setValue('id', newFormId)
-          setEditing(false)
-        })
-  }
-  return (
-    <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-evenly mb-2">
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className={'flex w-full'}>
-          <div className="flex justify-evenly w-full items-center border">
-            <InputContainer type="text" name={'name'} label="Nombre" />
-
-            <div className="form-control">
-              <label className="label flex-col">
-                <span className="label-text max-w-[150px] text-center">
-                  Incuir equipo de personas
-                </span>
-                <input
-                  {...register('haveATeam')}
-                  type="checkbox"
-                  className="checkbox"
-                />
-              </label>
-            </div>
-            <button className="btn btn-circle btn-sm btn-success">
-              <Icon name="done" />
-            </button>
-          </div>
-        </form>
-      </FormProvider>
     </div>
   )
 }

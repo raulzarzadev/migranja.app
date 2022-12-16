@@ -1,4 +1,5 @@
 import Farm from 'components/Farm'
+import useFarm from 'components/hooks/useFarm'
 import { useState } from 'react'
 import AnimalsTable from '../AnimalsTable'
 import AnimalForm from '../forms/AnimalForm'
@@ -13,6 +14,8 @@ const UserHome = () => {
     Partial<Record<MenuOptions, Option>>
   >({})
 
+  const { farm } = useFarm()
+
   const handleChangeOption = (column: MenuOptions, option: Option) => {
     if (column === 'column1') return setMenuOptions({ [column]: option })
     setMenuOptions({ ...menuOptions, [column]: option })
@@ -20,6 +23,7 @@ const UserHome = () => {
   const [listOptionSelected, setListOptionSelected] = useState('')
   const isSheepSelected =
     menuOptions.column1 === 'animals' && menuOptions.column2 === 'sheep'
+  const farmIncludeTeam = farm?.haveATeam
   return (
     <div>
       <Farm />
@@ -42,13 +46,14 @@ const UserHome = () => {
               onClick={() => handleChangeOption('column1', 'events')}
               selected={menuOptions.column1 === 'events'}
             />
-
-            <SquareOption
-              title="Equipo"
-              iconName="team"
-              onClick={() => handleChangeOption('column1', 'team')}
-              selected={menuOptions.column1 === 'team'}
-            />
+            {farmIncludeTeam && (
+              <SquareOption
+                title="Equipo"
+                iconName="team"
+                onClick={() => handleChangeOption('column1', 'team')}
+                selected={menuOptions.column1 === 'team'}
+              />
+            )}
           </div>
 
           {/****************  column 2 *********************/}

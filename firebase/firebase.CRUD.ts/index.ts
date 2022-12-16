@@ -357,7 +357,8 @@ export class FirebaseCRUD {
     const id = doc.id
 
     const res = this.deepFormatFirebaseDates(data, this.dateTarget)
-    console.log(res)
+    // console.log(res)
+    // FIXME: this should return null when no object is findend, in the response always is setted as {id,...res }
     return {
       id,
       ...res
