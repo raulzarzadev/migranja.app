@@ -32,13 +32,8 @@ const FarmInfo = ({
           <div>{farm?.images?.[0]?.url}</div>
           <div>{farm?.name}</div>
           <div>
-            {farm?.team?.map((member) => (
-              <div key={member.id}>
-                <div>{member.name}</div>
-                <div>{member.email}</div>
-                <div>{'member permissions'}</div>
-              </div>
-            ))}
+            Equipo status :{' '}
+            {farm.haveATeam ? `Activo (${farm.team.length})` : 'Dasactivado'}
           </div>
           <button
             className="btn btn-circle btn-sm btn-info"

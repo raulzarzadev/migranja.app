@@ -35,7 +35,7 @@ const FarmForm = ({
             <div className="form-control">
               <label className="label flex-col">
                 <span className="label-text max-w-[150px] text-center">
-                  Incuir equipo de personas
+                  Equipo activo
                 </span>
                 <input
                   {...register('haveATeam')}

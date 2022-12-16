@@ -45,7 +45,7 @@ const FarmTeamForm = () => {
     <div>
       <h3 className="text-center font-bold ">Miembros del equipo</h3>
       {!!fields.length || (
-        <div>
+        <div className="text-center">
           <div>
             <span>No hay miembros del equipo aún</span>
           </div>
