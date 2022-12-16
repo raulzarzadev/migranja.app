@@ -23,9 +23,9 @@ export interface Permission {
 
 export interface MemberTeam {
   email: string
-  name: string
+  name?: string
   id: UserType['id']
-  permissions: Permission
+  permissions?: Permission
 }
 
 export interface CreateFarmDTO extends Partial<FarmType> {}

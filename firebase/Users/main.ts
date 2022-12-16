@@ -1,3 +1,4 @@
+import { MemberTeam } from '@firebase/Farm/farm.model'
 import {
   getAuth,
   GoogleAuthProvider,
@@ -5,6 +6,7 @@ import {
   signInWithPopup,
   signOut
 } from 'firebase/auth'
+import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
@@ -56,6 +58,20 @@ export function authStateChanged(cb: CallableFunction) {
         cb(res)
       })
     }
+  })
+}
+
+export async function findUserByEmail({ email }: { email: string }) {
+  const formatTeamMember = (user: UserType): MemberTeam => {
+    return {
+      name: user?.displayName,
+      email: user?.email,
+      id: user?.id
+    }
+  }
+  return await usersCRUD.getItems([where('email', '==', email)]).then((res) => {
+    if (res?.length) return formatTeamMember(res[0])
+    return null
   })
 }
 

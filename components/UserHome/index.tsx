@@ -1,4 +1,5 @@
 import Farm from 'components/Farm'
+import FarmTeamForm from 'components/forms/FarmTeamForm.tsx'
 import useFarm from 'components/hooks/useFarm'
 import { useState } from 'react'
 import AnimalsTable from '../AnimalsTable'
@@ -13,6 +14,8 @@ const UserHome = () => {
   const [menuOptions, setMenuOptions] = useState<
     Partial<Record<MenuOptions, Option>>
   >({})
+
+  console.log(menuOptions)
 
   const { farm } = useFarm()
 
@@ -123,8 +126,20 @@ const UserHome = () => {
           </div>
         </div>
 
-        {/****************  information area  *********************/}
+        {/****************  MORE INFORMATION AREA  *********************/}
+
         <div className=" flex w-full gap-2 mt-1 flex-col md:flex-row">
+          {/* ********************************+ FARM MEMBER FORM *************************************** */}
+          {farmIncludeTeam &&
+            menuOptions.column1 === 'team' &&
+            menuOptions.column2 === 'add' && (
+              <div className="md:w-1/2  bg-base-300 rounded-md p-2">
+                <FarmTeamForm farmTeam={farm?.team} />
+              </div>
+            )}
+
+          {/* ********************************+ SHEEP FORM *************************************** */}
+
           {isSheepSelected && menuOptions.column3 === 'add' && (
             <div className="md:w-1/2  bg-base-300 rounded-md p-2">
               <AnimalForm

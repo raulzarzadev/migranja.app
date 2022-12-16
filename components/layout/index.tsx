@@ -6,7 +6,7 @@ export interface LayoutProps {
 }
 function Layout({ children }: LayoutProps) {
   return (
-    <div className="p-2">
+    <div className="p-2 prose">
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
