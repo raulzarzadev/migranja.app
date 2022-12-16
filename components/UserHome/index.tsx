@@ -15,8 +15,6 @@ const UserHome = () => {
     Partial<Record<MenuOptions, Option>>
   >({})
 
-  console.log(menuOptions)
-
   const { farm } = useFarm()
 
   const handleChangeOption = (column: MenuOptions, option: Option) => {
@@ -134,7 +132,7 @@ const UserHome = () => {
             menuOptions.column1 === 'team' &&
             menuOptions.column2 === 'add' && (
               <div className="md:w-1/2  bg-base-300 rounded-md p-2">
-                <FarmTeamForm farmTeam={farm?.team} />
+                <FarmTeamForm />
               </div>
             )}
 
