@@ -5,6 +5,7 @@ import VisitHome from '../components/VisitHome'
 
 const Home: NextPage = () => {
   const { user } = useAuth()
+
   return (
     <>
       <div>{user ? <UserHome /> : <VisitHome />}</div>

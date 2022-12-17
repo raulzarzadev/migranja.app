@@ -8,7 +8,7 @@ import AnimalCard from '../AnimalCard'
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option = 'animals' | 'sheep' | 'add' | 'list' | 'events' | 'team'
 
-const FarmMenu = ({ farm }: { farm: FarmType }) => {
+const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
   const [menuOptions, setMenuOptions] = useState<
     Partial<Record<MenuOptions, Option>>
   >({})

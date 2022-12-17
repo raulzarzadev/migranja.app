@@ -1,7 +1,5 @@
 import { MemberTeam } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
-import useFarm from 'components/hooks/useFarm'
-import useNotifications from 'components/hooks/useNotifications'
 import useSearchUsers from 'components/hooks/useSearchUsers'
 import Icon from 'components/Icon'
 import InvitationStatus from 'components/InvitationStatus'
@@ -15,7 +13,6 @@ import { selectFarmState } from 'store/slices/farmSlice'
 const FarmTeamForm = () => {
   const [showForm, setShowForm] = useState(false)
 
-  // const { farm } = useFarm()
   const farm = useSelector(selectFarmState)
   const { register, handleSubmit, setValue, watch, reset } = useForm()
 
@@ -61,8 +58,8 @@ const FarmTeamForm = () => {
           </tr>
         </thead>
         <tbody>
-          {farm &&
-            Object.entries(farm?.team).map(
+          {farm?.team &&
+            Object?.entries(farm?.team).map(
               ([key, { name, email, id, invitation }], index) => (
                 <tr key={id}>
                   <td>{name}</td>

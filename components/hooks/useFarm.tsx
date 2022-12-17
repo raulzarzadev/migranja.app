@@ -1,30 +1,34 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import { getUserFarm, listenUserFarm } from '@firebase/Farm/main'
-import { useEffect } from 'react'
+import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectFarmState, setFarmState } from 'store/slices/farmSlice'
 import useAuth from './useAuth'
-export interface UseFarmProps {
-  onEditingChange?: boolean
-}
-const useFarm = (props?: UseFarmProps) => {
-  const dispatch = useDispatch()
 
-  const farm = useSelector(selectFarmState)
+const useFarm = () => {
+  const dispatch = useDispatch()
+  const { user } = useAuth()
+  const currentFarm = useSelector(selectFarmState)
+  const [userFarm, setUserFarm] = useState<FarmType | null>(null)
+
+  const {
+    query: { farmId }
+  } = useRouter()
 
   useEffect(() => {
-    listenUserFarm((res: FarmType[]) => {
-      dispatch(setFarmState(res[0]))
-    })
-  }, [dispatch])
+    user &&
+      listenUserFarms((res: FarmType[] | null) => setUserFarm(res?.[0] || null))
+  }, [user])
 
-  // useEffect(() => {
-  //   getUserFarm().then((res) => {
-  //     dispatch(setFarmState(res))
-  //   })
-  // }, [user, dispatch, props?.onEditingChange])
+  useEffect(() => {
+    farmId &&
+      listenFarm(farmId as string, (res: FarmType) => {
+        dispatch(setFarmState(res))
+      })
+  }, [dispatch, farmId, user])
 
-  return { farm, userFarm: farm }
+  return { currentFarm, userFarm }
 }
 
 export default useFarm

@@ -11,7 +11,7 @@ interface ModalDeleteType {
   handleDelete: () => void
   openButtonProps?: OpenButtonProps
   buttonLabel: string | null
-  openModalItem: (props: any) => ReactNode | null
+  openModalItem?: (props: any) => ReactNode | null
 }
 
 const ModalDelete = ({
@@ -35,7 +35,7 @@ const ModalDelete = ({
   }
   return (
     <>
-      {openModalItem({
+      {openModalItem?.({
         onClick: (e: any) => {
           e.preventDefault()
           handleOpen()

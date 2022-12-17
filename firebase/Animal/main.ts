@@ -1,3 +1,4 @@
+import { FarmType } from '@firebase/Farm/farm.model'
 import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
@@ -29,6 +30,12 @@ export const getOvines = async () =>
 export const listenOvines = (cb: CallableFunction) => {
   return AnimalsCRUD.listenItems([where('type', '==', 'ovine')], cb)
 }
+
+export const listenFarmOvines = (
+  farmId: FarmType['id'],
+  cb: CallableFunction
+) => AnimalsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
+
 export const getMaleOvines = async () =>
   await AnimalsCRUD.getUserItems([
     where('type', '==', 'ovine'),

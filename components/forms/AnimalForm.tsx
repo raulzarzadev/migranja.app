@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
 import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
-import { myFormatDate } from 'utils/dates/myDateUtils'
+import useFarm from 'components/hooks/useFarm'
 
 const schema = yup
   .object()
@@ -31,7 +31,15 @@ export const AnimalForm = ({
   animal: CreateAnimalDTO
   setEditing?: (v: boolean) => void
 }) => {
+  const { currentFarm } = useFarm()
+
+  const farmData = {
+    id: currentFarm?.id,
+    name: currentFarm?.name
+  }
+
   const [loading, setLoading] = useState(false)
+
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -53,9 +61,9 @@ export const AnimalForm = ({
       ...animal
     }
   })
-
   const { watch, handleSubmit, reset, setValue } = methods
   const { id, images } = watch()
+
   const onSubmit = (data: any) => {
     //console.log(data)
     setLoading(true)
@@ -68,7 +76,7 @@ export const AnimalForm = ({
           setLoading(false)
         })
     } else {
-      createAnimal(data)
+      createAnimal({ ...data, farm: farmData })
         .then(({ res }: any) => {
           setValue('id', res?.id)
           console.log(res)
@@ -94,7 +102,7 @@ export const AnimalForm = ({
 
   const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000)
 
-  console.log(myFormatDate(dtDateOnly, 'dd/MM/yyyy'))
+  //  console.log(myFormatDate(dtDateOnly, 'dd/MM/yyyy'))
 
   return (
     <div>

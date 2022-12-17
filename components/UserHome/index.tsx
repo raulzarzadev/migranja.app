@@ -1,12 +1,11 @@
-import Farm from 'components/Farm'
-import FarmInvitations from 'components/FarmInvitations'
+import UserFarm from 'components/Farm'
 
 const UserHome = () => {
   return (
-    <div>
-      <Farm />
+    <>
+      <UserFarm />
       <FarmInvitations />
-    </div>
+    </>
   )
 }
 
