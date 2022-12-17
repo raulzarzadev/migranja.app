@@ -8,8 +8,6 @@ export interface UseFarmProps {
   onEditingChange?: boolean
 }
 const useFarm = (props?: UseFarmProps) => {
-  const { user } = useAuth()
-
   const dispatch = useDispatch()
 
   const farm = useSelector(selectFarmState)
@@ -26,7 +24,7 @@ const useFarm = (props?: UseFarmProps) => {
   //   })
   // }, [user, dispatch, props?.onEditingChange])
 
-  return { farm }
+  return { farm, userFarm: farm }
 }
 
 export default useFarm

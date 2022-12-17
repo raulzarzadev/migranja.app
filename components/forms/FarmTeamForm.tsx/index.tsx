@@ -4,43 +4,20 @@ import useFarm from 'components/hooks/useFarm'
 import useNotifications from 'components/hooks/useNotifications'
 import useSearchUsers from 'components/hooks/useSearchUsers'
 import Icon from 'components/Icon'
+import InvitationStatus from 'components/InvitationStatus'
 import ModalDelete from 'components/modal/ModalDelete'
 import { deleteField } from 'firebase/firestore'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { selectFarmState } from 'store/slices/farmSlice'
 
 const FarmTeamForm = () => {
   const [showForm, setShowForm] = useState(false)
 
-  const { farm } = useFarm()
-  const { sendNotification } = useNotifications()
-
+  // const { farm } = useFarm()
+  const farm = useSelector(selectFarmState)
   const { register, handleSubmit, setValue, watch, reset } = useForm()
-
-  const handleSendInvitation = async ({
-    to: { id, name, email }
-  }: {
-    to: { id: string; name: string; email: string }
-  }) => {
-    return sendNotification({
-      type: 'farm-invitation',
-      to: {
-        email: email,
-        id: id,
-        name: name
-      },
-      from: {
-        email: farm?.email ?? '',
-        id: farm?.id ?? '',
-        name: farm?.name ?? ''
-      },
-      options: {
-        message: `Invitación de ${farm?.name} a colaborar con ellos. `
-      }
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-  }
 
   const onSubmit = (data: any) => {
     console.log(data)
@@ -61,16 +38,6 @@ const FarmTeamForm = () => {
       setValue('id', user.id)
       setValue('email', user.email)
     }
-  }
-
-  const handleUpdateTeamMemberInvitation = (
-    index: string,
-    { invitation }: any
-  ) => {
-    farm?.id &&
-      updateFarm(farm?.id, { [`team.${index}.invitation`]: invitation })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
   }
 
   const handleDeleteMemberTeam = (id: string) => {
@@ -118,34 +85,10 @@ const FarmTeamForm = () => {
                     </div>
                   </td>
                   <td>
-                    <div>
-                      <div>{invitation?.accepted && <Icon name="done" />}</div>
-                      <div>
-                        {invitation?.sent && !invitation?.accepted && (
-                          <Icon name="time" />
-                        )}
-                      </div>
-                      <div>
-                        {!invitation?.sent && (
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleUpdateTeamMemberInvitation(id, {
-                                email,
-                                id,
-                                name: name,
-                                invitation: { sent: true, accepted: false }
-                              })
-                              handleSendInvitation({
-                                to: { email, id, name: name || '' }
-                              })
-                            }}
-                          >
-                            <Icon name="send" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
+                    <InvitationStatus
+                      memberTeam={{ name, email, id, invitation }}
+                      farm={farm}
+                    />
                   </td>
                 </tr>
               )

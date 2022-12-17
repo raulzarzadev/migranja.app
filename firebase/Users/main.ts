@@ -98,9 +98,9 @@ export async function googleLogin() {
       return null
       // ...
     })
-  console.log(user?.uid)
-  const a = await getUser(user?.uid)
-  console.log(a)
+  //console.log(user?.uid)
+  // const a = await getUser(user?.uid)
+  // console.log(a)
   // const dbUser = user?.uid && (await getUser(user?.uid))
   // if (!dbUser) {
   //   //create user

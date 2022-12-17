@@ -1,6 +1,4 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Script from 'next/script'
 import useAuth from '../components/hooks/useAuth'
 import UserHome from '../components/UserHome'
 import VisitHome from '../components/VisitHome'

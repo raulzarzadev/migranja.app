@@ -6,13 +6,14 @@ import { useState } from 'react'
 
 const Farm = () => {
   const [editing, setEditing] = useState(false)
-  const { farm } = useFarm({ onEditingChange: editing })
+  const { userFarm } = useFarm()
+
   return (
     <div>
       {editing ? (
-        <FarmForm farm={farm || undefined} setEditing={setEditing} />
+        <FarmForm farm={userFarm || undefined} setEditing={setEditing} />
       ) : (
-        <FarmInfo farm={farm} setEditing={setEditing} />
+        <FarmInfo farm={userFarm} setEditing={setEditing} />
       )}
     </div>
   )
@@ -45,7 +46,7 @@ const FarmInfo = ({
           </button>
         </>
       ) : (
-        <div className="flex w-full items-center">
+        <div className="flex w-full items-center justify-center">
           <div>No haz configurado una granja aún </div>
           <button
             className="btn btn-sm btn-secondary"

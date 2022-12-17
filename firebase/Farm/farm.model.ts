@@ -5,7 +5,7 @@ import { UserType } from '@firebase/Users/user.model'
 export interface FarmType extends TypeBase {
   name: string
   haveATeam?: boolean
-  team: MemberTeam[]
+  team: Record<MemberTeam['id'], MemberTeam>
   images: ImageType[]
   email?: string
 }
