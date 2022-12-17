@@ -4,7 +4,7 @@ import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
-import { CreateNotificationDTO } from './notifications.model'
+import { CreateNotificationDTO, NotificationType } from './notifications.model'
 
 const storage = getStorage(app)
 
@@ -37,10 +37,10 @@ export const listenNotification = async (
 ) => await notificationsCRUD.listenItem(itemId, cb)
 
 /** ************** LISTEN CURRENT USER ********** */
-const currentUser = getAuth().currentUser
 export const listenUserNotifications = async (cb: CallableFunction) => {
+  const currentUser = getAuth().currentUser?.uid
   return await notificationsCRUD.listenItems(
-    [where('directedTo', '==', currentUser)],
+    [where('directedTo.id', '==', currentUser)],
     cb
   )
 }

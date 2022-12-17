@@ -7,6 +7,7 @@ export interface FarmType extends TypeBase {
   haveATeam?: boolean
   team: MemberTeam[]
   images: ImageType[]
+  email?: string
 }
 
 export interface PermissionOption {
@@ -26,6 +27,12 @@ export interface MemberTeam {
   name?: string
   id: UserType['id']
   permissions?: Permission
+  invitation?: {
+    accepted: boolean
+    sent: boolean
+    acceptedAt?: DateType
+    sentAt?: DateType
+  }
 }
 
 export interface CreateFarmDTO extends Partial<FarmType> {}

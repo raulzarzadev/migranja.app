@@ -1,5 +1,5 @@
 import Icon from 'components/Icon'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import Modal from '..'
 type StatusModalDelete = 'DELETE' | 'LOADING' | 'ERROR' | 'DELETED'
 export interface OpenButtonProps {
@@ -11,12 +11,14 @@ interface ModalDeleteType {
   handleDelete: () => void
   openButtonProps?: OpenButtonProps
   buttonLabel: string | null
+  openModalItem: (props: any) => ReactNode | null
 }
 
 const ModalDelete = ({
   title,
   handleDelete,
   openButtonProps,
+  openModalItem,
   buttonLabel = 'Delete'
 }: ModalDeleteType) => {
   const [status, setStatus] = useState<StatusModalDelete>('DELETE')
@@ -33,22 +35,29 @@ const ModalDelete = ({
   }
   return (
     <>
-      <button
-        onClick={(e) => {
+      {openModalItem({
+        onClick: (e: any) => {
           e.preventDefault()
           handleOpen()
-        }}
-        {...openButtonProps}
-        className={` ${
-          openButtonProps?.className ??
-          ' flex justify-evenly btn btn-outline border-error  text-error'
-        }`}
-      >
-        <span className="">
-          <Icon name="delete" />{' '}
-        </span>
-        {buttonLabel ?? <span>{buttonLabel}</span>}
-      </button>
+        }
+      }) || (
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            handleOpen()
+          }}
+          {...openButtonProps}
+          className={` ${
+            openButtonProps?.className ??
+            ' flex justify-evenly btn btn-outline border-error  text-error'
+          }`}
+        >
+          <span className="">
+            <Icon name="delete" />{' '}
+          </span>
+          {buttonLabel ?? <span>{buttonLabel}</span>}
+        </button>
+      )}
       <Modal title={title} open={open} handleOpen={handleOpen}>
         <div>
           <p className="text-center my-10">Delete element</p>

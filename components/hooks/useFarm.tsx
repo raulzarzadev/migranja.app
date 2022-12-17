@@ -1,4 +1,5 @@
-import { getUserFarm } from '@firebase/Farm/main'
+import { FarmType } from '@firebase/Farm/farm.model'
+import { getUserFarm, listenUserFarm } from '@firebase/Farm/main'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectFarmState, setFarmState } from 'store/slices/farmSlice'
@@ -8,13 +9,22 @@ export interface UseFarmProps {
 }
 const useFarm = (props?: UseFarmProps) => {
   const { user } = useAuth()
+
   const dispatch = useDispatch()
+
   const farm = useSelector(selectFarmState)
+
   useEffect(() => {
-    getUserFarm().then((res) => {
-      dispatch(setFarmState(res))
+    listenUserFarm((res: FarmType[]) => {
+      dispatch(setFarmState(res[0]))
     })
-  }, [user, dispatch, props?.onEditingChange])
+  }, [dispatch])
+
+  // useEffect(() => {
+  //   getUserFarm().then((res) => {
+  //     dispatch(setFarmState(res))
+  //   })
+  // }, [user, dispatch, props?.onEditingChange])
 
   return { farm }
 }

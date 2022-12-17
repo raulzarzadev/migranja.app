@@ -9,6 +9,7 @@ import { VscDesktopDownload } from 'react-icons/vsc'
 import { AiOutlineTeam } from 'react-icons/ai'
 
 import {
+  SlActionRedo,
   SlArrowDown,
   SlArrowLeft,
   SlArrowRight,
@@ -22,6 +23,7 @@ import {
   SlCamera,
   SlChart,
   SlCheck,
+  SlClock,
   SlClose,
   SlCreditCard,
   SlEvent,
@@ -102,7 +104,9 @@ const ICON_LIST = {
   farm: FarmIcon,
   herd: GiShepherdsCrook,
   team: AiOutlineTeam,
-  install: VscDesktopDownload
+  install: VscDesktopDownload,
+  time: SlClock,
+  send: SlActionRedo
   // emergency: MdOutlineEmergency,
   // email: TiMail,
   // whatsapp: SiWhatsapp,

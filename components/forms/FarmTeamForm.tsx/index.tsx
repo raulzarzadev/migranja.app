@@ -1,78 +1,166 @@
 import { MemberTeam } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
 import useFarm from 'components/hooks/useFarm'
+import useNotifications from 'components/hooks/useNotifications'
 import useSearchUsers from 'components/hooks/useSearchUsers'
 import Icon from 'components/Icon'
+import ModalDelete from 'components/modal/ModalDelete'
+import { deleteField } from 'firebase/firestore'
 import { useState } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 const FarmTeamForm = () => {
-  const { farm } = useFarm()
+  const [showForm, setShowForm] = useState(false)
 
-  const { control, register, handleSubmit } = useForm({
-    defaultValues: { team: farm?.team || [] }
-  })
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control, // control props comes from useForm (optional: if you are using FormContext)
-      name: 'team' // unique name for your Field Array
-    }
-  )
+  const { farm } = useFarm()
+  const { sendNotification } = useNotifications()
+
+  const { register, handleSubmit, setValue, watch, reset } = useForm()
+
+  const handleSendInvitation = async ({
+    to: { id, name, email }
+  }: {
+    to: { id: string; name: string; email: string }
+  }) => {
+    return sendNotification({
+      type: 'farm-invitation',
+      to: {
+        email: email,
+        id: id,
+        name: name
+      },
+      from: {
+        email: farm?.email ?? '',
+        id: farm?.id ?? '',
+        name: farm?.name ?? ''
+      },
+      options: {
+        message: `Invitación de ${farm?.name} a colaborar con ellos. `
+      }
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+  }
 
   const onSubmit = (data: any) => {
     console.log(data)
+
     farm?.id &&
-      updateFarm(farm?.id, data).then((res) => {
-        setShowButtonSave(false)
-        console.log(res)
-      })
+      updateFarm(farm?.id, { [`team.${data.id}`]: data })
+        .then((res) => {
+          console.log(res)
+          setShowForm(false)
+          reset()
+        })
+        .catch((err) => console.log(err))
   }
   const handleSetMember = (user: MemberTeam | null) => {
+    setShowForm(true)
     if (user) {
-      setShowButtonSave(true)
-      append(user)
+      setValue('name', user.name)
+      setValue('id', user.id)
+      setValue('email', user.email)
     }
   }
 
-  const handleRemove = (index: number) => {
-    setShowButtonSave(true)
-    remove(index)
+  const handleUpdateTeamMemberInvitation = (
+    index: string,
+    { invitation }: any
+  ) => {
+    farm?.id &&
+      updateFarm(farm?.id, { [`team.${index}.invitation`]: invitation })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
   }
 
-  const [showButtonSave, setShowButtonSave] = useState(false)
+  const handleDeleteMemberTeam = (id: string) => {
+    farm?.id &&
+      updateFarm(farm?.id, { [`team.${id}`]: deleteField() })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+  }
 
   return (
     <div>
       <h3 className="text-center font-bold ">Miembros del equipo</h3>
-      {!!fields.length || (
-        <div className="text-center">
-          <div>
-            <span>No hay miembros del equipo aún</span>
-          </div>
-        </div>
-      )}
+
+      {farm &&
+        Object.entries(farm?.team).map(
+          ([key, { name, email, id, invitation }], index) => (
+            <div key={id} className="flex items-center w-full justify-between">
+              <div>
+                <ModalDelete
+                  handleDelete={() => handleDeleteMemberTeam(id)}
+                  title={'Eliminar animal'}
+                  buttonLabel={null}
+                  openModalItem={(props) => (
+                    <button
+                      {...props}
+                      className="btn btn-circle btn-xs btn-error"
+                    >
+                      <Icon name="delete" size="xs" />
+                    </button>
+                  )}
+                />
+              </div>
+              <div>{name}</div>
+              <div>{email}</div>
+              <div className="flex items-center">
+                <div>Invitación</div>
+                <div>{invitation?.accepted && <Icon name="done" />}</div>
+                <div>
+                  {invitation?.sent && !invitation?.accepted && (
+                    <Icon name="time" />
+                  )}
+                </div>
+                <div>
+                  {!invitation?.sent && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleUpdateTeamMemberInvitation(id, {
+                          email,
+                          id,
+                          name: name,
+                          invitation: { sent: true, accepted: false }
+                        })
+                        handleSendInvitation({
+                          to: { email, id, name: name || '' }
+                        })
+                      }}
+                    >
+                      <Icon name="send" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        )}
+
       <SearchUserForm setNewUser={handleSetMember} />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
-        {fields.map((field, index) => (
-          <div className="w-full flex gap-2 my-2" key={field.id}>
+      {showForm && (
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
+          <div className="w-full flex gap-2 my-2">
             <div className="form-control w-1/4">
               <input
                 className="input input-sm  "
                 // important to include key with field's id
-                {...register(`team.${index}.name`, {
+                {...register(`name`, {
                   required: 'Este campo es necesario'
                 })}
                 placeholder="nombre"
               />
             </div>
+
             <div className="form-control w-full min-w-0">
               <input
                 disabled
                 className="input input-sm  "
                 placeholder="email"
                 // important to include key with field's id
-                {...register(`team.${index}.email`, {
+                {...register(`email`, {
                   required: 'Este campo es necesario'
                 })}
               />
@@ -84,24 +172,31 @@ const FarmTeamForm = () => {
                 className="btn btn-sm btn-circle btn-warning "
                 onClick={(e) => {
                   e.preventDefault()
-                  handleRemove(index)
                 }}
               >
                 <Icon name="close" />
                 <span className="hidden">Eliminar</span>
               </button>
+              <button
+                className="btn btn-sm btn-circle btn-success "
+                type="submit"
+              >
+                <Icon name="done" />
+                <span className="hidden">Agregar</span>
+              </button>
             </div>
           </div>
-        ))}
-        {showButtonSave && (
+
+          {/* {showButtonSave && (
           <div className="flex w-full justify-center">
             <button className="btn btn-sm btn-info " type="submit">
               <span className="mr-2">Guardar cambios</span>
               <Icon name="done" />
             </button>
           </div>
-        )}
-      </form>
+        )} */}
+        </form>
+      )}
     </div>
   )
 }
