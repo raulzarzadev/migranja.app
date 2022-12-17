@@ -4,7 +4,7 @@ import AnimalForm from 'components/forms/AnimalForm'
 import FarmTeamForm from 'components/forms/FarmTeamForm.tsx'
 import SquareOption from 'components/SquareOption'
 import { useState } from 'react'
-import AnimalCard from '../AnimalCard'
+import AnimalCard from '../../AnimalCard'
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option = 'animals' | 'sheep' | 'add' | 'list' | 'events' | 'team'
 
