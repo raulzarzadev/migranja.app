@@ -3,7 +3,7 @@ import FarmForm from 'components/forms/FarmForm'
 import useFarm from 'components/hooks/useFarm'
 import Icon from 'components/Icon'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const UserFarm = () => {
   const [editing, setEditing] = useState(false)
