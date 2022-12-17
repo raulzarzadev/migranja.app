@@ -25,6 +25,8 @@ const FarmInfo = ({
   farm: FarmType | null
   setEditing: (bool: boolean) => void
 }) => {
+  const farmTeam =
+    farm?.team && Object.entries(farm?.team).map(([key, value]) => value)
   return (
     <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-evenly mb-2 items-center">
       {farm ? (
@@ -33,7 +35,7 @@ const FarmInfo = ({
           <div>{farm?.name}</div>
           <div>
             Equipo status :{' '}
-            {farm.haveATeam ? `Activo (${farm.team.length})` : 'Dasactivado'}
+            {farm.haveATeam ? `Activo (${farmTeam.length})` : 'Dasactivado'}
           </div>
           <button
             className="btn btn-circle btn-sm btn-info"

@@ -1,6 +1,6 @@
 import { UserType } from '@firebase/Users/user.model'
 import { getAuth } from 'firebase/auth'
-import { where } from 'firebase/firestore'
+import { limit, orderBy, where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
@@ -40,7 +40,11 @@ export const listenNotification = async (
 export const listenUserNotifications = async (cb: CallableFunction) => {
   const currentUser = getAuth().currentUser?.uid
   return await notificationsCRUD.listenItems(
-    [where('directedTo.id', '==', currentUser)],
+    [
+      where('directedTo.id', '==', currentUser),
+      limit(5),
+      orderBy('createdAt', 'desc')
+    ],
     cb
   )
 }

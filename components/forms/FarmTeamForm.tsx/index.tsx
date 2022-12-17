@@ -84,59 +84,74 @@ const FarmTeamForm = () => {
     <div>
       <h3 className="text-center font-bold ">Miembros del equipo</h3>
 
-      {farm &&
-        Object.entries(farm?.team).map(
-          ([key, { name, email, id, invitation }], index) => (
-            <div key={id} className="flex items-center w-full justify-between">
-              <div>
-                <ModalDelete
-                  handleDelete={() => handleDeleteMemberTeam(id)}
-                  title={'Eliminar animal'}
-                  buttonLabel={null}
-                  openModalItem={(props) => (
-                    <button
-                      {...props}
-                      className="btn btn-circle btn-xs btn-error"
-                    >
-                      <Icon name="delete" size="xs" />
-                    </button>
-                  )}
-                />
-              </div>
-              <div>{name}</div>
-              <div>{email}</div>
-              <div className="flex items-center">
-                <div>Invitación</div>
-                <div>{invitation?.accepted && <Icon name="done" />}</div>
-                <div>
-                  {invitation?.sent && !invitation?.accepted && (
-                    <Icon name="time" />
-                  )}
-                </div>
-                <div>
-                  {!invitation?.sent && (
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handleUpdateTeamMemberInvitation(id, {
-                          email,
-                          id,
-                          name: name,
-                          invitation: { sent: true, accepted: false }
-                        })
-                        handleSendInvitation({
-                          to: { email, id, name: name || '' }
-                        })
-                      }}
-                    >
-                      <Icon name="send" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        )}
+      <table className="table table-compact mx-auto mt-2">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>email</th>
+            <th>ops</th>
+            <th>inv</th>
+          </tr>
+        </thead>
+        <tbody>
+          {farm &&
+            Object.entries(farm?.team).map(
+              ([key, { name, email, id, invitation }], index) => (
+                <tr key={id}>
+                  <td>{name}</td>
+                  <td>{email}</td>
+                  <td>
+                    <div className="flex">
+                      <ModalDelete
+                        handleDelete={() => handleDeleteMemberTeam(id)}
+                        title={'Eliminar animal'}
+                        buttonLabel={null}
+                        openModalItem={(props) => (
+                          <button
+                            {...props}
+                            className="btn btn-circle btn-xs btn-error"
+                          >
+                            <Icon name="delete" size="xs" />
+                          </button>
+                        )}
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div>{invitation?.accepted && <Icon name="done" />}</div>
+                      <div>
+                        {invitation?.sent && !invitation?.accepted && (
+                          <Icon name="time" />
+                        )}
+                      </div>
+                      <div>
+                        {!invitation?.sent && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              handleUpdateTeamMemberInvitation(id, {
+                                email,
+                                id,
+                                name: name,
+                                invitation: { sent: true, accepted: false }
+                              })
+                              handleSendInvitation({
+                                to: { email, id, name: name || '' }
+                              })
+                            }}
+                          >
+                            <Icon name="send" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )
+            )}
+        </tbody>
+      </table>
 
       <SearchUserForm setNewUser={handleSetMember} />
 
