@@ -41,7 +41,7 @@ export const listenFarm = async (itemId: string, cb: CallableFunction) =>
 
 /** ************** LISTEN CURRENT USER ********** */
 
-export const listenUserFarm = (cb: CallableFunction) => {
+export const listenUserFarms = (cb: CallableFunction) => {
   const currentUser = getAuth().currentUser?.uid
   farmsCRUD.listenItems([where('userId', '==', currentUser)], cb)
 }

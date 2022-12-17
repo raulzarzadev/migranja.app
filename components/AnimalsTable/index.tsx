@@ -12,9 +12,10 @@ import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import { listenOvines } from '../../firebase/Animal/main'
+import { listenFarmOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import useFarm from 'components/hooks/useFarm'
 
 const AnimalsTable = ({
   onRowClick,
@@ -28,11 +29,16 @@ const AnimalsTable = ({
   const [data, setData] = useState<AnimalType[]>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
-
+  const { currentFarm } = useFarm()
   useEffect(() => {
-    listenOvines((res: AnimalType[]) => setData(res))
+    listenFarmOvines(currentFarm?.id, (res: AnimalType[]) => setData(res))
     return () => setData([])
   }, [])
+
+  // TODO: listen farm ovines, or farm animals. Pero solo aquellos con permisos suficientes deberian poder leer datos.
+  // ¿donde porner estos permisos?
+  // una funcion que evalue los permisos del usuario en cada peticion y basada en estos traiga resultados
+  // una funcion asi, donde se pone, en cada solicitud. y se le pasa un objeto con los permisos
 
   const columns = [
     columnHelper.accessor('earring', {

@@ -66,6 +66,7 @@ const Card = ({
     male: MaleOptions,
     female: FemaleOptions
   }
+  console.log(animal)
   return (
     <div>
       <div className="flex w-full justify-end">

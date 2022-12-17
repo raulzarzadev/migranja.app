@@ -1,39 +1,20 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import { getFarm } from '@firebase/Farm/main'
+import useFarm from 'components/hooks/useFarm'
 import FarmMenu from 'components/UserHome/FarmMenu'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectFarmState, setFarmState } from 'store/slices/farmSlice'
 
 const FarmPage = () => {
-  //  const [farm, setFarm] = useState<FarmType | null>(null)
-  const {
-    query: { farmId }
-  } = useRouter()
-  const dispatch = useDispatch()
-  const farm = useSelector(selectFarmState)
-
-  useEffect(() => {
-    farmId &&
-      getFarm(`${farmId}`).then((res) => {
-        dispatch(setFarmState(res))
-      })
-  }, [farmId])
-
-  if (!farm) return <></>
-
+  const { currentFarm } = useFarm()
   return (
     <div>
-      <Farm farm={farm} />
-      <FarmMenu farm={farm} />
+      <Farm farm={currentFarm} />
+      <FarmMenu farm={currentFarm} />
     </div>
   )
 }
 
-const Farm = ({ farm }: { farm: FarmType }) => {
+const Farm = ({ farm }: { farm: FarmType | null }) => {
   const farmTeam =
-    farm && Object?.entries(farm?.team)?.map(([key, value]) => value)
+    farm?.team && Object?.entries(farm?.team)?.map(([key, value]) => value)
   return (
     <div>
       <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-evenly mb-2 items-center">
