@@ -1,20 +1,32 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
+import { getFarm, listenFarm, listenUserFarms } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectFarmState, setFarmState } from 'store/slices/farmSlice'
 import useAuth from './useAuth'
 
-const useFarm = () => {
+export interface UseFarm {
+  getFarmById?: FarmType['id']
+}
+
+const useFarm = (props?: UseFarm) => {
+  const getFarmById = props?.getFarmById
+
   const dispatch = useDispatch()
   const { user } = useAuth()
   const currentFarm = useSelector(selectFarmState)
   const [userFarm, setUserFarm] = useState<FarmType | null>(null)
+  const [farmData, setFarmData] = useState<FarmType | null>(null)
 
   const {
     query: { farmId }
   } = useRouter()
+
+  useEffect(() => {
+    if (getFarmById)
+      getFarm(getFarmById).then((res) => setFarmData<FarmType | null>(res))
+  }, [getFarmById])
 
   useEffect(() => {
     user &&
@@ -28,7 +40,7 @@ const useFarm = () => {
       })
   }, [dispatch, farmId, user])
 
-  return { currentFarm, userFarm }
+  return { currentFarm, userFarm, farmData }
 }
 
 export default useFarm

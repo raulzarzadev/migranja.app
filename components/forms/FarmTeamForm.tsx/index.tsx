@@ -1,9 +1,8 @@
 import { MemberTeam } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
+import FarmTeamTable from 'components/FarmTeamTable'
 import useSearchUsers from 'components/hooks/useSearchUsers'
 import Icon from 'components/Icon'
-import InvitationStatus from 'components/InvitationStatus'
-import ModalDelete from 'components/modal/ModalDelete'
 import { deleteField } from 'firebase/firestore'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -45,104 +44,50 @@ const FarmTeamForm = () => {
   }
 
   return (
-    <div>
-      <h3 className="text-center font-bold ">Miembros del equipo</h3>
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
+      <div className="w-full flex gap-2 my-2">
+        <div className="form-control w-1/4">
+          <input
+            className="input input-sm  "
+            // important to include key with field's id
+            {...register(`name`, {
+              required: 'Este campo es necesario'
+            })}
+            placeholder="nombre"
+          />
+        </div>
 
-      <table className="table table-compact mx-auto mt-2">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>email</th>
-            <th>ops</th>
-            <th>inv</th>
-          </tr>
-        </thead>
-        <tbody>
-          {farm?.team &&
-            Object?.entries(farm?.team).map(
-              ([key, { name, email, id, invitation }], index) => (
-                <tr key={id}>
-                  <td>{name}</td>
-                  <td>{email}</td>
-                  <td>
-                    <div className="flex">
-                      <ModalDelete
-                        handleDelete={() => handleDeleteMemberTeam(id)}
-                        title={'Eliminar animal'}
-                        buttonLabel={null}
-                        openModalItem={(props) => (
-                          <button
-                            {...props}
-                            className="btn btn-circle btn-xs btn-error"
-                          >
-                            <Icon name="delete" size="xs" />
-                          </button>
-                        )}
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <InvitationStatus
-                      memberTeam={{ name, email, id, invitation }}
-                      farm={farm}
-                    />
-                  </td>
-                </tr>
-              )
-            )}
-        </tbody>
-      </table>
+        <div className="form-control w-full min-w-0">
+          <input
+            disabled
+            className="input input-sm  "
+            placeholder="email"
+            // important to include key with field's id
+            {...register(`email`, {
+              required: 'Este campo es necesario'
+            })}
+          />
+        </div>
+        {/* ************************** TODO should add permissions for each team member **************************** */}
 
-      <SearchUserForm setNewUser={handleSetMember} />
+        <div className="flex w-24 gap-1  justify-center ">
+          <button
+            className="btn btn-sm btn-circle btn-warning "
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+          >
+            <Icon name="close" />
+            <span className="hidden">Eliminar</span>
+          </button>
+          <button className="btn btn-sm btn-circle btn-success " type="submit">
+            <Icon name="done" />
+            <span className="hidden">Agregar</span>
+          </button>
+        </div>
+      </div>
 
-      {showForm && (
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
-          <div className="w-full flex gap-2 my-2">
-            <div className="form-control w-1/4">
-              <input
-                className="input input-sm  "
-                // important to include key with field's id
-                {...register(`name`, {
-                  required: 'Este campo es necesario'
-                })}
-                placeholder="nombre"
-              />
-            </div>
-
-            <div className="form-control w-full min-w-0">
-              <input
-                disabled
-                className="input input-sm  "
-                placeholder="email"
-                // important to include key with field's id
-                {...register(`email`, {
-                  required: 'Este campo es necesario'
-                })}
-              />
-            </div>
-            {/* ************************** TODO should add permissions for each team member **************************** */}
-
-            <div className="flex w-24 gap-1  justify-center ">
-              <button
-                className="btn btn-sm btn-circle btn-warning "
-                onClick={(e) => {
-                  e.preventDefault()
-                }}
-              >
-                <Icon name="close" />
-                <span className="hidden">Eliminar</span>
-              </button>
-              <button
-                className="btn btn-sm btn-circle btn-success "
-                type="submit"
-              >
-                <Icon name="done" />
-                <span className="hidden">Agregar</span>
-              </button>
-            </div>
-          </div>
-
-          {/* {showButtonSave && (
+      {/* {showButtonSave && (
           <div className="flex w-full justify-center">
             <button className="btn btn-sm btn-info " type="submit">
               <span className="mr-2">Guardar cambios</span>
@@ -150,9 +95,7 @@ const FarmTeamForm = () => {
             </button>
           </div>
         )} */}
-        </form>
-      )}
-    </div>
+    </form>
   )
 }
 

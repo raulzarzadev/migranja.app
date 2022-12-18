@@ -1,5 +1,7 @@
 import { FarmType } from '@firebase/Farm/farm.model'
+import useAuth from 'components/hooks/useAuth'
 import Icon from 'components/Icon'
+import InvitationStatus from 'components/InvitationStatus'
 import Link from 'next/link'
 
 const FarmNavigation = ({
@@ -11,6 +13,12 @@ const FarmNavigation = ({
   setEditing?: (bool: boolean) => void
   hiddenGo?: boolean
 }) => {
+  const { user } = useAuth()
+  const farmInvitationIsAccepted = (userId) =>
+    farm?.team?.[userId]?.invitation?.accepted
+
+  const canVisitFarm =
+    farmInvitationIsAccepted(user?.id) || farm?.userId === user?.id
   return (
     <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-between mb-2 items-center">
       {farm ? (
@@ -28,8 +36,9 @@ const FarmNavigation = ({
                 </button>
               )}
             </span>
+            <InvitationStatus farmId={farm?.id} userId={user?.id} />
             <div>
-              {!hiddenGo && (
+              {!hiddenGo && canVisitFarm && (
                 <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">
                   ir
                 </Link>

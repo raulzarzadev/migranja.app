@@ -1,18 +1,25 @@
 import { FarmType, MemberTeam } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
+import { UserType } from '@firebase/Users/user.model'
+import useFarm from 'components/hooks/useFarm'
 import useNotifications from 'components/hooks/useNotifications'
 import Icon from 'components/Icon'
+import Modal from 'components/modal/Modal_v2'
 
 const InvitationStatus = ({
-  memberTeam,
-  farm
+  farmId,
+  userId
 }: {
-  memberTeam: MemberTeam
-  farm: FarmType
+  farmId: string
+  userId: string
 }) => {
-  const { invitation, id, name, email } = memberTeam
-  const { sendNotification } = useNotifications()
+  const { farmData: farm } = useFarm({ getFarmById: farmId })
+  const teamMember = farm?.team?.[userId]
 
+  // const { invitation, id, name, email } = teamMember
+
+  const { sendNotification } = useNotifications()
+  // ****** Create a notification for user
   const handleSendInvitation = async ({
     to: { id, name, email }
   }: {
@@ -37,6 +44,8 @@ const InvitationStatus = ({
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
   }
+
+  // ****** Create or update team member invitation
   const handleUpdateTeamMemberInvitation = (
     userId: string,
     { invitation }: any
@@ -47,26 +56,121 @@ const InvitationStatus = ({
         .catch((err) => console.log(err))
   }
 
+  const handleAcceptInvitation = ({
+    farmId,
+    userId,
+    acceptInvitation
+  }: {
+    farmId: FarmType['id']
+    userId: UserType['id']
+    acceptInvitation: boolean
+  }) => {
+    updateFarm(farmId, {
+      [`team.${userId}.invitation.accepted`]: acceptInvitation
+    }).then((res) => console.log(res))
+  }
+
+  const invitationAccepted = teamMember?.invitation?.accepted
+  const invitationSentBy = farm?.name
+  const invitationSent = teamMember?.invitation?.sent
+  const memberId = teamMember?.id
+  const memberEmail = teamMember?.email
+  const memberName = teamMember?.name
+
   return (
     <div>
-      <div>{invitation?.accepted && <Icon name="done" />}</div>
       <div>
-        {invitation?.sent && !invitation?.accepted && <Icon name="time" />}
+        {invitationAccepted && (
+          <>
+            <Modal
+              title="Cancelar invitación"
+              openComponent={(props) => (
+                <button {...props}>
+                  <Icon name="done" />{' '}
+                </button>
+              )}
+            >
+              <div>
+                <div>Cancelar invitación</div>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleAcceptInvitation({
+                      farmId,
+                      userId,
+                      acceptInvitation: false
+                    })
+                  }}
+                >
+                  Rechazar
+                </button>
+              </div>
+            </Modal>
+          </>
+        )}
       </div>
       <div>
-        {!invitation?.sent && (
+        {invitationSent && !invitationAccepted && (
+          <Modal
+            title="Acceptar invitacion"
+            openComponent={(props) => (
+              <button {...props}>
+                <Icon name="time" />{' '}
+              </button>
+            )}
+          >
+            <div>
+              <div>Accpetar invitación de {invitationSentBy}</div>
+              <div>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleAcceptInvitation({
+                      farmId,
+                      userId,
+                      acceptInvitation: true
+                    })
+                  }}
+                >
+                  Acceptar
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleAcceptInvitation({
+                      farmId,
+                      userId,
+                      acceptInvitation: false
+                    })
+                  }}
+                >
+                  Rechazar
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </div>
+      <div>
+        {!invitationSent && (
           <button
             onClick={(e) => {
               e.preventDefault()
-              handleUpdateTeamMemberInvitation(id, {
-                email,
-                id,
-                name: name,
-                invitation: { sent: true, accepted: false }
-              })
-              handleSendInvitation({
-                to: { email, id, name: name || '' }
-              })
+              memberId &&
+                handleUpdateTeamMemberInvitation(memberId, {
+                  email: memberEmail,
+                  id: memberId,
+                  name: memberName,
+                  invitation: { sent: true, accepted: false }
+                })
+              memberId &&
+                handleSendInvitation({
+                  to: {
+                    email: memberEmail || '',
+                    id: memberId || '',
+                    name: memberName || ''
+                  }
+                })
             }}
           >
             <Icon name="send" />
