@@ -17,15 +17,12 @@ const FarmTeam = () => {
     setShowForm(true)
     if (user) {
       setTeamMember({ name: user?.name || '', id: user.id, email: user.email })
-      // setValue('name', user.name)
-      // setValue('id', user.id)
-      // setValue('email', user.email)
     }
   }
 
   return (
     <div>
-      <h2>Miembros del equipo</h2>
+      <h2 className="text-center font-bold">Miembros del equipo</h2>
       <FarmTeamTable farm={farm} />
       <SearchUserForm setNewUser={handleSetMember} />
 
