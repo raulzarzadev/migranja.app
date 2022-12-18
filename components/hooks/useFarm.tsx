@@ -24,7 +24,7 @@ const useFarm = (props?: UseFarm) => {
   } = useRouter()
 
   useEffect(() => {
-    if (getFarmById) listenFarm(getFarmById, (res) => setFarmData(res))
+    if (getFarmById) listenFarm(getFarmById, (res: any) => setFarmData(res))
   }, [getFarmById])
 
   useEffect(() => {

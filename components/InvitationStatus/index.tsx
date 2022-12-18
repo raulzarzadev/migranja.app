@@ -84,7 +84,7 @@ const InvitationStatus = ({
       }).then((res) => console.log(res))
   }
 
-  const invitationStatus = teamMember?.invitation?.status
+  const invitationStatus: InvitationStatus = teamMember?.invitation?.status
 
   const invitationSentBy = farm?.name
   const memberId = teamMember?.id
@@ -229,7 +229,7 @@ const InvitationStatus = ({
     )
   }
 
-  return <div>{STATUSES?.[invitationStatus || 'PENDING_TO_SEND']}</div>
+  return <div>{STATUSES?.[invitationStatus]}</div>
 }
 
 export default InvitationStatus
