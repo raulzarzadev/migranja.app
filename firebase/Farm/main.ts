@@ -47,5 +47,8 @@ export const listenUserFarms = (cb: CallableFunction) => {
 }
 
 export const getInvitationsFarm = async (userId: string) => {
-  return farmsCRUD.getItems([where(`team.${userId}.id`, '==', userId)])
+  return farmsCRUD.getItems([
+    where(`team.${userId}.id`, '==', userId), // verify if team user was created
+    where(`team.${userId}.invitation.sent`, '==', true) // verify if invitation  was made
+  ])
 }

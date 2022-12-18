@@ -21,7 +21,11 @@ export interface Permission {
   canRead: PermissionOption[] | 'all'
   canCreate: PermissionOption[] | 'all'
 }
-
+export type InvitationStatus =
+  | 'ACCEPTED'
+  | 'REJECTED'
+  | 'SENT'
+  | 'PENDING_TO_SEND'
 export interface MemberTeam {
   email: string
   name?: string
@@ -32,6 +36,7 @@ export interface MemberTeam {
     sent: boolean
     acceptedAt?: DateType
     sentAt?: DateType
+    status?: InvitationStatus
   }
 }
 
