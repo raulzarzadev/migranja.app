@@ -1,8 +1,16 @@
+import { updateFarm } from '@firebase/Farm/main'
 import Icon from 'components/Icon'
 import InvitationStatus from 'components/InvitationStatus'
 import ModalDelete from 'components/modal/ModalDelete'
+import { deleteField } from 'firebase/firestore'
 
 const FarmTeamTable = ({ farm }) => {
+  const handleDeleteMemberTeam = (id: string) => {
+    farm?.id &&
+      updateFarm(farm?.id, { [`team.${id}`]: deleteField() })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+  }
   return (
     <div>
       <table className="table table-compact mx-auto mt-2">

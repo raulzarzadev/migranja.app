@@ -1,46 +1,40 @@
 import { MemberTeam } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
-import FarmTeamTable from 'components/FarmTeamTable'
-import useSearchUsers from 'components/hooks/useSearchUsers'
 import Icon from 'components/Icon'
-import { deleteField } from 'firebase/firestore'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
+export interface TeamMemberFormType
+  extends Pick<MemberTeam, 'email' | 'name' | 'id'> {}
 
-const FarmTeamForm = () => {
-  const [showForm, setShowForm] = useState(false)
-
+const FarmTeamForm = ({
+  teamMember,
+  handleHideFrom
+}: {
+  teamMember?: TeamMemberFormType
+  handleHideFrom?: () => void
+}) => {
   const farm = useSelector(selectFarmState)
-  const { register, handleSubmit, setValue, watch, reset } = useForm()
+  const { register, handleSubmit, reset, setValue } = useForm({
+    defaultValues: teamMember
+  })
 
   const onSubmit = (data: any) => {
-    console.log(data)
-
     farm?.id &&
       updateFarm(farm?.id, { [`team.${data.id}`]: data })
         .then((res) => {
-          console.log(res)
-          setShowForm(false)
           reset()
+          console.log(res)
         })
         .catch((err) => console.log(err))
-  }
-  const handleSetMember = (user: MemberTeam | null) => {
-    setShowForm(true)
-    if (user) {
-      setValue('name', user.name)
-      setValue('id', user.id)
-      setValue('email', user.email)
-    }
+    handleReset()
   }
 
-  const handleDeleteMemberTeam = (id: string) => {
-    farm?.id &&
-      updateFarm(farm?.id, { [`team.${id}`]: deleteField() })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
+  const handleReset = () => {
+    setValue('email', '')
+    setValue('name', '')
+    setValue('id', '')
+    handleHideFrom?.()
   }
 
   return (
@@ -75,6 +69,7 @@ const FarmTeamForm = () => {
             className="btn btn-sm btn-circle btn-warning "
             onClick={(e) => {
               e.preventDefault()
+              handleReset()
             }}
           >
             <Icon name="close" />
@@ -85,88 +80,6 @@ const FarmTeamForm = () => {
             <span className="hidden">Agregar</span>
           </button>
         </div>
-      </div>
-
-      {/* {showButtonSave && (
-          <div className="flex w-full justify-center">
-            <button className="btn btn-sm btn-info " type="submit">
-              <span className="mr-2">Guardar cambios</span>
-              <Icon name="done" />
-            </button>
-          </div>
-        )} */}
-    </form>
-  )
-}
-
-const SearchUserForm = ({
-  setNewUser
-}: {
-  setNewUser: (user: MemberTeam | null) => void
-}) => {
-  interface HelperText {
-    type: 'error' | 'success' | 'info'
-    message: string
-  }
-  const { searchUser } = useSearchUsers()
-  const {
-    handleSubmit,
-    register,
-    formState: { errors }
-  } = useForm()
-  const [helperText, setHelperText] = useState<HelperText | null>(null)
-  const onSubmit = (data: any) => {
-    searchUser({ email: data.email }).then((res) => {
-      if (res) {
-        setHelperText({
-          message: 'Encontramos este usuario. ¿Quieres agregarlo?',
-          type: 'info'
-        })
-        setNewUser(res)
-      } else {
-        console.log('user not found')
-        setHelperText({ message: 'Usuario no encontrado', type: 'error' })
-      }
-      setTimeout(() => {
-        setHelperText(null)
-      }, 3000)
-    })
-  }
-  return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className=" my-2
-      "
-    >
-      <div className="form-control">
-        <label htmlFor="member-mail">Agregar miembro</label>
-        <div className="flex mb-0">
-          <input
-            id="member-mail"
-            className="input input-sm w-full rounded-r-none "
-            placeholder="Buscar usuario"
-            {...register('email', { required: 'Este campo es necesario' })}
-          />
-          <button className="btn btn-info btn-sm rounded-l-none">
-            <Icon name="search" />
-          </button>
-        </div>
-        {helperText?.type === 'error' && (
-          <span className="text-error label-text  ">{helperText.message}*</span>
-        )}
-        {errors.email && (
-          <span className="text-error label-text  ">
-            <>{errors.email.message}*</>
-          </span>
-        )}
-        {helperText?.type === 'success' && (
-          <span className="text-success label-text  ">
-            {helperText.message}*
-          </span>
-        )}
-        {helperText?.type === 'info' && (
-          <span className="text-info label-text  ">{helperText.message}*</span>
-        )}
       </div>
     </form>
   )

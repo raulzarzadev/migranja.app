@@ -1,5 +1,7 @@
 import { MemberTeam } from '@firebase/Farm/farm.model'
 import useSearchUsers from 'components/hooks/useSearchUsers'
+import Icon from 'components/Icon'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 const SearchUserForm = ({
@@ -15,25 +17,29 @@ const SearchUserForm = ({
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors }
   } = useForm()
   const [helperText, setHelperText] = useState<HelperText | null>(null)
   const onSubmit = (data: any) => {
-    searchUser({ email: data.email }).then((res) => {
-      if (res) {
-        setHelperText({
-          message: 'Encontramos este usuario. ¿Quieres agregarlo?',
-          type: 'info'
-        })
-        setNewUser(res)
-      } else {
-        console.log('user not found')
-        setHelperText({ message: 'Usuario no encontrado', type: 'error' })
-      }
-      setTimeout(() => {
-        setHelperText(null)
-      }, 3000)
-    })
+    searchUser({ email: data.email })
+      .then((res) => {
+        if (res) {
+          setHelperText({
+            message: 'Encontramos este usuario. ¿Quieres agregarlo?',
+            type: 'info'
+          })
+          setNewUser(res)
+          reset()
+        } else {
+          console.log('user not found')
+          setHelperText({ message: 'Usuario no encontrado', type: 'error' })
+        }
+        setTimeout(() => {
+          setHelperText(null)
+        }, 3000)
+      })
+      .catch((err) => console.log(err))
   }
   return (
     <form

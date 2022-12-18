@@ -1,7 +1,7 @@
 import { FarmType } from '@firebase/Farm/farm.model'
 import AnimalsTable from 'components/AnimalsTable'
+import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
-import FarmTeamForm from 'components/forms/FarmTeamForm.tsx'
 import SquareOption from 'components/SquareOption'
 import { useState } from 'react'
 import AnimalCard from '../../AnimalCard'
@@ -110,7 +110,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
         {menuOptions?.column1 === 'team' && (
           <>
             <div className="  bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
-              <FarmTeamForm />
+              <FarmTeam />
             </div>
           </>
         )}
