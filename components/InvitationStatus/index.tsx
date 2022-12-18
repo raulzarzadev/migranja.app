@@ -10,11 +10,11 @@ const InvitationStatus = ({
   farmId,
   userId
 }: {
-  farmId: string
-  userId: string
+  farmId?: string
+  userId?: string
 }) => {
   const { farmData: farm } = useFarm({ getFarmById: farmId })
-  const teamMember = farm?.team?.[userId]
+  const teamMember = farm?.team?.[userId || '']
 
   // const { invitation, id, name, email } = teamMember
 
@@ -61,13 +61,14 @@ const InvitationStatus = ({
     userId,
     acceptInvitation
   }: {
-    farmId: FarmType['id']
-    userId: UserType['id']
+    farmId?: FarmType['id']
+    userId?: UserType['id']
     acceptInvitation: boolean
   }) => {
-    updateFarm(farmId, {
-      [`team.${userId}.invitation.accepted`]: acceptInvitation
-    }).then((res) => console.log(res))
+    farmId &&
+      updateFarm(farmId, {
+        [`team.${userId}.invitation.accepted`]: acceptInvitation
+      }).then((res) => console.log(res))
   }
 
   const invitationAccepted = teamMember?.invitation?.accepted

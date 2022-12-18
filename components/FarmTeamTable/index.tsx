@@ -1,10 +1,11 @@
+import { FarmType } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
 import Icon from 'components/Icon'
 import InvitationStatus from 'components/InvitationStatus'
 import ModalDelete from 'components/modal/ModalDelete'
 import { deleteField } from 'firebase/firestore'
 
-const FarmTeamTable = ({ farm }) => {
+const FarmTeamTable = ({ farm }: { farm: FarmType | null }) => {
   const handleDeleteMemberTeam = (id: string) => {
     farm?.id &&
       updateFarm(farm?.id, { [`team.${id}`]: deleteField() })
@@ -25,7 +26,7 @@ const FarmTeamTable = ({ farm }) => {
         <tbody>
           {farm?.team &&
             Object?.entries(farm?.team).map(
-              ([key, { name, email, id, invitation }], index) => (
+              ([key, { name, email, id, invitation }]: any, index) => (
                 <tr key={id}>
                   <td>{name}</td>
                   <td>{email}</td>

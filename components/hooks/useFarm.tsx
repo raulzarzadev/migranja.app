@@ -17,15 +17,14 @@ const useFarm = (props?: UseFarm) => {
   const { user } = useAuth()
   const currentFarm = useSelector(selectFarmState)
   const [userFarm, setUserFarm] = useState<FarmType | null>(null)
-  const [farmData, setFarmData] = useState<FarmType | null>(null)
+  const [farmData, setFarmData] = useState<FarmType | any>(null)
 
   const {
     query: { farmId }
   } = useRouter()
 
   useEffect(() => {
-    if (getFarmById)
-      getFarm(getFarmById).then((res) => setFarmData<FarmType | null>(res))
+    if (getFarmById) getFarm(getFarmById).then((res) => setFarmData(res))
   }, [getFarmById])
 
   useEffect(() => {

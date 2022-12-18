@@ -14,8 +14,8 @@ const FarmNavigation = ({
   hiddenGo?: boolean
 }) => {
   const { user } = useAuth()
-  const farmInvitationIsAccepted = (userId) =>
-    farm?.team?.[userId]?.invitation?.accepted
+  const farmInvitationIsAccepted = (userId?: string) =>
+    farm?.team?.[userId || '']?.invitation?.accepted
 
   const canVisitFarm =
     farmInvitationIsAccepted(user?.id) || farm?.userId === user?.id

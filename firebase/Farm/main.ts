@@ -4,7 +4,7 @@ import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
-import { CreateFarmDTO } from './Farms.model'
+import { CreateFarmDTO } from './farm.model'
 
 const storage = getStorage(app)
 
