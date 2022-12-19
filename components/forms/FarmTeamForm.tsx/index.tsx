@@ -21,7 +21,12 @@ const FarmTeamForm = ({
 
   const onSubmit = (data: any) => {
     farm?.id &&
-      updateFarm(farm?.id, { [`team.${data.id}`]: data })
+      updateFarm(farm?.id, {
+        [`team.${data.id}`]: {
+          ...data,
+          invitation: { status: 'PENDING_TO_SEND' }
+        }
+      })
         .then((res) => {
           reset()
           console.log(res)

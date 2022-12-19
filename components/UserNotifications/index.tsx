@@ -13,10 +13,52 @@ const UserNotifications = () => {
   const handleClickNotification = (id: string) => {
     updateNotification(id, { viewed: true })
   }
-  const newNotifications = notifications.filter(({ viewed }) => !viewed)
+  const newNotifications = notifications?.filter(({ viewed }) => !viewed)
+  useEffect(() => {
+    const browserNotifications = (notifications: NotificationType[]) => {
+      notifications.forEach((notification) => {
+        console.log('notification created')
+        const notifTitle = notification.type
+        const notifBody = notification.message
+        const notifImg = ''
+        const options = {
+          body: notifBody,
+          icon: notifImg
+        }
+        const greeting = new Notification(notifTitle, options)
+        console.log(greeting)
+      })
+    }
+    browserNotifications(newNotifications)
+  }, [newNotifications])
+
+  const handleAskForNotificationsPermissions = () => {
+    Notification.requestPermission().then((result) => {
+      if (result === 'granted') {
+        setAllowNotifications(true)
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (!('Notification' in window)) {
+      console.log('This browser does not support notifications.')
+    } else if (!allowNotifications) {
+      Notification.requestPermission().then((permission) => {
+        permission === 'granted' && setAllowNotifications(true)
+      })
+    } else {
+      setAllowNotifications(Notification.permission === 'granted')
+      console.log('set notifications')
+      // Notification.requestPermission((permission) => {
+      // })
+    }
+  }, [])
+
+  const [allowNotifications, setAllowNotifications] = useState(false)
   return (
     <div className="dropdown dropdown-end">
-      <button tabIndex={0} className="btn btn-ghost btn-circle">
+      <label tabIndex={0} className="btn btn-ghost btn-circle">
         <div className="indicator">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -38,11 +80,24 @@ const UserNotifications = () => {
             </span>
           )}
         </div>
-      </button>
+      </label>
       <ul
         tabIndex={0}
         className=" dropdown-content mt-3 p-1 shadow bg-base-100 rounded-box w-52"
       >
+        {allowNotifications || (
+          <div>
+            <button
+              className="btn btn-sm btn-info"
+              onClick={(e) => {
+                e.preventDefault()
+                handleAskForNotificationsPermissions()
+              }}
+            >
+              Permitir notificaciónes
+            </button>
+          </div>
+        )}
         {notifications.map(({ viewed, id, createdAt, message }) => (
           <li key={id}>
             <button

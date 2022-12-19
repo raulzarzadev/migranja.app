@@ -22,6 +22,7 @@ const InvitationStatus = ({
   const { user } = useAuth()
   const { farmData: farm } = useFarm({ getFarmById: farmId })
   const teamMember = farm?.team?.[userId || '']
+
   const isAdmin = farm?.userId === user?.id
   // const { invitation, id, name, email } = teamMember
 
@@ -228,7 +229,6 @@ const InvitationStatus = ({
       </button>
     )
   }
-
   return <div>{STATUSES?.[invitationStatus]}</div>
 }
 
