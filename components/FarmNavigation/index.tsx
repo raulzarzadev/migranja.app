@@ -15,7 +15,7 @@ const FarmNavigation = ({
 }) => {
   const { user } = useAuth()
   const farmInvitationIsAccepted = (userId?: string) =>
-    farm?.team?.[userId || '']?.invitation?.accepted
+    farm?.team?.[userId || '']?.invitation?.status === 'ACCEPTED'
 
   const canVisitFarm =
     farmInvitationIsAccepted(user?.id) || farm?.userId === user?.id
@@ -25,25 +25,21 @@ const FarmNavigation = ({
         <>
           {/* <div>{farm?.images?.[0]?.url}</div> */}
           <div>{farm?.name}</div>
-          <div className="flex w-[110px] justify-between">
-            <span>
-              {setEditing && (
-                <button
-                  className="btn btn-circle btn-sm btn-info"
-                  onClick={() => setEditing?.(true)}
-                >
-                  <Icon name="edit" size="xs" />
-                </button>
-              )}
-            </span>
+          <div className="flex w-[110px] justify-between  items-center">
+            {setEditing && (
+              <button
+                className="btn btn-circle btn-sm btn-info"
+                onClick={() => setEditing?.(true)}
+              >
+                <Icon name="edit" size="xs" />
+              </button>
+            )}
             <InvitationStatus farmId={farm?.id} userId={user?.id} />
-            <div>
-              {!hiddenGo && canVisitFarm && (
-                <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">
-                  ir
-                </Link>
-              )}
-            </div>
+            {!hiddenGo && canVisitFarm && (
+              <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">
+                ir
+              </Link>
+            )}
           </div>
         </>
       ) : (
