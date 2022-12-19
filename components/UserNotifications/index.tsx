@@ -14,6 +14,7 @@ const UserNotifications = () => {
     updateNotification(id, { viewed: true })
   }
   const newNotifications = notifications?.filter(({ viewed }) => !viewed)
+  const [allowNotifications, setAllowNotifications] = useState(false)
   useEffect(() => {
     const browserNotifications = (notifications: NotificationType[]) => {
       notifications.forEach((notification) => {
@@ -30,7 +31,7 @@ const UserNotifications = () => {
       })
     }
     browserNotifications(newNotifications)
-  }, [newNotifications])
+  }, [newNotifications, allowNotifications])
 
   const handleAskForNotificationsPermissions = () => {
     Notification.requestPermission().then((result) => {
@@ -53,9 +54,9 @@ const UserNotifications = () => {
       // Notification.requestPermission((permission) => {
       // })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const [allowNotifications, setAllowNotifications] = useState(false)
   return (
     <div className="dropdown dropdown-end">
       <label tabIndex={0} className="btn btn-ghost btn-circle">
