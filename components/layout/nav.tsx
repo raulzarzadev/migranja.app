@@ -64,7 +64,7 @@ const UserMenu = ({ user }: { user: UserType }) => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li>
+            {/* <li>
               <a className="justify-between">
                 Profile
                 <span className="badge">New</span>
@@ -72,7 +72,7 @@ const UserMenu = ({ user }: { user: UserType }) => {
             </li>
             <li>
               <a>Settings</a>
-            </li>
+            </li> */}
             <li>
               <button
                 className="border-error border "
