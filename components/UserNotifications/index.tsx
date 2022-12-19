@@ -26,19 +26,25 @@ const UserNotifications = () => {
           body: notifBody,
           icon: notifImg
         }
-        const greeting = new Notification(notifTitle, options)
-        console.log(greeting)
+        if ('Notification' in window) {
+          console.log('This browser does not support notifications.')
+          const greeting = new Notification(notifTitle, options)
+          console.log(greeting)
+        }
       })
     }
     browserNotifications(newNotifications)
   }, [newNotifications, allowNotifications])
 
   const handleAskForNotificationsPermissions = () => {
-    Notification.requestPermission().then((result) => {
-      if (result === 'granted') {
-        setAllowNotifications(true)
-      }
-    })
+    if ('Notification' in window) {
+      console.log('This browser does not support notifications.')
+      Notification.requestPermission().then((result) => {
+        if (result === 'granted') {
+          setAllowNotifications(true)
+        }
+      })
+    }
   }
 
   useEffect(() => {
