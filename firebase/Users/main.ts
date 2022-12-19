@@ -49,7 +49,7 @@ export const listenUser = async (itemId: string, cb: CallableFunction) =>
 
 export function authStateChanged(cb: CallableFunction) {
   onAuthStateChanged(auth, async (user) => {
-    console.count()
+    // FIXME: this function is called multiple times
     if (!user) {
       console.log(user)
       // console.log('not logged');

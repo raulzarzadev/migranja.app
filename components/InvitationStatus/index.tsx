@@ -35,6 +35,7 @@ const InvitationStatus = ({
   }) => {
     return sendNotification({
       type: 'farm-invitation',
+      title: 'Únete a nosotros.',
       to: {
         email: email,
         id: id,
@@ -151,6 +152,13 @@ const InvitationStatus = ({
               className="btn btn-sm  btn-outline "
               onClick={() => {
                 handleUpdateInvitation({ status: 'SENT' })
+                handleSendInvitation({
+                  to: {
+                    email: memberEmail || '',
+                    id: memberId || '',
+                    name: memberName || ''
+                  }
+                })
               }}
             >
               Reenviar

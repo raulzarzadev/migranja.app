@@ -7,65 +7,67 @@ import { fromNow } from 'utils/dates/myDateUtils'
 const UserNotifications = () => {
   const { userNotifications } = useNotifications()
   const [notifications, setNotifications] = useState<NotificationType[]>([])
+  const [showAskForNotification, setShowAskForNotification] =
+    useState<boolean>(false)
+  const [notificationPermissions, setNotificationPermissions] = useState<
+    'granted' | 'default' | 'denied' | 'not_support'
+  >()
 
-  const newNotifications = notifications?.filter(({ viewed }) => !viewed)
-  const [allowNotifications, setAllowNotifications] = useState(false)
+  const [newNotifications, setNewNotifications] = useState<NotificationType[]>(
+    []
+  )
+
+  const createNotifications = (notifications: NotificationType[]) => {
+    notifications.forEach((notification) => {
+      const notifTitle = notification.type
+      const notifBody = notification.message
+      const notifImg = '/assets/notification-image.png'
+      const options = {
+        body: notifBody,
+        icon: notifImg
+      }
+      new Notification(notifTitle, options)
+      console.log('Notification created')
+    })
+  }
 
   const handleClickNotification = (id: string) => {
     updateNotification(id, { viewed: true })
   }
 
   const handleAskForNotificationsPermissions = () => {
-    if ('Notification' in window) {
-      console.log('This browser does not support notifications.')
-      Notification.requestPermission().then((result) => {
-        if (result === 'granted') {
-          setAllowNotifications(true)
-        }
+    if (!(notificationPermissions === 'not_support')) {
+      Notification.requestPermission().then((response) => {
+        setNotificationPermissions(response)
       })
     }
   }
 
   useEffect(() => {
-    userNotifications((res: NotificationType[]) => setNotifications(res))
+    userNotifications((res: NotificationType[]) => {
+      setNewNotifications(res?.filter(({ viewed }) => !viewed))
+      setNotifications(res)
+    })
   }, [userNotifications])
 
   useEffect(() => {
-    const browserNotifications = (notifications: NotificationType[]) => {
-      notifications.forEach((notification) => {
-        console.log('notification created')
-        const notifTitle = notification.type
-        const notifBody = notification.message
-        const notifImg = ''
-        const options = {
-          body: notifBody,
-          icon: notifImg
-        }
-        if ('Notification' in window) {
-          console.log('This browser does not support notifications.')
-          const greeting = new Notification(notifTitle, options)
-          console.log(greeting)
-        }
-      })
+    if (!('Notification' in window)) {
+      setNotificationPermissions('not_support')
+    } else {
+      setNotificationPermissions(Notification.permission)
     }
-    browserNotifications(newNotifications)
-  }, [newNotifications, allowNotifications])
+  }, [])
 
   useEffect(() => {
-    if (!('Notification' in window)) {
-      console.log('This browser does not support notifications.')
-    } else if (!allowNotifications) {
-      Notification.requestPermission().then((permission) => {
-        permission === 'granted' && setAllowNotifications(true)
-      })
-    } else {
-      setAllowNotifications(Notification.permission === 'granted')
-      console.log('set notifications')
-      // Notification.requestPermission((permission) => {
-      // })
+    /* ******************************************** 
+           Create notifications                
+ *******************************************rz */
+    if (newNotifications.length) {
+      createNotifications(newNotifications)
+      console.count()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [newNotifications])
+
   return (
     <div className="dropdown dropdown-end">
       <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -95,7 +97,7 @@ const UserNotifications = () => {
         tabIndex={0}
         className=" dropdown-content mt-3 p-1 shadow bg-base-100 rounded-box w-52"
       >
-        {allowNotifications || (
+        {showAskForNotification && (
           <div>
             <button
               className="btn btn-sm btn-info"
@@ -108,6 +110,7 @@ const UserNotifications = () => {
             </button>
           </div>
         )}
+        {!notifications.length && <li>No tienes notificiones aún</li>}
         {notifications.map(({ viewed, id, createdAt, message }) => (
           <li key={id}>
             <button

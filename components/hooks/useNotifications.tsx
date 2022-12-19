@@ -4,6 +4,7 @@ import {
 } from '@firebase/Notifications/main'
 import { NotificationType } from '@firebase/Notifications/notifications.model'
 interface SendNotification {
+  title: NotificationType['title']
   type: NotificationType['type']
   to: NotificationType['directedTo']
   from: NotificationType['createdBy']
