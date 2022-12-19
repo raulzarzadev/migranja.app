@@ -7,14 +7,29 @@ import { fromNow } from 'utils/dates/myDateUtils'
 const UserNotifications = () => {
   const { userNotifications } = useNotifications()
   const [notifications, setNotifications] = useState<NotificationType[]>([])
-  useEffect(() => {
-    userNotifications((res: NotificationType[]) => setNotifications(res))
-  }, [userNotifications])
+
+  const newNotifications = notifications?.filter(({ viewed }) => !viewed)
+  const [allowNotifications, setAllowNotifications] = useState(false)
+
   const handleClickNotification = (id: string) => {
     updateNotification(id, { viewed: true })
   }
-  const newNotifications = notifications?.filter(({ viewed }) => !viewed)
-  const [allowNotifications, setAllowNotifications] = useState(false)
+
+  const handleAskForNotificationsPermissions = () => {
+    if ('Notification' in window) {
+      console.log('This browser does not support notifications.')
+      Notification.requestPermission().then((result) => {
+        if (result === 'granted') {
+          setAllowNotifications(true)
+        }
+      })
+    }
+  }
+
+  useEffect(() => {
+    userNotifications((res: NotificationType[]) => setNotifications(res))
+  }, [userNotifications])
+
   useEffect(() => {
     const browserNotifications = (notifications: NotificationType[]) => {
       notifications.forEach((notification) => {
@@ -36,17 +51,6 @@ const UserNotifications = () => {
     browserNotifications(newNotifications)
   }, [newNotifications, allowNotifications])
 
-  const handleAskForNotificationsPermissions = () => {
-    if ('Notification' in window) {
-      console.log('This browser does not support notifications.')
-      Notification.requestPermission().then((result) => {
-        if (result === 'granted') {
-          setAllowNotifications(true)
-        }
-      })
-    }
-  }
-
   useEffect(() => {
     if (!('Notification' in window)) {
       console.log('This browser does not support notifications.')
@@ -62,7 +66,6 @@ const UserNotifications = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   return (
     <div className="dropdown dropdown-end">
       <label tabIndex={0} className="btn btn-ghost btn-circle">

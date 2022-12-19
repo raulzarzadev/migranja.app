@@ -9,11 +9,9 @@ const FarmInvitations = () => {
   const { user } = useAuth()
 
   useEffect(() => {
-    console.log(user?.id)
     user?.id &&
       getInvitationsFarm(user.id).then((res) => setFarmInvitations(res))
-  }, [user])
-
+  }, [user?.id])
   return (
     <div>
       {farmInvitations.map((farm, i) => (

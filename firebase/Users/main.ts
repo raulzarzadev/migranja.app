@@ -49,6 +49,7 @@ export const listenUser = async (itemId: string, cb: CallableFunction) =>
 
 export function authStateChanged(cb: CallableFunction) {
   onAuthStateChanged(auth, async (user) => {
+    console.count()
     if (!user) {
       console.log(user)
       // console.log('not logged');
