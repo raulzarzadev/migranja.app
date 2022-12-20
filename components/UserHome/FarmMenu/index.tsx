@@ -98,10 +98,10 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
                 title="Varios"
                 iconName="plus"
                 onClick={() => handleChangeOption('column3', 'addMany')}
-                selected={menuOptions.column3 === 'add'}
+                selected={menuOptions.column3 === 'addMany'}
               />
               <SquareOption
-                title="Nuevos"
+                title="Nuevo"
                 iconName="plus"
                 onClick={() => handleChangeOption('column3', 'add')}
                 selected={menuOptions.column3 === 'add'}
