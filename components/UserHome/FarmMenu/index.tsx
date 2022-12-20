@@ -2,11 +2,19 @@ import { FarmType } from '@firebase/Farm/farm.model'
 import AnimalsTable from 'components/AnimalsTable'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
+import AnimalsForm from 'components/forms/AnimalsForm'
 import SquareOption from 'components/SquareOption'
 import { useState } from 'react'
 import AnimalCard from '../../AnimalCard'
 type MenuOptions = 'column1' | 'column2' | 'column3'
-type Option = 'animals' | 'sheep' | 'add' | 'list' | 'events' | 'team'
+type Option =
+  | 'animals'
+  | 'sheep'
+  | 'add'
+  | 'list'
+  | 'events'
+  | 'team'
+  | 'addMany'
 
 const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
   const [menuOptions, setMenuOptions] = useState<
@@ -87,7 +95,13 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
           {menuOptions?.column2 === 'sheep' && (
             <>
               <SquareOption
-                title="Nuevo"
+                title="Varios"
+                iconName="plus"
+                onClick={() => handleChangeOption('column3', 'addMany')}
+                selected={menuOptions.column3 === 'add'}
+              />
+              <SquareOption
+                title="Nuevos"
                 iconName="plus"
                 onClick={() => handleChangeOption('column3', 'add')}
                 selected={menuOptions.column3 === 'add'}
@@ -119,6 +133,15 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
         {isSheepSelected && menuOptions.column3 === 'add' && (
           <div className="md:w-1/2  bg-base-300 shadow-md rounded-md p-2">
             <AnimalForm
+              animal={{
+                type: 'ovine'
+              }}
+            />
+          </div>
+        )}
+        {isSheepSelected && menuOptions.column3 === 'addMany' && (
+          <div className="md:w-1/2  bg-base-300 shadow-md rounded-md p-2">
+            <AnimalsForm
               animal={{
                 type: 'ovine'
               }}

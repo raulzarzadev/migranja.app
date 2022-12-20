@@ -1,3 +1,4 @@
+import { FarmType } from '@firebase/Farm/farm.model'
 import { ImageType } from './ImageType.model'
 import { DateType, TypeBase } from './TypeBase.model'
 
@@ -15,6 +16,10 @@ export interface AnimalType extends TypeBase {
   lote: string | null
   birthType: number | string
   joinedAt: DateType
+  farm?: {
+    id?: FarmType['id']
+    name?: FarmType['name']
+  }
 }
 
 export interface GenderOptions {

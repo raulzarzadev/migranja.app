@@ -1,4 +1,3 @@
-import { FarmType } from '@firebase/Farm/farm.model'
 import FarmNavigation from 'components/FarmNavigation'
 import useFarm from 'components/hooks/useFarm'
 import FarmMenu from 'components/UserHome/FarmMenu'

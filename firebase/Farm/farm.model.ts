@@ -1,3 +1,4 @@
+import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { ImageType } from '@firebase/types.model.ts/ImageType.model'
 import { DateType, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
 import { UserType } from '@firebase/Users/user.model'
@@ -8,6 +9,7 @@ export interface FarmType extends TypeBase {
   team: Record<MemberTeam['id'], MemberTeam>
   images: ImageType[]
   email?: string
+  animals?: AnimalType[]
 }
 
 export interface PermissionOption {

@@ -1,5 +1,6 @@
+import { listenFarmOvines } from '@firebase/Animal/main'
 import { FarmType } from '@firebase/Farm/farm.model'
-import { getFarm, listenFarm, listenUserFarms } from '@firebase/Farm/main'
+import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,6 +17,7 @@ const useFarm = (props?: UseFarm) => {
   const dispatch = useDispatch()
   const { user } = useAuth()
   const currentFarm = useSelector(selectFarmState)
+  const [currentFarmAnimals, setCurrentFarmAnimals] = useState([])
   const [userFarm, setUserFarm] = useState<FarmType | null>(null)
   const [farmData, setFarmData] = useState<FarmType | any>(null)
 
@@ -39,7 +41,18 @@ const useFarm = (props?: UseFarm) => {
       })
   }, [dispatch, farmId, user])
 
-  return { currentFarm, userFarm, farmData }
+  useEffect(() => {
+    farmId &&
+      listenFarmOvines(farmId as string, (res: any) => {
+        setCurrentFarmAnimals(res)
+      })
+  }, [farmId])
+
+  return {
+    currentFarm: { ...currentFarm, animals: currentFarmAnimals } as FarmType,
+    userFarm,
+    farmData
+  }
 }
 
 export default useFarm

@@ -13,6 +13,8 @@ import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
 import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
 import useFarm from 'components/hooks/useFarm'
+import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import Loading from 'components/Loading'
 
 const schema = yup
   .object()
@@ -24,6 +26,12 @@ const schema = yup
   })
   .required()
 
+interface QuickAnimal {
+  name: string
+  earring: string
+  gender: AnimalType['gender']
+}
+
 export const AnimalsForm = ({
   animal,
   setEditing
@@ -33,194 +41,206 @@ export const AnimalsForm = ({
 }) => {
   const { currentFarm } = useFarm()
 
-  const farmData = {
-    id: currentFarm?.id,
-    name: currentFarm?.name
-  }
-
   const [loading, setLoading] = useState(false)
 
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      birthday: new Date(),
       gender: 'female',
-      joinedAt: new Date(),
-      breed: '',
       name: '',
-      birthType: 1,
-      lote: null,
-      weight: {
-        atBirth: null,
-        atWeaning: null,
-        at6Month: null,
-        at12Month: null,
-        ...animal.weight
-      },
-
       ...animal
     }
   })
-  const { watch, handleSubmit, reset, setValue } = methods
+  const { watch, handleSubmit, reset, setValue, setError } = methods
   const { id, images } = watch()
 
-  const onSubmit = (data: any) => {
-    //console.log(data)
-    setLoading(true)
-    if (id) {
-      updateAnimal(id, data)
-        .then((res: any) => console.log(res))
-        .catch((err: any) => console.log(err))
-        .finally(() => {
-          setEditing?.(false)
-          setLoading(false)
-        })
+  const [animals, setAnimals] = useState<QuickAnimal[]>([])
+  const { register } = methods
+
+  const earringAlreadyExist = (earring: string) => {
+    return !![...(currentFarm?.animals || []), ...animals]?.find(
+      (animal: AnimalType | QuickAnimal) => animal?.earring === earring
+    )
+  }
+  const onAddItem = (data: any) => {
+    if (earringAlreadyExist(data?.earring)) {
+      setError('earring', { type: 'validate', message: 'Este arete ya existe' })
     } else {
-      createAnimal({ ...data, farm: farmData })
-        .then(({ res }: any) => {
-          setValue('id', res?.id)
-          console.log(res)
-        })
-        .catch((err: any) => console.log(err))
-        .finally(() => {
-          {
-            setEditing?.(false)
-            setLoading(false)
-          }
-        })
+      setAnimals([...animals, data])
+      reset()
     }
+    // //console.log(data)
+    // setLoading(true)
+    // if (id) {
+    //   updateAnimal(id, data)
+    //     .then((res: any) => console.log(res))
+    //     .catch((err: any) => console.log(err))
+    //     .finally(() => {
+    //       setEditing?.(false)
+    //       setLoading(false)
+    //     })
+    // } else {
+    //   createAnimal({ ...data, farm: farmData })
+    //     .then(({ res }: any) => {
+    //       setValue('id', res?.id)
+    //       console.log(res)
+    //     })
+    //     .catch((err: any) => console.log(err))
+    //     .finally(() => {
+    //       {
+    //         setEditing?.(false)
+    //         setLoading(false)
+    //       }
+    //     })
+    // }
   }
 
+  const handleRemove = (index: number) => {
+    const animalCopy = [...animals]
+    animalCopy.splice(index, 1)
+    setAnimals(animalCopy)
+  }
+
+  const handleSave = async () => {
+    setLoading(true)
+    const farmData = {
+      id: currentFarm.id,
+      name: currentFarm.name
+    }
+    try {
+      const savingAnimals = animals.map(async (animal) => {
+        return await createAnimal({ ...animal, farm: farmData }).then(
+          ({ res }: any) => {
+            //console.log(res)
+            return { ...res, ...animal }
+          }
+        )
+      })
+
+      await Promise.all(savingAnimals)
+      setAnimals([])
+
+      //console.log(res)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
   return (
     <div>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormHeader
-            id={id}
-            loading={loading}
-            reset={reset}
-            setEditing={setEditing}
-          />
-          <div>
-            <header className="flex w-full justify-between flex-col sm:flex-row">
-              <div>Ingresar animales</div>
-              <div>
-                <div className="text-right flex flex-wrap justify-end">
-                  <div className="w-[100px]">
-                    <InputContainer name="earring" type="text" label="Arete" />
-                  </div>
-                  <div className="w-[100px]">
-                    <InputContainer name="name" type="text" label="Nombre" />
-                  </div>
-                  <div className="w-[100px]">
-                    <InputContainer name="lote" type="text" label="Lote" />
-                  </div>
-                </div>
-                <div className="flex  justify-end flex-wrap text-end">
-                  <div className="w-[100px]">
+        <form onSubmit={handleSubmit(onAddItem)}>
+          <header className="flex w-full justify-between flex-col sm:flex-row"></header>
+          <main>
+            <table className="table table-compact mx-auto">
+              <thead>
+                <tr>
+                  <th>Arete</th>
+                  <th>Nombre</th>
+                  <th>Sexo</th>
+                  <th>Ops</th>
+                </tr>
+              </thead>
+              <tbody>
+                {animals.map((animal, i) => (
+                  <tr key={animal.earring}>
+                    <td>{animal.earring}</td>
+                    <td>{animal.name}</td>
+                    <td>{animal.gender}</td>
+                    <td>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleRemove(i)
+                        }}
+                      >
+                        <Icon name="delete" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td>
                     <InputContainer
-                      label="Raza"
-                      type="select"
-                      name="breed"
-                      selectOptions={sheep_breeds}
+                      name="earring"
+                      type="text"
+                      className="w-24"
                     />
-                  </div>
-                  <div className="w-[140px]">
-                    <InputContainer
-                      type="date"
-                      name="joinedAt"
-                      label="Incorporación"
-                    />
-                  </div>
-                </div>
-              </div>
-            </header>
-            <main>
-              <div className="flex w-full">
-                <div className="w-1/2">
-                  Nacimiento
-                  <div>
-                    <InputContainer type="date" name="birthday" label="Fecha" />
-                    <InputContainer
-                      label="Sexo"
-                      type="select"
-                      name="gender"
-                      selectOptions={[MaleOptions, FemaleOptions]}
-                    />
-
-                    <InputContainer
-                      label="Parto"
-                      type="select"
-                      name="birthType"
-                      selectOptions={[
-                        { label: '1', value: 1 },
-                        { label: '2', value: 2 },
-                        { label: '3', value: 3 },
-                        { label: '4', value: 4 }
-                      ]}
-                    />
-                    {/* <span>{part}</span> */}
-                  </div>
-                </div>
-                <div className="w-1/2 flex justify-center items-center p-4 ">
-                  <div className="w-full h-full ">
-                    <figure className=" w-full h-full flex justify-center items-center bg-base-200 shadow-sm">
-                      {images?.[0] ? (
-                        <Image src={images[0].url} fill alt="animal-photo" />
-                      ) : (
-                        <>
-                          <Icon name="camera" />
-                        </>
-                      )}
-                    </figure>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="">
-                  Genetica
-                  <AnimalParentsForm />
-                </div>
-                <div className="">
-                  Peso
-                  <div className=" flex w-full justify-around">
-                    <div className="flex flex-col justify-center text-center">
-                      <span>Al nacer: </span>
-                      <span className="w-[80px]">
-                        <InputContainer name="weight.atBirth" type="number" />
+                  </td>
+                  <td>
+                    <InputContainer name="name" type="text" className="w-24" />
+                  </td>
+                  <td>
+                    <div className="flex">
+                      <span className="flex flex-col p-0.5">
+                        Hembra
+                        <input
+                          type="radio"
+                          {...register('gender')}
+                          value="female"
+                          checked
+                        />
+                      </span>
+                      <span className="flex flex-col p-0.5">
+                        Macho
+                        <input
+                          type="radio"
+                          {...register('gender')}
+                          value="male"
+                        />
                       </span>
                     </div>
-
-                    <div className="flex flex-col justify-center text-center">
-                      <span>Al destete: </span>
-                      <span className="w-[80px]">
-                        <InputContainer name="weight.atWeaning" type="number" />
-                      </span>
-                    </div>
-                    <div className="flex flex-col justify-center text-center">
-                      <span>A los 6m: </span>
-                      <span className="w-[80px]">
-                        <InputContainer name="weight.at6Month" type="number" />
-                      </span>
-                    </div>
-                    <div className="flex flex-col justify-center text-center">
-                      <span>A los 12m: </span>
-                      <span className="w-[80px]">
-                        <InputContainer name="weight.at12Month" type="number" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </main>
-          </div>
+                  </td>
+                  <td>
+                    <button>
+                      Add <Icon name="plus" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </main>
+          <footer>
+            <div className="flex justify-evenly my-2">
+              <button
+                className="btn btn-outline"
+                onClick={(e) => {
+                  e.preventDefault()
+                  reset()
+                  setAnimals([])
+                }}
+              >
+                Limpiar
+              </button>
+              <button
+                disabled={loading}
+                className="btn btn-info"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleSave()
+                }}
+              >
+                Guardar todos{' '}
+                <span className="ml-1">
+                  {loading ? <Loading /> : <Icon name="close" />}
+                </span>
+              </button>
+            </div>
+          </footer>
         </form>
       </FormProvider>
     </div>
   )
 }
 
-const FormHeader = ({ id, setEditing, reset, loading }: any) => {
+const FormHeader = ({
+  id,
+  setEditing,
+  reset,
+  loading,
+  title = 'Form title'
+}: any) => {
   const handleDelete = () => {
     id &&
       deleteAnimal(id)
@@ -230,6 +250,9 @@ const FormHeader = ({ id, setEditing, reset, loading }: any) => {
 
   return (
     <div className="flex w-full justify-end">
+      <div>
+        <div className="text-center font-bold">Ingresar animales</div>
+      </div>
       <div className="flex w-1/3 justify-between">
         <span>
           {id && (
@@ -264,29 +287,7 @@ const FormHeader = ({ id, setEditing, reset, loading }: any) => {
           type="submit"
           disabled={loading}
         >
-          {loading ? (
-            <div role="status">
-              <svg
-                aria-hidden="true"
-                className="mr-4 w-6 h-6 text-base-content animate-spin dark:text-base-content fill-base-300"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                />
-              </svg>
-              <span className="sr-only">Loading...</span>
-            </div>
-          ) : (
-            <Icon size="sm" name="done" />
-          )}
+          {loading ? <Loading /> : <Icon size="sm" name="done" />}
         </button>
       </div>
     </div>
