@@ -69,30 +69,6 @@ export const AnimalsForm = ({
       setAnimals([...animals, data])
       reset()
     }
-    // //console.log(data)
-    // setLoading(true)
-    // if (id) {
-    //   updateAnimal(id, data)
-    //     .then((res: any) => console.log(res))
-    //     .catch((err: any) => console.log(err))
-    //     .finally(() => {
-    //       setEditing?.(false)
-    //       setLoading(false)
-    //     })
-    // } else {
-    //   createAnimal({ ...data, farm: farmData })
-    //     .then(({ res }: any) => {
-    //       setValue('id', res?.id)
-    //       console.log(res)
-    //     })
-    //     .catch((err: any) => console.log(err))
-    //     .finally(() => {
-    //       {
-    //         setEditing?.(false)
-    //         setLoading(false)
-    //       }
-    //     })
-    // }
   }
 
   const handleRemove = (index: number) => {
@@ -131,9 +107,9 @@ export const AnimalsForm = ({
     <div>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onAddItem)}>
-          <header className="flex w-full justify-between flex-col sm:flex-row"></header>
-          <main>
-            <table className="table table-compact mx-auto">
+          <header className="flex w-full justify-between flex-col sm:flex-row "></header>
+          <main className="">
+            <table className="table table-compact mx-auto ">
               <thead>
                 <tr>
                   <th>Arete</th>
@@ -172,7 +148,7 @@ export const AnimalsForm = ({
                     <InputContainer name="name" type="text" className="w-24" />
                   </td>
                   <td>
-                    <div className="flex">
+                    <div className="flex flex-col sm:flex-row">
                       <span className="flex flex-col p-0.5">
                         Hembra
                         <input

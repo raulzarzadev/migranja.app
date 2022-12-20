@@ -32,148 +32,11 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
 
   return (
     <div className="flex flex-wrap ">
-      <div className="flex justify-center w-full">
-        <div className=" min-h-[200px] p-1 flex justify-center w-min mx-auto border ">
-          {/****************  column 1 *********************/}
-          <div className="flex-col flex ">
-            <SquareOption
-              title="Animals"
-              iconName="herd"
-              onClick={() => handleChangeOption('column1', 'animals')}
-              selected={menuOptions.column1 === 'animals'}
-            />
+      {/* ********************************* FARM MENU ************************************* */}
 
-            <SquareOption
-              title="Eventos"
-              iconName="event"
-              onClick={() => handleChangeOption('column1', 'events')}
-              selected={menuOptions.column1 === 'events'}
-            />
-            {farmIncludeTeam && (
-              <SquareOption
-                title="Equipo"
-                iconName="team"
-                onClick={() => handleChangeOption('column1', 'team')}
-                selected={menuOptions.column1 === 'team'}
-              />
-            )}
-          </div>
-
-          {/****************  column 2 *********************/}
-
-          <div className="flex flex-col ">
-            {menuOptions?.column1 === 'animals' && (
-              <SquareOption
-                title="Borregas"
-                iconName="sheep"
-                onClick={() => handleChangeOption('column2', 'sheep')}
-                selected={menuOptions.column2 === 'sheep'}
-              />
-            )}
-            {menuOptions?.column1 === 'events' && (
-              <>
-                <SquareOption
-                  title="Nuevo"
-                  iconName="plus"
-                  onClick={() => handleChangeOption('column2', 'add')}
-                  selected={menuOptions.column2 === 'add'}
-                />
-                <SquareOption
-                  title="Todos"
-                  iconName="list"
-                  onClick={() => handleChangeOption('column2', 'list')}
-                  selected={menuOptions.column2 === 'list'}
-                />
-              </>
-            )}
-          </div>
-
-          {/****************  column 3 *********************/}
-
-          <div className="flex flex-col">
-            {menuOptions?.column2 === 'sheep' && (
-              <>
-                <SquareOption
-                  title="Todos"
-                  iconName="list"
-                  onClick={() => handleChangeOption('column3', 'list')}
-                  selected={menuOptions.column3 === 'list'}
-                />
-                <SquareOption
-                  title="Nuevo"
-                  iconName="plus"
-                  onClick={() => handleChangeOption('column3', 'add')}
-                  selected={menuOptions.column3 === 'add'}
-                />
-                <SquareOption
-                  title="Varios"
-                  iconName="plus"
-                  onClick={() => handleChangeOption('column3', 'addMany')}
-                  selected={menuOptions.column3 === 'addMany'}
-                />
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="min-h-[200px] p-1 flex justify-center flex-1 ">
-        {/* ********************************+ FARM MEMBER FORM *************************************** */}
-
-        {isSheepSelected && menuOptions.column3 === 'list' && (
-          <div className=" bg-base-300 shadow-md rounded-md">
-            <AnimalsTable
-              onRowClick={(id) => setListOptionSelected(id)}
-              selectedRow={listOptionSelected}
-            />
-          </div>
-        )}
-        {isSheepSelected && menuOptions.column3 === 'add' && (
-          <div className=" bg-base-300 shadow-md rounded-md p-2">
-            <AnimalForm
-              animal={{
-                type: 'ovine'
-              }}
-            />
-          </div>
-        )}
-        {isSheepSelected && menuOptions.column3 === 'addMany' && (
-          <div className="md:w-1/2  bg-base-300 shadow-md rounded-md p-2">
-            <AnimalsForm
-              animal={{
-                type: 'ovine'
-              }}
-            />
-          </div>
-        )}
-      </div>
-      <div className=" min-h-[200px] p-1 flex justify-center w-full md:w-1/3 ">
-        {isSheepSelected &&
-          menuOptions.column3 === 'list' &&
-          listOptionSelected && (
-            <div className="  bg-base-300 shadow-md rounded-md">
-              <AnimalCard animalId={listOptionSelected} />{' '}
-            </div>
-          )}
-        {menuOptions?.column1 === 'team' && (
-          <>
-            <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
-              <FarmTeam />
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  )
-}
-
-const Home = () => {
-  return (
-    <div className="flex gap-2 flex-col sm:flex-row">
-      {/****************  Farm *********************/}
-      {/****************  menu columns *********************/}
-      <div className="flex">
+      <div className="  p-1 flex justify-center w-min mx-auto  ">
         {/****************  column 1 *********************/}
-        <div className="flex-col flex">
+        <div className="flex-col flex ">
           <SquareOption
             title="Animals"
             iconName="herd"
@@ -253,22 +116,22 @@ const Home = () => {
           )}
         </div>
       </div>
+      {/* This will keep center the menu  */}
+      <div className=" flex w-full sm:w-0" />
 
-      {/****************  MORE INFORMATION AREA  *********************/}
+      {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
 
-      <div className=" flex w-full gap-2 mt-1 flex-col md:flex-row">
-        {/* ********************************+ FARM MEMBER FORM *************************************** */}
-        {menuOptions?.column1 === 'team' && (
-          <>
-            <div className="  bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
-              <FarmTeam />
-            </div>
-          </>
+      <div className=" p-1 flex justify-center flex-1 ">
+        {isSheepSelected && menuOptions.column3 === 'list' && (
+          <div className=" bg-base-300 shadow-md rounded-md">
+            <AnimalsTable
+              onRowClick={(id) => setListOptionSelected(id)}
+              selectedRow={listOptionSelected}
+            />
+          </div>
         )}
-        {/* ********************************+ SHEEP FORM *************************************** */}
-
         {isSheepSelected && menuOptions.column3 === 'add' && (
-          <div className="md:w-1/2  bg-base-300 shadow-md rounded-md p-2">
+          <div className=" bg-base-300 shadow-md rounded-md p-2">
             <AnimalForm
               animal={{
                 type: 'ovine'
@@ -277,7 +140,7 @@ const Home = () => {
           </div>
         )}
         {isSheepSelected && menuOptions.column3 === 'addMany' && (
-          <div className="md:w-1/2  bg-base-300 shadow-md rounded-md p-2">
+          <div className=" bg-base-300 shadow-md rounded-md p-2">
             <AnimalsForm
               animal={{
                 type: 'ovine'
@@ -285,20 +148,22 @@ const Home = () => {
             />
           </div>
         )}
-
-        {isSheepSelected && menuOptions.column3 === 'list' && (
-          <div className="md:w-1/2  bg-base-300 shadow-md rounded-md">
-            <AnimalsTable
-              onRowClick={(id) => setListOptionSelected(id)}
-              selectedRow={listOptionSelected}
-            />
-          </div>
+        {menuOptions?.column1 === 'team' && (
+          <>
+            <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
+              <FarmTeam />
+            </div>
+          </>
         )}
+      </div>
 
+      {/* ********************************+ ANIMAL CARD AND FARM TEAM WHEN THIS OPS ARE SELECTED*************************************** */}
+
+      <div className="  p-1 flex justify-center w-full md:w-1/3 ">
         {isSheepSelected &&
           menuOptions.column3 === 'list' &&
           listOptionSelected && (
-            <div className="md:w-1/2  bg-base-300 shadow-md rounded-md">
+            <div className="  bg-base-300 shadow-md rounded-md">
               <AnimalCard animalId={listOptionSelected} />{' '}
             </div>
           )}

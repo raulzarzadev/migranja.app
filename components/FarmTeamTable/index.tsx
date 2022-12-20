@@ -14,7 +14,7 @@ const FarmTeamTable = ({ farm }: { farm: FarmType | null }) => {
   }
   return (
     <div>
-      <table className="table table-compact mx-auto mt-2 w-full">
+      <table className="table table-compact mx-auto mt-2 w-full overflow-auto">
         <thead>
           <tr>
             <th>Nombre</th>
