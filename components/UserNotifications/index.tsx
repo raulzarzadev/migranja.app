@@ -2,7 +2,7 @@ import { updateNotification } from '@firebase/Notifications/main'
 import { NotificationType } from '@firebase/Notifications/notifications.model'
 import useNotifications from 'components/hooks/useNotifications'
 import { useEffect, useState } from 'react'
-import { fromNow } from 'utils/dates/myDateUtils'
+import NotificationsList from './NotificationsList'
 
 const UserNotifications = () => {
   const { userNotifications } = useNotifications()
