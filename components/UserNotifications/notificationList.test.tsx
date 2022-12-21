@@ -25,31 +25,42 @@ describe('User notifications', () => {
   ]
 
   it('renders notification bell', () => {
+    const mockHandlerNotificationClick = jest.fn()
+    const mockAskForNotifications = jest.fn()
     const component = render(
       <NotificationsList
-        notifications={[]}
-        onNotificationClick={(id) => console.log(id)}
+        notifications={notifications as NotificationType[]}
+        onNotificationClick={mockHandlerNotificationClick}
+        askForNotificationsPermissions={mockAskForNotifications}
+        showAskForNotification={true}
       />
     )
     component.getByRole('notification-bell')
   })
 
   it('Empty notifications list should render label any-notifications', () => {
+    const mockHandlerNotificationClick = jest.fn()
+    const mockAskForNotifications = jest.fn()
     const component = render(
       <NotificationsList
-        notifications={[]}
-        onNotificationClick={(id) => console.log(id)}
+        notifications={[] as NotificationType[]}
+        onNotificationClick={mockHandlerNotificationClick}
+        askForNotificationsPermissions={mockAskForNotifications}
+        showAskForNotification={true}
       />
     )
-
     component.getByRole('any-notifications-label')
   })
 
   it('Should render 2 notification, one viewed and one new', () => {
+    const mockHandlerNotificationClick = jest.fn()
+    const mockAskForNotifications = jest.fn()
     const component = render(
       <NotificationsList
         notifications={notifications as NotificationType[]}
-        onNotificationClick={(id) => console.log(id)}
+        onNotificationClick={mockHandlerNotificationClick}
+        askForNotificationsPermissions={mockAskForNotifications}
+        showAskForNotification={true}
       />
     )
     const items = component.getAllByRole('notification')
@@ -62,16 +73,18 @@ describe('User notifications', () => {
   })
 
   it('on notification click should use id notification ', () => {
-    const mockHandler = jest.fn()
-
+    const mockHandlerNotificationClick = jest.fn()
+    const mockAskForNotifications = jest.fn()
     const component = render(
       <NotificationsList
         notifications={notifications as NotificationType[]}
-        onNotificationClick={mockHandler}
+        onNotificationClick={mockHandlerNotificationClick}
+        askForNotificationsPermissions={mockAskForNotifications}
+        showAskForNotification={true}
       />
     )
     const notificationViewed = component.getByRole('notification-viewed')
     fireEvent.click(notificationViewed)
-    expect(mockHandler.mock.calls).toHaveLength(1)
+    expect(mockHandlerNotificationClick.mock.calls).toHaveLength(1)
   })
 })

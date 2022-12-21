@@ -3,10 +3,14 @@ import { fromNow } from 'utils/dates/myDateUtils'
 export interface NotificationList {
   notifications: NotificationType[]
   onNotificationClick: (id: string) => void
+  askForNotificationsPermissions: () => void
+  showAskForNotification: boolean
 }
 const NotificationsList = ({
   notifications,
-  onNotificationClick
+  onNotificationClick,
+  askForNotificationsPermissions,
+  showAskForNotification
 }: NotificationList) => {
   const newNotifications = notifications.filter(({ viewed }) => !viewed)
   return (
@@ -42,6 +46,19 @@ const NotificationsList = ({
         className=" dropdown-content mt-3 p-1 shadow bg-base-100 rounded-box w-52"
         role="notifications-list"
       >
+        {showAskForNotification && (
+          <div>
+            <button
+              className="btn btn-sm btn-info"
+              onClick={(e) => {
+                e.preventDefault()
+                askForNotificationsPermissions()
+              }}
+            >
+              Permitir notificaciónes
+            </button>
+          </div>
+        )}
         {!notifications.length && (
           <span role={'any-notifications-label'} className="text-sm">
             Aún no tienes notificaciones

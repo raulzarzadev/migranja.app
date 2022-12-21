@@ -37,14 +37,9 @@ next-env.d.ts
 
 # sw and pwa
 
-public/sw.js.map
-
 public/sw.**
 
-<<<<<<< HEAD
 public/sw.js.map
 
-=======
->>>>>>> testing
 public/workbox**
 
