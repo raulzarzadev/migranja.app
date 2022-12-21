@@ -12,6 +12,7 @@ export interface NotificationType extends TypeBase {
     name: UserType['name']
     email: UserType['email']
   }
+  title: string
   type: 'farm-invitation' | 'app-actualization'
   message: string
   viewed?: boolean
