@@ -27,7 +27,7 @@ const UserNotifications = () => {
         icon: notifImg
       }
       new Notification(notifTitle, options)
-      console.log('Notification created')
+      // console.log('Notification created')
     })
   }
 
@@ -64,7 +64,6 @@ const UserNotifications = () => {
  *******************************************rz */
     if (newNotifications.length) {
       createNotifications(newNotifications)
-      console.count()
     }
   }, [newNotifications])
 
