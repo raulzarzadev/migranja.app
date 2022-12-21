@@ -7,16 +7,70 @@ import { fromNow } from 'utils/dates/myDateUtils'
 const UserNotifications = () => {
   const { userNotifications } = useNotifications()
   const [notifications, setNotifications] = useState<NotificationType[]>([])
-  useEffect(() => {
-    userNotifications((res: NotificationType[]) => setNotifications(res))
-  }, [userNotifications])
+  const [showAskForNotification, setShowAskForNotification] =
+    useState<boolean>(false)
+  const [notificationPermissions, setNotificationPermissions] = useState<
+    'granted' | 'default' | 'denied' | 'not_support'
+  >()
+
+  const [newNotifications, setNewNotifications] = useState<NotificationType[]>(
+    []
+  )
+
+  const createNotifications = (notifications: NotificationType[]) => {
+    notifications.forEach((notification) => {
+      const notifTitle = notification.type
+      const notifBody = notification.message
+      const notifImg = '/assets/notification-image.png'
+      const options = {
+        body: notifBody,
+        icon: notifImg
+      }
+      new Notification(notifTitle, options)
+      console.log('Notification created')
+    })
+  }
+
   const handleClickNotification = (id: string) => {
     updateNotification(id, { viewed: true })
   }
-  const newNotifications = notifications.filter(({ viewed }) => !viewed)
+
+  const handleAskForNotificationsPermissions = () => {
+    if (!(notificationPermissions === 'not_support')) {
+      Notification.requestPermission().then((response) => {
+        setNotificationPermissions(response)
+      })
+    }
+  }
+
+  useEffect(() => {
+    userNotifications((res: NotificationType[]) => {
+      setNewNotifications(res?.filter(({ viewed }) => !viewed))
+      setNotifications(res)
+    })
+  }, [userNotifications])
+
+  useEffect(() => {
+    if (!('Notification' in window)) {
+      setNotificationPermissions('not_support')
+    } else {
+      setNotificationPermissions(Notification.permission)
+    }
+  }, [])
+
+  useEffect(() => {
+    /* ******************************************** 
+           Create notifications                
+ *******************************************rz */
+    if (newNotifications.length) {
+      createNotifications(newNotifications)
+      console.count()
+    }
+  }, [newNotifications])
+
   return (
     <div className="dropdown dropdown-end">
-      <button tabIndex={0} className="btn btn-ghost btn-circle">
+      <label tabIndex={0} className="btn btn-ghost btn-circle">
         <div className="indicator">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -38,11 +92,25 @@ const UserNotifications = () => {
             </span>
           )}
         </div>
-      </button>
+      </label>
       <ul
         tabIndex={0}
         className=" dropdown-content mt-3 p-1 shadow bg-base-100 rounded-box w-52"
       >
+        {showAskForNotification && (
+          <div>
+            <button
+              className="btn btn-sm btn-info"
+              onClick={(e) => {
+                e.preventDefault()
+                handleAskForNotificationsPermissions()
+              }}
+            >
+              Permitir notificaciónes
+            </button>
+          </div>
+        )}
+        {!notifications.length && <li>No tienes notificiones aún</li>}
         {notifications.map(({ viewed, id, createdAt, message }) => (
           <li key={id}>
             <button

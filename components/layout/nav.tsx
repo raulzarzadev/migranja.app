@@ -13,7 +13,7 @@ export const Nav = () => {
     <nav className="mb-2">
       <div className="navbar bg-base-300 rounded-lg shadow-md ">
         <div className="flex-1">
-          <Link className="btn btn-ghost normal-case text-xl" href={'/'}>
+          <Link className="btn btn-ghost normal-case text-xl btn-sm" href={'/'}>
             MiRanchito
           </Link>
         </div>
@@ -64,7 +64,7 @@ const UserMenu = ({ user }: { user: UserType }) => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li>
+            {/* <li>
               <a className="justify-between">
                 Profile
                 <span className="badge">New</span>
@@ -72,7 +72,7 @@ const UserMenu = ({ user }: { user: UserType }) => {
             </li>
             <li>
               <a>Settings</a>
-            </li>
+            </li> */}
             <li>
               <button
                 className="border-error border "

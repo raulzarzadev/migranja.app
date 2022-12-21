@@ -31,9 +31,10 @@ const AnimalsTable = ({
   const columnHelper = createColumnHelper<AnimalType>()
   const { currentFarm } = useFarm()
   useEffect(() => {
-    listenFarmOvines(currentFarm?.id, (res: AnimalType[]) => setData(res))
+    currentFarm?.id &&
+      listenFarmOvines(currentFarm?.id, (res: AnimalType[]) => setData(res))
     return () => setData([])
-  }, [])
+  }, [currentFarm?.id])
 
   // TODO: listen farm ovines, or farm animals. Pero solo aquellos con permisos suficientes deberian poder leer datos.
   // ¿donde porner estos permisos?

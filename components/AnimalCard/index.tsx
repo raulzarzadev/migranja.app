@@ -1,8 +1,9 @@
-import { getAnimal } from '@firebase/Animal/main'
+import { deleteAnimal, getAnimal } from '@firebase/Animal/main'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
 
 import Icon from 'components/Icon'
+import ModalDelete from 'components/modal/ModalDelete'
 import {
   AnimalType,
   GenderOptions
@@ -66,19 +67,38 @@ const Card = ({
     male: MaleOptions,
     female: FemaleOptions
   }
-  console.log(animal)
+
+  const handleDelete = () => {
+    id &&
+      deleteAnimal(id)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+  }
+  // console.log(animal)
   return (
     <div>
       <div className="flex w-full justify-end">
-        <button
-          onClick={(e) => {
-            e.preventDefault()
-            setEditing(true)
-          }}
-          className="text-info btn btn-ghost btn-circle btn-sm"
-        >
-          <Icon size="sm" name="edit" />
-        </button>
+        {id && (
+          <ModalDelete
+            handleDelete={handleDelete}
+            title={'Eliminar animal'}
+            buttonLabel={null}
+            openButtonProps={{
+              className: ' btn btn-error btn-circle btn-sm text-'
+            }}
+          />
+        )}
+        <span className="mx-1">
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              setEditing(true)
+            }}
+            className="text-info btn btn-ghost btn-circle btn-sm"
+          >
+            <Icon size="sm" name="edit" />
+          </button>
+        </span>
       </div>
       <header className="flex w-full justify-between">
         <div>

@@ -1,4 +1,4 @@
-import UserFarm from 'components/Farm'
+import UserFarm from 'components/UserFarm'
 import FarmInvitations from 'components/FarmInvitations'
 
 const UserHome = () => {

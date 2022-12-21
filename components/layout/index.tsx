@@ -1,9 +1,10 @@
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React from 'react'
 import Nav from './nav'
 export interface LayoutProps {
   children: React.ReactNode
 }
+
 function Layout({ children }: LayoutProps) {
   return (
     <div className="p-2 prose">
@@ -26,20 +27,24 @@ function Layout({ children }: LayoutProps) {
 
         <link rel="manifest" href="/manifest.json" />
         <link
-          href="/icons/farm.png"
+          href="/assets/icons/icon-48x48.png"
           rel="icon"
           type="image/png"
           sizes="16x16"
         />
         <link
-          href="/icons/farm.png"
+          href="/assets/icons/icon-152x152.png"
           rel="icon"
           type="image/png"
           sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="/icons/farm.png"></link>
+        <link
+          rel="apple-touch-icon"
+          href="/assets/icons/icon-152x152.png"
+        ></link>
         <meta name="theme-color" content="#C6B386" />
       </Head>
+
       <Nav />
       <main className="">{children}</main>
     </div>

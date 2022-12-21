@@ -4,7 +4,7 @@ import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
-import { CreateFarmDTO } from './Farms.model'
+import { CreateFarmDTO } from './farm.model'
 
 const storage = getStorage(app)
 
@@ -47,5 +47,8 @@ export const listenUserFarms = (cb: CallableFunction) => {
 }
 
 export const getInvitationsFarm = async (userId: string) => {
-  return farmsCRUD.getItems([where(`team.${userId}.id`, '==', userId)])
+  return farmsCRUD.getItems([
+    where(`team.${userId}.id`, '==', userId), // verify if team user was created
+    where(`team.${userId}.invitation.sent`, '==', true) // verify if invitation  was made
+  ])
 }

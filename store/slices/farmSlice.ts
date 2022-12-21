@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { AppState } from '..'
 import { HYDRATE } from 'next-redux-wrapper'
-import { UserType } from '../../firebase/Users/user.model'
 import { FarmType } from '@firebase/Farm/farm.model'
 
 // Type for our state

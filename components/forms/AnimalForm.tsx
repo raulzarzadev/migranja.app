@@ -98,12 +98,6 @@ export const AnimalForm = ({
         .catch((err) => console.log(err))
   }
 
-  const dt = new Date(watch('joinedAt'))
-
-  const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000)
-
-  //  console.log(myFormatDate(dtDateOnly, 'dd/MM/yyyy'))
-
   return (
     <div>
       <FormProvider {...methods}>
