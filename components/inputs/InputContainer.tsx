@@ -43,12 +43,23 @@ const InputContainer = ({
       }) => (
         <label className={`form-control ${className ?? ''}`}>
           {label && <span className="label-text">{label}</span>}
-          {['text', 'number'].includes(type) && (
+          {['text'].includes(type) && (
             <input
               className="input input-bordered input-sm"
               type={type}
               onBlur={onBlur} // notify when input is touched
               onChange={onChange} // send value to hook form
+              placeholder={placeholder}
+              value={value ?? ''}
+              {...rest}
+            />
+          )}
+          {type === 'number' && (
+            <input
+              className="input input-bordered input-sm"
+              type={type}
+              onBlur={onBlur} // notify when input is touched
+              onChange={(e) => onChange(parseInt(e.target.value))} // send value as number
               placeholder={placeholder}
               value={value ?? ''}
               {...rest}

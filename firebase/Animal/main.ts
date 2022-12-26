@@ -47,3 +47,17 @@ export const getFemaleOvines = async () =>
     where('type', '==', 'ovine'),
     where('gender', '==', 'female')
   ])
+
+export const getFarmFemaleOvines = async (farmId: string) =>
+  await AnimalsCRUD.getUserItems([
+    where('farm.id', '==', farmId),
+    where('type', '==', 'ovine'),
+    where('gender', '==', 'female')
+  ])
+
+export const getFarmMaleOvines = async (farmId: string) =>
+  await AnimalsCRUD.getUserItems([
+    where('farm.id', '==', farmId),
+    where('type', '==', 'ovine'),
+    where('gender', '==', 'male')
+  ])

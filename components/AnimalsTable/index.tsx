@@ -17,29 +17,26 @@ import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import useFarm from 'components/hooks/useFarm'
 
-const AnimalsTable = ({
-  onRowClick,
-  selectedRow,
-  onParentClick
-}: {
+export interface AnimalTableType {
+  animalsData: Partial<AnimalType>[]
   onRowClick?: (id: string) => void
   onParentClick?: (id: string | null) => void
   selectedRow?: string
-}) => {
-  const [data, setData] = useState<AnimalType[]>([])
+}
+const AnimalsTable = ({
+  animalsData,
+  onRowClick,
+  selectedRow,
+  onParentClick
+}: AnimalTableType) => {
+  const [data, setData] = useState<AnimalTableType['animalsData']>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
   const { currentFarm } = useFarm()
   useEffect(() => {
-    currentFarm?.id &&
-      listenFarmOvines(currentFarm?.id, (res: AnimalType[]) => setData(res))
+    setData(animalsData)
     return () => setData([])
-  }, [currentFarm?.id])
-
-  // TODO: listen farm ovines, or farm animals. Pero solo aquellos con permisos suficientes deberian poder leer datos.
-  // ¿donde porner estos permisos?
-  // una funcion que evalue los permisos del usuario en cada peticion y basada en estos traiga resultados
-  // una funcion asi, donde se pone, en cada solicitud. y se le pasa un objeto con los permisos
+  }, [animalsData])
 
   const columns = [
     columnHelper.accessor('earring', {
@@ -53,7 +50,9 @@ const AnimalsTable = ({
       header: 'Nac',
       cell: (props) => (
         <span>
-          {props.getValue() ? myFormatDate(props.getValue(), 'dd-MMM-yy') : '-'}
+          {props.getValue()
+            ? props.getValue() && myFormatDate(props.getValue(), 'dd-MMM-yy')
+            : '-'}
         </span>
       )
     }),

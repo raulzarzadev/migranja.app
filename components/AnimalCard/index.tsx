@@ -147,7 +147,9 @@ const Card = ({
             <div className="pl-2">
               <div>
                 <span>Fecha: </span>
-                <span>{myFormatDate(birthday, 'dd-MMM-yy')}</span>
+                <span>
+                  {birthday ? myFormatDate(birthday, 'dd-MMM-yy') : ''}
+                </span>
               </div>
 
               <div>

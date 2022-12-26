@@ -3,6 +3,8 @@ import AnimalsTable from 'components/AnimalsTable'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
+import BatchForm from 'components/forms/BatchForm'
+import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { useState } from 'react'
 import AnimalCard from '../../AnimalCard'
@@ -15,6 +17,7 @@ type Option =
   | 'events'
   | 'team'
   | 'addMany'
+  | 'addBatch'
 
 const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
   const [menuOptions, setMenuOptions] = useState<
@@ -36,6 +39,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
 
       <div className="  p-1 flex justify-center w-min mx-auto  ">
         {/****************  column 1 *********************/}
+
         <div className="flex-col flex ">
           <SquareOption
             title="Animals"
@@ -50,6 +54,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
             onClick={() => handleChangeOption('column1', 'events')}
             selected={menuOptions.column1 === 'events'}
           />
+
           {farmIncludeTeam && (
             <SquareOption
               title="Equipo"
@@ -112,6 +117,12 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
                 onClick={() => handleChangeOption('column3', 'addMany')}
                 selected={menuOptions.column3 === 'addMany'}
               />
+              <SquareOption
+                title="Lote"
+                iconName="plus"
+                onClick={() => handleChangeOption('column3', 'addBatch')}
+                selected={menuOptions.column3 === 'addBatch'}
+              />
             </>
           )}
         </div>
@@ -124,7 +135,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
       <div className=" p-1 flex justify-center flex-1 ">
         {isSheepSelected && menuOptions.column3 === 'list' && (
           <div className=" bg-base-300 shadow-md rounded-md">
-            <AnimalsTable
+            <OvinesTable
               onRowClick={(id) => setListOptionSelected(id)}
               selectedRow={listOptionSelected}
             />
@@ -142,6 +153,15 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
         {isSheepSelected && menuOptions.column3 === 'addMany' && (
           <div className=" bg-base-300 shadow-md rounded-md p-2">
             <AnimalsForm
+              animal={{
+                type: 'ovine'
+              }}
+            />
+          </div>
+        )}
+        {isSheepSelected && menuOptions.column3 === 'addBatch' && (
+          <div className=" bg-base-300 shadow-md rounded-md p-2">
+            <BatchForm
               animal={{
                 type: 'ovine'
               }}
