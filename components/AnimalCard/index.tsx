@@ -51,7 +51,7 @@ const Card = ({
   const {
     earring,
     id,
-    lote,
+    batch,
     gender,
     parents,
     images,
@@ -114,10 +114,10 @@ const Card = ({
             <span>Arete:</span>
             <span className="text-2xl font-bold">{earring}</span>
           </div>
-          {lote && (
+          {batch && (
             <div>
               <span>lote:</span>{' '}
-              <span className="text-2xl font-bold">{lote}</span>
+              <span className="text-2xl font-bold">{batch}</span>
             </div>
           )}
           {name && (

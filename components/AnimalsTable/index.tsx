@@ -31,7 +31,7 @@ const AnimalsTable = ({
   const [data, setData] = useState<AnimalTableType['animalsData']>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
-  const { currentFarm } = useFarm()
+
   useEffect(() => {
     setData(animalsData)
     return () => setData([])
@@ -112,7 +112,7 @@ const AnimalsTable = ({
   }
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
-    data,
+    data: data as any,
     columns,
     state: {
       sorting,
