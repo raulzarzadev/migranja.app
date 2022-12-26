@@ -29,7 +29,9 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
     if (column === 'column1') return setMenuOptions({ [column]: option })
     setMenuOptions({ ...menuOptions, [column]: option })
   }
-  const [listOptionSelected, setListOptionSelected] = useState('')
+  const [listOptionSelected, setListOptionSelected] = useState<string | null>(
+    ''
+  )
   const isSheepSelected =
     menuOptions.column1 === 'animals' && menuOptions.column2 === 'sheep'
   const farmIncludeTeam = farm?.haveATeam
@@ -139,7 +141,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
         {isSheepSelected && menuOptions.column3 === 'list' && (
           <div className=" bg-base-300 shadow-md rounded-md">
             <OvinesTable
-              onRowClick={(id) => setListOptionSelected(id)}
+              onRowClick={({ id }) => setListOptionSelected(id)}
               selectedRow={listOptionSelected}
             />
           </div>

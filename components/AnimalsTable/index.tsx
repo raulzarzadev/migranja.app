@@ -18,7 +18,7 @@ import useFarm from 'components/hooks/useFarm'
 
 export interface AnimalTableType {
   animalsData: Partial<AnimalType>[]
-  onRowClick?: (id: string) => void
+  onRowClick?: ({ id, earring }: { id: string | null; earring: string }) => void
   onParentClick?: (id: string | null) => void
   selectedRow?: string | null
 }
@@ -212,7 +212,10 @@ const AnimalsTable = ({
                   ' border-4 border-base-content'
                 } `}
                 onClick={() => {
-                  onRowClick?.(row.original.id)
+                  onRowClick?.({
+                    id: row.original.id,
+                    earring: row.original.earring
+                  })
                 }}
               >
                 {row.getVisibleCells().map((cell) => (

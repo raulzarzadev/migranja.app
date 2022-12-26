@@ -69,13 +69,11 @@ const InputContainer = ({
             <input
               className="input input-bordered input-sm"
               type={'date'}
-              onChange={onChange}
+              onChange={(e) => onChange(e.target.valueAsDate)}
               onBlur={onBlur}
               name={name}
               ref={ref}
-              value={myFormatDate(value || new Date(), 'input', {
-                dateOnly: true
-              })}
+              // value={myFormatDate(value || new Date(), 'input')}
             />
           )}
           {type === 'select' && (

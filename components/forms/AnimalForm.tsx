@@ -2,7 +2,7 @@ import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
 import { createAnimal, deleteAnimal, updateAnimal } from '@firebase/Animal/main'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import AnimalParentsForm from './AnimalParentsForm'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
@@ -13,6 +13,7 @@ import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
 import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
 import useFarm from 'components/hooks/useFarm'
+import Script from 'next/script'
 
 const schema = yup
   .object()
@@ -49,21 +50,19 @@ export const AnimalForm = ({
       breed: '',
       name: '',
       birthType: 1,
-      lote: null,
+      batch: null,
       weight: {
         atBirth: null,
         atWeaning: null,
         at6Month: null,
         at12Month: null,
-        ...animal.weight
+        ...animal?.weight
       },
-
       ...animal
     }
   })
   const { watch, handleSubmit, reset, setValue } = methods
   const { id, images } = watch()
-
   const onSubmit = (data: any) => {
     //console.log(data)
     setLoading(true)
@@ -182,7 +181,7 @@ export const AnimalForm = ({
                     <InputContainer name="name" type="text" label="Nombre" />
                   </div>
                   <div className="w-[100px]">
-                    <InputContainer name="lote" type="text" label="Lote" />
+                    <InputContainer name="batch" type="text" label="Lote" />
                   </div>
                 </div>
                 <div className="flex  justify-end flex-wrap text-end">
