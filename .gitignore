@@ -39,10 +39,7 @@ next-env.d.ts
 
 public/sw.**
 
-<<<<<<< HEAD
-=======
 public/sw.js.map
 
->>>>>>> main
 public/workbox**
 
