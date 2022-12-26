@@ -13,7 +13,7 @@ export interface AnimalType extends TypeBase {
   status: string
   parents?: ParentsType
   weight?: AnimalWeight
-  lote: string | null
+  batch: string | null
   birthType: number | string
   joinedAt: DateType
   farm?: {

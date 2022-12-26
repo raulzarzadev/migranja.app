@@ -12,7 +12,6 @@ import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import { listenFarmOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import useFarm from 'components/hooks/useFarm'
@@ -21,12 +20,12 @@ export interface AnimalTableType {
   animalsData: Partial<AnimalType>[]
   onRowClick?: (id: string) => void
   onParentClick?: (id: string | null) => void
-  selectedRow?: string
+  selectedRow?: string | null
 }
 const AnimalsTable = ({
   animalsData,
   onRowClick,
-  selectedRow,
+  selectedRow = null,
   onParentClick
 }: AnimalTableType) => {
   const [data, setData] = useState<AnimalTableType['animalsData']>([])

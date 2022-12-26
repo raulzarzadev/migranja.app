@@ -210,6 +210,7 @@ export const AnimalForm = ({
                   Nacimiento
                   <div>
                     <InputContainer type="date" name="birthday" label="Fecha" />
+
                     <InputContainer
                       label="Sexo"
                       type="select"

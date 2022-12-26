@@ -1,9 +1,10 @@
 import { FarmType } from '@firebase/Farm/farm.model'
 import AnimalsTable from 'components/AnimalsTable'
+import BatchTable from 'components/BatchTable'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
-import BatchForm from 'components/forms/BatchForm'
+import BatchForm, { BatchType } from 'components/forms/BatchForm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { useState } from 'react'
@@ -32,6 +33,8 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
   const isSheepSelected =
     menuOptions.column1 === 'animals' && menuOptions.column2 === 'sheep'
   const farmIncludeTeam = farm?.haveATeam
+
+  const [batch, setBatch] = useState<BatchType | null>(null)
 
   return (
     <div className="flex flex-wrap ">
@@ -160,11 +163,12 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
           </div>
         )}
         {isSheepSelected && menuOptions.column3 === 'addBatch' && (
-          <div className=" bg-base-300 shadow-md rounded-md p-2">
+          <div className=" bg-base-300 shadow-md rounded-md p-2 w-full">
             <BatchForm
               animal={{
                 type: 'ovine'
               }}
+              setBatch={setBatch}
             />
           </div>
         )}
@@ -178,6 +182,16 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
       </div>
 
       {/* ********************************+ ANIMAL CARD AND FARM TEAM WHEN THIS OPS ARE SELECTED*************************************** */}
+
+      <div className="  p-1 flex justify-center w-full md:w-1/3 ">
+        {isSheepSelected &&
+          menuOptions.column3 === 'addBatch' &&
+          batch?.animals?.length && (
+            <div className="  bg-base-300 shadow-md rounded-md w-full">
+              <BatchTable animals={batch?.animals} />{' '}
+            </div>
+          )}
+      </div>
 
       <div className="  p-1 flex justify-center w-full md:w-1/3 ">
         {isSheepSelected &&
