@@ -6,8 +6,7 @@ import { useEffect, useState } from 'react'
 
 const OvinesTable = ({
   onRowClick,
-  selectedRow,
-  onParentClick
+  selectedRow
 }: Omit<AnimalTableType, 'animalsData'>) => {
   const { currentFarm } = useFarm()
   const [ovines, setOvines] = useState<AnimalType[]>([])
@@ -28,7 +27,6 @@ const OvinesTable = ({
         animalsData={ovines}
         onRowClick={onRowClick}
         selectedRow={selectedRow}
-        onParentClick={onParentClick}
       />
     </>
   )

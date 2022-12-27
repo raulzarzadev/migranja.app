@@ -13,7 +13,6 @@ import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
 import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
 import useFarm from 'components/hooks/useFarm'
-import Script from 'next/script'
 
 const schema = yup
   .object()

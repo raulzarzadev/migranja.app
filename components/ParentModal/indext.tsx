@@ -1,6 +1,5 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import AnimalCard, { AnimalDetails } from 'components/AnimalCard'
-import useFarm from 'components/hooks/useFarm'
+import { AnimalDetails } from 'components/AnimalCard'
 import Icon from 'components/Icon'
 import Modal from 'components/modal'
 import { useState } from 'react'

@@ -1,17 +1,13 @@
 import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
 import { createAnimal, deleteAnimal, updateAnimal } from '@firebase/Animal/main'
-import Image from 'next/image'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import AnimalParentsForm from './AnimalParentsForm'
-import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import { CreateAnimalDTO } from 'firebase/Animal/animal.model'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
-import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
 import useFarm from 'components/hooks/useFarm'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import Loading from 'components/Loading'
@@ -40,7 +36,6 @@ export const AnimalsForm = ({
   setEditing?: (v: boolean) => void
 }) => {
   const { currentFarm } = useFarm()
-
   const [loading, setLoading] = useState(false)
 
   const methods = useForm({
