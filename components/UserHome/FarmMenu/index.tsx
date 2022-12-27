@@ -38,171 +38,179 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
 
   const [batch, setBatch] = useState<BatchType | null>(null)
   return (
-    <div className="flex flex-wrap ">
+    <div className="flex w-full justify-evenly flex-wrap">
       {/* ********************************* FARM MENU ************************************* */}
+      <MenuSection>
+        <>
+          <div className="  p-1 flex justify-start w-min mx-auto  ">
+            {/****************  column 1 *********************/}
 
-      <div className="  p-1 flex justify-center w-min mx-auto  ">
-        {/****************  column 1 *********************/}
+            <div className="flex-col flex ">
+              <SquareOption
+                title="Animals"
+                iconName="herd"
+                onClick={() => handleChangeOption('column1', 'animals')}
+                selected={menuOptions.column1 === 'animals'}
+              />
 
-        <div className="flex-col flex ">
-          <SquareOption
-            title="Animals"
-            iconName="herd"
-            onClick={() => handleChangeOption('column1', 'animals')}
-            selected={menuOptions.column1 === 'animals'}
-          />
+              <SquareOption
+                title="Eventos"
+                iconName="event"
+                onClick={() => handleChangeOption('column1', 'events')}
+                selected={menuOptions.column1 === 'events'}
+              />
 
-          <SquareOption
-            title="Eventos"
-            iconName="event"
-            onClick={() => handleChangeOption('column1', 'events')}
-            selected={menuOptions.column1 === 'events'}
-          />
+              {farmIncludeTeam && (
+                <SquareOption
+                  title="Equipo"
+                  iconName="team"
+                  onClick={() => handleChangeOption('column1', 'team')}
+                  selected={menuOptions.column1 === 'team'}
+                />
+              )}
+            </div>
 
-          {farmIncludeTeam && (
-            <SquareOption
-              title="Equipo"
-              iconName="team"
-              onClick={() => handleChangeOption('column1', 'team')}
-              selected={menuOptions.column1 === 'team'}
-            />
+            {/****************  column 2 *********************/}
+
+            <div className="flex flex-col ">
+              {menuOptions?.column1 === 'animals' && (
+                <SquareOption
+                  title="Borregas"
+                  iconName="sheep"
+                  onClick={() => handleChangeOption('column2', 'sheep')}
+                  selected={menuOptions.column2 === 'sheep'}
+                />
+              )}
+              {menuOptions?.column1 === 'events' && (
+                <>
+                  <SquareOption
+                    title="Nuevo"
+                    iconName="plus"
+                    onClick={() => handleChangeOption('column2', 'add')}
+                    selected={menuOptions.column2 === 'add'}
+                  />
+                  <SquareOption
+                    title="Todos"
+                    iconName="list"
+                    onClick={() => handleChangeOption('column2', 'list')}
+                    selected={menuOptions.column2 === 'list'}
+                  />
+                </>
+              )}
+            </div>
+
+            {/****************  column 3 *********************/}
+
+            <div className="flex flex-col">
+              {menuOptions?.column2 === 'sheep' && (
+                <>
+                  <SquareOption
+                    title="Todos"
+                    iconName="list"
+                    onClick={() => handleChangeOption('column3', 'list')}
+                    selected={menuOptions.column3 === 'list'}
+                  />
+                  <SquareOption
+                    title="Nuevo"
+                    iconName="plus"
+                    onClick={() => handleChangeOption('column3', 'add')}
+                    selected={menuOptions.column3 === 'add'}
+                  />
+                  <SquareOption
+                    title="Varios"
+                    iconName="plus"
+                    onClick={() => handleChangeOption('column3', 'addMany')}
+                    selected={menuOptions.column3 === 'addMany'}
+                  />
+                  <SquareOption
+                    title="Lote"
+                    iconName="plus"
+                    onClick={() => handleChangeOption('column3', 'addBatch')}
+                    selected={menuOptions.column3 === 'addBatch'}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      </MenuSection>
+      <MenuSection>
+        <>
+          {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
+          {isSheepSelected && menuOptions.column3 === 'list' && (
+            <div className=" bg-base-300 shadow-md rounded-md">
+              <OvinesTable
+                onRowClick={({ id }) => setListOptionSelected(id)}
+                selectedRow={listOptionSelected}
+              />
+            </div>
           )}
-        </div>
-
-        {/****************  column 2 *********************/}
-
-        <div className="flex flex-col ">
-          {menuOptions?.column1 === 'animals' && (
-            <SquareOption
-              title="Borregas"
-              iconName="sheep"
-              onClick={() => handleChangeOption('column2', 'sheep')}
-              selected={menuOptions.column2 === 'sheep'}
-            />
+          {isSheepSelected && menuOptions.column3 === 'add' && (
+            <div className=" bg-base-300 shadow-md rounded-md p-2">
+              <AnimalForm
+                animal={{
+                  type: 'ovine'
+                }}
+              />
+            </div>
           )}
-          {menuOptions?.column1 === 'events' && (
+          {isSheepSelected && menuOptions.column3 === 'addMany' && (
+            <div className=" bg-base-300 shadow-md rounded-md p-2">
+              <AnimalsForm
+                animal={{
+                  type: 'ovine'
+                }}
+              />
+            </div>
+          )}
+          {isSheepSelected && menuOptions.column3 === 'addBatch' && (
+            <div className=" bg-base-300 shadow-md rounded-md p-2 w-full">
+              <BatchForm
+                animal={{
+                  type: 'ovine'
+                }}
+                setBatch={setBatch}
+              />
+            </div>
+          )}
+          {menuOptions?.column1 === 'team' && (
             <>
-              <SquareOption
-                title="Nuevo"
-                iconName="plus"
-                onClick={() => handleChangeOption('column2', 'add')}
-                selected={menuOptions.column2 === 'add'}
-              />
-              <SquareOption
-                title="Todos"
-                iconName="list"
-                onClick={() => handleChangeOption('column2', 'list')}
-                selected={menuOptions.column2 === 'list'}
-              />
+              <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
+                <FarmTeam />
+              </div>
             </>
           )}
-        </div>
+        </>
+      </MenuSection>
+      <MenuSection>
+        <>
+          {/* ********************************+ ANIMAL CARD AND FARM TEAM WHEN THIS OPS ARE SELECTED*************************************** */}
 
-        {/****************  column 3 *********************/}
+          {isSheepSelected &&
+            menuOptions.column3 === 'addBatch' &&
+            batch?.animals?.length && (
+              <div className="  bg-base-300 shadow-md rounded-md w-full">
+                <BatchTable animals={batch?.animals} />{' '}
+              </div>
+            )}
 
-        <div className="flex flex-col">
-          {menuOptions?.column2 === 'sheep' && (
-            <>
-              <SquareOption
-                title="Todos"
-                iconName="list"
-                onClick={() => handleChangeOption('column3', 'list')}
-                selected={menuOptions.column3 === 'list'}
-              />
-              <SquareOption
-                title="Nuevo"
-                iconName="plus"
-                onClick={() => handleChangeOption('column3', 'add')}
-                selected={menuOptions.column3 === 'add'}
-              />
-              <SquareOption
-                title="Varios"
-                iconName="plus"
-                onClick={() => handleChangeOption('column3', 'addMany')}
-                selected={menuOptions.column3 === 'addMany'}
-              />
-              <SquareOption
-                title="Lote"
-                iconName="plus"
-                onClick={() => handleChangeOption('column3', 'addBatch')}
-                selected={menuOptions.column3 === 'addBatch'}
-              />
-            </>
-          )}
-        </div>
-      </div>
-      {/* This will keep center the menu  */}
-      <div className=" flex w-full sm:w-0" />
+          {isSheepSelected &&
+            menuOptions.column3 === 'list' &&
+            listOptionSelected && (
+              <div className="  bg-base-300 shadow-md rounded-md ">
+                <AnimalCard animalId={listOptionSelected} />{' '}
+              </div>
+            )}
+        </>
+      </MenuSection>
+    </div>
+  )
+}
 
-      {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
-
-      <div className=" p-1 flex justify-center flex-1 ">
-        {isSheepSelected && menuOptions.column3 === 'list' && (
-          <div className=" bg-base-300 shadow-md rounded-md">
-            <OvinesTable
-              onRowClick={({ id }) => setListOptionSelected(id)}
-              selectedRow={listOptionSelected}
-            />
-          </div>
-        )}
-        {isSheepSelected && menuOptions.column3 === 'add' && (
-          <div className=" bg-base-300 shadow-md rounded-md p-2">
-            <AnimalForm
-              animal={{
-                type: 'ovine'
-              }}
-            />
-          </div>
-        )}
-        {isSheepSelected && menuOptions.column3 === 'addMany' && (
-          <div className=" bg-base-300 shadow-md rounded-md p-2">
-            <AnimalsForm
-              animal={{
-                type: 'ovine'
-              }}
-            />
-          </div>
-        )}
-        {isSheepSelected && menuOptions.column3 === 'addBatch' && (
-          <div className=" bg-base-300 shadow-md rounded-md p-2 w-full">
-            <BatchForm
-              animal={{
-                type: 'ovine'
-              }}
-              setBatch={setBatch}
-            />
-          </div>
-        )}
-        {menuOptions?.column1 === 'team' && (
-          <>
-            <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
-              <FarmTeam />
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* ********************************+ ANIMAL CARD AND FARM TEAM WHEN THIS OPS ARE SELECTED*************************************** */}
-
-      <div className="  p-1 flex justify-center w-full md:w-1/3 ">
-        {isSheepSelected &&
-          menuOptions.column3 === 'addBatch' &&
-          batch?.animals?.length && (
-            <div className="  bg-base-300 shadow-md rounded-md w-full">
-              <BatchTable animals={batch?.animals} />{' '}
-            </div>
-          )}
-      </div>
-
-      <div className="  p-1 flex justify-center w-full md:w-1/3 ">
-        {isSheepSelected &&
-          menuOptions.column3 === 'list' &&
-          listOptionSelected && (
-            <div className="  bg-base-300 shadow-md rounded-md">
-              <AnimalCard animalId={listOptionSelected} />{' '}
-            </div>
-          )}
-      </div>
+const MenuSection = ({ children }) => {
+  return (
+    <div className="min-h-16 min-w-[150px] w-full p-2 md:w-1/2 lg:w-1/3">
+      <div className="  w-full h-full flex justify-center">{children}</div>
     </div>
   )
 }

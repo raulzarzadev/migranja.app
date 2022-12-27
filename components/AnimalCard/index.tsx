@@ -27,15 +27,11 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
 
   if (!animal) return <></>
   return (
-    <div className=" p-2">
+    <div className="p-2 ">
       {editing ? (
-        <div>
-          <AnimalForm animal={animal} setEditing={setEditing} />{' '}
-        </div>
+        <AnimalForm animal={animal} setEditing={setEditing} />
       ) : (
-        <div>
-          <AnimalDetails animal={animal} setEditing={setEditing} />
-        </div>
+        <AnimalDetails animal={animal} setEditing={setEditing} />
       )}
     </div>
   )
@@ -76,8 +72,8 @@ export const AnimalDetails = ({
   }
   // console.log(animal)
   return (
-    <div>
-      <div className="flex w-full justify-end">
+    <div className="">
+      <div className="flex w-full justify-end ">
         {id && (
           <ModalDelete
             handleDelete={handleDelete}
