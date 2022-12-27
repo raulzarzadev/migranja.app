@@ -1,6 +1,5 @@
-import { es, tr } from 'date-fns/locale'
+import { es } from 'date-fns/locale'
 import { Controller, ControllerProps } from 'react-hook-form'
-import { myFormatDate } from 'utils/dates/myDateUtils'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 export interface SelectOption {

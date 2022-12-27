@@ -6,7 +6,7 @@ import AnimalsForm from 'components/forms/AnimalsForm'
 import BatchForm, { BatchType } from 'components/forms/BatchForm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import AnimalCard from '../../AnimalCard'
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option =
@@ -207,7 +207,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
   )
 }
 
-const MenuSection = ({ children }) => {
+const MenuSection = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-16 min-w-[150px] w-full p-2 md:w-1/2 lg:w-1/3">
       <div className="  w-full h-full flex justify-center">{children}</div>

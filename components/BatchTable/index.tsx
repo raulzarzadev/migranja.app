@@ -12,7 +12,7 @@ const BatchTable = ({ animals }: { animals: Partial<AnimalType>[] }) => {
 
   const handleOpenAnimal = ({ id, earring }: any) => {
     handleOpenAnimalForm()
-    const animal = animals?.find((animal) => animal.earring === earring)
+    const animal = animals?.find((animal) => animal.earring === earring) || null
     setAnimalSelected(animal)
   }
 
@@ -38,7 +38,9 @@ const BatchTable = ({ animals }: { animals: Partial<AnimalType>[] }) => {
         open={openAnimalForm}
         handleOpen={handleOpenAnimalForm}
       >
-        <div>{animalSelected && <AnimalCard animal={animalSelected} />}</div>
+        <div>
+          {animalSelected && <AnimalCard animalId={animalSelected.id} />}
+        </div>
       </Modal>
 
       <AnimalsTable animalsData={animals || []} onRowClick={handleOpenAnimal} />

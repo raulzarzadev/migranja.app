@@ -1,4 +1,4 @@
-import { FarmType, InvitationStatus } from '@firebase/Farm/farm.model'
+import { FarmType, InvitationStatusType } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
 import { UserType } from '@firebase/Users/user.model'
 import useAuth from 'components/hooks/useAuth'
@@ -17,6 +17,7 @@ const InvitationStatus = ({
 }) => {
   const { user } = useAuth()
   const { farmData: farm } = useFarm({ getFarmById: farmId })
+
   const teamMember = farm?.team?.[userId || '']
 
   const isAdmin = farm?.userId === user?.id
@@ -75,21 +76,26 @@ const InvitationStatus = ({
         [`team.${userId}.invitation.accepted`]: acceptInvitation
       }).then((res) => console.log(res))
   }
-  const handleUpdateInvitation = ({ status }: { status: InvitationStatus }) => {
+  const handleUpdateInvitation = ({
+    status
+  }: {
+    status: InvitationStatusType
+  }) => {
     farmId &&
       updateFarm(farmId, {
         [`team.${userId}.invitation.status`]: status
       }).then((res) => console.log(res))
   }
 
-  const invitationStatus: InvitationStatus = teamMember?.invitation?.status
+  const invitationStatus: InvitationStatusType =
+    teamMember?.invitation?.status || 'PENDING_TO_SEND'
 
   const invitationSentBy = farm?.name
   const memberId = teamMember?.id
   const memberEmail = teamMember?.email
   const memberName = teamMember?.name
 
-  const STATUSES: Record<InvitationStatus, ReactNode> = {
+  const STATUSES: Record<InvitationStatusType, ReactNode> = {
     ACCEPTED: (
       <>
         <Modal

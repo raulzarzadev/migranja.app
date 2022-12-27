@@ -10,20 +10,25 @@ import {
 } from 'firebase/types.model.ts/AnimalType.model'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmOvines } from 'store/slices/farmSlice'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const [animal, setAnimal] = useState<AnimalType | null>(null)
   const [editing, setEditing] = useState<boolean>(false)
+  const ovines = useSelector(selectFarmOvines)
   useEffect(() => {
     if (animalId) {
-      getAnimal(animalId).then((res: any) => setAnimal(res))
+      const a = ovines.find(({ id }) => id === animalId)
+      setAnimal(a as AnimalType)
+      // getAnimal(animalId).then((res: any) => setAnimal(res))
     }
 
     return () => {
       setAnimal(null)
     }
-  }, [animalId, editing])
+  }, [animalId, editing, ovines])
 
   if (!animal) return <></>
   return (

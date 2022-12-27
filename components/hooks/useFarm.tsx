@@ -16,12 +16,18 @@ export interface UseFarm {
   getFarmById?: FarmType['id']
 }
 
-const useFarm = () => {
+const useFarm = (props?: UseFarm) => {
+  const getFarmById = props?.getFarmById
+
   const dispatch = useDispatch()
   const { user } = useAuth()
   const currentFarm = useSelector(selectFarmState)
   const farmOvines = useSelector(selectFarmOvines)
   const [userFarm, setUserFarm] = useState<FarmType | null>(null)
+  const [farmData, setFarmData] = useState<FarmType | null>(null)
+  useEffect(() => {
+    if (getFarmById) listenFarm(getFarmById, (res: any) => setFarmData(res))
+  }, [getFarmById])
 
   const {
     query: { farmId }
@@ -41,11 +47,12 @@ const useFarm = () => {
         dispatch(setFarmOvines(res))
       })
     }
-  }, [farmId])
+  }, [dispatch, farmId])
 
   return {
     currentFarm: { ...currentFarm, animals: [...farmOvines] } as FarmType,
-    userFarm
+    userFarm,
+    farmData
   }
 }
 

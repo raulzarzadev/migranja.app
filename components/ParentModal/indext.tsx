@@ -32,7 +32,6 @@ const ParentModal = ({
     setOpenModal(true)
     setParentData(parent || null)
   }
-  console.log(parentData)
   return (
     <div>
       {parentReference && (

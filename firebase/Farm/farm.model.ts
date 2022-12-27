@@ -23,7 +23,7 @@ export interface Permission {
   canRead: PermissionOption[] | 'all'
   canCreate: PermissionOption[] | 'all'
 }
-export type InvitationStatus =
+export type InvitationStatusType =
   | 'ACCEPTED'
   | 'REJECTED'
   | 'SENT'
@@ -38,7 +38,7 @@ export interface MemberTeam {
     sent: boolean
     acceptedAt?: DateType
     sentAt?: DateType
-    status?: InvitationStatus
+    status?: InvitationStatusType
   }
 }
 
