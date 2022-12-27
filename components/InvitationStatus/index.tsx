@@ -1,8 +1,4 @@
-import {
-  FarmType,
-  InvitationStatus,
-  MemberTeam
-} from '@firebase/Farm/farm.model'
+import { FarmType, InvitationStatus } from '@firebase/Farm/farm.model'
 import { updateFarm } from '@firebase/Farm/main'
 import { UserType } from '@firebase/Users/user.model'
 import useAuth from 'components/hooks/useAuth'

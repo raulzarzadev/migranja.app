@@ -28,14 +28,8 @@ const AnimalsTable = ({
   selectedRow = null
 }: // onParentClick
 AnimalTableType) => {
-  const [data, setData] = useState<AnimalTableType['animalsData']>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
-
-  useEffect(() => {
-    setData(animalsData)
-    return () => setData([])
-  }, [animalsData])
 
   const columns = [
     columnHelper.accessor('earring', {
@@ -72,6 +66,12 @@ AnimalTableType) => {
               type="father"
             />
           }
+          {
+            <ParentModal
+              parentReference={props.getValue()?.mother?.earring}
+              type="mother"
+            />
+          }
         </span>
       )
     })
@@ -90,7 +90,7 @@ AnimalTableType) => {
   }
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
-    data: data as any,
+    data: animalsData as any,
     columns,
     state: {
       sorting,

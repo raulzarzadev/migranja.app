@@ -4,6 +4,7 @@ import FarmMenu from 'components/UserHome/FarmMenu'
 
 const FarmPage = () => {
   const { currentFarm } = useFarm()
+
   return (
     <div>
       <FarmNavigation farm={currentFarm} hiddenGo />

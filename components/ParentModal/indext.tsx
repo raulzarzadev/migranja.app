@@ -1,8 +1,11 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { AnimalDetails } from 'components/AnimalCard'
+import useFarm from 'components/hooks/useFarm'
 import Icon from 'components/Icon'
 import Modal from 'components/modal'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmOvines } from 'store/slices/farmSlice'
 
 const ParentModal = ({
   parentReference,
@@ -11,7 +14,10 @@ const ParentModal = ({
   parentReference?: string
   type: 'father' | 'mother'
 }) => {
-  //const { currentFarm } = useFarm()
+  const ovines = useSelector(selectFarmOvines)
+  // const farm = useFarm()
+  // console.log(farm)
+
   const [parentData, setParentData] = useState<AnimalType | null>(null)
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
@@ -20,12 +26,13 @@ const ParentModal = ({
   const handleOpenParent = (parentReference: string) => {
     // can be a id or a earring
     console.log(parentReference)
-    const parent = [].find(
+    const parent = [...ovines].find(
       ({ earring, id }) => earring === parentReference || id === parentReference
     )
     setOpenModal(true)
     setParentData(parent || null)
   }
+  console.log(parentData)
   return (
     <div>
       {parentReference && (

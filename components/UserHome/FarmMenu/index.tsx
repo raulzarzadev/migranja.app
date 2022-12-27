@@ -1,5 +1,4 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import AnimalsTable from 'components/AnimalsTable'
 import BatchTable from 'components/BatchTable'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'

@@ -4,9 +4,15 @@ import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
-import { getFemaleOvines, getMaleOvines } from '@firebase/Animal/main'
+import {
+  getFarmMaleOvines,
+  getFemaleOvines,
+  getMaleOvines
+} from '@firebase/Animal/main'
 import Icon from 'components/Icon'
 import { IconName } from 'components/Icon/icons-list'
+import { useSelector } from 'react-redux'
+import { selectFarmOvines } from 'store/slices/farmSlice'
 
 export const AnimalParentsForm = () => {
   const { setValue, watch } = useFormContext()
@@ -69,21 +75,17 @@ const ParentForm = ({
       return { label: animal.earring, value: animal.earring, id: animal.id }
     })
   }
-
+  const ovines = useSelector(selectFarmOvines)
   useEffect(() => {
     if (isPartOfTheFarm === 'true') {
       unregister('breed')
       unregister('birthday')
-      if (gender === 'female') {
-        getFemaleOvines().then((res: AnimalType[]) => setParents(res))
-      } else {
-        getMaleOvines().then((res: AnimalType[]) => setParents(res))
-      }
+      const animals = ovines.filter((sheep) => sheep.gender === gender)
+      setParents(animals)
     }
-  }, [gender, isPartOfTheFarm, unregister])
+  }, [gender, isPartOfTheFarm, ovines, unregister])
 
   const onSubmit = (data: any) => {
-    // console.log(data)
     setValue?.(data)
     setOpenModal(false)
   }

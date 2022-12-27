@@ -1,9 +1,4 @@
-import {
-  getFarmFemaleOvines,
-  getFarmMaleOvines,
-  getFemaleOvines,
-  getMaleOvines
-} from '@firebase/Animal/main'
+import { getFarmFemaleOvines, getFarmMaleOvines } from '@firebase/Animal/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'

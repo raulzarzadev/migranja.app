@@ -41,11 +41,7 @@ const BatchTable = ({ animals }: { animals: Partial<AnimalType>[] }) => {
         <div>{animalSelected && <AnimalCard animal={animalSelected} />}</div>
       </Modal>
 
-      <AnimalsTable
-        animalsData={animals || []}
-        onRowClick={handleOpenAnimal}
-        onParentClick={handleOpenParent}
-      />
+      <AnimalsTable animalsData={animals || []} onRowClick={handleOpenAnimal} />
     </div>
   )
 }

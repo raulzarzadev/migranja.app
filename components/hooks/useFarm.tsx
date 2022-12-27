@@ -4,30 +4,28 @@ import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectFarmState, setFarmState } from 'store/slices/farmSlice'
+import {
+  selectFarmOvines,
+  selectFarmState,
+  setFarmOvines,
+  setFarmState
+} from 'store/slices/farmSlice'
 import useAuth from './useAuth'
 
 export interface UseFarm {
   getFarmById?: FarmType['id']
 }
 
-const useFarm = (props?: UseFarm) => {
-  const getFarmById = props?.getFarmById
-
+const useFarm = () => {
   const dispatch = useDispatch()
   const { user } = useAuth()
   const currentFarm = useSelector(selectFarmState)
-  const [currentFarmAnimals, setCurrentFarmAnimals] = useState([])
+  const farmOvines = useSelector(selectFarmOvines)
   const [userFarm, setUserFarm] = useState<FarmType | null>(null)
-  const [farmData, setFarmData] = useState<FarmType | any>(null)
 
   const {
     query: { farmId }
   } = useRouter()
-
-  useEffect(() => {
-    if (getFarmById) listenFarm(getFarmById, (res: any) => setFarmData(res))
-  }, [getFarmById])
 
   useEffect(() => {
     user &&
@@ -35,23 +33,19 @@ const useFarm = (props?: UseFarm) => {
   }, [user])
 
   useEffect(() => {
-    farmId &&
+    if (farmId) {
       listenFarm(farmId as string, (res: FarmType) => {
         dispatch(setFarmState(res))
       })
-  }, [dispatch, farmId, user])
-
-  useEffect(() => {
-    farmId &&
-      listenFarmOvines(farmId as string, (res: any) => {
-        setCurrentFarmAnimals(res)
+      listenFarmOvines(farmId as string, (res: FarmType) => {
+        dispatch(setFarmOvines(res))
       })
+    }
   }, [farmId])
 
   return {
-    currentFarm: { ...currentFarm, animals: currentFarmAnimals } as FarmType,
-    userFarm,
-    farmData
+    currentFarm: { ...currentFarm, animals: [...farmOvines] } as FarmType,
+    userFarm
   }
 }
 
