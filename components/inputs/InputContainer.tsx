@@ -7,16 +7,8 @@ export interface SelectOption {
   label?: string
   value?: string | number
 }
-const InputContainer = ({
-  name,
-  type = 'text',
-  label,
-  selectOptions,
-  placeholder,
-  rules,
-  className,
-  ...rest
-}: {
+export interface CustomInputTypes
+  extends Partial<Pick<HTMLInputElement, 'max' | 'min' | 'step'>> {
   name: string
   type:
     | 'date'
@@ -31,7 +23,17 @@ const InputContainer = ({
   placeholder?: string
   rules?: ControllerProps['rules']
   className?: string
-}) => {
+}
+const InputContainer = ({
+  name,
+  type = 'text',
+  label,
+  selectOptions,
+  placeholder,
+  rules,
+  className,
+  ...rest
+}: CustomInputTypes) => {
   return (
     <Controller
       //control={control}
@@ -73,7 +75,7 @@ const InputContainer = ({
               onChange={(date: Date) => onChange(date)}
               //onBlur={onBlur}
               locale={es}
-              dateFormat="dd MM yy"
+              dateFormat="dd-MM-yy"
               ref={ref}
               name={name}
             />

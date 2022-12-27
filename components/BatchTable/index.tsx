@@ -11,7 +11,6 @@ const BatchTable = ({ animals }: { animals: Partial<AnimalType>[] }) => {
   const handleOpenAnimal = ({ id, earring }: any) => {
     handleOpenAnimalForm()
     const animal = animals?.find((animal) => animal.earring === earring)
-    console.log(animal)
     setAnimalSelected(animal)
   }
   const [openAnimalForm, setOpenAnimalForm] = useState(false)

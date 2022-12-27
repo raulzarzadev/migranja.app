@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { ParentForm } from '../ParentForm'
 
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 export interface BatchType {
   birthday: DateType
   animals: Partial<AnimalType>[]
@@ -72,6 +74,28 @@ const BatchForm = ({
   )
 }
 
+const batchSchema = yup
+  .object()
+  .shape({
+    batchName: yup
+      .string()
+      .required('Este campo es necesario*')
+      .min(3, 'Al menos 3 letras'),
+    earrings: yup.object({
+      fromNumber: yup
+        .number()
+        .typeError('Debes escribir un number')
+        .required('Este campo es necesario*')
+        .min(1, 'Debe ser mayor a cero'),
+      toNumber: yup
+        .number()
+        .typeError('Debes escribir un number')
+        .required('Este campo es necesario*')
+        .min(1, 'Debe ser mayor a cero')
+    })
+  })
+  .required()
+
 const DefineBatchForm = ({
   batch,
   setBatch
@@ -86,7 +110,8 @@ const DefineBatchForm = ({
         toNumber: 0,
         suffix: ''
       }
-    }
+    },
+    resolver: yupResolver(batchSchema)
   })
   const { watch, handleSubmit, setValue, reset } = methods
   const formValues = watch()
@@ -159,12 +184,14 @@ const DefineBatchForm = ({
                 type="number"
                 name="earrings.fromNumber"
                 label="from"
+                min="0"
               />
               <InputContainer
                 className="w-24"
                 type="number"
                 name="earrings.toNumber"
                 label="to"
+                min="0"
               />
               <InputContainer
                 className="w-24"

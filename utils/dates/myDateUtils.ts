@@ -19,7 +19,6 @@ export const myFormatDate = (
   // format date without timezone to manage properly inputs
   const dt = new Date(date)
   const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000)
-  console.log(dtDateOnly)
   const res = format(
     validDateAsNumber(dateOnly ? dtDateOnly : date),
     choseDateFormat(strFormat),
