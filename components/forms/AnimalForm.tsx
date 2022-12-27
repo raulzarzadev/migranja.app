@@ -96,6 +96,7 @@ export const AnimalForm = ({
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
   }
+  console.log(watch())
 
   return (
     <div>

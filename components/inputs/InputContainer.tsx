@@ -1,7 +1,8 @@
-import { tr } from 'date-fns/locale'
+import { es, tr } from 'date-fns/locale'
 import { Controller, ControllerProps } from 'react-hook-form'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 export interface SelectOption {
   label?: string
   value?: string | number
@@ -66,14 +67,15 @@ const InputContainer = ({
             />
           )}
           {type === 'date' && (
-            <input
-              className="input input-bordered input-sm"
-              type={'date'}
-              onChange={(e) => onChange(e.target.valueAsDate)}
-              onBlur={onBlur}
-              name={name}
+            <DatePicker
+              className="input input-bordered input-sm w-32"
+              selected={value ? new Date(value) : new Date()}
+              onChange={(date: Date) => onChange(date)}
+              //onBlur={onBlur}
+              locale={es}
+              dateFormat="dd MM yy"
               ref={ref}
-              // value={myFormatDate(value || new Date(), 'input')}
+              name={name}
             />
           )}
           {type === 'select' && (
