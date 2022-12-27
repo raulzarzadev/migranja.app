@@ -14,7 +14,6 @@ import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
-import useFarm from 'components/hooks/useFarm'
 
 export interface AnimalTableType {
   animalsData: Partial<AnimalType>[]
@@ -40,6 +39,9 @@ const AnimalsTable = ({
   const columns = [
     columnHelper.accessor('earring', {
       header: 'Arete'
+    }),
+    columnHelper.accessor('batch', {
+      header: 'Lote'
     }),
     columnHelper.accessor('gender', {
       header: 'Sexo',
