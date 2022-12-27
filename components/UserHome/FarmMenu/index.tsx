@@ -21,6 +21,7 @@ type Option =
   | 'addBatch'
 
 const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
+  console.count()
   const [menuOptions, setMenuOptions] = useState<
     Partial<Record<MenuOptions, Option>>
   >({})
@@ -37,7 +38,6 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
   const farmIncludeTeam = farm?.haveATeam
 
   const [batch, setBatch] = useState<BatchType | null>(null)
-
   return (
     <div className="flex flex-wrap ">
       {/* ********************************* FARM MENU ************************************* */}

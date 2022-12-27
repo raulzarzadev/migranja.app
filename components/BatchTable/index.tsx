@@ -1,6 +1,7 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import AnimalCard from 'components/AnimalCard'
 import AnimalsTable from 'components/AnimalsTable'
-import AnimalForm from 'components/forms/AnimalForm'
+
 import Modal from 'components/modal'
 import { useState } from 'react'
 
@@ -8,11 +9,13 @@ const BatchTable = ({ animals }: { animals: Partial<AnimalType>[] }) => {
   const handleSaveBatch = () => {}
   const [animalSelected, setAnimalSelected] =
     useState<Partial<AnimalType | null>>(null)
+
   const handleOpenAnimal = ({ id, earring }: any) => {
     handleOpenAnimalForm()
     const animal = animals?.find((animal) => animal.earring === earring)
     setAnimalSelected(animal)
   }
+
   const [openAnimalForm, setOpenAnimalForm] = useState(false)
   const handleOpenAnimalForm = () => {
     setOpenAnimalForm(!openAnimalForm)
@@ -35,9 +38,14 @@ const BatchTable = ({ animals }: { animals: Partial<AnimalType>[] }) => {
         open={openAnimalForm}
         handleOpen={handleOpenAnimalForm}
       >
-        <div>{animalSelected && <AnimalForm animal={animalSelected} />}</div>
+        <div>{animalSelected && <AnimalCard animal={animalSelected} />}</div>
       </Modal>
-      <AnimalsTable animalsData={animals || []} onRowClick={handleOpenAnimal} />
+
+      <AnimalsTable
+        animalsData={animals || []}
+        onRowClick={handleOpenAnimal}
+        onParentClick={handleOpenParent}
+      />
     </div>
   )
 }

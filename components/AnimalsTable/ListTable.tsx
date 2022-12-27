@@ -11,7 +11,6 @@ import {
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
-import { myFormatDate } from 'utils/dates/myDateUtils'
 import { listenOvines } from '../../firebase/Animal/main'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'

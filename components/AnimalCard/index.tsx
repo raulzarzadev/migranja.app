@@ -34,14 +34,14 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
         </div>
       ) : (
         <div>
-          <Card animal={animal} setEditing={setEditing} />
+          <AnimalDetails animal={animal} setEditing={setEditing} />
         </div>
       )}
     </div>
   )
 }
 
-const Card = ({
+export const AnimalDetails = ({
   animal,
   setEditing
 }: {

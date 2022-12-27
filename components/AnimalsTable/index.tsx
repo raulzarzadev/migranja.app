@@ -14,19 +14,20 @@ import { useEffect, useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
+import ParentModal from 'components/ParentModal/indext'
 
 export interface AnimalTableType {
   animalsData: Partial<AnimalType>[]
   onRowClick?: ({ id, earring }: { id: string | null; earring: string }) => void
-  onParentClick?: (id: string | null) => void
+  // onParentClick?: (id: string | null) => void
   selectedRow?: string | null
 }
 const AnimalsTable = ({
   animalsData,
   onRowClick,
-  selectedRow = null,
-  onParentClick
-}: AnimalTableType) => {
+  selectedRow = null
+}: // onParentClick
+AnimalTableType) => {
   const [data, setData] = useState<AnimalTableType['animalsData']>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
@@ -65,37 +66,12 @@ const AnimalsTable = ({
       header: 'Padres',
       cell: (props) => (
         <span className="flex w-full justify-between">
-          <button
-            className="btn btn-ghost btn-sm btn-circle"
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-              onParentClick?.(props.getValue()?.father?.earring ?? null)
-            }}
-          >
-            <span className="text-info">
-              <Icon size="xs" name="male" />
-            </span>
-            <span className="truncate">
-              {props.getValue()?.father?.earring}
-            </span>
-          </button>
-
-          <button
-            className="btn btn-ghost btn-sm btn-circle"
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-              onParentClick?.(props.getValue()?.mother?.earring ?? null)
-            }}
-          >
-            <span className="text-pink-00">
-              <Icon size="xs" name="female" />
-            </span>
-            <span className="truncate">
-              {props.getValue()?.mother?.earring}
-            </span>
-          </button>
+          {
+            <ParentModal
+              parentReference={props.getValue()?.father?.earring}
+              type="father"
+            />
+          }
         </span>
       )
     })
@@ -172,7 +148,7 @@ const AnimalsTable = ({
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
           className=" input input-sm"
-          placeholder="buscar..."
+          placeholder="Buscar..."
         />
       </div>
       <div className={`overflow-x-auto ${selectedRow && '  '} mx-auto`}>
