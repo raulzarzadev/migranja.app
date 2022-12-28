@@ -21,6 +21,7 @@ export interface AnimalType extends TypeBase {
     id?: FarmType['id']
     name?: FarmType['name']
   }
+  batchData?: any
 }
 
 export interface GenderOptions {

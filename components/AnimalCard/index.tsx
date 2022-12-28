@@ -46,7 +46,7 @@ export const AnimalDetails = ({
   animal,
   setEditing
 }: {
-  animal: AnimalType
+  animal: Partial<AnimalType>
   setEditing?: (boolean: boolean) => void
 }) => {
   const {
@@ -157,7 +157,7 @@ export const AnimalDetails = ({
 
               <div>
                 <span>Sexo: </span>
-                <span>{genderLabel?.[gender]?.label}</span>
+                <span>{genderLabel?.[gender || 'male']?.label}</span>
               </div>
               <div>
                 <span>Parto: </span>

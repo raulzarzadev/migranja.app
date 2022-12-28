@@ -1,6 +1,9 @@
+import { createAnimal } from '@firebase/Animal/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import { async } from '@firebase/util'
 import { AnimalDetails } from 'components/AnimalCard'
 import AnimalsTable from 'components/AnimalsTable'
+import useFarm from 'components/hooks/useFarm'
 
 import Modal from 'components/modal'
 import { useEffect, useState } from 'react'
@@ -14,7 +17,6 @@ const BatchTable = ({
   animals: Partial<AnimalType>[]
   setAnimals?: (animals: Partial<AnimalType>[]) => void
 }) => {
-  const handleSaveBatch = () => {}
   const [animalSelected, setAnimalSelected] =
     useState<Partial<AnimalType | null>>(null)
 
@@ -57,7 +59,7 @@ const BatchTable = ({
         ({ earring }) => earring === animal.earring
       )
       animalAux.splice(animalIndex, 1)
-      const lastEarring = animalAux[animalAux.length - 1].earring
+      const lastEarring = animalAux[animalAux.length - 1].earring || ''
       const earringNum = parseInt(lastEarring?.split('-')[0])
       const earringSuffix = lastEarring?.split('-')[1]
       setAnimals?.([
@@ -73,9 +75,9 @@ const BatchTable = ({
   }
 
   const ovines = useSelector(selectFarmOvines)
-  const findDuplicatesAnimals = (animals: Partial<AnimalType[]>) => {
+  const findDuplicatesAnimals = (animals: Partial<AnimalType>[]) => {
     return animals.map((animal) => {
-      const animalMatch = ovines.some(
+      const animalMatch = [...ovines].some(
         (ovine) => ovine.earring === animal?.earring
       )
       if (animalMatch) {
@@ -88,12 +90,68 @@ const BatchTable = ({
   const [animalsData, setAnimalsData] = useState([...animals])
   useEffect(() => {
     setAnimalsData(findDuplicatesAnimals(animals))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animals])
+
+  const [loading, setLoading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const { currentFarm } = useFarm()
+
+  const handleSaveBatch = async () => {
+    console.log('save', { animalsData })
+    setLoading(true)
+    setProgress(1)
+    const farmData = {
+      id: currentFarm.id,
+      name: currentFarm.name
+    }
+
+    try {
+      for (let animal = 0; animal < animalsData.length; animal++) {
+        const element = animalsData[animal]
+        await createAnimal({ ...element, farm: farmData })
+        setProgress((animal * 100) / animalsData.length)
+      }
+      setProgress(100)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+      setProgress(0)
+    }
+  }
+  console.log({ progress })
+
   return (
     <div>
       <div className="flex w-full justify-center flex-col items-center mt-4">
+        {progress === 1 && <span>Preparando</span>}
+        {progress > 1 && progress < 100 && (
+          <span className="flex flex-col justify-center w-full mx-auto text-center">
+            Subiendo
+            <progress
+              max={100}
+              value={progress}
+              className="progress w-[200px] mx-auto"
+            ></progress>
+          </span>
+        )}
+        {progress === 100 && (
+          <span className="flex flex-col justify-center  mx-auto text-center ">
+            Listo
+            <button
+              onClick={() => {
+                setProgress(0)
+                setAnimalsData([])
+              }}
+              className="btn btn-sm"
+            >
+              limpiar
+            </button>
+          </span>
+        )}
         <button
-          disabled={someAreDuplicated}
+          disabled={someAreDuplicated || loading || progress === 100}
           className="btn my-2 btn-info"
           onClick={(e) => {
             e.preventDefault()
@@ -144,7 +202,6 @@ const EarringOptions = ({
   animal: Partial<AnimalType>
   setOption: (option: 'FORWARD' | 'DELETE' | 'REPLACE', animal?: any) => void
 }) => {
-  console.log(animal)
   const [value, setValue] = useState('')
   const [error, setError] = useState<string | null>(null)
   return (
@@ -158,7 +215,7 @@ const EarringOptions = ({
           }}
           type={'text'}
           placeholder={animal.earring}
-          className="input input-sm btn-outline "
+          className="input input-sm input-bordered "
         />
         {error && <span className="text-error text-sm">{error}</span>}
       </label>
