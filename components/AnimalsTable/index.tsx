@@ -85,7 +85,6 @@ AnimalTableType) => {
     addMeta({
       itemRank
     })
-    console.log(itemRank)
 
     // Return if the item should be filtered in/out
     return itemRank.passed
@@ -110,19 +109,18 @@ AnimalTableType) => {
     getPaginationRowModel: getPaginationRowModel()
   })
 
-  useEffect(() => {
-    console.log('change', table.getState().globalFilter)
-  }, [table.getState().globalFilter])
-
   return (
     <div className="p-2">
-      <div className=" justify-center flex my-2 ">
+      <div className=" justify-center flex my-2 items-center">
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
           className=" input input-sm w-full"
           placeholder="Buscar..."
         />
+        <div className="whitespace-nowrap ml-1">
+          {table.getFilteredRowModel().rows.length} de {animalsData.length || 0}
+        </div>
       </div>
       <div className={`overflow-x-auto ${selectedRow && '  '} mx-auto`}>
         <table className="mx-aut table table-compact mx-auto  ">
