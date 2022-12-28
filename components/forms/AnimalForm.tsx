@@ -13,6 +13,7 @@ import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
 import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
 import useFarm from 'components/hooks/useFarm'
+import useAnimal from 'components/hooks/useAnimal'
 
 const schema = yup
   .object()
@@ -89,16 +90,7 @@ export const AnimalForm = ({
     }
   }
 
-  const handleDelete = async () => {
-    try {
-      const res = await deleteAnimal(id as string)
-      console.log(res)
-      return true
-    } catch (err) {
-      console.log(err)
-      return false
-    }
-  }
+  const { handleDelete } = useAnimal()
 
   return (
     <div>
@@ -109,7 +101,7 @@ export const AnimalForm = ({
               <span>
                 {id && (
                   <ModalDelete
-                    handleDelete={handleDelete}
+                    handleDelete={() => handleDelete(id)}
                     title={'Eliminar animal'}
                     buttonLabel={null}
                     openButtonProps={{

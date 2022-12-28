@@ -188,7 +188,8 @@ const BatchTable = ({
 
       <AnimalsTable
         animalsData={animalsData || []}
-        onRowClick={handleOpenAnimal}
+        setSelectedRow={handleOpenAnimal}
+        // onRowClick={handleOpenAnimal}
       />
     </div>
   )
@@ -204,8 +205,11 @@ const EarringOptions = ({
   const [value, setValue] = useState('')
   const [error, setError] = useState<string | null>(null)
   return (
-    <div className="flex w-full border border-error rounded-md p-2 justify-between">
-      <label>
+    <div className="flex w-full border border-error rounded-md p-2 justify-between flex-col">
+      <div className="form-control w-full max-w-xs">
+        <label className="label">
+          <span className="label-text">Arete:</span>
+        </label>
         <input
           value={value}
           onChange={({ target: { value } }) => {
@@ -217,9 +221,9 @@ const EarringOptions = ({
           className="input input-sm input-bordered "
         />
         {error && <span className="text-error text-sm">{error}</span>}
-      </label>
+      </div>
       <button
-        className="btn btn-sm btn-error btn-outline"
+        className="btn btn-sm btn-error btn-outline my-2"
         onClick={(e) => {
           setOption('DELETE', { ...animal, earring: animal.earring })
           setValue('')
@@ -228,7 +232,7 @@ const EarringOptions = ({
         Borrar
       </button>
       <button
-        className="btn btn-sm btn-info btn-outline"
+        className="btn btn-sm btn-info btn-outline my-2"
         onClick={(e) => {
           if (!value) return setError('Asinga un nuevo arete')
           if (value == animal.earring)
@@ -241,7 +245,7 @@ const EarringOptions = ({
         Reemplazar
       </button>
       <button
-        className="btn btn-sm btn-info btn-outline"
+        className="btn btn-sm btn-info btn-outline my-2"
         onClick={(e) => {
           setOption('FORWARD', { ...animal })
           setValue('')

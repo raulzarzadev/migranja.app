@@ -132,7 +132,10 @@ const AnimalsTable = ({
 
   const _onSelectRow = (row: RowSelectedType) => {
     const { id, earring } = row
-    if (id === _selectedRow?.id || earring === _selectedRow?.earring) {
+    if (
+      (id ?? '') === _selectedRow?.id || // que no sea nullish e igual a selected id
+      (earring ?? '') === _selectedRow?.earring
+    ) {
       _setSelectedRow(null)
       setSelectedRow?.(null)
     } else {
@@ -145,7 +148,6 @@ const AnimalsTable = ({
     if (_selectMany) {
       _onSelectNewRow(row?.id)
     } else {
-      console.log('select rod')
       _onSelectRow(row)
     }
   }
@@ -217,39 +219,45 @@ const AnimalsTable = ({
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className={`hover cursor-pointer ${
-                  row.original.id === _selectedRow?.id &&
-                  ' border-4 border-base-content'
-                } 
+            {table.getRowModel().rows.map((row) => {
+              const itemId = row.original.id
+              const itemEarring = row.original.earring
+              return (
+                <tr
+                  key={row.id}
+                  className={`hover cursor-pointer ${
+                    (itemEarring ?? '') === _selectedRow?.earring &&
+                    ' border-4 border-base-content'
+                  } 
 
-                ${
-                  _selectedRows.includes(row.original.id) &&
-                  'border-4 border-base-content'
-                }
-                `}
-                onClick={() => {
-                  _onRowClick?.({
-                    id: row.original.id,
-                    earring: row.original.earring
-                  })
-                  // _selectMany && handleSelectNewRow(row.original.id)
-                }}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <th
-                    key={cell.id}
-                    className={`font-normal ${
-                      row.original?.isDuplicated && ' bg-error'
-                    }`}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
+              ${
+                _selectedRows.includes(itemId) && 'border-4 border-base-content'
+              }
+              `}
+                  onClick={() => {
+                    _onRowClick?.({
+                      id: itemId,
+                      earring: itemEarring
+                    })
+                    // _selectMany && handleSelectNewRow(row.original.id)
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <th
+                      key={cell.id}
+                      className={`font-normal ${
+                        row.original?.isDuplicated && ' bg-error'
+                      }`}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

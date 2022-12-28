@@ -6,11 +6,17 @@ import ModalDelete from 'components/modal/ModalDelete'
 import { deleteField } from 'firebase/firestore'
 
 const FarmTeamTable = ({ farm }: { farm: FarmType | null }) => {
-  const handleDeleteMemberTeam = (id: string) => {
-    farm?.id &&
-      updateFarm(farm?.id, { [`team.${id}`]: deleteField() })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
+  const handleDeleteMemberTeam = async (id: string) => {
+    try {
+      const res = await updateFarm(farm?.id as string, {
+        [`team.${id}`]: deleteField()
+      })
+      console.log(res)
+      return true
+    } catch (err) {
+      console.log(err)
+      return false
+    }
   }
   return (
     <div>

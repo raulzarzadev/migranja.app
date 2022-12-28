@@ -1,6 +1,7 @@
 import { deleteAnimal, getAnimal } from '@firebase/Animal/main'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
+import useAnimal from 'components/hooks/useAnimal'
 
 import Icon from 'components/Icon'
 import ModalDelete from 'components/modal/ModalDelete'
@@ -69,24 +70,14 @@ export const AnimalDetails = ({
     female: FemaleOptions
   }
 
-  const handleDelete = async () => {
-    return await deleteAnimal(id as string)
-      .then((res) => {
-        return true
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-        return false
-      })
-  }
+  const { handleDelete } = useAnimal()
   // console.log(animal)
   return (
     <div className="">
       <div className="flex w-full justify-end ">
         {id && (
           <ModalDelete
-            handleDelete={handleDelete}
+            handleDelete={() => handleDelete(id)}
             title={'Eliminar animal'}
             buttonLabel={null}
             openButtonProps={{

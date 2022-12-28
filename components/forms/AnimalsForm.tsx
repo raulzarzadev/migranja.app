@@ -11,6 +11,7 @@ import ModalDelete from 'components/modal/ModalDelete'
 import useFarm from 'components/hooks/useFarm'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import Loading from 'components/Loading'
+import useAnimal from 'components/hooks/useAnimal'
 
 const schema = yup
   .object()
@@ -212,12 +213,7 @@ const FormHeader = ({
   loading,
   title = 'Form title'
 }: any) => {
-  const handleDelete = () => {
-    id &&
-      deleteAnimal(id)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-  }
+  const { handleDelete } = useAnimal()
 
   return (
     <div className="flex w-full justify-end">
@@ -228,7 +224,7 @@ const FormHeader = ({
         <span>
           {id && (
             <ModalDelete
-              handleDelete={handleDelete}
+              handleDelete={() => handleDelete(id)}
               title={'Eliminar animal'}
               buttonLabel={null}
               openButtonProps={{
