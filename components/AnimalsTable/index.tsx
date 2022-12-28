@@ -188,7 +188,8 @@ AnimalTableType) => {
                 className={`hover cursor-pointer ${
                   row.original.id === selectedRow &&
                   ' border-4 border-base-content'
-                } `}
+                } 
+                `}
                 onClick={() => {
                   onRowClick?.({
                     id: row.original.id,
@@ -197,7 +198,12 @@ AnimalTableType) => {
                 }}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <th key={cell.id} className="font-normal">
+                  <th
+                    key={cell.id}
+                    className={`font-normal ${
+                      row.original?.isDuplicated && ' bg-error'
+                    }`}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </th>
                 ))}

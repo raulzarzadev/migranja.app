@@ -3,6 +3,7 @@ import { ImageType } from './ImageType.model'
 import { DateType, TypeBase } from './TypeBase.model'
 
 export interface AnimalType extends TypeBase {
+  isDuplicated?: boolean
   name: string
   birthday: DateType
   earring: string

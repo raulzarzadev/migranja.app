@@ -11,6 +11,9 @@ import { ParentForm } from '../ParentForm'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+
+import { useSelector } from 'react-redux'
+import { selectFarmOvines } from 'store/slices/farmSlice'
 export interface BatchType {
   birthday: DateType
   animals: Partial<AnimalType>[]
@@ -34,16 +37,17 @@ const BatchForm = ({
   setBatch: (batch: BatchType | null) => void
 }) => {
   //const [batch, setBatch] = useState<BatchType | null>(null)
-  const handleCreateBatch = (batch: BatchType | null) => {
-    if (!batch) return setBatch(null)
-    const { earrings, father, birthday, joinedAt, batchName } = batch
-    // console.log({ earrings, father, birthday, batchName })
+  const createEarringsBatch = (batch: BatchType) => {
+    const {
+      earrings: { fromNumber, toNumber, suffix, from, to },
+      father,
+      birthday,
+      joinedAt,
+      batchName
+    } = batch
     const animals: BatchType['animals'] = []
-    for (
-      let earring = earrings.fromNumber;
-      earring <= earrings.toNumber;
-      earring++
-    ) {
+
+    for (let earring = fromNumber; earring <= toNumber; earring++) {
       animals.push({
         gender: 'female',
         birthday,
@@ -53,18 +57,24 @@ const BatchForm = ({
           father,
           mother: null
         },
-        earring: `${earring}${earrings.suffix ? '-' + earrings.suffix : ''}`,
+        earring: `${earring}${suffix ? '-' + suffix : ''}`,
         batch: batchName
       })
     }
-    setBatch({
-      earrings,
+    return {
+      earrings: { fromNumber, toNumber, suffix, from, to },
       father,
       animals,
       birthday,
       joinedAt,
       batchName
-    })
+    }
+  }
+
+  const handleCreateBatch = (batch: BatchType | null) => {
+    if (!batch) return setBatch(null)
+    const fullBatch = createEarringsBatch(batch)
+    setBatch({ ...fullBatch })
   }
 
   return (

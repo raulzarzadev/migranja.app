@@ -47,7 +47,7 @@ export const AnimalDetails = ({
   setEditing
 }: {
   animal: AnimalType
-  setEditing: (boolean: boolean) => void
+  setEditing?: (boolean: boolean) => void
 }) => {
   const {
     earring,
@@ -89,17 +89,19 @@ export const AnimalDetails = ({
             }}
           />
         )}
-        <span className="mx-1">
-          <button
-            onClick={(e) => {
-              e.preventDefault()
-              setEditing(true)
-            }}
-            className="text-info btn btn-ghost btn-circle btn-sm"
-          >
-            <Icon size="sm" name="edit" />
-          </button>
-        </span>
+        {setEditing && (
+          <span className="mx-1">
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                setEditing(true)
+              }}
+              className="text-info btn btn-ghost btn-circle btn-sm"
+            >
+              <Icon size="sm" name="edit" />
+            </button>
+          </span>
+        )}
       </div>
       <header className="flex w-full justify-between">
         <div>

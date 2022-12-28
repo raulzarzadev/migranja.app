@@ -20,7 +20,6 @@ type Option =
   | 'addBatch'
 
 const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
-  console.count()
   const [menuOptions, setMenuOptions] = useState<
     Partial<Record<MenuOptions, Option>>
   >({})
@@ -190,7 +189,10 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
             menuOptions.column3 === 'addBatch' &&
             batch?.animals?.length && (
               <div className="  bg-base-300 shadow-md rounded-md w-full">
-                <BatchTable animals={batch?.animals} />{' '}
+                <BatchTable
+                  animals={batch?.animals}
+                  setAnimals={(animals) => setBatch({ ...batch, animals })}
+                />{' '}
               </div>
             )}
 
