@@ -8,10 +8,11 @@ export interface OpenButtonProps {
 }
 interface ModalDeleteType {
   title: string
-  handleDelete: () => void
+  handleDelete: () => Promise<boolean>
   openButtonProps?: OpenButtonProps
   buttonLabel: string | null
   openModalItem?: (props: any) => ReactNode | null
+  text?: string
 }
 
 const ModalDelete = ({
@@ -19,7 +20,8 @@ const ModalDelete = ({
   handleDelete,
   openButtonProps,
   openModalItem,
-  buttonLabel = 'Delete'
+  buttonLabel = 'Delete',
+  text = 'Delete element'
 }: ModalDeleteType) => {
   const [status, setStatus] = useState<StatusModalDelete>('DELETE')
   const [open, setOpen] = useState(false)
@@ -60,9 +62,10 @@ const ModalDelete = ({
       )}
       <Modal title={title} open={open} handleOpen={handleOpen}>
         <div>
-          <p className="text-center my-10">Delete element</p>
+          <p className="text-center my-10">{text}</p>
           <div className="flex w-full my-5 justify-evenly">
             <button
+              disabled={['LOADING', 'ERROR'].includes(status)}
               className="btn btn-outline"
               onClick={(e) => {
                 e.preventDefault()
@@ -72,6 +75,7 @@ const ModalDelete = ({
               Cancel
             </button>
             <button
+              disabled={['LOADING', 'ERROR', 'DELETED'].includes(status)}
               data-test-id="delete-modal-delete-button"
               className="btn btn-error"
               onClick={(e) => {
@@ -79,10 +83,13 @@ const ModalDelete = ({
                 setStatus('LOADING')
 
                 handleDelete()
-
-                setTimeout(() => {
-                  setStatus('DELETED')
-                }, 300)
+                  .then((res) => {
+                    setStatus('DELETED')
+                    setTimeout(() => {
+                      setStatus('DELETE')
+                    }, 2000)
+                  })
+                  .catch((err) => setStatus('ERROR'))
               }}
             >
               {LABELS[status]}

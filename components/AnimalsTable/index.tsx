@@ -16,22 +16,26 @@ import { myFormatDate } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import ParentModal from 'components/ParentModal/indext'
-
+export interface RowSelectedType {
+  id?: string
+  earring?: string
+}
 export interface AnimalTableType {
   animalsData: Partial<AnimalType>[]
-  onRowClick?: ({ id, earring }: { id: string | null; earring: string }) => void
-  // onParentClick?: (id: string | null) => void
-  selectedRow?: string | null
+  setSelectedRows?: (rows: string[] | null) => void
+  setSelectedRow?: (row: RowSelectedType | null) => void
+  settings?: {
+    selectMany?: boolean
+  }
 }
 const AnimalsTable = ({
   animalsData,
-  onRowClick,
-  selectedRow = null
-}: // onParentClick
-AnimalTableType) => {
+  settings,
+  setSelectedRow,
+  setSelectedRows
+}: AnimalTableType) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
-
   const columns = [
     columnHelper.accessor('earring', {
       header: 'Arete'
@@ -109,9 +113,54 @@ AnimalTableType) => {
     getPaginationRowModel: getPaginationRowModel()
   })
 
+  const [_selectMany, _setSelectMany] = useState(false)
+  const [_selectedRows, _setSelectedRows] = useState<string[]>([])
+  const [_selectedRow, _setSelectedRow] = useState<RowSelectedType | null>(null)
+
+  const _onSelectNewRow = (id?: string) => {
+    if (!id) return console.log('no row selected')
+    if (_selectedRows.includes(id)) {
+      const cleanRows = [..._selectedRows.filter((row) => row !== id)]
+      _setSelectedRows(cleanRows)
+      setSelectedRows?.(cleanRows)
+    } else {
+      const addRow = [..._selectedRows, id]
+      _setSelectedRows(addRow)
+      setSelectedRows?.(addRow)
+    }
+  }
+
+  const _onSelectRow = (row: RowSelectedType) => {
+    const { id, earring } = row
+    if (id === _selectedRow?.id || earring === _selectedRow?.earring) {
+      _setSelectedRow(null)
+      setSelectedRow?.(null)
+    } else {
+      _setSelectedRow({ earring, id })
+      setSelectedRow?.({ earring, id })
+    }
+  }
+  const _onRowClick = (row: RowSelectedType | null) => {
+    if (!row) return 'no row selected'
+    if (_selectMany) {
+      _onSelectNewRow(row?.id)
+    } else {
+      console.log('select rod')
+      _onSelectRow(row)
+    }
+  }
+
+  const handleSelectMany = (checked: boolean) => {
+    _setSelectMany(checked)
+    _setSelectedRows([])
+    _setSelectedRow(null)
+    setSelectedRow?.(null)
+    setSelectedRows?.(null)
+  }
+
   return (
     <div className="p-2">
-      <div className=" justify-center flex my-2 items-center">
+      <div className=" justify-center flex my-2 items-center w-full">
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
@@ -122,7 +171,22 @@ AnimalTableType) => {
           {table.getFilteredRowModel().rows.length} de {animalsData.length || 0}
         </div>
       </div>
-      <div className={`overflow-x-auto ${selectedRow && '  '} mx-auto`}>
+      <div
+        className="flex from-control
+      "
+      >
+        {settings?.selectMany && (
+          <label className="label ">
+            <input
+              type={'checkbox'}
+              className="checkbox checkbox-sm"
+              onChange={({ target: { checked } }) => handleSelectMany(checked)}
+            />
+            <span className="label-text ml-1">Seleccionar varios</span>
+          </label>
+        )}
+      </div>
+      <div className={`overflow-x-auto  mx-auto`}>
         <table className="mx-aut table table-compact mx-auto  ">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -157,15 +221,21 @@ AnimalTableType) => {
               <tr
                 key={row.id}
                 className={`hover cursor-pointer ${
-                  row.original.id === selectedRow &&
+                  row.original.id === _selectedRow?.id &&
                   ' border-4 border-base-content'
                 } 
+
+                ${
+                  _selectedRows.includes(row.original.id) &&
+                  'border-4 border-base-content'
+                }
                 `}
                 onClick={() => {
-                  onRowClick?.({
+                  _onRowClick?.({
                     id: row.original.id,
                     earring: row.original.earring
                   })
+                  // _selectMany && handleSelectNewRow(row.original.id)
                 }}
               >
                 {row.getVisibleCells().map((cell) => (

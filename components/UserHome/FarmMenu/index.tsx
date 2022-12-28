@@ -1,4 +1,5 @@
 import { FarmType } from '@firebase/Farm/farm.model'
+import Batch from 'components/Batch'
 import BatchTable from 'components/BatchTable'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
@@ -7,7 +8,7 @@ import BatchForm, { BatchType } from 'components/forms/BatchForm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { ReactNode, useState } from 'react'
-import AnimalCard from '../../AnimalCard'
+
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option =
   | 'animals'
@@ -28,18 +29,15 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
     if (column === 'column1') return setMenuOptions({ [column]: option })
     setMenuOptions({ ...menuOptions, [column]: option })
   }
-  const [listOptionSelected, setListOptionSelected] = useState<string | null>(
-    ''
-  )
+
   const isSheepSelected =
     menuOptions.column1 === 'animals' && menuOptions.column2 === 'sheep'
   const farmIncludeTeam = farm?.haveATeam
 
-  const [batch, setBatch] = useState<BatchType | null>(null)
   return (
-    <div className="flex w-full justify-evenly flex-wrap">
+    <div className="flex w-full  flex-wrap ">
       {/* ********************************* FARM MENU ************************************* */}
-      <MenuSection>
+      <MenuSection className=" w-full sm:w-2/6 border">
         <>
           <div className="  p-1 flex justify-start w-min mx-auto  ">
             {/****************  column 1 *********************/}
@@ -133,16 +131,14 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
           </div>
         </>
       </MenuSection>
-      <MenuSection>
+      <MenuSection className=" w-full sm:w-4/6 border">
         <>
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {isSheepSelected && menuOptions.column3 === 'list' && (
-            <div className=" bg-base-300 shadow-md rounded-md">
-              <OvinesTable
-                onRowClick={({ id }) => setListOptionSelected(id)}
-                selectedRow={listOptionSelected}
-              />
-            </div>
+            <OvinesTable
+            // onRowClick={(row) => setListOptionSelected(row?.id)}
+            // selectedRow={listOptionSelected}
+            />
           )}
           {isSheepSelected && menuOptions.column3 === 'add' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
@@ -162,16 +158,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
               />
             </div>
           )}
-          {isSheepSelected && menuOptions.column3 === 'addBatch' && (
-            <div className=" bg-base-300 shadow-md rounded-md p-2 w-full">
-              <BatchForm
-                animal={{
-                  type: 'ovine'
-                }}
-                setBatch={setBatch}
-              />
-            </div>
-          )}
+          {isSheepSelected && menuOptions.column3 === 'addBatch' && <Batch />}
           {menuOptions?.column1 === 'team' && (
             <>
               <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
@@ -181,37 +168,19 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
           )}
         </>
       </MenuSection>
-      <MenuSection>
-        <>
-          {/* ********************************+ ANIMAL CARD AND FARM TEAM WHEN THIS OPS ARE SELECTED*************************************** */}
-
-          {isSheepSelected &&
-            menuOptions.column3 === 'addBatch' &&
-            batch?.animals?.length && (
-              <div className="  bg-base-300 shadow-md rounded-md w-full">
-                <BatchTable
-                  animals={batch?.animals}
-                  setAnimals={(animals) => setBatch({ ...batch, animals })}
-                />{' '}
-              </div>
-            )}
-
-          {isSheepSelected &&
-            menuOptions.column3 === 'list' &&
-            listOptionSelected && (
-              <div className="  bg-base-300 shadow-md rounded-md ">
-                <AnimalCard animalId={listOptionSelected} />{' '}
-              </div>
-            )}
-        </>
-      </MenuSection>
     </div>
   )
 }
 
-const MenuSection = ({ children }: { children: ReactNode }) => {
+const MenuSection = ({
+  children,
+  className
+}: {
+  children: ReactNode
+  className?: string
+}) => {
   return (
-    <div className="min-h-16 min-w-[150px] w-full p-2 md:w-1/2 lg:w-1/3">
+    <div className={`min-h-16 min-w-[150px]   ${className ?? ''}`}>
       <div className="  w-full h-full flex justify-center">{children}</div>
     </div>
   )

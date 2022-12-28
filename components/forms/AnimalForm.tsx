@@ -89,11 +89,15 @@ export const AnimalForm = ({
     }
   }
 
-  const handleDelete = () => {
-    id &&
-      deleteAnimal(id)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
+  const handleDelete = async () => {
+    try {
+      const res = await deleteAnimal(id as string)
+      console.log(res)
+      return true
+    } catch (err) {
+      console.log(err)
+      return false
+    }
   }
 
   return (

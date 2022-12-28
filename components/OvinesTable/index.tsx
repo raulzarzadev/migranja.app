@@ -1,23 +1,34 @@
-import { listenFarmOvines } from '@firebase/Animal/main'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import AnimalsTable, { AnimalTableType } from 'components/AnimalsTable'
+import AnimalCard from 'components/AnimalCard'
+import AnimalsTable, { RowSelectedType } from 'components/AnimalsTable'
 import useFarm from 'components/hooks/useFarm'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import AnimalsOptions from './AnimalsOptions'
 
-const OvinesTable = ({
-  onRowClick,
-  selectedRow
-}: Omit<AnimalTableType, 'animalsData'>) => {
+const OvinesTable = () => {
   const { currentFarm } = useFarm()
   const ovines = currentFarm.animals?.filter(({ type }) => type === 'ovine')
+  const [selectedRow, setSelectedRow] = useState<RowSelectedType | null>(null)
+  const [selectedRows, setSelectedRows] = useState<string[] | null>(null)
   return (
-    <>
-      <AnimalsTable
-        animalsData={ovines || []}
-        onRowClick={onRowClick}
-        selectedRow={selectedRow}
-      />
-    </>
+    <div className="flex flex-col w-full  lg:flex-row">
+      <div className=" bg-base-300 shadow-md rounded-md m-2 lg:w-1/2 h-min">
+        <AnimalsTable
+          animalsData={ovines || []}
+          setSelectedRow={setSelectedRow}
+          setSelectedRows={setSelectedRows}
+          settings={{ selectMany: true }}
+        />
+      </div>
+      <div className=" bg-base-300 shadow-md rounded-md m-2 lg:w-1/2 h-min">
+        {selectedRow && <AnimalCard animalId={selectedRow.id} />}
+        {selectedRows && (
+          <AnimalsOptions
+            animalsIds={selectedRows}
+            setAnimalsIds={setSelectedRows}
+          />
+        )}
+      </div>
+    </div>
   )
 }
 

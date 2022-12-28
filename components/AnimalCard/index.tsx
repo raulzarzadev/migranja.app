@@ -69,11 +69,16 @@ export const AnimalDetails = ({
     female: FemaleOptions
   }
 
-  const handleDelete = () => {
-    id &&
-      deleteAnimal(id)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
+  const handleDelete = async () => {
+    return await deleteAnimal(id as string)
+      .then((res) => {
+        return true
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+        return false
+      })
   }
   // console.log(animal)
   return (

@@ -157,7 +157,7 @@ const DefineBatchForm = ({
     setBatch(null)
   }
   return (
-    <div>
+    <div className="p-2">
       <header>
         <div>Nuevo lote</div>
       </header>
