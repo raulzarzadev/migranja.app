@@ -37,7 +37,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
   return (
     <div className="flex w-full  flex-wrap ">
       {/* ********************************* FARM MENU ************************************* */}
-      <MenuSection className=" w-full sm:w-2/6 border">
+      <MenuSection className=" w-full sm:w-2/6 ">
         <>
           <div className="  p-1 flex justify-start w-min mx-auto  ">
             {/****************  column 1 *********************/}
@@ -131,7 +131,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
           </div>
         </>
       </MenuSection>
-      <MenuSection className=" w-full sm:w-4/6 border">
+      <MenuSection className=" w-full sm:w-4/6 ">
         <>
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {isSheepSelected && menuOptions.column3 === 'list' && (

@@ -206,7 +206,7 @@ const EarringOptions = ({
   const [error, setError] = useState<string | null>(null)
   return (
     <div className="flex w-full border border-error rounded-md p-2 justify-between flex-col">
-      <div className="form-control w-full max-w-xs">
+      <div className="form-control w-full ">
         <label className="label">
           <span className="label-text">Arete:</span>
         </label>

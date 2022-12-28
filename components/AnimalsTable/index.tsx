@@ -173,11 +173,11 @@ const AnimalsTable = ({
           {table.getFilteredRowModel().rows.length} de {animalsData.length || 0}
         </div>
       </div>
-      <div
-        className="flex from-control
+      {settings?.selectMany && (
+        <div
+          className="flex from-control
       "
-      >
-        {settings?.selectMany && (
+        >
           <label className="label ">
             <input
               type={'checkbox'}
@@ -186,10 +186,10 @@ const AnimalsTable = ({
             />
             <span className="label-text ml-1">Seleccionar varios</span>
           </label>
-        )}
-      </div>
+        </div>
+      )}
       <div className={`overflow-x-auto  mx-auto`}>
-        <table className="mx-aut table table-compact mx-auto  ">
+        <table className="mx-aut table table-compact mx-auto w-full ">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -222,38 +222,43 @@ const AnimalsTable = ({
             {table.getRowModel().rows.map((row) => {
               const itemId = row.original.id
               const itemEarring = row.original.earring
+              const isDuplicated = row.original.isDuplicated
+
+              const isEarringRowSelected =
+                _selectedRow?.earring === row.original.earring
+
+              const isEarringRowsSelected = _selectedRows.includes(
+                row.original.earring
+              )
+
+              // const isSelected = (itemReference) =>
+              // (_selectedRows.includes(itemReference) &&
+              //   (itemReference ?? '') === _selectedRow?.earring) ||
+              // (itemReference ?? '') === _selectedRow?.id
               return (
                 <tr
                   key={row.id}
-                  className={`hover cursor-pointer ${
-                    (itemEarring ?? '') === _selectedRow?.earring &&
-                    ' border-4 border-base-content'
-                  } 
-
-              ${
-                _selectedRows.includes(itemId) && 'border-4 border-base-content'
-              }
-              `}
+                  className={`hover cursor-pointer`}
                   onClick={() => {
                     _onRowClick?.({
                       id: itemId,
                       earring: itemEarring
                     })
-                    // _selectMany && handleSelectNewRow(row.original.id)
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <th
+                    <td
                       key={cell.id}
-                      className={`font-normal ${
-                        row.original?.isDuplicated && ' bg-error'
-                      }`}
+                      className={`font-normal ${isDuplicated && ' bg-error'} ${
+                        (isEarringRowSelected || isEarringRowsSelected) &&
+                        'bg-base-300'
+                      } `}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
-                    </th>
+                    </td>
                   ))}
                 </tr>
               )
