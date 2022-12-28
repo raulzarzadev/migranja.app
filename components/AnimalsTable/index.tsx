@@ -16,6 +16,7 @@ import { myFormatDate } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import ParentModal from 'components/ParentModal/indext'
+import { getDuplicatedEarrings } from 'components/BatchTable/batch.helpers'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -34,6 +35,7 @@ const AnimalsTable = ({
   setSelectedRow,
   setSelectedRows
 }: AnimalTableType) => {
+  console.log({ animalsData })
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
   const columns = [
@@ -146,7 +148,7 @@ const AnimalsTable = ({
   const _onRowClick = (row: RowSelectedType | null) => {
     if (!row) return 'no row selected'
     if (_selectMany) {
-      _onSelectNewRow(row?.id)
+      _onSelectNewRow(row?.earring)
     } else {
       _onSelectRow(row)
     }
@@ -159,6 +161,7 @@ const AnimalsTable = ({
     setSelectedRow?.(null)
     setSelectedRows?.(null)
   }
+  const earringsDuplicated = getDuplicatedEarrings(animalsData)
 
   return (
     <div className="p-2">
@@ -222,14 +225,18 @@ const AnimalsTable = ({
             {table.getRowModel().rows.map((row) => {
               const itemId = row.original.id
               const itemEarring = row.original.earring
-              const isDuplicated = row.original.isDuplicated
-
+              const isDuplicatedInDb = row.original.isDuplicated
+              const isCurrentEarringsDuplicated = earringsDuplicated.find(
+                ({ earring }) => earring === itemEarring
+              )
               const isEarringRowSelected =
                 _selectedRow?.earring === row.original.earring
-
               const isEarringRowsSelected = _selectedRows.includes(
                 row.original.earring
               )
+              const isDuplicated =
+                isDuplicatedInDb || isCurrentEarringsDuplicated
+              const isSelected = isEarringRowSelected || isEarringRowsSelected
 
               // const isSelected = (itemReference) =>
               // (_selectedRows.includes(itemReference) &&
@@ -249,10 +256,9 @@ const AnimalsTable = ({
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className={`font-normal ${isDuplicated && ' bg-error'} ${
-                        (isEarringRowSelected || isEarringRowsSelected) &&
-                        'bg-base-300'
-                      } `}
+                      className={`font-normal
+                      ${isSelected && 'bg-base-300'} 
+                      ${isDuplicated && ' bg-error'} `}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

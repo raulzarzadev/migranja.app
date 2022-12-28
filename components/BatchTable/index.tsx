@@ -9,6 +9,11 @@ import Modal from 'components/modal'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
+import {
+  findDuplicatesAnimals,
+  getDuplicatedEarrings,
+  handleSetDuplicatedAnimal
+} from './batch.helpers'
 
 const BatchTable = ({
   animals,
@@ -20,7 +25,9 @@ const BatchTable = ({
   const [animalSelected, setAnimalSelected] =
     useState<Partial<AnimalType | null>>(null)
 
-  const handleOpenAnimal = ({ id, earring }: any) => {
+  const handleOpenAnimal = (row: any) => {
+    if (!row) return 'no rows selected'
+    const { id, earring } = row
     handleOpenAnimalForm()
     const animal = animals?.find((animal) => animal.earring === earring) || null
     setAnimalSelected(animal)
@@ -30,68 +37,13 @@ const BatchTable = ({
   const handleOpenAnimalForm = () => {
     setOpenAnimalForm(!openAnimalForm)
   }
-  const someAreDuplicated = animals.some((animal) => animal.isDuplicated)
 
-  const handleSetDuplicatedAnimal = (
-    option: 'FORWARD' | 'DELETE' | 'REPLACE',
-    animal: any
-  ) => {
-    if (option === 'DELETE') {
-      setAnimals?.([
-        ...animals.filter(({ earring }) => earring !== animal.earring)
-      ])
-    } else if (option === 'REPLACE') {
-      const animalAux = [...animals]
-      const animalIndex = animalAux.findIndex(
-        ({ earring }) => earring === animal.earring
-      )
-      const newAnimal = {
-        ...animal,
-        earring: animal.newEarring
-      }
-      delete newAnimal.newEarring
-      animalAux.splice(animalIndex, 1, newAnimal)
-      console.log({ animalAux })
-      setAnimals?.([...animalAux])
-    } else if (option === 'FORWARD') {
-      const animalAux = [...animals]
-      const animalIndex = animalAux.findIndex(
-        ({ earring }) => earring === animal.earring
-      )
-      animalAux.splice(animalIndex, 1)
-      const lastEarring = animalAux[animalAux.length - 1].earring || ''
-      const earringNum = parseInt(lastEarring?.split('-')[0])
-      const earringSuffix = lastEarring?.split('-')[1]
-      setAnimals?.([
-        ...animalAux,
-        {
-          ...animal,
-          earring: `${earringNum + 1}${
-            earringSuffix ? '-' + earringSuffix : ''
-          }`
-        }
-      ])
-    }
-  }
+  const [animalsData, setAnimalsData] = useState([...animals])
 
   const ovines = useSelector(selectFarmOvines)
-  const findDuplicatesAnimals = (animals: Partial<AnimalType>[]) => {
-    return animals.map((animal) => {
-      const animalMatch = [...ovines].some(
-        (ovine) => ovine.earring === animal?.earring
-      )
-      if (animalMatch) {
-        return { ...animal, isDuplicated: true }
-      } else {
-        return { ...animal, isDuplicated: false }
-      }
-    })
-  }
-  const [animalsData, setAnimalsData] = useState([...animals])
   useEffect(() => {
-    setAnimalsData(findDuplicatesAnimals(animals))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animals])
+    setAnimalsData(findDuplicatesAnimals(animals, ovines))
+  }, [animals, ovines])
 
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -120,6 +72,12 @@ const BatchTable = ({
       setProgress(0)
     }
   }
+
+  const earringDuplicatedInBatch = getDuplicatedEarrings(animalsData)
+
+  const someAreDuplicated =
+    [...animalsData].some((animal) => animal.isDuplicated) ||
+    earringDuplicatedInBatch.length > 0
 
   return (
     <div>
@@ -177,8 +135,19 @@ const BatchTable = ({
           {animalSelected && (
             <div>
               <EarringOptions
-                animal={animalSelected}
-                setOption={handleSetDuplicatedAnimal}
+                earring={animalSelected.earring}
+                setOption={(option, options) => {
+                  setAnimals?.(
+                    handleSetDuplicatedAnimal(
+                      option,
+                      {
+                        ...animalSelected,
+                        newEarring: options?.newEarring
+                      },
+                      animalsData as AnimalType[]
+                    )
+                  )
+                }}
               />
               <AnimalDetails animal={animalSelected} />
             </div>
@@ -187,7 +156,7 @@ const BatchTable = ({
       </Modal>
 
       <AnimalsTable
-        animalsData={animalsData || []}
+        animalsData={[...animalsData] || []}
         setSelectedRow={handleOpenAnimal}
         // onRowClick={handleOpenAnimal}
       />
@@ -197,10 +166,13 @@ const BatchTable = ({
 
 const EarringOptions = ({
   setOption,
-  animal
+  earring
 }: {
-  animal: Partial<AnimalType>
-  setOption: (option: 'FORWARD' | 'DELETE' | 'REPLACE', animal?: any) => void
+  setOption: (
+    option: 'FORWARD' | 'DELETE' | 'REPLACE',
+    { newEarring }?: { newEarring?: string }
+  ) => void
+  earring?: string
 }) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -217,7 +189,7 @@ const EarringOptions = ({
             setValue(value)
           }}
           type={'text'}
-          placeholder={animal.earring}
+          placeholder={earring}
           className="input input-sm input-bordered "
         />
         {error && <span className="text-error text-sm">{error}</span>}
@@ -225,7 +197,7 @@ const EarringOptions = ({
       <button
         className="btn btn-sm btn-error btn-outline my-2"
         onClick={(e) => {
-          setOption('DELETE', { ...animal, earring: animal.earring })
+          setOption('DELETE')
           setValue('')
         }}
       >
@@ -235,10 +207,10 @@ const EarringOptions = ({
         className="btn btn-sm btn-info btn-outline my-2"
         onClick={(e) => {
           if (!value) return setError('Asinga un nuevo arete')
-          if (value == animal.earring)
+          if (value == earring)
             return setError('Asinga un valor diferente al anterior')
-
-          setOption('REPLACE', { ...animal, newEarring: value })
+          // @ts-ignore // newEarring is necesary becaouse use old earring to find out and replaces it whit newEarring value
+          setOption('REPLACE', { newEarring: value })
           setValue('')
         }}
       >
@@ -247,7 +219,7 @@ const EarringOptions = ({
       <button
         className="btn btn-sm btn-info btn-outline my-2"
         onClick={(e) => {
-          setOption('FORWARD', { ...animal })
+          setOption('FORWARD')
           setValue('')
         }}
       >
