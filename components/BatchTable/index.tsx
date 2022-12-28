@@ -120,7 +120,6 @@ const BatchTable = ({
       setProgress(0)
     }
   }
-  console.log({ progress })
 
   return (
     <div>

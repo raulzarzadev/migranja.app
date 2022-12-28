@@ -6,7 +6,8 @@ import {
   SortingState,
   getSortedRowModel,
   getPaginationRowModel,
-  FilterFn
+  FilterFn,
+  getFilteredRowModel
 } from '@tanstack/react-table'
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
@@ -84,6 +85,7 @@ AnimalTableType) => {
     addMeta({
       itemRank
     })
+    console.log(itemRank)
 
     // Return if the item should be filtered in/out
     return itemRank.passed
@@ -92,62 +94,33 @@ AnimalTableType) => {
   const table = useReactTable({
     data: animalsData as any,
     columns,
+    filterFns: {
+      fuzzy: fuzzyFilter
+    },
     state: {
       sorting,
       globalFilter
-    },
-    filterFns: {
-      fuzzy: fuzzyFilter
     },
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     getPaginationRowModel: getPaginationRowModel()
   })
 
-  function DebouncedInput({
-    value: initialValue,
-    onChange,
-    debounce = 500,
-    ...props
-  }: {
-    value: string | number
-    onChange: (value: string | number) => void
-    debounce?: number
-  } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
-    const [value, setValue] = useState(initialValue)
-
-    useEffect(() => {
-      setValue(initialValue)
-    }, [initialValue])
-
-    useEffect(() => {
-      const timeout = setTimeout(() => {
-        onChange(value)
-      }, debounce)
-
-      return () => clearTimeout(timeout)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value])
-
-    return (
-      <input
-        {...props}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-    )
-  }
+  useEffect(() => {
+    console.log('change', table.getState().globalFilter)
+  }, [table.getState().globalFilter])
 
   return (
     <div className="p-2">
-      <div className=" justify-center flex my-2">
+      <div className=" justify-center flex my-2 ">
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
-          className=" input input-sm"
+          className=" input input-sm w-full"
           placeholder="Buscar..."
         />
       </div>
@@ -254,6 +227,39 @@ AnimalTableType) => {
         </div>
       </div>
     </div>
+  )
+}
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+  const [value, setValue] = useState(initialValue)
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
+
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
   )
 }
 
