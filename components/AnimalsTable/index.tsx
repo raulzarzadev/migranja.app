@@ -35,7 +35,6 @@ const AnimalsTable = ({
   setSelectedRow,
   setSelectedRows
 }: AnimalTableType) => {
-  console.log({ animalsData })
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
   const columns = [
