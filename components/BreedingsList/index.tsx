@@ -145,7 +145,10 @@ const AnimalBreeding = ({ animal }: { animal: Partial<AnimalType> }) => {
 
         <span className="flex flex-col">
           <span>
-            Arete: <span className="font-bold">{animal.earring}</span>
+            Arete:{' '}
+            <span className="font-bold whitespace-nowrap">
+              {animal.earring}
+            </span>
           </span>
           <span className="text-xs">
             Lote: <span className="font-bold">{animal.batch}</span>
