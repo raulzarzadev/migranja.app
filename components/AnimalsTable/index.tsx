@@ -17,6 +17,7 @@ import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import ParentModal from 'components/ParentModal/indext'
 import { getDuplicatedEarrings } from 'components/BatchTable/batch.helpers'
+import DebouncedInput from 'components/inputs/DebouncedInput'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -331,39 +332,6 @@ const AnimalsTable = ({
         </div>
       </div>
     </div>
-  )
-}
-function DebouncedInput({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
-  value: string | number
-  onChange: (value: string | number) => void
-  debounce?: number
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(value)
-    }, debounce)
-
-    return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
-
-  return (
-    <input
-      {...props}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
   )
 }
 

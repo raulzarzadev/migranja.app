@@ -1,3 +1,4 @@
+import { BreedingEventType } from '@firebase/Events/event.model'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { ImageType } from './ImageType.model'
 import { DateType, TypeBase } from './TypeBase.model'
@@ -22,6 +23,7 @@ export interface AnimalType extends TypeBase {
     name?: FarmType['name']
   }
   batchData?: any
+  breeding?: BreedingEventType
 }
 
 export interface GenderOptions {

@@ -12,6 +12,14 @@ export interface EventType extends TypeBase {
   farm: Pick<FarmType, 'name' | 'id'>
 }
 
+export interface BreedingEventType extends EventType {
+  type: 'BREEDING'
+  possibleBirth?: {
+    startAt?: DateType
+    finishAt?: DateType
+  }
+}
+
 export interface CreateEventDTO
   extends Pick<
     EventType,

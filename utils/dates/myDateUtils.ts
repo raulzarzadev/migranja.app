@@ -51,7 +51,10 @@ export const fromNow = (
     console.error('date error')
     return ''
   }
-  return formatDistanceStrict(new Date(date), new Date(), options)
+  return formatDistanceStrict(new Date(date), new Date(), {
+    locale: es,
+    ...options
+  })
 }
 
 const choseDateFormat = (format: FormatType) => {
