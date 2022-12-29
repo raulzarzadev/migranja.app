@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 const useSortByField = (array: any[]) => {
-  const [sortReverse, setSortReverse] = useState<boolean>(true)
+  const [sortReverse, setSortReverse] = useState<boolean>(false)
   const [arraySorted, setArraySorted] = useState<any[]>([])
 
   useEffect(() => {
@@ -24,7 +24,8 @@ const useSortByField = (array: any[]) => {
 
   return {
     arraySorted: arraySorted?.length ? arraySorted : array,
-    handleSortBy
+    handleSortBy,
+    reverse: sortReverse
   }
 }
 

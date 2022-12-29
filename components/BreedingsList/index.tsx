@@ -59,20 +59,28 @@ const BreedingsList = () => {
 }
 
 const AnimalsBreeding = ({ animals }: { animals: any[] }) => {
-  const { arraySorted, handleSortBy } = useSortByField(animals)
+  const { arraySorted, handleSortBy, reverse } = useSortByField(animals)
+  const sortByButtons = [
+    { field: 'possibleBirthStartIn', label: 'Parto' },
+    { field: 'earring', label: 'Arete' }
+  ]
   return (
     <>
       <div>
         <div>Ordenar por:</div>
         <div className="flex w-full justify-evenly">
-          {/* <button onClick={() => handleSortBy('possibleBirthStartIn')}>
-            monta
-          </button> */}
-          <button onClick={() => handleSortBy('possibleBirthStartIn')}>
-            parto
-          </button>
-          <button onClick={() => handleSortBy('earring')}>arete</button>
-          {/* <button onClick={() => handleSortBy('')}>macho</button> */}
+          {sortByButtons.map(({ field, label }) => (
+            <button
+              key={label}
+              onClick={() => handleSortBy(field)}
+              className="btn btn-sm btn-ghost"
+            >
+              {label}
+              <span className="ml-1">
+                <Icon name={reverse ? 'down' : 'up'} size="xs" />
+              </span>
+            </button>
+          ))}
         </div>
       </div>
       {arraySorted.map((animal, i) => (
