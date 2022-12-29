@@ -1,50 +1,41 @@
-import { UserType } from '@firebase/Users/user.model'
 import { getAuth } from 'firebase/auth'
-import { limit, orderBy, where } from 'firebase/firestore'
+import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
-import { CreateNotificationDTO, NotificationType } from './notifications.model'
+import { EventDTO, CreateEventDTO } from './event.model'
 
 const storage = getStorage(app)
 
-const notificationsCRUD = new FirebaseCRUD('notifications', db, storage)
+const eventsCRUD = new FirebaseCRUD('events', db, storage)
 
 /** ************** CREATE ********** */
-export const createNotification = async (newItem: CreateNotificationDTO) =>
-  await notificationsCRUD.createItem(newItem)
+export const createEvent = async (newItem: CreateEventDTO) =>
+  await eventsCRUD.createItem(newItem)
 
 /** ************** UPDATE ********** */
-export const updateNotification = async (
-  itemId: string,
-  newItem: CreateNotificationDTO
-) => await notificationsCRUD.updateItem(itemId, newItem)
+export const updateEvent = async (itemId: string, newItem: EventDTO) =>
+  await eventsCRUD.updateItem(itemId, newItem)
 
 /** ************** DELETE ********** */
-export const deleteNotification = async (itemId: string) =>
-  await notificationsCRUD.deleteItem(itemId)
+export const deleteEvent = async (itemId: string) =>
+  await eventsCRUD.deleteItem(itemId)
 
 /** ************** GET ********** */
 
-export const getNotification = async (itemId: string) =>
-  await notificationsCRUD.getItem(itemId)
+export const getEvent = async (itemId: string) =>
+  await eventsCRUD.getItem(itemId)
 
 /** ************** LISTEN ONE ********** */
 
-export const listenNotification = async (
-  itemId: string,
-  cb: CallableFunction
-) => await notificationsCRUD.listenItem(itemId, cb)
+export const listenEvent = async (itemId: string, cb: CallableFunction) =>
+  await eventsCRUD.listenItem(itemId, cb)
 
 /** ************** LISTEN CURRENT USER ********** */
-export const listenUserNotifications = async (cb: CallableFunction) => {
-  const currentUser = getAuth().currentUser?.uid
-  return await notificationsCRUD.listenItems(
-    [
-      where('directedTo.id', '==', currentUser),
-      limit(5),
-      orderBy('createdAt', 'desc')
-    ],
+export const listenUserEvents = async (cb: CallableFunction) => {
+  const currentUserId = getAuth().currentUser?.uid
+  return await eventsCRUD.listenItems(
+    [where('userId', '==', currentUserId)],
     cb
   )
 }

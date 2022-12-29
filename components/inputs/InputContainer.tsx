@@ -78,6 +78,8 @@ const InputContainer = ({
               dateFormat="dd-MM-yy"
               ref={ref}
               name={name}
+              minDate={rest?.min as unknown as Date}
+              maxDate={rest?.max as unknown as Date}
             />
           )}
           {type === 'select' && (

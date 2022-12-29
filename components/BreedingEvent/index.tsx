@@ -2,7 +2,7 @@ import BreedingForm from 'components/forms/BreedingForm'
 
 const BreedingEvent = () => {
   return (
-    <div>
+    <div className=" border min-w-[250px] w-full">
       <BreedingForm />
     </div>
   )

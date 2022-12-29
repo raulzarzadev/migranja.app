@@ -253,10 +253,6 @@ const AnimalsTable = ({
                 isDuplicatedInDb || isCurrentEarringsDuplicated
               const isSelected = isEarringRowSelected || isEarringRowsSelected
 
-              // const isSelected = (itemReference) =>
-              // (_selectedRows.includes(itemReference) &&
-              //   (itemReference ?? '') === _selectedRow?.earring) ||
-              // (itemReference ?? '') === _selectedRow?.id
               return (
                 <tr
                   key={row.id}
