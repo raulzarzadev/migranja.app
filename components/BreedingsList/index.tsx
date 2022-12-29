@@ -20,38 +20,40 @@ const BreedingsList = () => {
 
   useEffect(() => {
     currentFarm.id &&
+      !animals.length &&
       getFarmBreedings(currentFarm.id).then((res) =>
         setAnimals(formatBreedingsAsBreedingsList(res))
       )
-  }, [currentFarm.id])
+  }, [animals.length, currentFarm.id])
 
-  useEffect(() => {
-    // search in earrig
-    const earrigs = animals.filter(
-      (animal) =>
-        animal.earring?.includes(search.value) || // search earrings
-        animal?.breeding?.breedingMale?.earring?.includes(search.value) // search breeding males
-    )
+  const filterField = (field: string = '', search: string = '') => {
+    return field.toLowerCase().includes(search.toLowerCase())
+  }
 
-    setSearch((state: any) => {
-      return { ...state, matches: [...earrigs] }
-    })
-  }, [animals, search.value])
+  const animalsFiltered = [...animals].filter(
+    (animal) =>
+      // filter  earrings
+      filterField(animal?.earring, search.value) ||
+      // filter  by bull
+      filterField(animal?.breeding?.breedingMale?.earring, search.value) ||
+      // filter  by batch
+      filterField(animal?.batch || '', search.value)
+  )
 
   return (
     <div className="w-full">
       <div className="flex w-full items-center">
         <DebouncedInput
           value={search.value ?? ''}
-          onChange={(value) => setSearch({ ...search, value: String(value) })}
+          onChange={(value) => setSearch({ ...search, value: value as string })}
           className=" input input-sm w-full input-bordered"
           placeholder="Buscar..."
         />
         <div className="whitespace-nowrap ml-1">
-          Encontrados {search.matches.length}
+          Encontrados {animalsFiltered.length}
         </div>
       </div>
-      <AnimalsBreeding animals={search.matches} />
+      <AnimalsBreeding animals={animalsFiltered} />
     </div>
   )
 }
@@ -131,8 +133,13 @@ const AnimalBreeding = ({ animal }: { animal: Partial<AnimalType> }) => {
           </span>
         </div>
 
-        <span>
-          Arete: <span className="font-bold">{animal.earring}</span>
+        <span className="flex flex-col">
+          <span>
+            Arete: <span className="font-bold">{animal.earring}</span>
+          </span>
+          <span className="text-xs">
+            Lote: <span className="font-bold">{animal.batch}</span>
+          </span>
         </span>
       </header>
       <main className="p-2">
