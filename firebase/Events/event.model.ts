@@ -2,7 +2,7 @@ import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { DateType, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
 import { FarmType } from '@firebase/Farm/farm.model'
 
-export interface Event extends TypeBase {
+export interface EventType extends TypeBase {
   type: 'BREEDING' | 'REMOVE'
   date: DateType
   startAt: DateType
@@ -14,7 +14,7 @@ export interface Event extends TypeBase {
 
 export interface CreateEventDTO
   extends Pick<
-    Event,
+    EventType,
     'breedingBatch' | 'type' | 'startAt' | 'finishAt' | 'breedingMale' | 'farm'
   > {}
 

@@ -26,6 +26,14 @@ export const deleteEvent = async (itemId: string) =>
 export const getEvent = async (itemId: string) =>
   await eventsCRUD.getItem(itemId)
 
+/** ************** GET ********** */
+
+export const getFarmBreedings = async (farmId: string) =>
+  await eventsCRUD.getItems([
+    where('farm.id', '==', farmId),
+    where('type', '==', 'BREEDING')
+  ])
+
 /** ************** LISTEN ONE ********** */
 
 export const listenEvent = async (itemId: string, cb: CallableFunction) =>

@@ -2,10 +2,12 @@ import { FarmType } from '@firebase/Farm/farm.model'
 import Batch from 'components/Batch'
 import BatchTable from 'components/BatchTable'
 import BreedingEvent from 'components/BreedingEvent'
+import BreedingsList from 'components/BreedingsList'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
 import BatchForm, { BatchType } from 'components/forms/BatchForm'
+import BreedingForm from 'components/forms/BreedingForm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { ReactNode, useEffect, useState } from 'react'
@@ -41,7 +43,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
 
   if (!menuOptions) return <></>
   const { column1, column2, column3 } = menuOptions
-  console.log({ column1, column2, column3 })
+  // console.log({ column1, column2, column3 })
 
   const handleChangeOption = (column: MenuOptions, option: Option) => {
     if (column === 'column1')
@@ -123,7 +125,13 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
               {column1 === 'events' && column2 === 'breedingEvent' && (
                 <>
                   <SquareOption
-                    title="Monta"
+                    title="Montas"
+                    iconName="list"
+                    onClick={() => handleChangeOption('column3', 'list')}
+                    selected={column3 === 'list'}
+                  />
+                  <SquareOption
+                    title="Nueva"
                     iconName="plus"
                     onClick={() => handleChangeOption('column3', 'add')}
                     selected={column3 === 'add'}
@@ -169,6 +177,9 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {column2 === 'breedingEvent' && column3 === 'add' && (
             <BreedingEvent />
+          )}
+          {column2 === 'breedingEvent' && column3 === 'list' && (
+            <BreedingsList />
           )}
           {isSheepSelected && column3 === 'list' && (
             <OvinesTable
