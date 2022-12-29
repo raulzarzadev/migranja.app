@@ -77,6 +77,7 @@ export const AnimalForm = ({
     } else {
       createAnimal({ ...data, farm: farmData })
         .then(({ res }: any) => {
+          // @ts-ignore FIXME: circularly references itself
           setValue('id', res?.id)
           console.log(res)
         })

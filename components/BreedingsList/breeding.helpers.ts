@@ -32,7 +32,7 @@ export const formatBreedingsAsBreedingsList = (
   let animals: Partial<AnimalType>[] = []
   breedings.forEach((breeding) => {
     const possibleBirth = calculatePossibleBirth(breeding)
-    const getPlusMinusDays = (date) => {
+    const getPlusMinusDays = (date: DateType) => {
       const auxArr = fromNow(date, {
         unit: 'day',
         addSuffix: true

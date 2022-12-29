@@ -8,7 +8,7 @@ const useSortByField = (array: any[]) => {
     setArraySorted(array)
   }, [array])
 
-  const sortByField = (arr, fieldName, reverse) => {
+  const sortByField = (arr: any[], fieldName: string, reverse: boolean) => {
     const auxArr = [...arr]
     return auxArr.sort((a, b) => {
       if (a[fieldName] < b[fieldName]) return reverse ? -1 : 1
@@ -17,7 +17,7 @@ const useSortByField = (array: any[]) => {
     })
   }
 
-  const handleSortBy = (fieldName) => {
+  const handleSortBy = (fieldName: string) => {
     setArraySorted(sortByField(array, fieldName, sortReverse))
     setSortReverse(!sortReverse)
   }
