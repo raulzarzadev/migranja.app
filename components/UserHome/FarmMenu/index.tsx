@@ -41,6 +41,7 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
 
   if (!menuOptions) return <></>
   const { column1, column2, column3 } = menuOptions
+  console.log({ column1, column2, column3 })
 
   const handleChangeOption = (column: MenuOptions, option: Option) => {
     if (column === 'column1')
@@ -52,7 +53,6 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
 
   const isSheepSelected = column1 === 'animals' && column2 === 'sheep'
   const farmIncludeTeam = farm?.haveATeam
-  console.log({ column1, column2, column3 })
 
   return (
     <div className="flex w-full  flex-wrap ">

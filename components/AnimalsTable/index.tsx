@@ -168,30 +168,46 @@ const AnimalsTable = ({
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
-          className=" input input-sm w-full"
+          className=" input input-sm w-full input-bordered"
           placeholder="Buscar..."
         />
         <div className="whitespace-nowrap ml-1">
           {table.getFilteredRowModel().rows.length} de {animalsData.length || 0}
         </div>
       </div>
-      {settings?.selectMany && (
-        <div
-          className="flex from-control
-      "
-        >
-          <label className="label ">
-            <input
-              type={'checkbox'}
-              className="checkbox checkbox-sm"
-              onChange={({ target: { checked } }) => handleSelectMany(checked)}
-            />
-            <span className="label-text ml-1">Seleccionar varios</span>
-          </label>
-        </div>
-      )}
+      <div className="flex w-full justify-between items-center">
+        {settings?.selectMany ? (
+          <div
+            className="flex from-control
+        "
+          >
+            <label className="label ">
+              <input
+                type={'checkbox'}
+                className="checkbox checkbox-sm"
+                onChange={({ target: { checked } }) =>
+                  handleSelectMany(checked)
+                }
+              />
+              <span className="label-text ml-1">Seleccionar varios</span>
+            </label>
+          </div>
+        ) : (
+          ''
+        )}
+        {!!_selectedRows.length && (
+          <span className="label-text ml-1">
+            Seleccionados: {_selectedRows.length}
+          </span>
+        )}
+        {!!_selectedRow && (
+          <span className="label-text ml-1">
+            Seleccionado: {_selectedRow.earring}
+          </span>
+        )}
+      </div>
       <div className={`overflow-x-auto  mx-auto`}>
-        <table className="mx-aut table table-compact mx-auto w-full ">
+        <table className="mx-aut table table-compact mx-auto w-full  ">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -200,8 +216,8 @@ const AnimalsTable = ({
                     key={header.id}
                     {...{
                       className: header.column.getCanSort()
-                        ? 'cursor-pointer select-none'
-                        : '',
+                        ? '!z-0 cursor-pointer select-none'
+                        : '!z-0  ',
                       onClick: header.column.getToggleSortingHandler()
                     }}
                   >
@@ -291,14 +307,20 @@ const AnimalsTable = ({
           </button> */}
           <button
             className="btn btn-outline btn-sm btn-square mx-2"
-            onClick={() => table.previousPage()}
+            onClick={(e) => {
+              e.preventDefault()
+              table.previousPage()
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             <Icon name="left" size="xs" />
           </button>
           <button
             className="btn btn-outline btn-sm btn-square mx-2"
-            onClick={() => table.nextPage()}
+            onClick={(e) => {
+              e.preventDefault()
+              table.nextPage()
+            }}
             disabled={!table.getCanNextPage()}
           >
             <Icon name="right" size="xs" />

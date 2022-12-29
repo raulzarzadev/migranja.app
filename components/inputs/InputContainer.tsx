@@ -35,12 +35,11 @@ const InputContainer = ({
 }: CustomInputTypes) => {
   return (
     <Controller
-      //control={control}
       rules={rules}
       name={name}
       render={({
         field: { onChange, onBlur, value, name, ref },
-        fieldState: { invalid, isTouched, isDirty, error },
+        fieldState: { isTouched, isDirty, error },
         formState
       }) => (
         <label className={`form-control ${className ?? ''}`}>
@@ -69,10 +68,12 @@ const InputContainer = ({
           )}
           {type === 'date' && (
             <DatePicker
-              className="input input-bordered input-sm w-32"
+              onBlur={onBlur}
+              className="input input-bordered input-sm w-32 "
               selected={value ? new Date(value) : new Date()}
               onChange={(date: Date) => onChange(date)}
               //onBlur={onBlur}
+              closeOnScroll
               locale={es}
               dateFormat="dd-MM-yy"
               ref={ref}

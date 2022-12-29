@@ -12,8 +12,6 @@ import { ParentForm } from '../ParentForm'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-import { useSelector } from 'react-redux'
-import { selectFarmOvines } from 'store/slices/farmSlice'
 export interface BatchType {
   birthday: DateType
   animals: Partial<AnimalType>[]
