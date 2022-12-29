@@ -83,9 +83,11 @@ const AnimalsBreeding = ({ animals }: { animals: any[] }) => {
           ))}
         </div>
       </div>
-      {arraySorted.map((animal, i) => (
-        <AnimalBreeding key={`${animal?.id}-${i}`} animal={animal} />
-      ))}
+      <div className="  overflow-y-auto p-1 shadow-inner rounded-md event-list">
+        {arraySorted.map((animal, i) => (
+          <AnimalBreeding key={`${animal?.id}-${i}`} animal={animal} />
+        ))}
+      </div>
     </>
   )
 }
