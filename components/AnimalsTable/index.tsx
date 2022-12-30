@@ -18,6 +18,7 @@ import { rankItem } from '@tanstack/match-sorter-utils'
 import ParentModal from 'components/ParentModal/indext'
 import { getDuplicatedEarrings } from 'components/BatchTable/batch.helpers'
 import DebouncedInput from 'components/inputs/DebouncedInput'
+import HelperText from 'components/HelperText'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -185,6 +186,10 @@ const AnimalsTable = ({
           {table.getFilteredRowModel().rows.length} de {animalsData.length || 0}
         </div>
       </div>
+      <HelperText
+        text="Selecciona de uno en uno para ver los detalles. Selecciona varios para editar en grupo. Selecciona todos los que estan filtrados."
+        type="info"
+      />
       <div className="flex w-full justify-between items-center">
         {settings?.selectMany ? (
           <div
