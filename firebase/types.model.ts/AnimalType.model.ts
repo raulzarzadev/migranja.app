@@ -39,12 +39,17 @@ export interface GenderOptions {
 export interface AnimalWeight {
   atBirth?: string | number | null
   atWeaning?: string | number | null // Destete
-  at6Month: string | number | null
-  at12Month: string | number | null
+  at6Month?: string | number | null
+  at12Month?: string | number | null
 }
 
 export interface ParentType
-  extends Pick<AnimalType, 'earring' | 'breed' | 'birthday' | 'gender'> {
+  extends Partial<
+    Pick<
+      AnimalType,
+      'earring' | 'breed' | 'birthday' | 'gender' | 'name' | 'id'
+    >
+  > {
   inTheFarm: boolean
 }
 export interface ParentsType {

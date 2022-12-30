@@ -1,9 +1,12 @@
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import {
+  AnimalType,
+  ParentType
+} from '@firebase/types.model.ts/AnimalType.model'
 import { DateType, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
 import { FarmType } from '@firebase/Farm/farm.model'
 
 export interface EventType extends TypeBase {
-  type: 'BREEDING' | 'REMOVE'
+  type: 'BREEDING' | 'REMOVE' | 'BIRTH'
   date: DateType
   startAt: DateType
   finishAt: DateType
@@ -18,6 +21,10 @@ export interface BreedingEventType extends EventType {
     startAt?: DateType
     finishAt?: DateType
   }
+}
+export interface CreateBirthEventType extends Partial<EventType> {
+  type: 'BIRTH'
+  parents: AnimalType['parents']
 }
 
 export interface CreateEventDTO

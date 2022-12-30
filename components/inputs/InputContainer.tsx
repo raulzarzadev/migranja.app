@@ -69,7 +69,7 @@ const InputContainer = ({
           {type === 'date' && (
             <DatePicker
               onBlur={onBlur}
-              className="input input-bordered input-sm w-32 "
+              className="input input-bordered input-sm w-full "
               selected={value ? new Date(value) : new Date()}
               onChange={(date: Date) => onChange(date)}
               //onBlur={onBlur}

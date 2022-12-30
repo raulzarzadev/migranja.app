@@ -48,6 +48,7 @@ const useFarm = (props?: UseFarm) => {
       })
     }
   }, [dispatch, farmId])
+
   const currentFarmEarrings = [...farmOvines].map(
     (animal) => `${animal.earring}`
   )

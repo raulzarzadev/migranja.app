@@ -47,3 +47,6 @@ export const listenUserEvents = async (cb: CallableFunction) => {
     cb
   )
 }
+
+export const createBirthEvent = async (newItem: BirthEventType) =>
+  await eventsCRUD.createItem(newItem)

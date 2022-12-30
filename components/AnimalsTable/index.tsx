@@ -294,13 +294,6 @@ const AnimalsTable = ({
           </strong>
         </span>
         <div>
-          {/* <button
-            className="btn btn-outline btn-sm btn-square"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <Icon name="left" size="xs" />
-          </button> */}
           <button
             className="btn btn-outline btn-sm btn-square mx-2"
             onClick={(e) => {
@@ -321,13 +314,6 @@ const AnimalsTable = ({
           >
             <Icon name="right" size="xs" />
           </button>
-          {/* <button
-            className="btn btn-outline btn-sm btn-square"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>>'}
-          </button> */}
         </div>
       </div>
     </div>
