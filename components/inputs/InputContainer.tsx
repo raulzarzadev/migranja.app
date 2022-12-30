@@ -15,7 +15,7 @@ export interface CustomInputTypes
     | 'datetime'
     | 'select'
     | 'checkbox'
-    | 'radio'
+    //| 'radio'
     | 'number'
   label?: string
   selectOptions?: SelectOption[]

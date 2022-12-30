@@ -162,7 +162,6 @@ const AnimalsTable = ({
     setSelectedRows?.(null)
   }
   const earringsDuplicated = getDuplicatedEarrings(animalsData)
-
   return (
     <div className="p-2">
       <div className=" justify-center flex my-2 items-center w-full">

@@ -8,7 +8,7 @@ interface PossiblesBirthDates {
   finishAt: DateType
 }
 
-const GESTATION_DAYS = 90
+const GESTATION_DAYS = 150
 export const calculatePossibleBirth = (
   breeding: Partial<AnimalType['breeding']>
 ): PossiblesBirthDates => {

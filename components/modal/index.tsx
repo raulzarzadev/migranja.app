@@ -4,7 +4,7 @@ import React, { useId } from 'react'
 const Modal = ({
   title = 'Modal title',
   open = false,
-  handleOpen = () => {},
+  handleOpen,
   children = <></>,
   onMouseLeave,
   size = 'full'
