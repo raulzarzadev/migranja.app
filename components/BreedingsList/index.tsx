@@ -114,7 +114,6 @@ const AnimalBreedingOptions = ({
     formState: { errors }
   } = methods
   const formValues = watch()
-  const [newAnimals, setNewAnimals] = useState<any[]>([])
   const defaultBirthValues = {
     birthday: formValues.date,
     parents: {

@@ -60,7 +60,7 @@ const InputContainer = ({
               className="input input-bordered input-sm"
               type={type}
               onBlur={onBlur} // notify when input is touched
-              onChange={(e) => onChange(parseInt(e.target.value))} // send value as number
+              onChange={(e) => onChange(parseFloat(e.target.value))} // send value as number
               placeholder={placeholder}
               value={value ?? ''}
               {...rest}
