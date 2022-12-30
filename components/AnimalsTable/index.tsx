@@ -106,6 +106,7 @@ const AnimalsTable = ({
       sorting,
       globalFilter
     },
+    autoResetPageIndex: false,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
