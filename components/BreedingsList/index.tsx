@@ -1,21 +1,12 @@
-import { createAnimal } from '@firebase/Animal/main'
-import {
-  createBirthEvent,
-  createEvent,
-  getFarmBreedings
-} from '@firebase/Events/main'
+import { BreedingEventType } from '@firebase/Events/event.model'
+import { getFarmBreedings, listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import useFarm from 'components/hooks/useFarm'
 import useSortByField from 'components/hooks/useSortByField'
 import Icon from 'components/Icon'
 import DebouncedInput from 'components/inputs/DebouncedInput'
-import InputContainer from 'components/inputs/InputContainer'
-import Modal from 'components/modal'
 import { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingCard from './AnimalBreedingCard'
-import AnimalBreedingOptions from './AnimalBreedingOptions'
 import { formatBreedingsAsBreedingsList } from './breeding.helpers'
 
 interface SearchField {
@@ -30,9 +21,10 @@ const BreedingsList = () => {
 
   useEffect(() => {
     currentFarm.id &&
-      !animals.length &&
-      getFarmBreedings(currentFarm.id).then((res) =>
-        setAnimals(formatBreedingsAsBreedingsList(res))
+      listenFarmBreedings(
+        currentFarm.id,
+        (res: Partial<BreedingEventType | undefined>[]) =>
+          setAnimals(formatBreedingsAsBreedingsList(res))
       )
   }, [animals.length, currentFarm.id])
 

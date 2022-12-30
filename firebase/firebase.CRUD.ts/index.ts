@@ -203,29 +203,6 @@ export class FirebaseCRUD {
     return this.normalizeItem(docSnap)
   }
 
-  async updateItem(itemId: string, item: object) {
-    const newItem = {
-      ...this.deepFormatFirebaseDates(
-        { ...item, updatedAt: new Date() },
-        this.dateTarget
-      )
-    }
-    // console.log(newItem)
-    return await updateDoc(doc(this.db, this.collectionName, itemId), newItem)
-      .then((res) =>
-        this.formatResponse(true, `${this.collectionName}_UPDATED`, res)
-      )
-      .catch((err) => console.error(err))
-  }
-
-  async deleteItem(itemId: string) {
-    return await deleteDoc(doc(this.db, this.collectionName, itemId))
-      .then((res) =>
-        this.formatResponse(true, `${this.collectionName}_DELETED`, res)
-      )
-      .catch((err) => console.error(err))
-  }
-
   async getItems(filters: any[]) {
     /**
      * * get all documents in a collection implementing filters
@@ -242,6 +219,31 @@ export class FirebaseCRUD {
       res.push(this.normalizeItem(doc))
     })
     return res
+  }
+
+  async updateItem(itemId: string, item: object) {
+    const newItem = {
+      ...this.deepFormatFirebaseDates(
+        { ...item, updatedAt: new Date() },
+        this.dateTarget
+      )
+    }
+    // console.log(newItem)
+    return await updateDoc(doc(this.db, this.collectionName, itemId), newItem)
+      .then((res) =>
+        this.formatResponse(true, `${this.collectionName}_UPDATED`, {
+          id: itemId
+        })
+      )
+      .catch((err) => console.error(err))
+  }
+
+  async deleteItem(itemId: string) {
+    return await deleteDoc(doc(this.db, this.collectionName, itemId))
+      .then((res) =>
+        this.formatResponse(true, `${this.collectionName}_DELETED`, res)
+      )
+      .catch((err) => console.error(err))
   }
 
   async getUserItems(filters: any[]) {
@@ -359,9 +361,13 @@ export class FirebaseCRUD {
     const res = this.deepFormatFirebaseDates(data, this.dateTarget)
     // console.log(res)
     // FIXME: this should return null when no object is findend, in the response always is setted as {id,...res }
-    return {
-      id,
-      ...res
+    if (res) {
+      return {
+        id,
+        ...res
+      }
+    } else {
+      return null
     }
   }
 

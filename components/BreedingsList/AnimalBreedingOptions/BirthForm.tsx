@@ -1,12 +1,15 @@
 import { createAnimal } from '@firebase/Animal/main'
-import { createBirthEvent } from '@firebase/Events/main'
+import {
+  createBirthEvent,
+  updateBreedingWithBirth
+} from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import useFarm from 'components/hooks/useFarm'
 import InputContainer from 'components/inputs/InputContainer'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-const BirthForm = ({ animal }) => {
+const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   const { currentFarmEarrings, currentFarm } = useFarm()
   const methods = useForm()
   const { watch, handleSubmit, setValue, register, reset } = methods
@@ -53,7 +56,7 @@ const BirthForm = ({ animal }) => {
   const onSubmit = async (data: any) => {
     setProgress(1)
     try {
-      // create birth
+      // ****************************************************create birth
       const event = await createBirthEvent({
         type: 'BIRTH',
         date: formValues.date,
@@ -66,7 +69,7 @@ const BirthForm = ({ animal }) => {
       })
       console.log(event)
       setProgress(25)
-      // create animals calfs
+      // *************************************************create animals/calfs
       for (let index = 0; index < data?.calfs.length; index++) {
         const element = data?.calfs[index]
         const animal = await createAnimal({
@@ -75,7 +78,18 @@ const BirthForm = ({ animal }) => {
         console.log(animal)
         setProgress((index * 100) / data?.calfs?.length)
       }
-      // update breeding, move from batch to already done
+
+      // console.log(first)
+      // *********************** update breeding, move from batch to already done
+
+      const breeding = await updateBreedingWithBirth(
+        animal?.breeding?.id as string,
+        animal?.id as string,
+        {
+          birthData: data
+        }
+      )
+      console.log(breeding)
       setProgress(100)
 
       reset()
@@ -115,7 +129,7 @@ const BirthForm = ({ animal }) => {
               />
             )}
           </div>
-          {formValues?.calfs?.map((newAnimal, i) => (
+          {formValues?.calfs?.map((_newAnimal: any, i: number) => (
             <div
               key={i}
               className="flex w-full items-center justify-evenly flex-col sm:flex-row my-2 "
