@@ -162,6 +162,15 @@ const AnimalsTable = ({
     setSelectedRow?.(null)
     setSelectedRows?.(null)
   }
+  const handleSelectAllInFilter = (checked: boolean) => {
+    const selected: string[] = checked
+      ? (table
+          .getFilteredRowModel()
+          .rows.map((row) => row.getAllCells()?.[0].getValue()) as string[])
+      : []
+    _setSelectedRows(selected)
+    console.log(selected)
+  }
   const earringsDuplicated = getDuplicatedEarrings(animalsData)
   return (
     <div className="p-2">
@@ -191,6 +200,17 @@ const AnimalsTable = ({
                 }
               />
               <span className="label-text ml-1">Seleccionar varios</span>
+            </label>
+
+            <label className="label ">
+              <input
+                type={'checkbox'}
+                className="checkbox checkbox-sm"
+                onChange={({ target: { checked } }) =>
+                  handleSelectAllInFilter(checked)
+                }
+              />
+              <span className="label-text ml-1">Todos</span>
             </label>
           </div>
         ) : (
