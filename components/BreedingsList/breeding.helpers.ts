@@ -52,7 +52,7 @@ export const formatBreedingsAsBreedingsList = (
 
     // @ts-ignore
     const animalsAux: Partial<AnimalType>[] = breeding?.breedingBatch?.map(
-      (animal) => {
+      (animal: any) => {
         return {
           possibleBirthStartIn:
             possibleBirth && getPlusMinusDays(possibleBirth?.startAt),

@@ -23,7 +23,7 @@ export interface AnimalType extends TypeBase {
     name?: FarmType['name']
   }
   batchData?: any
-  breeding?: BreedingEventType
+  breeding?: any
   currentStatus?:
     | 'ACTIVE'
     | 'PREGNANT'
