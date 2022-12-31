@@ -7,6 +7,7 @@ import {
   getPlusMinusDays
 } from 'components/BreedingsList/breeding.helpers'
 import Icon from 'components/Icon'
+import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -36,36 +37,15 @@ const BreedingCard = ({
 }: {
   breeding: Partial<BreedingBatchFormattedType>
 }) => {
-  const iconStyle: 'error' | 'warning' | 'success' =
-    // @ts-ignore
-    breeding.possibleBirthStartIn < 0
-      ? 'error'
-      : // @ts-ignore
-      breeding.possibleBirthStartIn < 5
-      ? 'warning'
-      : 'success'
   return (
     <div className="bg-base-300 rounded-md my-1">
       <header className="flex w-full justify-between p-2">
         <div>
           <div className="flex items-center ">
-            <span className="pr-1">
-              {iconStyle === 'error' && (
-                <span className="text-error ">
-                  <Icon name="baned" size="xs" />
-                </span>
-              )}
-              {iconStyle === 'success' && (
-                <span className="text-success ">
-                  <Icon name="done" size="xs" />
-                </span>
-              )}
-              {iconStyle === 'warning' && (
-                <span className="text-warning ">
-                  <Icon name="info" size="xs" />
-                </span>
-              )}
-            </span>
+            <IconBreedingStatus
+              startInDays={breeding?.possibleBirthStartIn as number}
+              finishInDays={breeding?.possibleBirthFinishIn as number}
+            />
           </div>
           <div className="font-lg">
             <span>Partos:</span>

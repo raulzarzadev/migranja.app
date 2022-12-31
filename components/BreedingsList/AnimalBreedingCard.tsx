@@ -1,5 +1,6 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import Icon from 'components/Icon'
+import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
@@ -34,23 +35,10 @@ const AnimalBreedingCard = ({ animal }: { animal: Partial<AnimalType> }) => {
       >
         <header className="flex w-full justify-between p-2 bg-base-200 rounded-t-md">
           <div className="flex items-center ">
-            <span className="pr-1">
-              {iconStyle === 'error' && (
-                <span className="text-error ">
-                  <Icon name="baned" size="xs" />
-                </span>
-              )}
-              {iconStyle === 'success' && (
-                <span className="text-success ">
-                  <Icon name="done" size="xs" />
-                </span>
-              )}
-              {iconStyle === 'warning' && (
-                <span className="text-warning ">
-                  <Icon name="info" size="xs" />
-                </span>
-              )}
-            </span>
+            <IconBreedingStatus
+              finishInDays={animal?.possibleBirthFinishIn}
+              startInDays={animal?.possibleBirthStartIn}
+            />
             <span className="flex flex-col">
               <span>
                 Parto: del{' '}
