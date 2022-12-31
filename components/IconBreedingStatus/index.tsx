@@ -7,7 +7,6 @@ const IconBreedingStatus = ({
   startInDays: number
   finishInDays: number
 }) => {
-  console.log({ startInDays, finishInDays })
   let status: IconStatus = 'info'
   if (startInDays > 1) status = 'success'
   if (startInDays <= 0) status = 'warning'

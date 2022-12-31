@@ -1,21 +1,17 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
-const AnimalBreedingCard = ({ animal }: { animal: Partial<AnimalType> }) => {
+export interface AnimalBreedingCart extends Partial<AnimalType> {
+  possibleBirthFinishIn: number
+  possibleBirthStartIn: number
+}
+const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCart }) => {
   const possibleBirthStartAt = animal?.breeding?.possibleBirth?.startAt
   const possibleBirthFinishAt = animal?.breeding?.possibleBirth?.finishAt
-  const iconStyle: 'error' | 'warning' | 'success' =
-    // @ts-ignore
-    animal.possibleBirthStartIn < 0
-      ? 'error'
-      : // @ts-ignore
-      animal.possibleBirthStartIn < 5
-      ? 'warning'
-      : 'success'
+
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
     setOpenModal(!openModal)

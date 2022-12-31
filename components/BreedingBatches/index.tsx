@@ -6,7 +6,6 @@ import {
   formatBreedingBatches,
   getPlusMinusDays
 } from 'components/BreedingsList/breeding.helpers'
-import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
@@ -16,9 +15,7 @@ const BreedingBatches = ({
 }: {
   batches: Partial<BreedingEventType>[]
 }) => {
-  console.log({ batches })
   const breedings = formatBreedingBatches({ breedings: batches })
-  console.log(breedings)
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
@@ -89,12 +86,18 @@ const BreedingCard = ({
   )
 }
 
-const BreedingCardBody = ({ breeding }) => {
+const BreedingCardBody = ({
+  breeding
+}: {
+  breeding: BreedingBatchFormattedType
+}) => {
   const { breedingBatch, breedingBirths, breedingAborts, breedingEmpty } =
     breeding
-  const [list, setList] = useState([])
+  const [list, setList] = useState<Partial<BreedingEventType['breedingBatch']>>(
+    []
+  )
   const possibleBirth = calculatePossibleBirth(breeding)
-  const formatBatch = (batch) =>
+  const formatBatch = (batch: Partial<BreedingEventType['breedingBatch']>) =>
     batch.map((animal) => {
       return {
         possibleBirthStartIn: getPlusMinusDays(possibleBirth.startAt),
@@ -106,10 +109,10 @@ const BreedingCardBody = ({ breeding }) => {
         }
       }
     })
-
-  const [view, setView] = useState<'PENDING' | 'BIRTHS' | 'ALL' | ''>('')
-
-  const handleSetView = (newView) => {
+  type ViewBatchesType = 'PENDING' | 'BIRTHS' | 'ALL' | ''
+  const [view, setView] = useState<ViewBatchesType>('')
+  console.log(breeding)
+  const handleSetView = (newView: ViewBatchesType) => {
     if (newView === view) {
       setView('')
       setList([])
@@ -117,7 +120,7 @@ const BreedingCardBody = ({ breeding }) => {
     }
     setView(newView)
     if (newView == 'PENDING') {
-      setList([...(formatBatch(breedingBatch) || [])])
+      setList([...formatBatch(breedingBatch || [])])
     }
   }
 
