@@ -10,7 +10,7 @@ import Icon from 'components/Icon'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import AnimalBreedingCard from './AnimalBreedingCard'
-import { formatBreedingsAsBreedingsList } from './breeding.helpers'
+import { formatAnimalsBreedings } from './breeding.helpers'
 
 interface SearchField {
   value: string
@@ -27,12 +27,15 @@ const BreedingsList = () => {
       listenFarmBreedings(
         currentFarm.id,
         (res: BreedingBatchesListType['batches']) => {
-          setAnimals(formatBreedingsAsBreedingsList(res))
-          setBatches(res)
+          const formattedBreedings = formatAnimalsBreedings(res)
+          setBatches(formattedBreedings)
+          const allAnimals = formattedBreedings?.map((batch) => batch.animals)
+          setAnimals(allAnimals.flat())
+          // setAnimals(formatBreedingsAsBreedingsList(res))
+          // setBatches(res)
         }
       )
   }, [animals.length, currentFarm.id])
-
   const filterField = (field: string = '', search: string = '') => {
     return field?.toLowerCase()?.includes(search?.toLowerCase())
   }
@@ -51,7 +54,6 @@ const BreedingsList = () => {
     filterField(batch?.breedingMale?.earring || '', search.value)
   )
 
-  console.log({ batchesFiltered })
   const [view, setView] = useState<'breeding' | 'animals'>('breeding')
 
   return (

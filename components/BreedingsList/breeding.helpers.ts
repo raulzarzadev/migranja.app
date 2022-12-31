@@ -33,6 +33,7 @@ export const getPlusMinusDays = (date?: Date | number) => {
     unit: 'day',
     addSuffix: true
   }).split(' ')
+
   if (auxArr[0] === 'hace') {
     return -parseInt(auxArr[1])
   } else {
@@ -57,11 +58,13 @@ export const formatBreedingBatches = ({
       breedingEmpty
     }) => {
       const possibleBirthDates = calculatePossibleBirth({
-        breedingFinishAt: startAt,
-        breedingStartAt: finishAt
+        breedingFinishAt: finishAt,
+        breedingStartAt: startAt
       })
-      const possibleBirthFinishIn = getPlusMinusDays(finishAt)
-      const possibleBirthStartIn = getPlusMinusDays(startAt)
+      const possibleBirthFinishIn = getPlusMinusDays(
+        possibleBirthDates.finishAt
+      )
+      const possibleBirthStartIn = getPlusMinusDays(possibleBirthDates.startAt)
       return {
         breedingBatch,
         breedingMale,
@@ -109,4 +112,81 @@ export const formatBreedingsAsBreedingsList = (
     animals = [...animals, ...animalsAux]
   })
   return animals
+}
+
+export interface BatchFormatted extends BreedingEventType {
+  animals: Partial<AnimalType>[]
+  breedingDates: {
+    breedingStartAt: number | Date
+    breedingFinishAt: number | Date
+    birthStartAt: number | Date
+    birthFinishAt: number | Date
+    birthStartInDays: number
+    birthFinishInDays: number
+  }
+}
+
+export const formatAnimalsBreedings = (
+  breedings: BreedingEventType[]
+): BatchFormatted[] => {
+  return breedings.map((breeding) => {
+    const possibleBirth = calculatePossibleBirth({
+      breedingFinishAt: breeding.finishAt,
+      breedingStartAt: breeding.startAt
+    })
+    const breedingDates = {
+      breedingStartAt: breeding.startAt,
+      breedingFinishAt: breeding.finishAt,
+      birthStartAt: possibleBirth.startAt,
+      birthFinishAt: possibleBirth.finishAt,
+      birthStartInDays: getPlusMinusDays(possibleBirth.startAt),
+      birthFinishInDays: getPlusMinusDays(possibleBirth.finishAt)
+    }
+    const breedingBatch = breeding.breedingBatch.map((animal) => {
+      return {
+        ...animal,
+        ...breedingDates,
+        breedingDates,
+        status: 'AWAITING'
+      }
+    })
+    const breedingBirths = breeding?.breedingBirths?.map((animal) => {
+      return {
+        ...animal,
+        ...breedingDates,
+        breedingDates,
+        status: 'BIRTH'
+      }
+    })
+    const breedingAborts = breeding?.breedingAborts?.map((animal) => {
+      return {
+        ...animal,
+        ...breedingDates,
+        breedingDates,
+        status: 'ABORT'
+      }
+    })
+    const breedingEmpty = breeding?.breedingEmpty?.map((animal) => {
+      return {
+        ...animal,
+        ...breedingDates,
+        breedingDates,
+        status: 'EMPTY'
+      }
+    })
+    const animals = [
+      ...breedingBatch,
+      ...(breedingBirths || []),
+      ...(breedingAborts || []),
+      ...(breedingEmpty || [])
+    ].map((animal) => {
+      return { ...animal, breeding }
+    })
+    return {
+      ...breeding,
+      breedingDates,
+      animals,
+      breedingBatch: breedingBatch
+    }
+  })
 }

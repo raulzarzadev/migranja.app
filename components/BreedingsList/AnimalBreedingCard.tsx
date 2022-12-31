@@ -5,13 +5,26 @@ import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
 export interface AnimalBreedingCardType extends Partial<AnimalType> {
-  possibleBirthFinishIn: number
-  possibleBirthStartIn: number
+  breedingDates: {
+    birthStartAt: number | Date
+    birthFinishAt: number | Date
+    breedingStartAt: number | Date
+    breedingFinishAt: number | Date
+    birthStartInDays: number
+    birthFinishInDays: number
+  }
 }
 const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
-  const possibleBirthStartAt = animal?.breeding?.possibleBirth?.startAt
-  const possibleBirthFinishAt = animal?.breeding?.possibleBirth?.finishAt
-
+  const {
+    breedingDates: {
+      birthStartAt,
+      birthFinishAt,
+      birthStartInDays,
+      birthFinishInDays,
+      breedingFinishAt,
+      breedingStartAt
+    }
+  } = animal
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
     setOpenModal(!openModal)
@@ -32,24 +45,22 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
         <header className="flex w-full justify-between p-2 bg-base-200 rounded-t-md">
           <div className="flex items-center ">
             <IconBreedingStatus
-              finishInDays={animal?.possibleBirthFinishIn}
-              startInDays={animal?.possibleBirthStartIn}
+              finishInDays={birthFinishInDays}
+              startInDays={birthStartInDays}
             />
             <span className="flex flex-col">
               <span>
                 Parto: del{' '}
                 <span className="font-bold">
-                  {possibleBirthStartAt &&
-                    myFormatDate(possibleBirthStartAt, 'dd-MMM')}
+                  {birthStartAt && myFormatDate(birthStartAt, 'dd-MMM')}
                 </span>{' '}
                 al{' '}
                 <span className="font-bold">
-                  {possibleBirthFinishAt &&
-                    myFormatDate(possibleBirthFinishAt, 'dd-MMM yyyy')}
+                  {birthFinishAt && myFormatDate(birthFinishAt, 'dd-MMM yyyy')}
                 </span>
               </span>
               <span className="text-xs italic">
-                {fromNow(possibleBirthStartAt, { addSuffix: true })}
+                {fromNow(birthStartAt, { addSuffix: true })}
               </span>
             </span>
           </div>
@@ -71,13 +82,9 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
             <div className="flex flex-col text-center">
               <span>Fecha Monta</span>
               <div>
-                <span>
-                  {myFormatDate(animal?.breeding?.startAt, 'dd-MMM-yy')}
-                </span>
+                <span>{myFormatDate(breedingStartAt, 'dd-MMM-yy')}</span>
                 <span className="mx-2">al</span>
-                <span>
-                  {myFormatDate(animal?.breeding?.finishAt, 'dd-MMM-yy')}
-                </span>
+                <span>{myFormatDate(breedingFinishAt, 'dd-MMM-yy')}</span>
               </div>
             </div>
             <div className="flex flex-col text-center">

@@ -11,7 +11,6 @@ const IconBreedingStatus = ({
   if (startInDays > 1) status = 'success'
   if (startInDays <= 0) status = 'warning'
   if (finishInDays < 0) status = 'error'
-
   return (
     <div>
       <span className="pr-1">

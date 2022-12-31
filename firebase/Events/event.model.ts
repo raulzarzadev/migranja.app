@@ -18,9 +18,9 @@ export interface BreedingEventType extends EventType {
     startAt?: DateType
     finishAt?: DateType
   }
-  breedingBirths?: EventType['breedingBatch']
-  breedingAborts?: EventType['breedingBatch']
-  breedingEmpty?: EventType['breedingBatch']
+  breedingBirths?: Partial<AnimalType>[]
+  breedingAborts?: Partial<AnimalType>[]
+  breedingEmpty?: Partial<AnimalType>[]
 }
 export interface CreateBirthEventType extends Partial<EventType> {
   type: 'BIRTH'

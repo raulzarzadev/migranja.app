@@ -1,4 +1,6 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
+import { deleteEvent } from '@firebase/Events/main'
+import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import AnimalBreedingCard, {
   AnimalBreedingCardType
 } from 'components/BreedingsList/AnimalBreedingCard'
@@ -8,7 +10,9 @@ import {
   getPlusMinusDays,
   PossiblesBirthDates
 } from 'components/BreedingsList/breeding.helpers'
+import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
+import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -17,6 +21,7 @@ export interface BreedingBatchesListType {
 }
 const BreedingBatchesList = ({ batches = [] }: BreedingBatchesListType) => {
   const breedings = formatBreedingBatches({ breedings: batches })
+
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
@@ -43,11 +48,17 @@ export interface BreedingCard
     | 'finishAt'
     | 'breedingMale'
   > {
+  animals?: Partial<AnimalBreedingCardType>[]
   possibleBirthStartIn: number
   possibleBirthFinishIn: number
   possibleBirthDates: PossiblesBirthDates
 }
 const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
+  const handleDelete = async () => {
+    const res = await deleteEvent(breeding.id)
+    return console.log(res)
+  }
+
   return (
     <div className="bg-base-300 rounded-md my-1">
       <header className="flex w-full justify-between p-2">
@@ -81,17 +92,31 @@ const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
             </span>
           </div>
         </div>
-        <div className="">
-          <span>
-            Macho:{' '}
-            <span className="font-bold text-xl">
-              {breeding?.breedingMale?.earring}
-            </span>{' '}
-            <span>{breeding?.breedingMale?.name}</span>
+        <div className="relative">
+          <span className="absolute -top-6 -right-2">
+            <ModalDelete
+              buttonLabel={null}
+              handleDelete={() => handleDelete()}
+              title="Eliminar monta"
+              openModalItem={(props) => (
+                <button className="btn btn-circle btn-sm shadow-md" {...props}>
+                  <Icon name="delete" />
+                </button>
+              )}
+            />
           </span>
           <div>
+            <span>
+              Macho:{' '}
+              <span className="font-bold text-xl">
+                {breeding?.breedingMale?.earring}
+              </span>{' '}
+              <span>{breeding?.breedingMale?.name}</span>
+            </span>
+          </div>
+          <div>
             <span>Creado: </span>
-            <span>12/12712</span>
+            <span>hace 10 dias</span>
           </div>
         </div>
       </header>
@@ -102,30 +127,7 @@ const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
 
 export interface BreedingCardBody extends BreedingCard {}
 const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
-  const { breedingBatch, breedingBirths, breedingAborts, breedingEmpty } =
-    breeding
-
   const [animals, setAnimals] = useState<AnimalBreedingCardType[]>([])
-  const possibleBirth = calculatePossibleBirth({
-    breedingFinishAt: breeding?.finishAt,
-    breedingStartAt: breeding?.startAt
-  })
-
-  const formatBatch = (
-    batch: AnimalBreedingCardType['batchData']
-  ): AnimalBreedingCardType[] =>
-    batch.map((animal: AnimalBreedingCardType['batchData']) => {
-      return {
-        possibleBirthStartIn: getPlusMinusDays(possibleBirth?.startAt),
-        possibleBirthFinishIn: getPlusMinusDays(possibleBirth?.finishAt),
-        ...animal,
-        breeding: {
-          ...breeding,
-          possibleBirth
-        }
-      }
-    })
-
   type ViewBatchesType = 'PENDING' | 'BIRTHS' | 'ALL' | ''
   const [view, setView] = useState<ViewBatchesType>('')
   const handleSetView = (newView: ViewBatchesType) => {
@@ -136,7 +138,7 @@ const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
     }
     setView(newView)
     if (newView == 'PENDING') {
-      setAnimals([...formatBatch(breedingBatch || [])])
+      setAnimals([...(breeding?.animals || [])])
     }
   }
 
@@ -145,7 +147,7 @@ const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
       <div className="flex w-full justify-evenly">
         <span>
           <button onClick={() => handleSetView('PENDING')}>
-            Espera {`(${breedingBatch?.length || 0})`}
+            Espera {`(${breeding?.animals?.length || 0})`}
           </button>
         </span>
       </div>
