@@ -5,4 +5,4 @@ export interface TypeBase {
   userId: string
 }
 
-export type DateType = 'string' | 'number' | Date
+export type DateType = number | Date

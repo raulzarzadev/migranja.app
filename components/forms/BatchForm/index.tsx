@@ -48,9 +48,9 @@ const BatchForm = ({
     for (let earring = fromNumber; earring <= toNumber; earring++) {
       animals.push({
         gender: 'female',
-        birthday: birthday || null,
+        birthday: birthday,
         type,
-        joinedAt: joinedAt || null,
+        joinedAt: joinedAt,
         parents: {
           father: father || null,
           mother: null

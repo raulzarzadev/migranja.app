@@ -1,11 +1,6 @@
-import { createAnimal } from '@firebase/Animal/main'
-import { createBirthEvent } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import useFarm from 'components/hooks/useFarm'
-import InputContainer from 'components/inputs/InputContainer'
 import Modal from 'components/modal'
-import { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useState } from 'react'
 import BirthForm from './BirthForm'
 
 const AnimalBreedingOptions = ({

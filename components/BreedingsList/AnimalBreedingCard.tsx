@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
-export interface AnimalBreedingCart extends Partial<AnimalType> {
+export interface AnimalBreedingCardType extends Partial<AnimalType> {
   possibleBirthFinishIn: number
   possibleBirthStartIn: number
 }
-const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCart }) => {
+const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
   const possibleBirthStartAt = animal?.breeding?.possibleBirth?.startAt
   const possibleBirthFinishAt = animal?.breeding?.possibleBirth?.finishAt
 

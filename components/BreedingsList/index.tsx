@@ -1,7 +1,9 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { getFarmBreedings, listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import BreedingBatches from 'components/BreedingBatches'
+import BreedingBatches, {
+  BreedingBatchesListType
+} from 'components/BreedingBatches'
 import useFarm from 'components/hooks/useFarm'
 import useSortByField from 'components/hooks/useSortByField'
 import Icon from 'components/Icon'
@@ -19,12 +21,12 @@ const BreedingsList = () => {
   const { currentFarm } = useFarm()
   const [animals, setAnimals] = useState<Partial<AnimalType>[]>([])
   const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
-  const [batches, setBatches] = useState([])
+  const [batches, setBatches] = useState<BreedingBatchesListType['batches']>([])
   useEffect(() => {
     currentFarm.id &&
       listenFarmBreedings(
         currentFarm.id,
-        (res: Partial<BreedingEventType | undefined>[]) => {
+        (res: BreedingBatchesListType['batches']) => {
           setAnimals(formatBreedingsAsBreedingsList(res))
           setBatches(res)
         }

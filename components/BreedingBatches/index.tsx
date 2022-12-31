@@ -1,27 +1,28 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
-import AnimalBreedingCard from 'components/BreedingsList/AnimalBreedingCard'
+import AnimalBreedingCard, {
+  AnimalBreedingCardType
+} from 'components/BreedingsList/AnimalBreedingCard'
 import {
-  BreedingBatchFormattedType,
   calculatePossibleBirth,
   formatBreedingBatches,
-  getPlusMinusDays
+  getPlusMinusDays,
+  PossiblesBirthDates
 } from 'components/BreedingsList/breeding.helpers'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
-const BreedingBatches = ({
-  batches = []
-}: {
-  batches: Partial<BreedingEventType>[]
-}) => {
+export interface BreedingBatchesListType {
+  batches: BreedingEventType[]
+}
+const BreedingBatchesList = ({ batches = [] }: BreedingBatchesListType) => {
   const breedings = formatBreedingBatches({ breedings: batches })
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
 
       {breedings.map((breeding) => (
-        <div className="my-2" key={breeding.id}>
+        <div className="my-2" key={breeding?.id}>
           <BreedingCard breeding={breeding} />
         </div>
       ))}
@@ -29,11 +30,24 @@ const BreedingBatches = ({
   )
 }
 
-const BreedingCard = ({
-  breeding
-}: {
-  breeding: Partial<BreedingBatchFormattedType>
-}) => {
+export interface BreedingCard
+  extends Pick<
+    BreedingEventType,
+    | 'id'
+    | 'breedingAborts'
+    | 'breedingBirths'
+    | 'breedingAborts'
+    | 'breedingBatch'
+    | 'breedingEmpty'
+    | 'startAt'
+    | 'finishAt'
+    | 'breedingMale'
+  > {
+  possibleBirthStartIn: number
+  possibleBirthFinishIn: number
+  possibleBirthDates: PossiblesBirthDates
+}
+const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
   return (
     <div className="bg-base-300 rounded-md my-1">
       <header className="flex w-full justify-between p-2">
@@ -71,9 +85,9 @@ const BreedingCard = ({
           <span>
             Macho:{' '}
             <span className="font-bold text-xl">
-              {breeding.breedingMale?.earring}
+              {breeding?.breedingMale?.earring}
             </span>{' '}
-            <span>{breeding.breedingMale?.name}</span>
+            <span>{breeding?.breedingMale?.name}</span>
           </span>
           <div>
             <span>Creado: </span>
@@ -86,22 +100,24 @@ const BreedingCard = ({
   )
 }
 
-const BreedingCardBody = ({
-  breeding
-}: {
-  breeding: BreedingBatchFormattedType
-}) => {
+export interface BreedingCardBody extends BreedingCard {}
+const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
   const { breedingBatch, breedingBirths, breedingAborts, breedingEmpty } =
     breeding
-  const [list, setList] = useState<Partial<BreedingEventType['breedingBatch']>>(
-    []
-  )
-  const possibleBirth = calculatePossibleBirth(breeding)
-  const formatBatch = (batch: Partial<BreedingEventType['breedingBatch']>) =>
-    batch.map((animal) => {
+
+  const [animals, setAnimals] = useState<AnimalBreedingCardType[]>([])
+  const possibleBirth = calculatePossibleBirth({
+    breedingFinishAt: breeding?.finishAt,
+    breedingStartAt: breeding?.startAt
+  })
+
+  const formatBatch = (
+    batch: AnimalBreedingCardType['batchData']
+  ): AnimalBreedingCardType[] =>
+    batch.map((animal: AnimalBreedingCardType['batchData']) => {
       return {
-        possibleBirthStartIn: getPlusMinusDays(possibleBirth.startAt),
-        possibleBirthFinishIn: getPlusMinusDays(possibleBirth.finishAt),
+        possibleBirthStartIn: getPlusMinusDays(possibleBirth?.startAt),
+        possibleBirthFinishIn: getPlusMinusDays(possibleBirth?.finishAt),
         ...animal,
         breeding: {
           ...breeding,
@@ -109,18 +125,18 @@ const BreedingCardBody = ({
         }
       }
     })
+
   type ViewBatchesType = 'PENDING' | 'BIRTHS' | 'ALL' | ''
   const [view, setView] = useState<ViewBatchesType>('')
-  console.log(breeding)
   const handleSetView = (newView: ViewBatchesType) => {
     if (newView === view) {
       setView('')
-      setList([])
+      setAnimals([])
       return
     }
     setView(newView)
     if (newView == 'PENDING') {
-      setList([...formatBatch(breedingBatch || [])])
+      setAnimals([...formatBatch(breedingBatch || [])])
     }
   }
 
@@ -134,7 +150,7 @@ const BreedingCardBody = ({
         </span>
       </div>
       <div>
-        {list.map((animal, i) => (
+        {animals.map((animal, i) => (
           <AnimalBreedingCard key={i} animal={animal} />
         ))}
       </div>
@@ -142,4 +158,4 @@ const BreedingCardBody = ({
   )
 }
 
-export default BreedingBatches
+export default BreedingBatchesList

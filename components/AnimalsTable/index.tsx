@@ -30,7 +30,7 @@ export interface AnimalTableType {
   settings?: {
     selectMany?: boolean
   }
-  selectedRows?: any[]
+  selectedRows?: string[] | null
 }
 const AnimalsTable = ({
   animalsData,
@@ -124,7 +124,7 @@ const AnimalsTable = ({
   const [_selectedRow, _setSelectedRow] = useState<RowSelectedType | null>(null)
 
   useEffect(() => {
-    _setSelectedRows(selectedRows)
+    selectedRows && _setSelectedRows(selectedRows)
   }, [selectedRows])
 
   const _onSelectNewRow = (id?: string) => {

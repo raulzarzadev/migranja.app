@@ -19,7 +19,6 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     setValue,
     register,
     reset,
-    setError,
     formState: { errors }
   } = methods
   const formValues = watch()
@@ -120,33 +119,8 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     }
 
     setProgress(0)
-    console.log(data)
   }
 
-  // useEffect(() => {
-  //   formValues?.calfs?.map((calf, i) => {
-  //     const earring = `${calf.earringNumber}${
-  //       calf.earringSuffix ? `-${calf.earringSuffix}` : ''
-  //     }`
-  //     setValue(`calfs.${i}.earring`, earring)
-  //     setError(`calfs.${i}.earring`, {
-  //       types: {
-  //         required: 'Este campo es necesario',
-  //         validate: (value) => {
-  //           return ![...currentFarmEarrings].includes(value) || 'Ya existe!'
-  //         }
-  //       }
-  //     })
-  //     return { ...calf, earring }
-  //   })
-  // }, [
-  //   watch('calfs.0.earringNumber'),
-  //   watch('calfs.0.earringSuffix'),
-  //   watch('calfs.1.earringNumber'),
-  //   watch('calfs.1.earringSuffix'),
-  //   watch('calfs.2.earringNumber'),
-  //   watch('calfs.2.earringSuffix')
-  // ])
   return (
     <div>
       <FormProvider {...methods}>
@@ -207,32 +181,6 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
                 placeholder="Arete"
                 className="w-[100px] my-1"
               />
-              {/* <div className="flex flex-col w-full justify-center items-center">
-                <div className="flex w-full justify-evenly">
-                  <InputContainer
-                    rules={{
-                      required: 'Este campo es necesario',
-                      validate: (value) => {
-                        return (
-                          ![...currentFarmEarrings].includes(value) ||
-                          'Ya existe!'
-                        )
-                      }
-                    }}
-                    name={`calfs.${i}.earringNumber`}
-                    type="number"
-                    placeholder="Num"
-                    className="w-[60px] my-1"
-                  />
-                  <InputContainer
-                    name={`calfs.${i}.earringSuffix`}
-                    type="text"
-                    placeholder="Letra"
-                    className="w-[60px] my-1"
-                  />
-                </div>
-                {errors.calfs[i].earring && <div>error</div>}
-              </div> */}
 
               <InputContainer
                 name={`calfs.${i}.name`}
