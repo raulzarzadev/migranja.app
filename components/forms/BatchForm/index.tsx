@@ -215,7 +215,7 @@ const DefineBatchForm = ({
               />
             </div>
             <div className="text-center">
-              Total:<span className="font-bold">{earringsTotal}</span>
+              Total:<span className="font-bold">{earringsTotal + 1}</span>
             </div>
             <div className="flex justify-center w-full">
               <button

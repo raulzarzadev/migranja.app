@@ -1,6 +1,7 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { getFarmBreedings, listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import BreedingBatches from 'components/BreedingBatches'
 import useFarm from 'components/hooks/useFarm'
 import useSortByField from 'components/hooks/useSortByField'
 import Icon from 'components/Icon'
@@ -18,18 +19,20 @@ const BreedingsList = () => {
   const { currentFarm } = useFarm()
   const [animals, setAnimals] = useState<Partial<AnimalType>[]>([])
   const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
-
+  const [batches, setBatches] = useState([])
   useEffect(() => {
     currentFarm.id &&
       listenFarmBreedings(
         currentFarm.id,
-        (res: Partial<BreedingEventType | undefined>[]) =>
+        (res: Partial<BreedingEventType | undefined>[]) => {
           setAnimals(formatBreedingsAsBreedingsList(res))
+          setBatches(res)
+        }
       )
   }, [animals.length, currentFarm.id])
 
   const filterField = (field: string = '', search: string = '') => {
-    return field.toLowerCase().includes(search.toLowerCase())
+    return field?.toLowerCase()?.includes(search?.toLowerCase())
   }
 
   const animalsFiltered = [...animals].filter(
@@ -41,6 +44,13 @@ const BreedingsList = () => {
       // filter  by batch
       filterField(animal?.batch || '', search.value)
   )
+  const batchesFiltered = [...batches].filter((batch) =>
+    // filter  by bull
+    filterField(batch?.breedingMale?.earring || '', search.value)
+  )
+
+  console.log({ batchesFiltered })
+  const [view, setView] = useState<'breeding' | 'animals'>('breeding')
 
   return (
     <div className="w-full">
@@ -52,10 +62,33 @@ const BreedingsList = () => {
           placeholder="Buscar..."
         />
         <div className="whitespace-nowrap ml-1">
-          Encontrados {animalsFiltered.length}
+          Encontrados{' '}
+          {view === 'animals' ? animalsFiltered.length : batchesFiltered.length}
         </div>
       </div>
-      <AnimalsBreeding animals={animalsFiltered} />
+      <div className="flex justify-evenly w-full my-4">
+        <button
+          className={`btn btn-sm btn-outline ${
+            view == 'breeding' ? 'btn-active' : ''
+          }`}
+          onClick={() => setView('breeding')}
+        >
+          Por Montas
+        </button>
+        <button
+          className={`btn btn-sm btn-outline ${
+            view == 'animals' ? 'btn-active' : ''
+          }`}
+          onClick={() => setView('animals')}
+        >
+          Por Animales
+        </button>
+      </div>
+      {view === 'animals' ? (
+        <AnimalsBreeding animals={animalsFiltered} />
+      ) : (
+        <BreedingBatches batches={batchesFiltered} />
+      )}
     </div>
   )
 }
@@ -85,6 +118,7 @@ const AnimalsBreeding = ({ animals }: { animals: any[] }) => {
           ))}
         </div>
       </div>
+      <div className="text-center">Total: {animals.length}</div>
       <div className="  overflow-y-auto p-1 shadow-inner rounded-md event-list">
         {arraySorted.map((animal, i) => (
           <AnimalBreedingCard key={`${animal?.id}-${i}`} animal={animal} />

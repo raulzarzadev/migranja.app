@@ -1,3 +1,4 @@
+import { BreedingEventType } from '@firebase/Events/event.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { DateType } from '@firebase/types.model.ts/TypeBase.model'
 import { addDays } from 'date-fns'
@@ -25,6 +26,38 @@ export const calculatePossibleBirth = (
     finishAt
   }
 }
+export const getPlusMinusDays = (date: DateType) => {
+  const auxArr = fromNow(date, {
+    unit: 'day',
+    addSuffix: true
+  }).split(' ')
+  if (auxArr[0] === 'hace') {
+    return -parseInt(auxArr[1])
+  } else {
+    return parseInt(auxArr[1])
+  }
+}
+
+export interface BreedingBatchFormattedType extends Partial<BreedingEventType> {
+  possibleBirthStartIn: number
+  possibleBirthFinishIn: number
+  possibleBirthDates: PossiblesBirthDates
+}
+export const formatBreedingBatches = ({
+  breedings
+}: {
+  breedings: Partial<BreedingEventType>[]
+}): Partial<BreedingBatchFormattedType>[] => {
+  return breedings.map((breeding) => {
+    const possibleBirth = calculatePossibleBirth(breeding)
+    return {
+      possibleBirthDates: calculatePossibleBirth(breeding),
+      possibleBirthStartIn: getPlusMinusDays(possibleBirth.startAt),
+      possibleBirthFinishIn: getPlusMinusDays(possibleBirth.finishAt),
+      ...breeding
+    }
+  })
+}
 
 export const formatBreedingsAsBreedingsList = (
   breedings: Partial<AnimalType['breeding']>[]
@@ -32,17 +65,7 @@ export const formatBreedingsAsBreedingsList = (
   let animals: Partial<AnimalType>[] = []
   breedings.forEach((breeding) => {
     const possibleBirth = calculatePossibleBirth(breeding)
-    const getPlusMinusDays = (date: DateType) => {
-      const auxArr = fromNow(date, {
-        unit: 'day',
-        addSuffix: true
-      }).split(' ')
-      if (auxArr[0] === 'hace') {
-        return -parseInt(auxArr[1])
-      } else {
-        return parseInt(auxArr[1])
-      }
-    }
+
     // @ts-ignore
     const animalsAux: Partial<AnimalType>[] = breeding?.breedingBatch?.map(
       (animal) => {
