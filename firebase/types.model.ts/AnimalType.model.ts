@@ -24,6 +24,14 @@ export interface AnimalType extends TypeBase {
   }
   batchData?: any
   breeding?: BreedingEventType
+  currentStatus?:
+    | 'ACTIVE'
+    | 'PREGNANT'
+    | 'DEAD'
+    | 'STOLEN'
+    | 'SICK'
+    | 'LOST'
+    | 'SOLD'
 }
 
 export interface GenderOptions {

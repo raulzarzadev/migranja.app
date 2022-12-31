@@ -30,12 +30,14 @@ export interface AnimalTableType {
   settings?: {
     selectMany?: boolean
   }
+  selectedRows?: any[]
 }
 const AnimalsTable = ({
   animalsData,
   settings,
   setSelectedRow,
-  setSelectedRows
+  setSelectedRows,
+  selectedRows
 }: AnimalTableType) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const columnHelper = createColumnHelper<AnimalType>()
@@ -121,6 +123,10 @@ const AnimalsTable = ({
   const [_selectedRows, _setSelectedRows] = useState<string[]>([])
   const [_selectedRow, _setSelectedRow] = useState<RowSelectedType | null>(null)
 
+  useEffect(() => {
+    _setSelectedRows(selectedRows)
+  }, [selectedRows])
+
   const _onSelectNewRow = (id?: string) => {
     if (!id) return console.log('no row selected')
     if (_selectedRows.includes(id)) {
@@ -170,6 +176,7 @@ const AnimalsTable = ({
           .rows.map((row) => row.getAllCells()?.[0].getValue()) as string[])
       : []
     _setSelectedRows(selected)
+    setSelectedRows?.(selected)
     console.log(selected)
   }
   const earringsDuplicated = getDuplicatedEarrings(animalsData)
@@ -221,9 +228,9 @@ const AnimalsTable = ({
         ) : (
           ''
         )}
-        {!!_selectedRows.length && (
+        {!!_selectedRows?.length && (
           <span className="label-text ml-1">
-            Seleccionados: {_selectedRows.length}
+            Seleccionados: {_selectedRows?.length}
           </span>
         )}
         {!!_selectedRow && (
@@ -272,7 +279,7 @@ const AnimalsTable = ({
               )
               const isEarringRowSelected =
                 _selectedRow?.earring === row.original.earring
-              const isEarringRowsSelected = _selectedRows.includes(
+              const isEarringRowsSelected = _selectedRows?.includes(
                 row.original.earring
               )
               const isDuplicated =

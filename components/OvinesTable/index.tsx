@@ -14,6 +14,7 @@ const OvinesTable = () => {
       <div className=" bg-base-300 shadow-md rounded-md m-2 lg:w-1/2 h-min">
         <AnimalsTable
           animalsData={ovines || []}
+          selectedRows={selectedRows}
           setSelectedRow={setSelectedRow}
           setSelectedRows={setSelectedRows}
           settings={{ selectMany: true }}
@@ -23,8 +24,8 @@ const OvinesTable = () => {
         {selectedRow && <AnimalCard animalId={selectedRow.id} />}
         {selectedRows && (
           <AnimalsOptions
-            animalsIds={selectedRows}
-            setAnimalsIds={setSelectedRows}
+            animalsEarrings={selectedRows}
+            setAnimalsEarrings={setSelectedRows}
           />
         )}
       </div>

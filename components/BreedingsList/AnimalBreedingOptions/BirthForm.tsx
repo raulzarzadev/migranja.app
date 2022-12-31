@@ -1,4 +1,5 @@
 import { createAnimal } from '@firebase/Animal/main'
+import { CreateBirthEventType } from '@firebase/Events/event.model'
 import {
   createBirthEvent,
   updateBreedingWithBirth
@@ -12,7 +13,15 @@ import { FormProvider, useForm } from 'react-hook-form'
 const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   const { currentFarmEarrings, currentFarm } = useFarm()
   const methods = useForm()
-  const { watch, handleSubmit, setValue, register, reset } = methods
+  const {
+    watch,
+    handleSubmit,
+    setValue,
+    register,
+    reset,
+    setError,
+    formState: { errors }
+  } = methods
   const formValues = watch()
 
   const parentsDefaultData: AnimalType['parents'] = {
@@ -55,38 +64,51 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
   const onSubmit = async (data: any) => {
     setProgress(1)
-    try {
-      // ****************************************************create birth
-      const event = await createBirthEvent({
-        type: 'BIRTH',
-        date: formValues.date,
+    console.log(data)
+    const formatBirthEvent: CreateBirthEventType = {
+      type: 'BIRTH',
+      date: formValues.date,
 
-        farm: {
-          id: currentFarm?.id,
-          name: currentFarm?.name
-        },
-        parents: parentsDefaultData
-      })
+      farm: {
+        id: currentFarm?.id,
+        name: currentFarm?.name
+      },
+      parents: parentsDefaultData
+    }
+    const formattedCalfs = data?.calfs?.map((calf: any) => {
+      const status: AnimalType['currentStatus'] = calf.isAlive
+        ? 'ACTIVE'
+        : 'DEAD'
+      return {
+        currentStatus: status,
+        ...calf
+      }
+    })
+    const formatBreedingEvent = { ...data, calfs: formattedCalfs }
+
+    try {
+      // ****************************************************   create birth
+      const event = await createBirthEvent(formatBirthEvent)
       console.log(event)
       setProgress(25)
-      // *************************************************create animals/calfs
-      for (let index = 0; index < data?.calfs.length; index++) {
-        const element = data?.calfs[index]
-        const animal = await createAnimal({
-          ...element
-        })
-        console.log(animal)
-        setProgress((index * 100) / data?.calfs?.length)
-      }
+      // *************************************************   create animals/calfs
+      formattedCalfs.forEach(async (calf: any, i: number) => {
+        const r = await createAnimal({ ...calf }).then((res) =>
+          console.log(res)
+        )
+        setProgress((i * 100) / formattedCalfs?.length)
+        console.log(r)
+      })
+      setProgress(50)
 
       // console.log(first)
-      // *********************** update breeding, move from batch to already done
+      // ***************************************************   update breeding, move from batch to already done
 
       const breeding = await updateBreedingWithBirth(
         animal?.breeding?.id as string,
         animal?.id as string,
         {
-          birthData: data
+          birthData: formatBreedingEvent
         }
       )
       console.log(breeding)
@@ -101,6 +123,30 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     console.log(data)
   }
 
+  // useEffect(() => {
+  //   formValues?.calfs?.map((calf, i) => {
+  //     const earring = `${calf.earringNumber}${
+  //       calf.earringSuffix ? `-${calf.earringSuffix}` : ''
+  //     }`
+  //     setValue(`calfs.${i}.earring`, earring)
+  //     setError(`calfs.${i}.earring`, {
+  //       types: {
+  //         required: 'Este campo es necesario',
+  //         validate: (value) => {
+  //           return ![...currentFarmEarrings].includes(value) || 'Ya existe!'
+  //         }
+  //       }
+  //     })
+  //     return { ...calf, earring }
+  //   })
+  // }, [
+  //   watch('calfs.0.earringNumber'),
+  //   watch('calfs.0.earringSuffix'),
+  //   watch('calfs.1.earringNumber'),
+  //   watch('calfs.1.earringSuffix'),
+  //   watch('calfs.2.earringNumber'),
+  //   watch('calfs.2.earringSuffix')
+  // ])
   return (
     <div>
       <FormProvider {...methods}>
@@ -129,13 +175,24 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
               />
             )}
           </div>
+          <div className="flex w-full justify-evenly  ">
+            <span>Vivo</span>
+            <span className="w-[100px] text-center">Arete</span>
+            <span className="w-[120px] text-center">Nombre</span>
+            <span className="w-[120px] text-center">Peso</span>
+            <span className="w-[120px] text-center">Sexo</span>
+          </div>
           {formValues?.calfs?.map((_newAnimal: any, i: number) => (
             <div
               key={i}
               className="flex w-full items-center justify-evenly flex-col sm:flex-row my-2 "
             >
               <div className="divider" />
-
+              <InputContainer
+                name={`calfs.${i}.isAlive`}
+                type="checkbox"
+                inputClassName="checkbox-success"
+              />
               <InputContainer
                 rules={{
                   required: 'Este campo es necesario',
@@ -148,8 +205,35 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
                 name={`calfs.${i}.earring`}
                 type="text"
                 placeholder="Arete"
-                className="w-[120px] my-1"
+                className="w-[100px] my-1"
               />
+              {/* <div className="flex flex-col w-full justify-center items-center">
+                <div className="flex w-full justify-evenly">
+                  <InputContainer
+                    rules={{
+                      required: 'Este campo es necesario',
+                      validate: (value) => {
+                        return (
+                          ![...currentFarmEarrings].includes(value) ||
+                          'Ya existe!'
+                        )
+                      }
+                    }}
+                    name={`calfs.${i}.earringNumber`}
+                    type="number"
+                    placeholder="Num"
+                    className="w-[60px] my-1"
+                  />
+                  <InputContainer
+                    name={`calfs.${i}.earringSuffix`}
+                    type="text"
+                    placeholder="Letra"
+                    className="w-[60px] my-1"
+                  />
+                </div>
+                {errors.calfs[i].earring && <div>error</div>}
+              </div> */}
+
               <InputContainer
                 name={`calfs.${i}.name`}
                 type="text"

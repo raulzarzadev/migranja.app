@@ -8,11 +8,12 @@ export interface OpenButtonProps {
 }
 interface ModalDeleteType {
   title: string
-  handleDelete: () => Promise<boolean>
+  handleDelete: () => Promise<any> | void
   openButtonProps?: OpenButtonProps
   buttonLabel: string | null
   openModalItem?: (props: any) => ReactNode | null
   text?: string
+  children?: ReactNode
 }
 
 const ModalDelete = ({
@@ -21,7 +22,8 @@ const ModalDelete = ({
   openButtonProps,
   openModalItem,
   buttonLabel = 'Delete',
-  text = 'Delete element'
+  text = 'Delete element',
+  children
 }: ModalDeleteType) => {
   const [status, setStatus] = useState<StatusModalDelete>('DELETE')
   const [open, setOpen] = useState(false)
@@ -63,6 +65,7 @@ const ModalDelete = ({
       <Modal title={title} open={open} handleOpen={handleOpen}>
         <div>
           <p className="text-center my-10">{text}</p>
+          {children ? <div>{children}</div> : ''}
           <div className="flex w-full my-5 justify-evenly">
             <button
               disabled={['LOADING', 'ERROR'].includes(status)}
@@ -83,7 +86,7 @@ const ModalDelete = ({
                 setStatus('LOADING')
 
                 handleDelete()
-                  .then((res) => {
+                  ?.then((res) => {
                     setStatus('DELETED')
                     setTimeout(() => {
                       setStatus('DELETE')

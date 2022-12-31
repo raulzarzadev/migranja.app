@@ -2,6 +2,7 @@ import { es } from 'date-fns/locale'
 import { Controller, ControllerProps } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import React from 'react'
 export interface SelectOption {
   label?: string
   value?: string | number
@@ -22,6 +23,7 @@ export interface CustomInputTypes
   placeholder?: string
   rules?: ControllerProps['rules']
   className?: string
+  inputClassName?: string
 }
 const InputContainer = ({
   name,
@@ -31,6 +33,7 @@ const InputContainer = ({
   placeholder,
   rules,
   className,
+  inputClassName,
   ...rest
 }: CustomInputTypes) => {
   return (
@@ -102,12 +105,13 @@ const InputContainer = ({
           {type === 'checkbox' && (
             <input
               type={'checkbox'}
-              className=" checkbox"
+              className={`checkbox ${inputClassName}`}
               onChange={onChange}
               onBlur={onBlur}
               name={name}
               ref={ref}
               value={value}
+              {...rest}
             />
           )}
 
