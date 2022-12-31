@@ -45,6 +45,7 @@ const BreedingForm = () => {
     try {
       const res = await createEvent({
         type: 'BREEDING',
+        batch: data?.batch,
         breedingBatch: breedingBatch as AnimalType[],
         breedingMale: male as AnimalType,
         startAt: data.startAt,
@@ -60,6 +61,8 @@ const BreedingForm = () => {
       console.log(error)
       setLoading(false)
     }
+    setSheepSelected([])
+    reset()
   }
 
   const formValues = watch()
@@ -89,10 +92,20 @@ const BreedingForm = () => {
             />
           </div>
           {/* ******************************************** 
+                Write the batch name               
+     *******************************************rz */}
+          <InputContainer
+            className="w-36 mx-auto"
+            type="text"
+            name="batch"
+            label="Lote"
+            placeholder="lote"
+          />
+          {/* ******************************************** 
                 Select Dates               
      *******************************************rz */}
 
-          {formValues.breedingMale && (
+          {formValues.breedingMale && formValues.batch && (
             <>
               <HelperText
                 text="Selecciona las fechas aproximadas en las que se llevo a cabo la monta"

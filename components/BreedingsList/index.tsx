@@ -1,9 +1,7 @@
-import { BreedingEventType } from '@firebase/Events/event.model'
-import { getFarmBreedings, listenFarmBreedings } from '@firebase/Events/main'
+import { listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import BreedingBatches, {
-  BreedingBatchesListType
-} from 'components/BreedingBatches'
+import BreedingBatchesList from 'components/BreedingBatchesList'
+import { BreedingBatchesListType } from 'components/BreedingBatchesList'
 import useFarm from 'components/hooks/useFarm'
 import useSortByField from 'components/hooks/useSortByField'
 import Icon from 'components/Icon'
@@ -21,12 +19,14 @@ const BreedingsList = () => {
   const { currentFarm } = useFarm()
   const [animals, setAnimals] = useState<Partial<AnimalType>[]>([])
   const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
-  const [batches, setBatches] = useState<BreedingBatchesListType['batches']>([])
+  const [batches, setBatches] = useState<BreedingBatchesListType['breedings']>(
+    []
+  )
   useEffect(() => {
     currentFarm.id &&
       listenFarmBreedings(
         currentFarm.id,
-        (res: BreedingBatchesListType['batches']) => {
+        (res: BreedingBatchesListType['breedings']) => {
           const formattedBreedings = formatAnimalsBreedings(res)
           setBatches(formattedBreedings)
           const allAnimals = formattedBreedings?.map((batch) => batch.animals)
@@ -55,6 +55,7 @@ const BreedingsList = () => {
   )
 
   const [view, setView] = useState<'breeding' | 'animals'>('breeding')
+  console.log(batchesFiltered)
 
   return (
     <div className="w-full">
@@ -91,7 +92,7 @@ const BreedingsList = () => {
       {view === 'animals' ? (
         <AnimalsBreeding animals={animalsFiltered} />
       ) : (
-        <BreedingBatches batches={batchesFiltered} />
+        <BreedingBatchesList breedings={batchesFiltered} />
       )}
     </div>
   )

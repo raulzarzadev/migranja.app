@@ -1,31 +1,22 @@
-import { BreedingEventType } from '@firebase/Events/event.model'
 import { deleteEvent } from '@firebase/Events/main'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import AnimalBreedingCard, {
-  AnimalBreedingCardType
-} from 'components/BreedingsList/AnimalBreedingCard'
+import AnimalBreedingCard from 'components/BreedingsList/AnimalBreedingCard'
 import {
-  calculatePossibleBirth,
-  formatBreedingBatches,
-  getPlusMinusDays,
-  PossiblesBirthDates
+  AnimalFormatted,
+  BreedingFormatted
 } from 'components/BreedingsList/breeding.helpers'
 import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
-import { myFormatDate } from 'utils/dates/myDateUtils'
+import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
 export interface BreedingBatchesListType {
-  batches: BreedingEventType[]
+  breedings: BreedingFormatted[]
 }
-const BreedingBatchesList = ({ batches = [] }: BreedingBatchesListType) => {
-  const breedings = formatBreedingBatches({ breedings: batches })
-
+const BreedingBatchesList = ({ breedings = [] }: BreedingBatchesListType) => {
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
-
       {breedings.map((breeding) => (
         <div className="my-2" key={breeding?.id}>
           <BreedingCard breeding={breeding} />
@@ -35,25 +26,7 @@ const BreedingBatchesList = ({ batches = [] }: BreedingBatchesListType) => {
   )
 }
 
-export interface BreedingCard
-  extends Pick<
-    BreedingEventType,
-    | 'id'
-    | 'breedingAborts'
-    | 'breedingBirths'
-    | 'breedingAborts'
-    | 'breedingBatch'
-    | 'breedingEmpty'
-    | 'startAt'
-    | 'finishAt'
-    | 'breedingMale'
-  > {
-  animals?: Partial<AnimalBreedingCardType>[]
-  possibleBirthStartIn: number
-  possibleBirthFinishIn: number
-  possibleBirthDates: PossiblesBirthDates
-}
-const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
+const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
   const handleDelete = async () => {
     const res = await deleteEvent(breeding.id)
     return console.log(res)
@@ -65,19 +38,19 @@ const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
         <div>
           <div className="flex items-center ">
             <IconBreedingStatus
-              startInDays={breeding?.possibleBirthStartIn as number}
-              finishInDays={breeding?.possibleBirthFinishIn as number}
+              startInDays={breeding?.birthStartInDays as number}
+              finishInDays={breeding?.birthFinishInDays as number}
             />
           </div>
           <div className="font-lg">
             <span>Partos:</span>
             <span> del </span>
             <span className="font-bold">
-              {myFormatDate(breeding.possibleBirthDates?.startAt, 'dd-MMM')}
+              {myFormatDate(breeding.birthStartAt, 'dd-MMM')}
             </span>
             <span> al </span>
             <span className="font-bold">
-              {myFormatDate(breeding.possibleBirthDates?.finishAt, 'dd-MMM-yy')}
+              {myFormatDate(breeding.birthFinishAt, 'dd-MMM-yy')}
             </span>
           </div>
           <div className="font-sm">
@@ -92,6 +65,7 @@ const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
             </span>
           </div>
         </div>
+        <span>Lote:{breeding?.batch}</span>
         <div className="relative">
           <span className="absolute -top-6 -right-2">
             <ModalDelete
@@ -114,9 +88,9 @@ const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
               <span>{breeding?.breedingMale?.name}</span>
             </span>
           </div>
-          <div>
+          <div className="text-xs">
             <span>Creado: </span>
-            <span>hace 10 dias</span>
+            <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
           </div>
         </div>
       </header>
@@ -125,9 +99,9 @@ const BreedingCard = ({ breeding }: { breeding: BreedingCard }) => {
   )
 }
 
-export interface BreedingCardBody extends BreedingCard {}
+export interface BreedingCardBody extends BreedingFormatted {}
 const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
-  const [animals, setAnimals] = useState<AnimalBreedingCardType[]>([])
+  const [animals, setAnimals] = useState<AnimalFormatted[]>([])
   type ViewBatchesType = 'PENDING' | 'BIRTHS' | 'ALL' | ''
   const [view, setView] = useState<ViewBatchesType>('')
   const handleSetView = (newView: ViewBatchesType) => {
@@ -138,6 +112,7 @@ const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
     }
     setView(newView)
     if (newView == 'PENDING') {
+      //@ts-ignore
       setAnimals([...(breeding?.animals || [])])
     }
   }

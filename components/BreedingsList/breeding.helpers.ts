@@ -1,7 +1,6 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import { DateType } from '@firebase/types.model.ts/TypeBase.model'
-import { BreedingCard } from 'components/BreedingBatches'
+import { DateType, Merge } from '@firebase/types.model.ts/TypeBase.model'
 import { addDays } from 'date-fns'
 import { fromNow } from 'utils/dates/myDateUtils'
 
@@ -41,48 +40,6 @@ export const getPlusMinusDays = (date?: Date | number) => {
   }
 }
 
-export const formatBreedingBatches = ({
-  breedings
-}: {
-  breedings: BreedingEventType[]
-}): BreedingCard[] => {
-  const breedingsFormatted: BreedingCard[] = breedings.map(
-    ({
-      id,
-      breedingMale,
-      startAt,
-      finishAt,
-      breedingBatch,
-      breedingAborts,
-      breedingBirths,
-      breedingEmpty
-    }) => {
-      const possibleBirthDates = calculatePossibleBirth({
-        breedingFinishAt: finishAt,
-        breedingStartAt: startAt
-      })
-      const possibleBirthFinishIn = getPlusMinusDays(
-        possibleBirthDates.finishAt
-      )
-      const possibleBirthStartIn = getPlusMinusDays(possibleBirthDates.startAt)
-      return {
-        breedingBatch,
-        breedingMale,
-        finishAt,
-        id,
-        possibleBirthDates,
-        possibleBirthFinishIn,
-        possibleBirthStartIn,
-        startAt,
-        breedingAborts,
-        breedingBirths,
-        breedingEmpty
-      }
-    }
-  )
-  return breedingsFormatted
-}
-
 export const formatBreedingsAsBreedingsList = (
   breedings: Partial<AnimalType['breeding']>[]
 ): Partial<AnimalType>[] => {
@@ -114,21 +71,33 @@ export const formatBreedingsAsBreedingsList = (
   return animals
 }
 
-export interface BatchFormatted extends BreedingEventType {
+export interface BreedingDatesType {
+  breedingStartAt: number | Date
+  breedingFinishAt: number | Date
+  birthStartAt: number | Date
+  birthFinishAt: number | Date
+  birthStartInDays: number
+  birthFinishInDays: number
+}
+
+export interface AnimalFormatted extends Merge<AnimalType, BreedingDatesType> {
+  breedingDates: BreedingDatesType
+}
+export interface BreedingFormatted
+  extends Merge<
+    Omit<
+      BreedingEventType,
+      'possibleBirth' | 'breedingBirths' | 'breedingAborts' | 'breedingEmpty'
+    >,
+    BreedingDatesType
+  > {
   animals: Partial<AnimalType>[]
-  breedingDates: {
-    breedingStartAt: number | Date
-    breedingFinishAt: number | Date
-    birthStartAt: number | Date
-    birthFinishAt: number | Date
-    birthStartInDays: number
-    birthFinishInDays: number
-  }
+  breedingDates?: BreedingDatesType
 }
 
 export const formatAnimalsBreedings = (
   breedings: BreedingEventType[]
-): BatchFormatted[] => {
+): BreedingFormatted[] => {
   return breedings.map((breeding) => {
     const possibleBirth = calculatePossibleBirth({
       breedingFinishAt: breeding.finishAt,
@@ -185,6 +154,7 @@ export const formatAnimalsBreedings = (
     return {
       ...breeding,
       breedingDates,
+      ...breedingDates,
       animals,
       breedingBatch: breedingBatch
     }

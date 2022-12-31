@@ -41,6 +41,7 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     birthday: formValues.date || new Date(),
     type: 'ovine',
     name: '',
+    batch: animal.breeding?.batch || '',
     weight: {
       atBirth: 0
     },

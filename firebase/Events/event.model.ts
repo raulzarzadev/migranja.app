@@ -10,6 +10,7 @@ export interface EventType extends TypeBase {
   breedingBatch: Partial<AnimalType>[]
   breedingMale: Partial<AnimalType>
   farm: Pick<FarmType, 'name' | 'id'>
+  batch: string
 }
 
 export interface BreedingEventType extends EventType {
@@ -30,7 +31,13 @@ export interface CreateBirthEventType extends Partial<EventType> {
 export interface CreateEventDTO
   extends Pick<
     EventType,
-    'breedingBatch' | 'type' | 'startAt' | 'finishAt' | 'breedingMale' | 'farm'
+    | 'breedingBatch'
+    | 'type'
+    | 'startAt'
+    | 'finishAt'
+    | 'breedingMale'
+    | 'farm'
+    | 'batch'
   > {}
 
 export interface EventDTO extends Partial<Event> {}
