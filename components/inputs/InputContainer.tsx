@@ -44,7 +44,7 @@ const InputContainer = ({
       render={({
         field: { onChange, onBlur, value, name, ref },
         fieldState: { isTouched, isDirty, error },
-        formState
+        formState: { defaultValues }
       }) => (
         <label className={`form-control ${className ?? ''}`}>
           {label && <span className="label-text">{label}</span>}

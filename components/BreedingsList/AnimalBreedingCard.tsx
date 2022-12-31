@@ -39,6 +39,7 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
           openModal={openModal}
         />
       )}
+
       <div
         className="bg-base-300 my-2 rounded-md shadow-md  "
         onClick={() => handleOpenModal()}
@@ -94,8 +95,11 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
                 <span className="mx-2 font-bold">
                   {animal.breeding?.breedingMale?.earring}
                 </span>
+
                 <span>{animal.breeding?.breedingMale?.name || ''}</span>
               </div>
+
+              {console.log(animal.breeding?.breedingMale)}
             </div>
           </div>
         </main>

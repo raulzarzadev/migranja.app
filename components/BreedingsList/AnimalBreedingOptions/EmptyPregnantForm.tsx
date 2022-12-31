@@ -94,7 +94,7 @@ const EmptyPregnantForm = ({ animal }: { animal: Partial<AnimalType> }) => {
           </div>
 
           <InputContainer
-            label={'Comentarios (sopcional)'}
+            label={'Comentarios (opcional)'}
             name={`comments`}
             type="textarea"
             placeholder="Commentarios"

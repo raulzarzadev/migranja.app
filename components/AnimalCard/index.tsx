@@ -16,21 +16,21 @@ import { selectFarmOvines } from 'store/slices/farmSlice'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
-  const [animal, setAnimal] = useState<AnimalType | null>(null)
+  // const [animal, setAnimal] = useState<AnimalType | null>(null)
   const [editing, setEditing] = useState<boolean>(false)
   const ovines = useSelector(selectFarmOvines)
-  useEffect(() => {
-    if (animalId) {
-      const a = ovines.find(({ id }) => id === animalId)
-      setAnimal(a as AnimalType)
-      // getAnimal(animalId).then((res: any) => setAnimal(res))
-    }
+  // useEffect(() => {
+  //   if (animalId) {
+  //     const a = ovines.find(({ id }) => id === animalId)
+  //     setAnimal(a as AnimalType)
+  //     // getAnimal(animalId).then((res: any) => setAnimal(res))
+  //   }
 
-    return () => {
-      setAnimal(null)
-    }
-  }, [animalId, editing, ovines])
-
+  //   return () => {
+  //     setAnimal(null)
+  //   }
+  // }, [animalId, editing, ovines])
+  const animal = ovines.find(({ id }) => id === animalId)
   if (!animal) return <></>
   return (
     <div className="p-2 ">
@@ -50,6 +50,7 @@ export const AnimalDetails = ({
   animal: Partial<AnimalType>
   setEditing?: (boolean: boolean) => void
 }) => {
+  console.log(animal)
   const {
     earring,
     id,

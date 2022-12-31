@@ -1,3 +1,4 @@
+import { getAnimal } from '@firebase/Animal/main'
 import { deleteEvent } from '@firebase/Events/main'
 import AnimalBreedingCard, {
   AnimalBreedingCardType
@@ -9,7 +10,7 @@ import {
 import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
 export interface BreedingBatchesListType {
@@ -33,6 +34,15 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
     const res = await deleteEvent(breeding.id)
     return console.log(res)
   }
+
+  const [breedingMale, setBreedingMale] = useState()
+  useEffect(() => {
+    console.log(breeding)
+    breeding?.breedingMale?.id &&
+      getAnimal(breeding?.breedingMale?.id).then((res) => setBreedingMale(res))
+  }, [breeding?.breedingMale?.id])
+
+  console.log({ breedingMale })
 
   return (
     <div className="bg-base-300 rounded-md my-1">

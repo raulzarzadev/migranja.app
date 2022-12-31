@@ -25,12 +25,14 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
   const parentsDefaultData: AnimalType['parents'] = {
     father: {
+      breed: animal.breeding?.breedingMale.breed || '',
       earring: animal.breeding?.breedingMale.earring || '',
       name: animal.breeding?.breedingMale.name || '',
       id: animal.breeding?.breedingMale.id || '',
       inTheFarm: true
     },
     mother: {
+      breed: animal.breed || '',
       earring: animal.earring || '',
       name: animal.name || '',
       id: animal.id || '',
@@ -73,35 +75,47 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
         id: currentFarm?.id,
         name: currentFarm?.name
       },
-      parents: parentsDefaultData
+      parents: parentsDefaultData,
+      birthData: data
     }
+    const motherBreed = parentsDefaultData.mother?.breed
+    const fatherBreed = parentsDefaultData.father?.breed
+    const breed =
+      motherBreed ??
+      (motherBreed === fatherBreed
+        ? fatherBreed
+        : `1/2${fatherBreed}-1/2${motherBreed}`)
+
+    console.log({ motherBreed, fatherBreed })
     const formattedCalfs = data?.calfs?.map((calf: any) => {
       const status: AnimalType['currentStatus'] = calf.isAlive
         ? 'ACTIVE'
         : 'DEAD'
       return {
         currentStatus: status,
-        ...calf
+        ...calf,
+        birthType: data?.calfs?.length,
+        breed
       }
     })
     const formatBreedingEvent = { ...data, calfs: formattedCalfs }
-
+    return
     try {
-      // ****************************************************   create birth
-      const event = await createBirthEvent(formatBirthEvent)
-      console.log(event)
-      setProgress(25)
       // *************************************************   create animals/calfs
       formattedCalfs.forEach(async (calf: any, i: number) => {
+        //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
         const r = await createAnimal({ ...calf }).then((res) =>
           console.log(res)
         )
         setProgress((i * 100) / formattedCalfs?.length)
         console.log(r)
       })
+      // ****************************************************   create birth
+      const event = await createBirthEvent(formatBirthEvent)
+      console.log(event)
+
       setProgress(50)
 
-      // console.log(first)
       // ***************************************************   update breeding, move from batch to already done
 
       const breeding = await updateBreedingWithBirth(
@@ -134,28 +148,34 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
             />
           </div>
 
-          <div className="flex justify-evenly my-2">
-            {!!formValues.date && (
-              <InputContainer
-                className="w-[150px]"
-                label="Tipo de parto"
-                name="birthType"
-                type="select"
-                selectOptions={[
-                  { label: '1', value: 1 },
-                  { label: '2', value: 2 },
-                  { label: '3', value: 3 }
-                ]}
-              />
-            )}
-          </div>
-          <div className="flex w-full justify-evenly  ">
-            <span>Vivo</span>
-            <span className="w-[100px] text-center">Arete</span>
-            <span className="w-[120px] text-center">Nombre</span>
-            <span className="w-[120px] text-center">Peso</span>
-            <span className="w-[120px] text-center">Sexo</span>
-          </div>
+          {!!formValues.date && (
+            <>
+              <div className="flex justify-evenly my-2">
+                <InputContainer
+                  className="w-[150px]"
+                  label="Tipo de parto"
+                  name="birthType"
+                  type="select"
+                  selectOptions={[
+                    { label: '1', value: 1 },
+                    { label: '2', value: 2 },
+                    { label: '3', value: 3 }
+                  ]}
+                />
+              </div>
+            </>
+          )}
+
+          {formValues.birthType && (
+            <div className="flex w-full justify-evenly  ">
+              <span>Vivo</span>
+              <span className="w-[100px] text-center">Arete</span>
+              <span className="w-[120px] text-center">Nombre</span>
+              <span className="w-[120px] text-center">Peso</span>
+              <span className="w-[120px] text-center">Sexo</span>
+            </div>
+          )}
+
           {formValues?.calfs?.map((_newAnimal: any, i: number) => (
             <div
               key={i}
@@ -189,7 +209,7 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
                 className="w-[120px] my-1"
               />
               <InputContainer
-                name={`calfs.${i}.weight`}
+                name={`calfs.${i}.weight.atBirth`}
                 type="number"
                 placeholder="Peso"
                 className="w-[120px] my-1"
@@ -221,7 +241,7 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
           {progress > 0 && (
             <progress className="progress w-full" value={progress} max={100} />
           )}
-          <div className="flex justify-center w-full">
+          <div className="flex justify-center w-full mt-6">
             <button disabled={progress > 0} className="btn btn-info">
               Guardar
             </button>

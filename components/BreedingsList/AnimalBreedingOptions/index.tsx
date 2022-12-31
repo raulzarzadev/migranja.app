@@ -66,8 +66,8 @@ const AnimalBreedingOptions = ({
           </label>
         </div>
         {option === 'birth' && <BirthForm animal={animal} />}
-        {option === 'birth' && <BirthForm animal={animal} />}
         {option === 'abort' && <AbortForm animal={animal} />}
+        {option === 'notPregnant' && <EmptyPregnantForm animal={animal} />}
         {option === 'discard' && (
           <div className="flex w-full justify-center my-6">
             <ModalDelete

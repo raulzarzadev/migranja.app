@@ -1,33 +1,22 @@
-import { createAnimal } from '@firebase/Animal/main'
-import { CreateBirthEventType } from '@firebase/Events/event.model'
 import {
   createAbortEvent,
-  createBirthEvent,
-  updateBreedingWithAbort,
-  updateBreedingWithBirth
+  updateBreedingWithAbort
 } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import useFarm from 'components/hooks/useFarm'
 import InputContainer from 'components/inputs/InputContainer'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
-  const { currentFarmEarrings, currentFarm } = useFarm()
+  const { currentFarm } = useFarm()
   const methods = useForm({
     defaultValues: {
       date: new Date(),
       comments: ''
     }
   })
-  const {
-    watch,
-    handleSubmit,
-    setValue,
-    register,
-    reset,
-    formState: { errors }
-  } = methods
+  const { watch, handleSubmit } = methods
   const formValues = watch()
 
   const parentsDefaultData: AnimalType['parents'] = {
@@ -98,7 +87,7 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
           </div>
 
           <InputContainer
-            label={'Comentarios (sopcional)'}
+            label={'Comentarios (opcional)'}
             name={`comments`}
             type="textarea"
             placeholder="Commentarios"

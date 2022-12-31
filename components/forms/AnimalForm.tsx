@@ -1,6 +1,6 @@
 import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
-import { createAnimal, deleteAnimal, updateAnimal } from '@firebase/Animal/main'
+import { createAnimal, updateAnimal } from '@firebase/Animal/main'
 import Image from 'next/image'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -40,38 +40,52 @@ export const AnimalForm = ({
   }
 
   const [loading, setLoading] = useState(false)
-
+  const defaultValues = {
+    birthday: new Date(),
+    gender: 'female',
+    joinedAt: new Date(),
+    breed: '',
+    name: '',
+    birthType: 1,
+    batch: null,
+    ...animal,
+    weight: {
+      atBirth: null,
+      atWeaning: null,
+      at6Month: null,
+      at12Month: null,
+      ...animal.weight
+    }
+  }
   const methods = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      birthday: new Date(),
-      gender: 'female',
-      joinedAt: new Date(),
-      breed: '',
-      name: '',
-      birthType: 1,
-      batch: null,
-      weight: {
-        atBirth: null,
-        atWeaning: null,
-        at6Month: null,
-        at12Month: null,
-        ...animal?.weight
-      },
-      ...animal
-    }
+    defaultValues
   })
   const { watch, handleSubmit, reset, setValue } = methods
   const { id, images } = watch()
+  interface ErrorType {
+    type: any
+    message: string
+  }
+  const [error, setError] = useState<ErrorType | null>()
   const onSubmit = (data: any) => {
     //console.log(data)
+    console.log(data)
     setLoading(true)
     if (id) {
       updateAnimal(id, data)
-        .then((res: any) => console.log(res))
-        .catch((err: any) => console.log(err))
-        .finally(() => {
+        .then((res: any) => {
           setEditing?.(false)
+          console.log(res)
+        })
+        .catch((err: any) => {
+          setError({ type: err, message: 'Hubo un error' })
+          setTimeout(() => {
+            setError(null)
+          }, 1000)
+        })
+        .finally(() => {
+          //setEditing?.(false)
           setLoading(false)
         })
     } else {
@@ -79,6 +93,7 @@ export const AnimalForm = ({
         .then(({ res }: any) => {
           // @ts-ignore FIXME: circularly references itself
           setValue('id', res?.id)
+          setEditing?.(false)
           console.log(res)
         })
         .catch((err: any) => console.log(err))
@@ -92,7 +107,6 @@ export const AnimalForm = ({
   }
 
   const { handleDelete } = useAnimal()
-
   return (
     <div>
       <FormProvider {...methods}>
@@ -153,10 +167,13 @@ export const AnimalForm = ({
                     <span className="sr-only">Loading...</span>
                   </div>
                 ) : (
-                  <Icon size="sm" name="done" />
+                  <>
+                    <Icon size="sm" name="done" />
+                  </>
                 )}
               </button>
             </div>
+            {error && error.message}
           </div>
           <div>
             <header className="flex w-full justify-between flex-col sm:flex-row">
