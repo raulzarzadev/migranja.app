@@ -69,7 +69,7 @@ const EmptyPregnantForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       setProgress(50)
       const breedingUpdate = await updateBreedingWithEmptyPregnant(
         animal?.breeding?.id,
-        animal?.id,
+        animal?.id || '',
         { emptyData }
       )
       console.log(breedingUpdate)

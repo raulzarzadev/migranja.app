@@ -73,7 +73,7 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       setProgress(50)
       const breedingUpdate = await updateBreedingWithAbort(
         animal?.breeding?.id,
-        animal?.id,
+        animal?.id || '',
         { abortData }
       )
       console.log(breedingUpdate)
