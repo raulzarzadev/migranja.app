@@ -3,7 +3,7 @@ import { DateType, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
 import { FarmType } from '@firebase/Farm/farm.model'
 
 export interface EventType extends TypeBase {
-  type: 'BREEDING' | 'REMOVE' | 'BIRTH'
+  type: 'BREEDING' | 'REMOVE' | 'BIRTH' | 'ABORT' | 'EMPTY'
   date: DateType
   startAt: DateType
   finishAt: DateType

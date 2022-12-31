@@ -116,7 +116,7 @@ export const formatAnimalsBreedings = (
         ...animal,
         ...breedingDates,
         breedingDates,
-        status: 'AWAITING'
+        status: 'PENDING'
       }
     })
     const breedingBirths = breeding?.breedingBirths?.map((animal) => {

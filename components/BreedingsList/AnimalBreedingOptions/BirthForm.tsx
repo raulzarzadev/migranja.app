@@ -116,10 +116,9 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
       reset()
     } catch (error) {
+      setProgress(0)
       console.log(error)
     }
-
-    setProgress(0)
   }
 
   return (

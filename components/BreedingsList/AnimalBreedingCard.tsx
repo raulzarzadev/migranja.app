@@ -29,6 +29,7 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
   const handleOpenModal = () => {
     setOpenModal(!openModal)
   }
+
   return (
     <>
       {openModal && (

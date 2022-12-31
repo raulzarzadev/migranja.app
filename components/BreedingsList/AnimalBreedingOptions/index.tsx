@@ -1,7 +1,11 @@
+import { removeAnimalFromBreeding } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import Modal from 'components/modal'
+import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
+import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
+import EmptyPregnantForm from './EmptyPregnantForm'
 
 const AnimalBreedingOptions = ({
   animal,
@@ -24,9 +28,20 @@ const AnimalBreedingOptions = ({
     {
       label: 'No preña',
       value: 'notPregnant'
+    },
+    {
+      label: 'Descartar',
+      value: 'discard'
     }
   ]
   const [option, setOption] = useState('')
+  const handleRemove = () => {
+    removeAnimalFromBreeding(animal.breeding.id, animal.id)
+      .then((res) => {
+        console.log(res)
+      })
+      .then((err) => console.log(err))
+  }
   return (
     <Modal
       handleOpen={handleOpenModal}
@@ -51,6 +66,20 @@ const AnimalBreedingOptions = ({
           </label>
         </div>
         {option === 'birth' && <BirthForm animal={animal} />}
+        {option === 'birth' && <BirthForm animal={animal} />}
+        {option === 'abort' && <AbortForm animal={animal} />}
+        {option === 'discard' && (
+          <div className="flex w-full justify-center my-6">
+            <ModalDelete
+              text={`Eliminar este animal de la monta de forma permanente ${
+                animal.earring
+              } ${animal.name || ''}`}
+              title="Eliminar del la monta"
+              buttonLabel={'Descartar'}
+              handleDelete={() => handleRemove()}
+            />
+          </div>
+        )}
       </div>
     </Modal>
   )

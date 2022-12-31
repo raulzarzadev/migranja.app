@@ -30,7 +30,9 @@ const BreedingsList = () => {
           const formattedBreedings = formatAnimalsBreedings(res)
           setBatches(formattedBreedings)
           const allAnimals = formattedBreedings?.map((batch) => batch.animals)
-          setAnimals(allAnimals.flat())
+          setAnimals(
+            allAnimals.flat().filter(({ status }) => status === 'PENDING')
+          )
           // setAnimals(formatBreedingsAsBreedingsList(res))
           // setBatches(res)
         }
@@ -55,7 +57,6 @@ const BreedingsList = () => {
   )
 
   const [view, setView] = useState<'breeding' | 'animals'>('breeding')
-  console.log(batchesFiltered)
 
   return (
     <div className="w-full">

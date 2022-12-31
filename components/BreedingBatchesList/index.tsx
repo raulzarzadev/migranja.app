@@ -1,5 +1,7 @@
 import { deleteEvent } from '@firebase/Events/main'
-import AnimalBreedingCard from 'components/BreedingsList/AnimalBreedingCard'
+import AnimalBreedingCard, {
+  AnimalBreedingCardType
+} from 'components/BreedingsList/AnimalBreedingCard'
 import {
   AnimalFormatted,
   BreedingFormatted
@@ -102,18 +104,26 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
 export interface BreedingCardBody extends BreedingFormatted {}
 const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
   const [animals, setAnimals] = useState<AnimalFormatted[]>([])
-  type ViewBatchesType = 'PENDING' | 'BIRTHS' | 'ALL' | ''
+  type ViewBatchesType = 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY' | ''
   const [view, setView] = useState<ViewBatchesType>('')
+  const pendingAnimals = breeding.animals.filter(
+    ({ status }) => status === 'PENDING'
+  )
+  const abortAnimals = breeding.animals.filter(
+    ({ status }) => status === 'ABORT'
+  )
+  const birthAnimals = breeding.animals.filter(
+    ({ status }) => status === 'BIRTH'
+  )
+  const emptyAnimals = breeding.animals.filter(
+    ({ status }) => status === 'EMPTY'
+  )
+
   const handleSetView = (newView: ViewBatchesType) => {
     if (newView === view) {
       setView('')
-      setAnimals([])
-      return
-    }
-    setView(newView)
-    if (newView == 'PENDING') {
-      //@ts-ignore
-      setAnimals([...(breeding?.animals || [])])
+    } else {
+      setView(newView)
     }
   }
 
@@ -121,15 +131,67 @@ const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
     <main className="p-2">
       <div className="flex w-full justify-evenly">
         <span>
+          <button onClick={() => handleSetView('ALL')}>
+            Todos {`(${breeding?.animals?.length || 0})`}
+          </button>
+        </span>
+        <span>
           <button onClick={() => handleSetView('PENDING')}>
-            Espera {`(${breeding?.animals?.length || 0})`}
+            Espera {`(${pendingAnimals?.length || 0})`}
+          </button>
+        </span>
+        <span>
+          <button onClick={() => handleSetView('ABORT')}>
+            Abortos {`(${abortAnimals?.length || 0})`}
+          </button>
+        </span>
+        <span>
+          <button onClick={() => handleSetView('BIRTH')}>
+            Partos {`(${birthAnimals?.length || 0})`}
+          </button>
+        </span>
+        <span>
+          <button onClick={() => handleSetView('EMPTY')}>
+            Vacios {`(${emptyAnimals?.length || 0})`}
           </button>
         </span>
       </div>
       <div>
-        {animals.map((animal, i) => (
-          <AnimalBreedingCard key={i} animal={animal} />
-        ))}
+        {view === 'ALL' &&
+          breeding.animals.map((animal, i) => (
+            <AnimalBreedingCard
+              key={i}
+              animal={animal as AnimalBreedingCardType}
+            />
+          ))}
+        {view === 'PENDING' &&
+          pendingAnimals.map((animal, i) => (
+            <AnimalBreedingCard
+              key={i}
+              animal={animal as AnimalBreedingCardType}
+            />
+          ))}
+        {view === 'ABORT' &&
+          abortAnimals.map((animal, i) => (
+            <AnimalBreedingCard
+              key={i}
+              animal={animal as AnimalBreedingCardType}
+            />
+          ))}
+        {view === 'BIRTH' &&
+          birthAnimals.map((animal, i) => (
+            <AnimalBreedingCard
+              key={i}
+              animal={animal as AnimalBreedingCardType}
+            />
+          ))}
+        {view === 'EMPTY' &&
+          emptyAnimals.map((animal, i) => (
+            <AnimalBreedingCard
+              key={i}
+              animal={animal as AnimalBreedingCardType}
+            />
+          ))}
       </div>
     </main>
   )

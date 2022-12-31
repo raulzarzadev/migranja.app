@@ -7,7 +7,8 @@ import {
   EventDTO,
   CreateEventDTO,
   CreateBirthEventType,
-  BreedingEventType
+  BreedingEventType,
+  EventType
 } from './event.model'
 
 import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
@@ -74,7 +75,11 @@ export const updateBreedingWithBirth = async (
 
   return await eventsCRUD.updateItem(breedingId, {
     breedingBatch: arrayRemove(breedingAnimal),
-    breedingBirths: arrayUnion({ ...breedingAnimal, birthData })
+    breedingBirths: arrayUnion({
+      ...breedingAnimal,
+      birthData,
+      status: 'BIRTH'
+    })
   })
 }
 
@@ -88,3 +93,84 @@ export const listenFarmBreedings = async (
     [where('farm.id', '==', farmId), where('type', '==', 'BREEDING')],
     cb
   )
+
+/** ************** CREATE  ABORT ********** */
+
+export interface CreateBirthAbortType extends Partial<EventType> {
+  type: 'ABORT'
+  parents: AnimalType['parents']
+}
+export const createAbortEvent = async (newItem: CreateBirthAbortType) =>
+  await eventsCRUD.createItem({ ...newItem, type: 'ABORT' })
+
+/** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
+
+export const updateBreedingWithAbort = async (
+  breedingId: BreedingEventType['id'],
+  animalId: AnimalType['id'],
+  { abortData }: { abortData: any }
+) => {
+  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
+    breedingId
+  )
+  const breedingAnimal = [...(breeding?.breedingBatch || [])].find(
+    (animal) => animal?.id === animalId
+  )
+
+  return await eventsCRUD.updateItem(breedingId, {
+    breedingBatch: arrayRemove(breedingAnimal),
+    breedingAborts: arrayUnion({
+      ...breedingAnimal,
+      abortData,
+      status: 'ABORT'
+    })
+  })
+}
+
+/** ************** CREATE  EMPTY ********** */
+
+export interface CreateBirthAbortType extends Partial<EventType> {
+  type: 'ABORT'
+  parents: AnimalType['parents']
+}
+export const createEmptyPregnantEvent = async (newItem: CreateBirthAbortType) =>
+  await eventsCRUD.createItem({ ...newItem, type: 'EMPTY' })
+
+/** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
+
+export const updateBreedingWithEmptyPregnant = async (
+  breedingId: BreedingEventType['id'],
+  animalId: AnimalType['id'],
+  { emptyData }: { emptyData: any }
+) => {
+  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
+    breedingId
+  )
+  const breedingAnimal = [...(breeding?.breedingBatch || [])].find(
+    (animal) => animal?.id === animalId
+  )
+
+  return await eventsCRUD.updateItem(breedingId, {
+    breedingBatch: arrayRemove(breedingAnimal),
+    breedingEmpty: arrayUnion({
+      ...breedingAnimal,
+      emptyData,
+      status: 'EMPTY'
+    })
+  })
+}
+
+export const removeAnimalFromBreeding = async (
+  breedingId: BreedingEventType['id'],
+  animalId: AnimalType['id']
+) => {
+  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
+    breedingId
+  )
+  const breedingAnimal = [...(breeding?.breedingBatch || [])].find(
+    (animal) => animal?.id === animalId
+  )
+  await eventsCRUD.updateItem(breedingId, {
+    breedingBatch: arrayRemove(breedingAnimal)
+  })
+}

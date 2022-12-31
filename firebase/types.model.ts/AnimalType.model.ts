@@ -32,6 +32,7 @@ export interface AnimalType extends TypeBase {
     | 'SICK'
     | 'LOST'
     | 'SOLD'
+    | 'PENDING'
 }
 
 export interface GenderOptions {

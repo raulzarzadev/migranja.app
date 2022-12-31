@@ -16,6 +16,7 @@ export interface CustomInputTypes
     | 'datetime'
     | 'select'
     | 'checkbox'
+    | 'textarea'
     //| 'radio'
     | 'number'
   label?: string
@@ -111,6 +112,16 @@ const InputContainer = ({
               name={name}
               ref={ref}
               value={value}
+              {...rest}
+            />
+          )}
+          {type === 'textarea' && (
+            <textarea
+              className="textarea input-bordered resize-none"
+              onBlur={onBlur} // notify when input is touched
+              onChange={onChange} // send value as number
+              placeholder={placeholder}
+              value={value ?? ''}
               {...rest}
             />
           )}
