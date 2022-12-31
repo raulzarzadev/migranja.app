@@ -77,7 +77,7 @@ const InputContainer = ({
               selected={value ? new Date(value) : new Date()}
               onChange={(date: Date) => onChange(date)}
               //onBlur={onBlur}
-              closeOnScroll
+              // closeOnScroll
               locale={es}
               dateFormat="dd-MM-yy"
               ref={ref}
