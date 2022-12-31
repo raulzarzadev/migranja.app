@@ -7,6 +7,7 @@ import {
   AnimalFormatted,
   BreedingFormatted
 } from 'components/BreedingsList/breeding.helpers'
+import useFarm from 'components/hooks/useFarm'
 import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
@@ -34,26 +35,21 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
     const res = await deleteEvent(breeding.id)
     return console.log(res)
   }
-
-  const [breedingMale, setBreedingMale] = useState()
-  useEffect(() => {
-    console.log(breeding)
-    breeding?.breedingMale?.id &&
-      getAnimal(breeding?.breedingMale?.id).then((res) => setBreedingMale(res))
-  }, [breeding?.breedingMale?.id])
-
-  console.log({ breedingMale })
+  const { currentFarm } = useFarm()
+  const breedingMale = currentFarm.animals?.find(
+    ({ id }) => id === breeding.breedingMale.id
+  )
 
   return (
     <div className="bg-base-300 rounded-md my-1">
       <header className="flex w-full justify-between p-2">
-        <div>
-          <div className="flex items-center ">
-            <IconBreedingStatus
-              startInDays={breeding?.birthStartInDays as number}
-              finishInDays={breeding?.birthFinishInDays as number}
-            />
-          </div>
+        <div className="flex pr-1 mt-1 ">
+          <IconBreedingStatus
+            startInDays={breeding?.birthStartInDays as number}
+            finishInDays={breeding?.birthFinishInDays as number}
+          />
+        </div>
+        <div className="w-full">
           <div className="font-lg">
             <span>Partos:</span>
             <span> del </span>
@@ -65,7 +61,7 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
               {myFormatDate(breeding.birthFinishAt, 'dd-MMM-yy')}
             </span>
           </div>
-          <div className="font-sm">
+          <div className="text-xs">
             <span>Realizada: </span>
             <span> del </span>
             <span className="font-semibold">
@@ -76,6 +72,10 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
               {myFormatDate(breeding.finishAt, 'dd-MMM-yy')}
             </span>
           </div>
+          <div className="text-xs">
+            <span>Creado: </span>
+            <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
+          </div>
         </div>
         <span>Lote:{breeding?.batch}</span>
         <div className="relative">
@@ -85,7 +85,10 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
               handleDelete={() => handleDelete()}
               title="Eliminar monta"
               openModalItem={(props) => (
-                <button className="btn btn-circle btn-sm shadow-md" {...props}>
+                <button
+                  className="btn btn-circle btn-sm shadow-md btn-error"
+                  {...props}
+                >
                   <Icon name="delete" />
                 </button>
               )}
@@ -94,16 +97,11 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
           <div>
             <span>
               Macho:{' '}
-              <span className="font-bold text-xl">
-                {breeding?.breedingMale?.earring}
-              </span>{' '}
-              <span>{breeding?.breedingMale?.name}</span>
+              <span className="font-bold text-xl">{breedingMale?.earring}</span>{' '}
+              <span>{breedingMale?.name}</span>
             </span>
           </div>
-          <div className="text-xs">
-            <span>Creado: </span>
-            <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
-          </div>
+          <span>{breedingMale?.breed}</span>
         </div>
       </header>
       <BreedingCardBody breeding={breeding} />

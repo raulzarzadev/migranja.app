@@ -12,33 +12,31 @@ const IconBreedingStatus = ({
   if (startInDays <= 0) status = 'warning'
   if (finishInDays < 0) status = 'error'
   return (
-    <div>
-      <span className="pr-1">
-        <IconStatus status={status} />
-      </span>
-    </div>
+    <span className="">
+      <IconStatus status={status} />
+    </span>
   )
 }
 type IconStatus = 'error' | 'success' | 'warning' | 'info'
 export const IconStatus = ({ status }: { status: IconStatus }) => (
-  <span className="pr-1">
+  <span className="">
     {status === 'error' && (
-      <span className="text-error ">
+      <span className="btn btn-xs btn-circle btn-error">
         <Icon name="baned" size="xs" />
       </span>
     )}
     {status === 'success' && (
-      <span className="text-success ">
+      <span className="btn btn-xs btn-circle btn-success ">
         <Icon name="done" size="xs" />
       </span>
     )}
     {status === 'warning' && (
-      <span className="text-warning ">
+      <span className="btn btn-xs btn-circle btn-warning ">
         <Icon name="info" size="xs" />
       </span>
     )}
     {status === 'info' && (
-      <span className="text-info ">
+      <span className="btn btn-xs btn-circle btn-info ">
         <Icon name="info" size="xs" />
       </span>
     )}

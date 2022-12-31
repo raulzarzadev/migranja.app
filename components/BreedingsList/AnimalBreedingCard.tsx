@@ -1,4 +1,5 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import useFarm from 'components/hooks/useFarm'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
@@ -29,6 +30,12 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
   const handleOpenModal = () => {
     setOpenModal(!openModal)
   }
+
+  const { currentFarm } = useFarm()
+
+  const breedingMale = currentFarm.animals?.find(
+    ({ id }) => id === animal.breeding.breedingMale.id
+  )
 
   return (
     <>
@@ -92,15 +99,12 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
             <div className="flex flex-col text-center">
               <span>Macho</span>
               <div>
-                <span className="mx-2 font-bold">
-                  {animal.breeding?.breedingMale?.earring}
-                </span>
+                <span className="mx-2 font-bold">{breedingMale?.earring}</span>
 
-                <span>{animal.breeding?.breedingMale?.name || ''}</span>
+                <span>{breedingMale?.name || ''}</span>
               </div>
-
-              {console.log(animal.breeding?.breedingMale)}
             </div>
+            <span>raza:{breedingMale?.breed || ''}</span>
           </div>
         </main>
       </div>

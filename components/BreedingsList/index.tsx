@@ -22,6 +22,7 @@ const BreedingsList = () => {
   const [batches, setBatches] = useState<BreedingBatchesListType['breedings']>(
     []
   )
+
   useEffect(() => {
     currentFarm.id &&
       listenFarmBreedings(
