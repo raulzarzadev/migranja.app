@@ -96,13 +96,14 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       parents: parentsDefaultData,
       birthData: data
     }
-    const motherBreed = parentsDefaultData.mother?.breed
-    const fatherBreed = parentsDefaultData.father?.breed
+    const motherBreed = parentsDefaultData.mother?.breed?.replaceAll(' ', '')
+    const fatherBreed = parentsDefaultData.father?.breed?.replaceAll(' ', '')
     const breed =
-      motherBreed ??
-      (motherBreed === fatherBreed
+      !motherBreed || !fatherBreed
+        ? motherBreed || fatherBreed
+        : fatherBreed === motherBreed
         ? fatherBreed
-        : `1/2${fatherBreed}-1/2${motherBreed}`)
+        : `(1/2${motherBreed}-1/2${fatherBreed})`
 
     const formattedCalfs = data?.calfs?.map((calf: any) => {
       const status: AnimalType['currentStatus'] = calf.isAlive
@@ -117,7 +118,6 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     })
     const formatBreedingEvent = { ...data, calfs: formattedCalfs }
 
-    return
     try {
       // *************************************************   create animals/calfs
       formattedCalfs.forEach(async (calf: any, i: number) => {

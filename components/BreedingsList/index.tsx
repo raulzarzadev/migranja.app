@@ -56,7 +56,6 @@ const BreedingsList = () => {
       // filter  by batch
       filterField(animal?.batch || '', search.value)
   )
-  console.log(animalsFiltered)
 
   const batchesFiltered = [...batches].filter((batch) =>
     // filter  by bull

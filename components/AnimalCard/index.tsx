@@ -1,4 +1,5 @@
 import { deleteAnimal, getAnimal } from '@firebase/Animal/main'
+import AnimalEvents from 'components/AnimalEvents'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
 import useAnimal from 'components/hooks/useAnimal'
@@ -16,20 +17,9 @@ import { selectFarmOvines } from 'store/slices/farmSlice'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
-  // const [animal, setAnimal] = useState<AnimalType | null>(null)
   const [editing, setEditing] = useState<boolean>(false)
   const ovines = useSelector(selectFarmOvines)
-  // useEffect(() => {
-  //   if (animalId) {
-  //     const a = ovines.find(({ id }) => id === animalId)
-  //     setAnimal(a as AnimalType)
-  //     // getAnimal(animalId).then((res: any) => setAnimal(res))
-  //   }
 
-  //   return () => {
-  //     setAnimal(null)
-  //   }
-  // }, [animalId, editing, ovines])
   const animal = ovines.find(({ id }) => id === animalId)
   if (!animal) return <></>
   return (
@@ -215,6 +205,9 @@ export const AnimalDetails = ({
           </div>
         </div>
       </main>
+      <footer>
+        <AnimalEvents />
+      </footer>
     </div>
   )
 }
