@@ -4,8 +4,8 @@ const sheep_breeds = [
     value: 'dorper'
   },
   {
-    label: ' Katahdin ',
-    value: ' katahdin '
+    label: 'Katahdin',
+    value: 'katahdin'
   },
   { label: 'Pelibuey', value: 'pelibuey' },
   {

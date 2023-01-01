@@ -16,6 +16,17 @@ export interface AnimalBreedingCardType extends Partial<AnimalType> {
   }
 }
 const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
+  const { currentFarm } = useFarm()
+
+  const lastVersionOfBreedingMale =
+    currentFarm.animals?.find(
+      ({ id }) => id === animal.breeding.breedingMale.id
+    ) || animal.breeding.breedingMale
+
+  const lastVersionAnimal =
+    currentFarm.animals?.find(({ id }) => id === animal.id) || animal
+
+  const breedingMale = lastVersionOfBreedingMale
   const {
     breedingDates: {
       birthStartAt,
@@ -25,16 +36,15 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
       breedingFinishAt,
       breedingStartAt
     }
-  } = animal
+  } = { ...animal }
+
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
     setOpenModal(!openModal)
   }
 
-  const { currentFarm } = useFarm()
-
-  const breedingMale = currentFarm.animals?.find(
-    ({ id }) => id === animal.breeding.breedingMale.id
+  const disableOptionsModal = ['ABORT', 'BIRTH', 'EMPTY'].includes(
+    animal?.status || ''
   )
 
   return (
@@ -48,8 +58,12 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
       )}
 
       <div
-        className="bg-base-300 my-2 rounded-md shadow-md  "
-        onClick={() => handleOpenModal()}
+        className={`bg-base-300 my-2 rounded-md shadow-md ${
+          disableOptionsModal && ' opacity-50  shadow-none'
+        } `}
+        onClick={() => {
+          disableOptionsModal || handleOpenModal()
+        }}
       >
         <header className="flex w-full justify-between p-2 bg-base-200 rounded-t-md">
           <div className="flex items-center ">
@@ -58,6 +72,7 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
               startInDays={birthStartInDays}
             />
             <span className="flex flex-col">
+              {animal.status || 'PENDING'}
               <span>
                 Parto: del{' '}
                 <span className="font-bold">
@@ -78,11 +93,14 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
             <span>
               Arete:{' '}
               <span className="font-bold whitespace-nowrap">
-                {animal.earring}
+                {lastVersionAnimal.earring}
               </span>
             </span>
             <span className="text-xs">
-              Lote: <span className="font-bold">{animal.batch}</span>
+              Lote: <span className="font-bold">{lastVersionAnimal.batch}</span>
+            </span>
+            <span className="text-xs">
+              <span className="">{lastVersionAnimal.breed}</span>
             </span>
           </span>
         </header>

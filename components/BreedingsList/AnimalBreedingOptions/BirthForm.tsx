@@ -10,6 +10,18 @@ import InputContainer from 'components/inputs/InputContainer'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+const schema = yup
+  .object()
+  .shape({
+    earring: yup
+      .string()
+      .required('Este campo es necesario*')
+      .min(3, 'Al menos 3 letras')
+  })
+  .required()
+
 const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   const { currentFarmEarrings, currentFarm } = useFarm()
   const methods = useForm()
@@ -22,23 +34,29 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     formState: { errors }
   } = methods
   const formValues = watch()
-
+  const motherLastVersion =
+    currentFarm?.animals?.find(({ id }) => id == animal.id) || animal
+  const fatherLastVersion =
+    currentFarm?.animals?.find(
+      ({ id }) => id == animal?.breeding?.breedingMale?.id
+    ) || animal?.breeding?.breedingMale
   const parentsDefaultData: AnimalType['parents'] = {
     father: {
-      breed: animal.breeding?.breedingMale.breed || '',
-      earring: animal.breeding?.breedingMale.earring || '',
-      name: animal.breeding?.breedingMale.name || '',
-      id: animal.breeding?.breedingMale.id || '',
+      breed: fatherLastVersion?.breed || '',
+      earring: fatherLastVersion?.earring || '',
+      name: fatherLastVersion?.name || '',
+      id: fatherLastVersion?.id || '',
       inTheFarm: true
     },
     mother: {
-      breed: animal.breed || '',
-      earring: animal.earring || '',
-      name: animal.name || '',
-      id: animal.id || '',
+      breed: motherLastVersion?.breed || '',
+      earring: motherLastVersion?.earring || '',
+      name: motherLastVersion?.name || '',
+      id: motherLastVersion?.id || '',
       inTheFarm: true
     }
   }
+
   const defaultBirthValues: Partial<AnimalType> = {
     birthday: formValues.date || new Date(),
     type: 'ovine',
@@ -86,7 +104,6 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
         ? fatherBreed
         : `1/2${fatherBreed}-1/2${motherBreed}`)
 
-    console.log({ motherBreed, fatherBreed })
     const formattedCalfs = data?.calfs?.map((calf: any) => {
       const status: AnimalType['currentStatus'] = calf.isAlive
         ? 'ACTIVE'
@@ -95,10 +112,11 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
         currentStatus: status,
         ...calf,
         birthType: data?.calfs?.length,
-        breed
+        breed: breed?.replaceAll(' ', '')
       }
     })
     const formatBreedingEvent = { ...data, calfs: formattedCalfs }
+
     return
     try {
       // *************************************************   create animals/calfs
@@ -189,11 +207,14 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
               />
               <InputContainer
                 rules={{
-                  required: 'Este campo es necesario',
-                  validate: (value) => {
-                    return (
-                      ![...currentFarmEarrings].includes(value) || 'Ya existe!'
-                    )
+                  // required: 'Este campo es necesario',
+
+                  validate: {
+                    alreadyExist: (value) =>
+                      ![...currentFarmEarrings].includes(value) || 'Ya existe!',
+                    isRequired: (value) => !!value || 'Es necesario',
+                    min: (value) =>
+                      String(value).length >= 3 || 'Al menos 3 numeros'
                   }
                 }}
                 name={`calfs.${i}.earring`}

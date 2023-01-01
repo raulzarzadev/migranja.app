@@ -37,9 +37,11 @@ const BreedingForm = () => {
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const breedingBatch = females?.filter(({ earring }) =>
-      sheepSelected?.includes(earring)
-    )
+    const breedingBatch = females
+      ?.filter(({ earring }) => sheepSelected?.includes(earring))
+      .map((animal) => {
+        return { ...animal, status: 'PENDING' }
+      })
     const male = males?.find(({ earring }) => earring === data.breedingMale)
     // console.log({ ...data, breedingMale: male, breedingBatch })
     try {

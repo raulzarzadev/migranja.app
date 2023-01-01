@@ -8,13 +8,13 @@ import AnimalParentsForm from './AnimalParentsForm'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import { CreateAnimalDTO } from 'firebase/Animal/animal.model'
 
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import ModalDelete from 'components/modal/ModalDelete'
 import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
 import useFarm from 'components/hooks/useFarm'
 import useAnimal from 'components/hooks/useAnimal'
 
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 const schema = yup
   .object()
   .shape({

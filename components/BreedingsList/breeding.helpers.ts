@@ -115,32 +115,32 @@ export const formatAnimalsBreedings = (
       return {
         ...animal,
         ...breedingDates,
-        breedingDates,
-        status: 'PENDING'
+        breedingDates
+        //status: 'PENDING'
       }
     })
     const breedingBirths = breeding?.breedingBirths?.map((animal) => {
       return {
         ...animal,
         ...breedingDates,
-        breedingDates,
-        status: 'BIRTH'
+        breedingDates
+        // status: 'BIRTH'
       }
     })
     const breedingAborts = breeding?.breedingAborts?.map((animal) => {
       return {
         ...animal,
         ...breedingDates,
-        breedingDates,
-        status: 'ABORT'
+        breedingDates
+        // status: 'ABORT'
       }
     })
     const breedingEmpty = breeding?.breedingEmpty?.map((animal) => {
       return {
         ...animal,
         ...breedingDates,
-        breedingDates,
-        status: 'EMPTY'
+        breedingDates
+        // status: 'EMPTY'
       }
     })
     const animals = [
@@ -151,6 +151,7 @@ export const formatAnimalsBreedings = (
     ].map((animal) => {
       return { ...animal, breeding }
     })
+
     return {
       ...breeding,
       breedingDates,

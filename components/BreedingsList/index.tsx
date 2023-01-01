@@ -32,7 +32,11 @@ const BreedingsList = () => {
           setBatches(formattedBreedings)
           const allAnimals = formattedBreedings?.map((batch) => batch.animals)
           setAnimals(
-            allAnimals.flat().filter(({ status }) => status === 'PENDING')
+            allAnimals
+              .flat()
+              .filter(
+                ({ status }) => status === 'PENDING' || status === undefined
+              )
           )
           // setAnimals(formatBreedingsAsBreedingsList(res))
           // setBatches(res)
@@ -52,6 +56,8 @@ const BreedingsList = () => {
       // filter  by batch
       filterField(animal?.batch || '', search.value)
   )
+  console.log(animalsFiltered)
+
   const batchesFiltered = [...batches].filter((batch) =>
     // filter  by bull
     filterField(batch?.breedingMale?.earring || '', search.value)
