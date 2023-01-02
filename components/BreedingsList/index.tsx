@@ -1,14 +1,18 @@
+import { BreedingEventType } from '@firebase/Events/event.model'
 import { listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import BreedingBatchesList from 'components/BreedingBatchesList'
 import { BreedingBatchesListType } from 'components/BreedingBatchesList'
+import useDebugInformation from 'components/hooks/useDebugInformation'
 import useFarm from 'components/hooks/useFarm'
 import useSortByField from 'components/hooks/useSortByField'
 import Icon from 'components/Icon'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmEvents } from 'store/slices/farmSlice'
 import AnimalBreedingCard from './AnimalBreedingCard'
-import { formatAnimalsBreedings } from './breeding.helpers'
+import { BreedingFormatted, formatAnimalsBreedings } from './breeding.helpers'
 
 interface SearchField {
   value: string
@@ -16,53 +20,56 @@ interface SearchField {
 }
 
 const BreedingsList = () => {
-  const { currentFarm } = useFarm()
   const [animals, setAnimals] = useState<Partial<AnimalType>[]>([])
   const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
   const [batches, setBatches] = useState<BreedingBatchesListType['breedings']>(
     []
   )
 
-  useEffect(() => {
-    currentFarm.id &&
-      listenFarmBreedings(
-        currentFarm.id,
-        (res: BreedingBatchesListType['breedings']) => {
-          const formattedBreedings = formatAnimalsBreedings(res)
-          setBatches(formattedBreedings)
-          const allAnimals = formattedBreedings?.map((batch) => batch.animals)
-          setAnimals(
-            allAnimals
-              .flat()
-              .filter(
-                ({ status }) => status === 'PENDING' || status === undefined
-              )
-          )
-          // setAnimals(formatBreedingsAsBreedingsList(res))
-          // setBatches(res)
-        }
-      )
-  }, [animals.length, currentFarm.id])
+  const [animalsFiltered, setAnimalsFilter] = useState<Partial<AnimalType>[]>(
+    []
+  )
+  const [batchesFiltered, setBreedingFilter] = useState<BreedingFormatted[]>([])
+  const [view, setView] = useState<'breeding' | 'animals'>('breeding')
+  useDebugInformation('BreedingsList', {})
+
   const filterField = (field: string = '', search: string = '') => {
     return field?.toLowerCase()?.includes(search?.toLowerCase())
   }
+  const farmEvents = useSelector(selectFarmEvents)
 
-  const animalsFiltered = [...animals].filter(
-    (animal) =>
-      // filter  earrings
-      filterField(animal?.earring, search.value) ||
+  useEffect(() => {
+    // @ts-ignore
+    const farmBreedings: BreedingEventType[] = [...farmEvents].filter(
+      ({ type }) => type === 'BREEDING'
+    )
+    const formattedBreedings = formatAnimalsBreedings(farmBreedings)
+    const allAnimals = [...formattedBreedings]
+      ?.map((batch) => batch.animals)
+      .flat()
+      .filter(({ status }) => status === 'PENDING' || status === undefined)
+    setBatches(formattedBreedings)
+    setAnimals(allAnimals)
+  }, [farmEvents])
+
+  useEffect(() => {
+    const animalsFiltered = [...animals].filter(
+      (animal) =>
+        // filter  earrings
+        filterField(animal?.earring, search.value) ||
+        // filter  by bull
+        filterField(animal?.breeding?.breedingMale?.earring, search.value) ||
+        // filter  by batch
+        filterField(animal?.batch || '', search.value)
+    )
+
+    const batchesFiltered = [...batches].filter((batch) =>
       // filter  by bull
-      filterField(animal?.breeding?.breedingMale?.earring, search.value) ||
-      // filter  by batch
-      filterField(animal?.batch || '', search.value)
-  )
-
-  const batchesFiltered = [...batches].filter((batch) =>
-    // filter  by bull
-    filterField(batch?.breedingMale?.earring || '', search.value)
-  )
-
-  const [view, setView] = useState<'breeding' | 'animals'>('breeding')
+      filterField(batch?.breedingMale?.earring || '', search.value)
+    )
+    setAnimalsFilter(animalsFiltered)
+    setBreedingFilter(batchesFiltered)
+  }, [animals, batches, search.value])
 
   return (
     <div className="w-full">

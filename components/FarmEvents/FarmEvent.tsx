@@ -4,7 +4,7 @@ import {
 } from '@firebase/types.model.ts/AnimalType.model'
 import { fromNow } from 'utils/dates/myDateUtils'
 import BirthEventDetails from './BirthEventDetails'
-import BreedingEventDetails from './BreddingEventDetails'
+import BreedingEventDetails from './BreedingEventDetails'
 import EventModal from './EventModal'
 
 export interface FarmEventType {
@@ -20,7 +20,6 @@ export interface FarmEventType {
   createdAt: number
 }
 export const FarmEvent = ({ event }: { event: FarmEventType }) => {
-  console.log(event.type)
   return (
     <>
       {event.type === 'BREEDING' && <BreedingEventDetails event={event} />}

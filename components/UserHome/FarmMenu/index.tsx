@@ -29,7 +29,7 @@ type Option =
 
 const FarmMenu = () => {
   const farm = useSelector(selectFarmState)
-  useDebugInformation('FarmMenu', { farm })
+  // useDebugInformation('FarmMenu', { farm })
   const [menuOptions, setMenuOptions] =
     useState<Partial<Record<MenuOptions, Option>>>()
   useEffect(() => {

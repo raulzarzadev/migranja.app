@@ -80,9 +80,7 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
         <div className="flex justify-between items-center px-2 pt-1 w-full ">
           <span></span>
           <span>Monta</span>
-          <span>
-            <EventModal event={event} />
-          </span>
+          <span>{disableOptionsModal || <EventModal event={event} />}</span>
         </div>
         <header className="flex w-full justify-between p-2 bg-base-200 ">
           <div className="flex items-center ">

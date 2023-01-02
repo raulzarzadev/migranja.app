@@ -17,9 +17,7 @@ export interface FarmBirthEventType
 }
 const BreedingEventDetails = ({ event }: { event: FarmBirthEventType }) => {
   const animal = formatAnimalsBreedings([event])[0]
-  console.log(animal)
   const breeding: AnimalBreedingCardType = { ...animal, breeding: event }
-  console.log(breeding)
   return (
     <div className="">
       <AnimalBreedingCard animal={breeding} />

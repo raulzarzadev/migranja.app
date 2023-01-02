@@ -11,6 +11,8 @@ import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
 export interface BreedingBatchesListType {
@@ -34,7 +36,7 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
     const res = await deleteEvent(breeding.id)
     return console.log(res)
   }
-  const { farmAnimals } = useFarm()
+  const farmAnimals = useSelector(selectFarmAnimals)
   const breedingMale =
     farmAnimals?.find(({ id }) => id === breeding.breedingMale.id) ||
     breeding.breedingMale
@@ -113,7 +115,6 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
 
 export interface BreedingCardBody extends BreedingFormatted {}
 const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
-  const [animals, setAnimals] = useState<AnimalFormatted[]>([])
   type ViewBatchesType = 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY' | ''
   const [view, setView] = useState<ViewBatchesType>('')
   const pendingAnimals = breeding.animals.filter(

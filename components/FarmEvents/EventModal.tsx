@@ -24,7 +24,13 @@ export const EventModal = ({ event }: { event: FarmEventType }) => {
   return (
     <div role="details-modal">
       <div>
-        <button onClick={(e) => handleOpenEventDetails()}>
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleOpenEventDetails()
+          }}
+        >
           <Icon name="settings" />
         </button>
       </div>
