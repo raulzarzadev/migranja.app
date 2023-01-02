@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit && next lint",
-    "test": "jest --watch",
+    "test": "jest --watch  --detectOpenHandles",
     "test:ci": "jest --ci"
   },
   "dependencies": {

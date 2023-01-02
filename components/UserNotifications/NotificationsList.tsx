@@ -80,7 +80,7 @@ const NotificationsList = ({
               <div className="text-start">
                 <div className="text-end">
                   <span className="text-xs text-end">
-                    {fromNow(createdAt, { addSuffix: true })}
+                    {createdAt && fromNow(createdAt, { addSuffix: true })}
                   </span>
                 </div>
                 <div>
