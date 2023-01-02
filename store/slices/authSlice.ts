@@ -5,12 +5,12 @@ import { UserType } from '../../firebase/Users/user.model'
 
 // Type for our state
 export interface AuthState {
-  user: UserType | null
+  user?: UserType | null
 }
 
 // Initial state
 const initialState: AuthState = {
-  user: null
+  user: undefined
 }
 
 // Actual Slice

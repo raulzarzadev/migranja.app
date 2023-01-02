@@ -36,6 +36,11 @@ export const listenFarmOvines = (
   cb: CallableFunction
 ) => AnimalsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
 
+export const listenFarmAnimals = (
+  farmId: FarmType['id'],
+  cb: CallableFunction
+) => AnimalsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
+
 export const getMaleOvines = async () =>
   await AnimalsCRUD.getUserItems([
     where('type', '==', 'ovine'),

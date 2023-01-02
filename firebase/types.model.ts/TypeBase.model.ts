@@ -1,7 +1,7 @@
 export interface TypeBase {
   id: string
-  createdAt: string
-  updatedAt: string
+  createdAt: number | string
+  updatedAt: number | string
   userId: string
 }
 

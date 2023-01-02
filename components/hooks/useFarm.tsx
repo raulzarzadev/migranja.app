@@ -1,14 +1,19 @@
-import { listenFarmOvines } from '@firebase/Animal/main'
+import { listenFarmAnimals } from '@firebase/Animal/main'
+import { listenFarmEvents } from '@firebase/Events/main'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  selectFarmOvines,
+  selectFarmAnimals,
+  selectFarmEvents,
   selectFarmState,
-  setFarmOvines,
-  setFarmState
+  selectUserFarm,
+  setFarmAnimals,
+  setFarmEvents,
+  setFarmState,
+  setUserFarm
 } from 'store/slices/farmSlice'
 import useAuth from './useAuth'
 
@@ -17,47 +22,48 @@ export interface UseFarm {
 }
 
 const useFarm = (props?: UseFarm) => {
-  const getFarmById = props?.getFarmById
-
   const dispatch = useDispatch()
   const { user } = useAuth()
-  const currentFarm = useSelector(selectFarmState)
-  const farmOvines = useSelector(selectFarmOvines)
-  const [userFarm, setUserFarm] = useState<FarmType | null>(null)
-  const [farmData, setFarmData] = useState<FarmType | null>(null)
-  useEffect(() => {
-    if (getFarmById) listenFarm(getFarmById, (res: any) => setFarmData(res))
-  }, [getFarmById])
+  const [farmEarrings, setFarmEarrings] = useState<string[]>([])
 
   const {
     query: { farmId }
   } = useRouter()
 
   useEffect(() => {
-    user &&
-      listenUserFarms((res: FarmType[] | null) => setUserFarm(res?.[0] || null))
-  }, [user])
-
-  useEffect(() => {
-    if (farmId) {
-      listenFarm(farmId as string, (res: FarmType) => {
-        dispatch(setFarmState(res))
-      })
-      listenFarmOvines(farmId as string, (res: FarmType) => {
-        dispatch(setFarmOvines(res))
+    if (user) {
+      listenUserFarms((res: FarmType[] | null) => {
+        dispatch(setUserFarm(res?.[0] || null))
       })
     }
-  }, [dispatch, farmId])
+  }, [dispatch, user])
 
-  const currentFarmEarrings = [...farmOvines].map(
-    (animal) => `${animal.earring}`
-  )
+  useEffect(() => {
+    if (user && farmId) {
+      listenFarm(farmId as string, (res: any) => {
+        dispatch(setFarmState(res))
+      })
+      listenFarmAnimals(farmId as string, (res: any[]) => {
+        const earringsList = res?.map((animal) => `${animal.earring}`)
+        setFarmEarrings(earringsList)
+        dispatch(setFarmAnimals(res))
+      })
+      listenFarmEvents(farmId as string, (res: any[]) => {
+        dispatch(setFarmEvents(res))
+      })
+    }
+  }, [dispatch, farmId, user])
 
+  const currentFarm = useSelector(selectFarmState)
+  const farmAnimals = useSelector(selectFarmAnimals)
+  const farmEvents = useSelector(selectFarmEvents)
+  const userFarm = useSelector(selectUserFarm)
   return {
-    currentFarm: { ...currentFarm, animals: [...farmOvines] } as FarmType,
-    currentFarmEarrings,
+    currentFarm,
+    farmAnimals,
+    farmEarrings,
     userFarm,
-    farmData
+    farmEvents
   }
 }
 

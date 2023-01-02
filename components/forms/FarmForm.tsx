@@ -1,5 +1,6 @@
 import { FarmType } from '@firebase/Farm/farm.model'
 import { createFarm, updateFarm } from '@firebase/Farm/main'
+import useDebugInformation from 'components/hooks/useDebugInformation'
 import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -11,6 +12,7 @@ const FarmForm = ({
   farm?: FarmType
   setEditing: (bool: boolean) => void
 }) => {
+  // useDebugInformation('FarmForm', { farm, setEditing })
   const methods = useForm({ defaultValues: farm })
   const { handleSubmit, register, setValue } = methods
   const onSubmit = (data: any) => {

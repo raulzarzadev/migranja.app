@@ -5,8 +5,8 @@ import { useState } from 'react'
 import AnimalsOptions from './AnimalsOptions'
 
 const OvinesTable = () => {
-  const { currentFarm } = useFarm()
-  const ovines = currentFarm.animals?.filter(({ type }) => type === 'ovine')
+  const { farmAnimals } = useFarm()
+  const ovines = farmAnimals.filter(({ type }) => type === 'ovine')
   const [selectedRow, setSelectedRow] = useState<RowSelectedType | null>(null)
   const [selectedRows, setSelectedRows] = useState<string[] | null>(null)
   return (

@@ -16,7 +16,7 @@ const InvitationStatus = ({
   userId?: string
 }) => {
   const { user } = useAuth()
-  const { farmData: farm } = useFarm({ getFarmById: farmId })
+  const { currentFarm: farm } = useFarm({ getFarmById: farmId })
 
   const teamMember = farm?.team?.[userId || '']
 

@@ -57,7 +57,7 @@ export const listenUserEvents = async (cb: CallableFunction) => {
 /** ************** crete Birth Event ********** */
 
 export const createBirthEvent = async (newItem: CreateBirthEventType) =>
-  await eventsCRUD.createItem(newItem)
+  await eventsCRUD.createItem({ ...newItem, status: 'BIRTH' })
 
 /** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
 
@@ -173,4 +173,13 @@ export const removeAnimalFromBreeding = async (
   await eventsCRUD.updateItem(breedingId, {
     breedingBatch: arrayRemove(breedingAnimal)
   })
+}
+export const getFarmEvents = async (farmId: string) => {
+  return eventsCRUD.getItems([where('farm.id', '==', farmId)])
+}
+export const listenFarmEvents = async (
+  farmId: string,
+  cb: CallableFunction
+) => {
+  eventsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
 }

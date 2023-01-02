@@ -1,51 +1,17 @@
-import Icon from 'components/Icon'
-import Modal from 'components/modal'
-import { useState } from 'react'
+import useFarm from 'components/hooks/useFarm'
+import FarmEvent from './FarmEvent'
 
-export interface FarmEvent {
-  id: string
-}
-
-const FarmEvents = ({ events }: { events: FarmEvent[] }) => {
+const FarmEvents = () => {
+  const { farmEvents: events } = useFarm()
   return (
-    <div>
+    <div className="w-full">
       <div role="events-list">
         {events.map((event) => (
-          <FarmEvent key={event.id} event={event} />
+          <div key={event?.id} className="my-2">
+            <FarmEvent event={event} />
+          </div>
         ))}
       </div>
-    </div>
-  )
-}
-
-export const FarmEvent = ({ event }: { event: FarmEvent }) => {
-  return (
-    <div role={'farm-event'}>
-      <EventModal event={event} />
-      <div className=""></div>
-    </div>
-  )
-}
-
-export const EventModal = ({ event }: { event: FarmEvent }) => {
-  const [openEventDetails, setOpenEventDetails] = useState(false)
-  const handleOpenEventDetails = () => {
-    setOpenEventDetails(!openEventDetails)
-  }
-  return (
-    <div role="details-modal">
-      <div>
-        <button onClick={(e) => handleOpenEventDetails()}>
-          <Icon name="settings" />
-        </button>
-      </div>
-      <Modal
-        open={openEventDetails}
-        handleOpen={handleOpenEventDetails}
-        title="Detalles del Evento"
-      >
-        <div></div>
-      </Modal>
     </div>
   )
 }

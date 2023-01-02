@@ -17,7 +17,7 @@ const schema = yup.object().shape({
 // .required()
 
 const BreedingForm = () => {
-  const { currentFarm } = useFarm()
+  const { currentFarm, farmAnimals } = useFarm()
   const [loading, setLoading] = useState(false)
 
   const methods = useForm({
@@ -25,10 +25,8 @@ const BreedingForm = () => {
   })
   const { handleSubmit, watch, reset } = methods
 
-  const males = currentFarm.animals?.filter(({ gender }) => gender === 'male')
-  const females = currentFarm.animals?.filter(
-    ({ gender }) => gender === 'female'
-  )
+  const males = farmAnimals.filter(({ gender }) => gender === 'male')
+  const females = farmAnimals.filter(({ gender }) => gender === 'female')
   const malesOptions = males?.map((ovine) => {
     return { label: ovine.earring, value: ovine.earring }
   })

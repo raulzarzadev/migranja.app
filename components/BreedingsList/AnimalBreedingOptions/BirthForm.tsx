@@ -4,7 +4,10 @@ import {
   createBirthEvent,
   updateBreedingWithBirth
 } from '@firebase/Events/main'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import {
+  AnimalStatus,
+  AnimalType
+} from '@firebase/types.model.ts/AnimalType.model'
 import useFarm from 'components/hooks/useFarm'
 import InputContainer from 'components/inputs/InputContainer'
 import { useEffect, useState } from 'react'
@@ -23,7 +26,7 @@ const schema = yup
   .required()
 
 const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
-  const { currentFarmEarrings, currentFarm } = useFarm()
+  const { farmEarrings, currentFarm } = useFarm()
   const methods = useForm()
   const {
     watch,
@@ -106,14 +109,17 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
         : `(1/2${motherBreed}-1/2${fatherBreed})`
 
     const formattedCalfs = data?.calfs?.map((calf: any) => {
-      const status: AnimalType['currentStatus'] = calf.isAlive
-        ? 'ACTIVE'
-        : 'DEAD'
+      const statuses: AnimalType['statuses'] = {
+        isAlive: calf.isAlive,
+        isInTheFarm: true,
+        isPregnant: false
+      }
+
       return {
-        currentStatus: status,
         ...calf,
         birthType: data?.calfs?.length,
-        breed: breed?.replaceAll(' ', '')
+        breed: breed?.replaceAll(' ', ''),
+        statuses
       }
     })
     const formatBreedingEvent = { ...data, calfs: formattedCalfs }
@@ -211,7 +217,7 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
                   validate: {
                     alreadyExist: (value) =>
-                      ![...currentFarmEarrings].includes(value) || 'Ya existe!',
+                      ![...farmEarrings].includes(value) || 'Ya existe!',
                     isRequired: (value) => !!value || 'Es necesario',
                     min: (value) =>
                       String(value).length >= 3 || 'Al menos 3 numeros'

@@ -1,4 +1,6 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import EventModal from 'components/FarmEvents/EventModal'
+import { FarmEventType } from 'components/FarmEvents/FarmEvent'
 import useFarm from 'components/hooks/useFarm'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
@@ -16,15 +18,14 @@ export interface AnimalBreedingCardType extends Partial<AnimalType> {
   }
 }
 const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
-  const { currentFarm } = useFarm()
+  const { farmAnimals } = useFarm()
 
   const lastVersionOfBreedingMale =
-    currentFarm.animals?.find(
-      ({ id }) => id === animal.breeding.breedingMale.id
-    ) || animal.breeding.breedingMale
+    farmAnimals?.find(({ id }) => id === animal.breeding.breedingMale.id) ||
+    animal.breeding.breedingMale
 
   const lastVersionAnimal =
-    currentFarm.animals?.find(({ id }) => id === animal.id) || animal
+    farmAnimals?.find(({ id }) => id === animal.id) || animal
 
   const breedingMale = lastVersionOfBreedingMale
   const {
@@ -47,6 +48,17 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
     animal?.status || ''
   )
 
+  const breeding = animal.breeding
+
+  const event: FarmEventType = {
+    createdAt: breeding.date,
+    id: breeding.id,
+    parents: breeding.parents,
+    type: 'BREEDING',
+    updatedAt: breeding.updatedAt,
+    birthData: breeding
+  }
+
   return (
     <>
       {openModal && (
@@ -65,14 +77,21 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
           disableOptionsModal || handleOpenModal()
         }}
       >
-        <header className="flex w-full justify-between p-2 bg-base-200 rounded-t-md">
+        <div className="flex justify-between items-center px-2 pt-1 w-full ">
+          <span></span>
+          <span>Monta</span>
+          <span>
+            <EventModal event={event} />
+          </span>
+        </div>
+        <header className="flex w-full justify-between p-2 bg-base-200 ">
           <div className="flex items-center ">
             <IconBreedingStatus
               finishInDays={birthFinishInDays}
               startInDays={birthStartInDays}
             />
             <span className="flex flex-col">
-              {animal.status || 'PENDING'}
+              <span>{animal.status || 'PENDING'}</span>
               <span>
                 Parto: del{' '}
                 <span className="font-bold">

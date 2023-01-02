@@ -1,24 +1,18 @@
-import { FarmType } from '@firebase/Farm/farm.model'
-import useAuth from 'components/hooks/useAuth'
+import useFarm from 'components/hooks/useFarm'
 import Icon from 'components/Icon'
-import InvitationStatus from 'components/InvitationStatus'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-const FarmNavigation = ({
-  farm,
-  setEditing,
-  hiddenGo = false
+const UserFarmNavigation = ({
+  setEditing
 }: {
-  farm?: FarmType | null
-  setEditing?: (bool: boolean) => void
-  hiddenGo?: boolean
+  setEditing: (bool: boolean) => void
 }) => {
-  const { user } = useAuth()
-  const farmInvitationIsAccepted = (userId?: string) =>
-    farm?.team?.[userId || '']?.invitation?.status === 'ACCEPTED'
+  const router = useRouter()
+  const currentFarmId = router?.query?.farmId
+  const { userFarm: farm } = useFarm()
+  const showGo = farm?.id !== currentFarmId
 
-  const canVisitFarm =
-    farmInvitationIsAccepted(user?.id) || farm?.userId === user?.id
   return (
     <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-between mb-2 items-center">
       {farm ? (
@@ -34,8 +28,8 @@ const FarmNavigation = ({
                 <Icon name="edit" size="xs" />
               </button>
             )}
-            <InvitationStatus farmId={farm?.id} userId={user?.id} />
-            {!hiddenGo && canVisitFarm && (
+
+            {showGo && (
               <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">
                 ir
               </Link>
@@ -59,4 +53,4 @@ const FarmNavigation = ({
   )
 }
 
-export default FarmNavigation
+export default UserFarmNavigation

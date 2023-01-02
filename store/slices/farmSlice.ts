@@ -3,17 +3,22 @@ import { AppState } from '..'
 import { HYDRATE } from 'next-redux-wrapper'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import { EventType } from '@firebase/Events/event.model'
 
 // Type for our state
 export interface FarmState {
   farm: FarmType | null
+  userFarm: FarmType | null
   animals: AnimalType[]
+  events: EventType[]
 }
 
 // Initial state
 const initialState: FarmState = {
   farm: null,
-  animals: []
+  userFarm: null,
+  animals: [],
+  events: []
 }
 
 // Actual Slice
@@ -27,6 +32,15 @@ export const farmSlice = createSlice({
     },
     setFarmOvines(state, action) {
       state.animals = action.payload
+    },
+    setFarmAnimals(state, action) {
+      state.animals = action.payload
+    },
+    setFarmEvents(state, action) {
+      state.events = action.payload
+    },
+    setUserFarm(state, action) {
+      state.userFarm = action.payload
     }
 
     // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -42,9 +56,18 @@ export const farmSlice = createSlice({
   }
 })
 
-export const { setFarmState, setFarmOvines } = farmSlice.actions
+export const {
+  setFarmState,
+  setFarmOvines,
+  setFarmAnimals,
+  setFarmEvents,
+  setUserFarm
+} = farmSlice.actions
 
 export const selectFarmState = (state: AppState) => state.farm.farm
 export const selectFarmOvines = (state: AppState) => state.farm.animals
+export const selectFarmAnimals = (state: AppState) => state.farm.animals
+export const selectFarmEvents = (state: AppState) => state.farm.events
+export const selectUserFarm = (state: AppState) => state.farm.userFarm
 
 export default farmSlice.reducer

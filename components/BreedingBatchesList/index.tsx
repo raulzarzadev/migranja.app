@@ -34,9 +34,9 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
     const res = await deleteEvent(breeding.id)
     return console.log(res)
   }
-  const { currentFarm } = useFarm()
+  const { farmAnimals } = useFarm()
   const breedingMale =
-    currentFarm.animals?.find(({ id }) => id === breeding.breedingMale.id) ||
+    farmAnimals?.find(({ id }) => id === breeding.breedingMale.id) ||
     breeding.breedingMale
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">

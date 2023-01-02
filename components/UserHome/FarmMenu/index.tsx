@@ -3,14 +3,16 @@ import Batch from 'components/Batch'
 import BatchTable from 'components/BatchTable'
 import BreedingEvent from 'components/BreedingEvent'
 import BreedingsList from 'components/BreedingsList'
+import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
-import BatchForm, { BatchType } from 'components/forms/BatchForm'
-import BreedingForm from 'components/forms/BreedingForm'
+import useDebugInformation from 'components/hooks/useDebugInformation'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { ReactNode, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmState } from 'store/slices/farmSlice'
 
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option =
@@ -25,7 +27,9 @@ type Option =
   | 'addBatch'
   | 'breedingEvent'
 
-const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
+const FarmMenu = () => {
+  const farm = useSelector(selectFarmState)
+  useDebugInformation('FarmMenu', { farm })
   const [menuOptions, setMenuOptions] =
     useState<Partial<Record<MenuOptions, Option>>>()
   useEffect(() => {
@@ -175,18 +179,14 @@ const FarmMenu = ({ farm }: { farm: FarmType | null }) => {
       <MenuSection className=" w-full sm:w-4/6 ">
         <>
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
+          {column1 === 'events' && column2 === 'list' && <FarmEvents />}
           {column2 === 'breedingEvent' && column3 === 'add' && (
             <BreedingEvent />
           )}
           {column2 === 'breedingEvent' && column3 === 'list' && (
             <BreedingsList />
           )}
-          {isSheepSelected && column3 === 'list' && (
-            <OvinesTable
-            // onRowClick={(row) => setListOptionSelected(row?.id)}
-            // selectedRow={listOptionSelected}
-            />
-          )}
+          {isSheepSelected && column3 === 'list' && <OvinesTable />}
           {isSheepSelected && column3 === 'add' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               <AnimalForm
