@@ -10,9 +10,9 @@ const FarmEvents = ({ events }: { events: FarmEvent[] }) => {
   return (
     <div>
       <div role="events-list">
-        {/* {events.map((event) => (
+        {events.map((event) => (
           <FarmEvent key={event.id} event={event} />
-        ))} */}
+        ))}
       </div>
     </div>
   )
@@ -20,20 +20,20 @@ const FarmEvents = ({ events }: { events: FarmEvent[] }) => {
 
 export const FarmEvent = ({ event }: { event: FarmEvent }) => {
   return (
-    <>
-      <EventDetails event={event} />
+    <div role={'farm-event'}>
+      <EventModal event={event} />
       <div className=""></div>
-    </>
+    </div>
   )
 }
 
-export const EventDetails = ({ event }: { event: FarmEvent }) => {
+export const EventModal = ({ event }: { event: FarmEvent }) => {
   const [openEventDetails, setOpenEventDetails] = useState(false)
   const handleOpenEventDetails = () => {
     setOpenEventDetails(!openEventDetails)
   }
   return (
-    <>
+    <div role="details-modal">
       <div>
         <button onClick={(e) => handleOpenEventDetails()}>
           <Icon name="settings" />
@@ -44,11 +44,9 @@ export const EventDetails = ({ event }: { event: FarmEvent }) => {
         handleOpen={handleOpenEventDetails}
         title="Detalles del Evento"
       >
-        <div>
-          <EventDetails event={event} />
-        </div>
+        <div></div>
       </Modal>
-    </>
+    </div>
   )
 }
 

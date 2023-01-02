@@ -7,7 +7,10 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div>{user ? <UserHome /> : <VisitHome />}</div>
+      <div>
+        <span className="hidden">Home view</span>
+        {user ? <UserHome /> : <VisitHome />}
+      </div>
     </>
   )
 }
