@@ -47,8 +47,7 @@ export const AnimalsForm = ({
       ...animal
     }
   })
-  const { watch, handleSubmit, reset, setValue, setError } = methods
-  const { id, images } = watch()
+  const { handleSubmit, reset, setValue, setError } = methods
 
   const [animals, setAnimals] = useState<QuickAnimal[]>([])
   const { register } = methods
@@ -76,8 +75,8 @@ export const AnimalsForm = ({
   const handleSave = async () => {
     setLoading(true)
     const farmData = {
-      id: currentFarm.id,
-      name: currentFarm.name
+      id: currentFarm?.id || '',
+      name: currentFarm?.name || ''
     }
     try {
       const savingAnimals = animals.map(async (animal) => {

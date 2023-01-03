@@ -15,6 +15,7 @@ export interface EventType extends TypeBase {
   farm: Pick<FarmType, 'name' | 'id'>
   batch: string
   birthData?: BirthDataType
+  parents?: ParentsType
 }
 
 export interface BreedingEventType extends EventType {

@@ -1,10 +1,11 @@
+import { EventType } from '@firebase/Events/event.model'
 import { EventsList } from 'components/FarmEvents'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmEvents } from 'store/slices/farmSlice'
 
 const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState<EventType[]>([])
   const farmEvents = useSelector(selectFarmEvents)
   useEffect(() => {
     const birth = farmEvents.filter((event) =>
@@ -29,7 +30,7 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
         event?.parents?.mother?.earring === animalEarring
     )
     setEvents([...birth, ...breeding, ...aborts, ...empty])
-  }, [])
+  }, [animalEarring, farmEvents])
   return (
     <div>
       <div>

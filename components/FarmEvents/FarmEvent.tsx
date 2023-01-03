@@ -1,8 +1,4 @@
 import { BirthDataType } from '@firebase/Events/event.model'
-import {
-  AnimalType,
-  ParentsType
-} from '@firebase/types.model.ts/AnimalType.model'
 import { fromNow } from 'utils/dates/myDateUtils'
 import BirthEventDetails from './BirthEventDetails'
 import BreedingEventDetails from './BreedingEventDetails'
@@ -16,6 +12,7 @@ export interface FarmEventType {
   updatedAt: number
   createdAt: number
 }
+
 export const FarmEvent = ({ event }: { event: FarmEventType }) => {
   return (
     <>
@@ -26,6 +23,7 @@ export const FarmEvent = ({ event }: { event: FarmEventType }) => {
     </>
   )
 }
+
 const EmptyEventCard = ({ event }: { event: FarmEventType }) => {
   return (
     <div role={'farm-event'} className={`bg-base-300 w-full rounded-md `}>

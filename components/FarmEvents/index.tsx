@@ -1,3 +1,4 @@
+import { EventType } from '@firebase/Events/event.model'
 import useFarm from 'components/hooks/useFarm'
 import FarmEvent from './FarmEvent'
 
@@ -9,7 +10,7 @@ const FarmEvents = () => {
     </div>
   )
 }
-export const EventsList = ({ events }) => {
+export const EventsList = ({ events }: { events: EventType[] }) => {
   return (
     <div role="events-list">
       {events.map((event) => (

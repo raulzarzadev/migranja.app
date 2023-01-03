@@ -71,20 +71,22 @@ const InputContainer = ({
             />
           )}
           {type === 'date' && (
-            <DatePicker
-              onBlur={onBlur}
-              className="input input-bordered input-sm w-full "
-              selected={value ? new Date(value) : new Date()}
-              onChange={(date: Date) => onChange(date)}
-              //onBlur={onBlur}
-              // closeOnScroll
-              locale={es}
-              dateFormat="dd-MM-yy"
-              ref={ref}
-              name={name}
-              minDate={rest?.min as unknown as Date}
-              maxDate={rest?.max as unknown as Date}
-            />
+            <div className="z-20">
+              <DatePicker
+                onBlur={onBlur}
+                className="input input-bordered input-sm w-full "
+                selected={value ? new Date(value) : new Date()}
+                onChange={(date: Date) => onChange(date)}
+                //onBlur={onBlur}
+                // closeOnScroll
+                locale={es}
+                dateFormat="dd-MM-yy"
+                ref={ref}
+                name={name}
+                minDate={rest?.min as unknown as Date}
+                maxDate={rest?.max as unknown as Date}
+              />
+            </div>
           )}
           {type === 'select' && (
             <select

@@ -51,8 +51,8 @@ const BreedingForm = () => {
         startAt: data.startAt,
         finishAt: data.finishAt,
         farm: {
-          id: currentFarm.id,
-          name: currentFarm.name
+          id: currentFarm?.id || '',
+          name: currentFarm?.name || ''
         }
       })
       console.log(res)
