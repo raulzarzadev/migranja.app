@@ -25,24 +25,25 @@ const AnimalsOptions = ({
       currentFarm?.animals?.find((animal) => animal.earring === earring)?.id
   )
   const handleDeleteAll = async () => {
-    setProgress(1)
-    try {
-      // animalsIds.forEach(async (id, i) => {
-      //   await deleteAnimal(id as string).then((res) => console.log(res))
-      //   setProgress((i * 100) / animalsIds.length)
-      // })
-      for (let i = 0; i < animalsIds.length; i++) {
-        const id = animalsIds[i]
-        await deleteAnimal(id as string).then((res) => console.log(res))
-        setProgress((i * 100) / animalsIds.length)
-      }
-      setProgress(100)
-      _setEarrings([])
-      setAnimalsEarrings?.([])
-    } catch (error) {
-      console.log(error)
-      setProgress(0)
-    }
+    console.log('delete all')
+    // setProgress(1)
+    // try {
+    //   // animalsIds.forEach(async (id, i) => {
+    //   //   await deleteAnimal(id as string).then((res) => console.log(res))
+    //   //   setProgress((i * 100) / animalsIds.length)
+    //   // })
+    //   for (let i = 0; i < animalsIds.length; i++) {
+    //     const id = animalsIds[i]
+    //     await deleteAnimal(id as string).then((res) => console.log(res))
+    //     setProgress((i * 100) / animalsIds.length)
+    //   }
+    //   setProgress(100)
+    //   _setEarrings([])
+    //   setAnimalsEarrings?.([])
+    // } catch (error) {
+    //   console.log(error)
+    //   setProgress(0)
+    // }
   }
   return (
     <div className="p-2">

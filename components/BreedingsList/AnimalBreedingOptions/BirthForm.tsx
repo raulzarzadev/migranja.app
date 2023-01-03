@@ -2,6 +2,7 @@ import { createAnimal } from '@firebase/Animal/main'
 import { CreateBirthEventType } from '@firebase/Events/event.model'
 import {
   createBirthEvent,
+  updateBreedingBatch,
   updateBreedingWithBirth
 } from '@firebase/Events/main'
 import {
@@ -70,7 +71,7 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     })
     //console.log(formatBreedingEvent.formatBirthEvent)
     //return
-    const newCalfs = formatBirthEvent.birthData.calfs
+    const newCalfs = formatBirthEvent.birthData.calfs || []
     try {
       // *************************************************   create animals/calfs
       const calfs = newCalfs.map((calf: any, i: number) => {
@@ -85,13 +86,15 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
       // ***************************************************   update breeding, move from batch to already done
 
-      const breeding = updateBreedingWithBirth(
-        animal?.breeding?.id as string,
-        animal?.id as string,
-        {
-          birthData: formatBirthEvent
-        }
-      )
+      const breeding = updateBreedingBatch({
+        breedingId: animal?.breeding?.id as string,
+        animalId: animal?.id as string,
+        eventType: 'BIRTH',
+        eventData: formatBirthEvent
+        // {
+        //   birthData: formatBirthEvent
+        // }
+      })
       setProgress(75)
 
       const promises = [...calfs, event, breeding]

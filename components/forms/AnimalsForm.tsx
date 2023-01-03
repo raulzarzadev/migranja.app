@@ -1,6 +1,6 @@
 import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
-import { createAnimal, deleteAnimal, updateAnimal } from '@firebase/Animal/main'
+import { createAnimal } from '@firebase/Animal/main'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { CreateAnimalDTO } from 'firebase/Animal/animal.model'

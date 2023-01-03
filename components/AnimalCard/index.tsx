@@ -1,8 +1,9 @@
-import { deleteAnimal, getAnimal } from '@firebase/Animal/main'
+import { deleteAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
 import useAnimal from 'components/hooks/useAnimal'
+import useDebugInformation from 'components/hooks/useDebugInformation'
 
 import Icon from 'components/Icon'
 import Modal from 'components/modal'
@@ -20,6 +21,7 @@ import { myFormatDate } from 'utils/dates/myDateUtils'
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const [editing, setEditing] = useState<boolean>(false)
   const ovines = useSelector(selectFarmOvines)
+  useDebugInformation('AnimalCard', { animalId })
 
   const animal = ovines.find(({ id }) => id === animalId)
   if (!animal) return <></>
@@ -41,7 +43,6 @@ export const AnimalDetails = ({
   animal: Partial<AnimalType>
   setEditing?: (boolean: boolean) => void
 }) => {
-  console.log(animal)
   const {
     earring,
     id,
@@ -62,33 +63,38 @@ export const AnimalDetails = ({
     female: FemaleOptions
   }
 
-  const { handleDelete } = useAnimal()
-  // console.log(animal)
+  // const { handleDelete } = useAnimal()
+  const handleDelete = async () => {
+    const res = await deleteAnimal(id as string)
+    console.log(res)
+    return res
+  }
+  useDebugInformation('AnimalDetails', animal)
   return (
     <div className="">
       <div className="flex w-full justify-end ">
-        {id && (
-          <ModalDelete
-            handleDelete={() => handleDelete(id)}
-            title={'Eliminar animal'}
-            buttonLabel={null}
-            openButtonProps={{
-              className: ' btn btn-error btn-circle btn-sm text-'
-            }}
-          />
-        )}
-        {setEditing && (
-          <span className="mx-1">
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                setEditing(true)
+        {setEditing && id && (
+          <>
+            <ModalDelete
+              handleDelete={() => handleDelete(id)}
+              title={'Eliminar animal'}
+              buttonLabel={null}
+              openButtonProps={{
+                className: ' btn btn-error btn-circle btn-sm text-'
               }}
-              className="text-info btn btn-ghost btn-circle btn-sm"
-            >
-              <Icon size="sm" name="edit" />
-            </button>
-          </span>
+            />
+            <span className="mx-1">
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  setEditing(true)
+                }}
+                className="text-info btn btn-ghost btn-circle btn-sm"
+              >
+                <Icon size="sm" name="edit" />
+              </button>
+            </span>
+          </>
         )}
       </div>
       <header className="flex w-full justify-between">

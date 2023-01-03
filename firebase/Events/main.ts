@@ -105,6 +105,45 @@ export const createAbortEvent = async (newItem: CreateBirthAbortType) =>
 
 /** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
 
+export const updateBreedingBatch = async ({
+  breedingId,
+  animalId,
+  eventType,
+  eventData = {}
+}: {
+  breedingId: string
+  animalId: string
+  eventType: EventType['type']
+  eventData: any
+}) => {
+  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
+    breedingId
+  )
+  const oldAnimal = [...(breeding?.breedingBatch || [])].find(
+    (animal) => animal?.id === animalId
+  )
+
+  const removeOldAnimal = eventsCRUD.updateItem(breedingId, {
+    breedingBatch: arrayRemove(oldAnimal)
+    // breedingBatch: arrayUnion({
+    //   ...breedingAnimal,
+    //   abortData,
+    //   status: 'ABORT'
+    // })
+  })
+  const newAnimal = { ...oldAnimal, status: eventType, eventData }
+
+  const setNewAnimal = eventsCRUD.updateItem(breedingId, {
+    breedingBatch: arrayUnion(newAnimal)
+
+    // breedingBatch: arrayUnion({
+    //   ...breedingAnimal,
+    //   abortData,
+    //   status: 'ABORT'
+    // })
+  })
+  return await Promise.all([removeOldAnimal, setNewAnimal])
+}
 export const updateBreedingWithAbort = async (
   breedingId: BreedingEventType['id'],
   animalId: AnimalType['id'],

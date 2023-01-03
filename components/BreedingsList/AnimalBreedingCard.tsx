@@ -81,9 +81,15 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
       >
         <div className="flex justify-between items-center px-2 pt-1 w-full ">
           <span></span>
-          <span>Monta</span>
+          <span>
+            Monta
+            <span className="text-xs h-full">
+              <span className=""> {lastVersionAnimal.batch} </span>
+            </span>
+          </span>
           <span>{disableOptionsModal || <EventModal event={event} />}</span>
         </div>
+        <div className="text-center"></div>
         <header className="flex w-full justify-between p-2 bg-base-200 ">
           <div className="flex items-center ">
             <IconBreedingStatus
@@ -93,11 +99,11 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
             <span className="flex flex-col">
               <span>{animal.status || 'PENDING'}</span>
               <span>
-                Parto: del{' '}
+                Partos:{' '}
                 <span className="font-bold">
                   {birthStartAt && myFormatDate(birthStartAt, 'dd-MMM')}
                 </span>{' '}
-                al{' '}
+                <span className="">al </span>
                 <span className="font-bold">
                   {birthFinishAt && myFormatDate(birthFinishAt, 'dd-MMM yyyy')}
                 </span>
@@ -115,9 +121,7 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
                 {lastVersionAnimal.earring}
               </span>
             </span>
-            <span className="text-xs">
-              Lote: <span className="font-bold">{lastVersionAnimal.batch}</span>
-            </span>
+
             <span className="text-xs">
               <span className="">{lastVersionAnimal.breed}</span>
             </span>
@@ -128,8 +132,8 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
             <div className="flex flex-col text-center">
               <span>Fecha Monta</span>
               <div>
-                <span>{myFormatDate(breedingStartAt, 'dd-MMM-yy')}</span>
-                <span className="mx-2">al</span>
+                <span>{myFormatDate(breedingStartAt, 'dd-MMM')}</span>
+                <span className="mx-2 text-xs italic">al</span>
                 <span>{myFormatDate(breedingFinishAt, 'dd-MMM-yy')}</span>
               </div>
             </div>

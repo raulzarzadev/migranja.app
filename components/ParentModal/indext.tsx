@@ -60,7 +60,10 @@ const ParentModal = ({
       >
         <div>
           {parentData ? (
-            <AnimalDetails animal={parentData} setEditing={() => {}} />
+            <AnimalDetails
+              animal={parentData}
+              // setEditing={() => {}}
+            />
           ) : (
             <div>No hay información sobre el padre</div>
           )}
