@@ -2,6 +2,8 @@ import { deleteAnimal } from '@firebase/Animal/main'
 import useFarm from 'components/hooks/useFarm'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals } from 'store/slices/farmSlice'
 
 const AnimalsOptions = ({
   animalsEarrings,
@@ -17,17 +19,47 @@ const AnimalsOptions = ({
       setProgress(0)
     }
   }, [animalsEarrings])
-  const { currentFarm } = useFarm()
+  // const { currentFarm } = useFarm()
+  const farmAnimals = useSelector(selectFarmAnimals)
   const [progress, setProgress] = useState(0)
 
   const animalsIds = _earrings.map(
-    (earring) =>
-      currentFarm?.animals?.find((animal) => animal.earring === earring)?.id
+    (earring) => farmAnimals?.find((animal) => animal.earring === earring)?.id
   )
   const handleDeleteAll = async () => {
-    console.log('delete all')
-    // setProgress(1)
+    setProgress(1)
+
+    try {
+      const deletePromises = animalsIds.map((animal, i) => {
+        setProgress((i * 100) / animalsIds.length)
+        if (animal) return deleteAnimal(animal)
+      })
+      setProgress(50)
+      const res = await Promise.all(deletePromises)
+      // console.log(res)
+      setProgress(100)
+      _setEarrings([])
+      setAnimalsEarrings?.([])
+    } catch (error) {
+      console.log(error)
+      setProgress(0)
+    }
+    //
     // try {
+    //   setProgress(10)
+    //   for (let i = 0; i < animalsIds.length; i++) {
+    //     const id = animalsIds[i]
+    //     await deleteAnimal(id as string).then((res) => console.log(res))
+    //     debugger
+    //     setProgress((i * 100) / animalsIds.length)
+    //   }
+    //   setProgress(100)
+    //   _setEarrings([])
+    //   setAnimalsEarrings?.([])
+    // } catch (error) {
+    //   console.log(error)
+    //   setProgress(0)
+    // }
     //   // animalsIds.forEach(async (id, i) => {
     //   //   await deleteAnimal(id as string).then((res) => console.log(res))
     //   //   setProgress((i * 100) / animalsIds.length)
@@ -45,6 +77,7 @@ const AnimalsOptions = ({
     //   setProgress(0)
     // }
   }
+  console.log({ progress })
   return (
     <div className="p-2">
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
