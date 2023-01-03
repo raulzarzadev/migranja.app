@@ -12,7 +12,7 @@ import {
   GenderOptions
 } from 'firebase/types.model.ts/AnimalType.model'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
 import { myFormatDate } from 'utils/dates/myDateUtils'
@@ -177,7 +177,7 @@ export const AnimalDetails = ({
               </div>
 
               <div className="flex flex-col justify-center text-center">
-                <span>Sexo: </span>
+                <span>Madre: </span>
                 <span>{parents?.mother?.earring ?? 'sin'}</span>
               </div>
             </div>
@@ -207,12 +207,12 @@ export const AnimalDetails = ({
         </div>
       </main>
       <footer>
-        <EventsSection animalEarring={animal.earring} />
+        <EventsSection animalEarring={animal?.earring || ''} />
       </footer>
     </div>
   )
 }
-const EventsSection = ({ animalEarring }) => {
+const EventsSection = ({ animalEarring }: { animalEarring: string }) => {
   const [openEvents, setOpenEvents] = useState(false)
   const handleOpen = () => setOpenEvents(!openEvents)
   return (
