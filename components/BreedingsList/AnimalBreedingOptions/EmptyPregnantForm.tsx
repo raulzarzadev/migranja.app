@@ -1,5 +1,8 @@
+import { createAnimal } from '@firebase/Animal/main'
 import {
+  createBirthEvent,
   createEmptyPregnantEvent,
+  updateBreedingBatch,
   updateBreedingWithEmptyPregnant
 } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
@@ -7,9 +10,13 @@ import useFarm from 'components/hooks/useFarm'
 import InputContainer from 'components/inputs/InputContainer'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import { formatBirthData } from './birth.helper'
 
 const EmptyPregnantForm = ({ animal }: { animal: Partial<AnimalType> }) => {
-  const { currentFarm } = useFarm()
+  const currentFarm = useSelector(selectFarmState)
+  const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({
     defaultValues: {
       date: new Date(),
@@ -19,63 +26,73 @@ const EmptyPregnantForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   const {
     watch,
     handleSubmit,
+    reset,
     formState: { errors }
   } = methods
   const formValues = watch()
 
-  const parentsDefaultData: AnimalType['parents'] = {
-    father: {
-      earring: animal.breeding?.breedingMale.earring || '',
-      name: animal.breeding?.breedingMale.name || '',
-      id: animal.breeding?.breedingMale.id || '',
-      inTheFarm: true
-    },
-    mother: {
-      earring: animal.earring || '',
-      name: animal.name || '',
-      id: animal.id || '',
-      inTheFarm: true
-    }
-  }
-  const defaultAnimalValues: Partial<AnimalType> = {
-    birthday: formValues.date || new Date(),
-    type: 'ovine',
-    name: '',
-    batch: animal.breeding?.batch || '',
-    weight: {
-      atBirth: 0
-    },
-    farm: {
-      id: currentFarm.id,
-      name: currentFarm.name
-    },
-    parents: parentsDefaultData
-  }
-
   const [progress, setProgress] = useState(0)
+
+  // const onSubmit = async (data: any) => {
+  //   setProgress(1)
+  //   const emptyData = { ...data, ...defaultAnimalValues }
+  //   try {
+  //     console.log()
+  //     // CRATE ABORT EVENT
+  //     const abort = await createEmptyPregnantEvent({
+  //       ...data,
+  //       ...defaultAnimalValues
+  //     })
+  //     // UPDATE BREEDING EVENT
+  //     console.log(abort)
+  //     setProgress(50)
+  //     const breedingUpdate = await updateBreedingWithEmptyPregnant(
+  //       animal?.breeding?.id,
+  //       animal?.id || '',
+  //       { emptyData }
+  //     )
+  //     console.log(breedingUpdate)
+
+  //     setProgress(100)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   const onSubmit = async (data: any) => {
     setProgress(1)
-    const emptyData = { ...data, ...defaultAnimalValues }
-    try {
-      console.log()
-      // CRATE ABORT EVENT
-      const abort = await createEmptyPregnantEvent({
-        ...data,
-        ...defaultAnimalValues
-      })
-      // UPDATE BREEDING EVENT
-      console.log(abort)
-      setProgress(50)
-      const breedingUpdate = await updateBreedingWithEmptyPregnant(
-        animal?.breeding?.id,
-        animal?.id || '',
-        { emptyData }
-      )
-      console.log(breedingUpdate)
+    const { formatBirthEvent } = formatBirthData({
+      eventType: 'EMPTY',
+      animal,
+      calfs: data?.calfs || [],
+      currentFarm,
+      farmAnimals,
+      formValues
+    })
 
+    try {
+      // ****************************************************   create birth
+      const event = createBirthEvent(formatBirthEvent)
+      setProgress(50)
+
+      // ***************************************************   update breeding, move from batch to already done
+
+      const breeding = updateBreedingBatch({
+        breedingId: animal?.breeding?.id as string,
+        animalId: animal?.id as string,
+        eventType: 'BIRTH',
+        eventData: formatBirthEvent
+      })
+      setProgress(75)
+
+      const promises = [event, breeding]
+      await Promise.all(promises).then((res: any) => {
+        console.log(res)
+      })
       setProgress(100)
+      reset()
     } catch (error) {
+      setProgress(0)
       console.log(error)
     }
   }

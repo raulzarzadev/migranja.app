@@ -76,7 +76,7 @@ export const AnimalDetails = ({
         {setEditing && id && (
           <>
             <ModalDelete
-              handleDelete={() => handleDelete(id)}
+              handleDelete={() => handleDelete()}
               title={'Eliminar animal'}
               buttonLabel={null}
               openButtonProps={{

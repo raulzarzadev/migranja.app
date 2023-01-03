@@ -87,7 +87,12 @@ export interface BreedingFormatted
   extends Merge<
     Omit<
       BreedingEventType,
-      'possibleBirth' | 'breedingBirths' | 'breedingAborts' | 'breedingEmpty'
+      | 'possibleBirth'
+      | 'breedingBirths'
+      | 'breedingAborts'
+      | 'breedingEmpty'
+      | 'parents'
+      | 'birthData'
     >,
     BreedingDatesType
   > {

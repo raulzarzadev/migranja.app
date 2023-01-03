@@ -1,16 +1,17 @@
-import { CreateBirthEventType } from '@firebase/Events/event.model'
+import { CreateBirthEventType, EventType } from '@firebase/Events/event.model'
 import {
   AnimalType,
   ParentsType
 } from '@firebase/types.model.ts/AnimalType.model'
 export interface CreateBirthDataType {
+  eventType: EventType['type']
   currentFarm: any
   farmAnimals: Partial<AnimalType>[]
   animal: any
   formValues: any
   calfs: any[]
 }
-export const formatBirth = (
+export const formatBirthData = (
   data: CreateBirthDataType
 ): {
   formatBirthEvent: CreateBirthEventType
@@ -19,7 +20,7 @@ export const formatBirth = (
   const animal = data.animal
   const formValues = data.formValues
   const farmAnimals = data.farmAnimals
-
+  const eventType = data.eventType
   const motherLastVersion =
     farmAnimals?.find(({ id }) => id == animal.id) || animal
 
@@ -85,6 +86,7 @@ export const formatBirth = (
   })
 
   const birthData = {
+    ...formValues,
     date: formValues.date,
     parents: parentsDefaultData,
     calfs: formattedCalfs,
@@ -92,7 +94,7 @@ export const formatBirth = (
   }
 
   const formatBirthEvent: CreateBirthEventType = {
-    type: 'BIRTH',
+    type: eventType,
     birthData,
     farm: {
       id: currentFarm?.id || '',

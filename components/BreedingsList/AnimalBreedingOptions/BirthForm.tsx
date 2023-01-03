@@ -1,34 +1,14 @@
 import { createAnimal } from '@firebase/Animal/main'
-import { CreateBirthEventType } from '@firebase/Events/event.model'
-import {
-  createBirthEvent,
-  updateBreedingBatch,
-  updateBreedingWithBirth
-} from '@firebase/Events/main'
-import {
-  AnimalStatus,
-  AnimalType
-} from '@firebase/types.model.ts/AnimalType.model'
-import useFarm from 'components/hooks/useFarm'
+import { createBirthEvent, updateBreedingBatch } from '@firebase/Events/main'
+import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import InputContainer from 'components/inputs/InputContainer'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import useDebugInformation from 'components/hooks/useDebugInformation'
-import { formatBirth } from './birth.helper'
-const schema = yup
-  .object()
-  .shape({
-    earring: yup
-      .string()
-      .required('Este campo es necesario*')
-      .min(3, 'Al menos 3 letras')
-  })
-  .required()
+import { formatBirthData } from './birth.helper'
 
 const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   useDebugInformation('BirthForm', animal)
@@ -62,7 +42,8 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
   const onSubmit = async (data: any) => {
     setProgress(1)
-    const { formatBirthEvent } = formatBirth({
+    const { formatBirthEvent } = formatBirthData({
+      eventType: 'BIRTH',
       animal,
       calfs: data.calfs,
       currentFarm,

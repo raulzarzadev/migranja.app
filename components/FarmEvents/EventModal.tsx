@@ -48,7 +48,7 @@ export const EventModal = ({ event }: { event: FarmEventType }) => {
                 Fecha:
                 {event?.birthData?.date &&
                   myFormatDate(event?.birthData?.date, 'dd MMM yy')}
-                <div>Crías:{birthData.calfs.length}</div>
+                <div>Crías:{birthData?.calfs?.length}</div>
                 {birthData?.calfs?.map((calf) => (
                   <div key={calf?.earring}>{calf?.earring}</div>
                 ))}

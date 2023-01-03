@@ -1,14 +1,17 @@
 import { BirthDataType } from '@firebase/Events/event.model'
+import { ParentsType } from '@firebase/types.model.ts/AnimalType.model'
 import { fromNow } from 'utils/dates/myDateUtils'
 import BirthEventDetails from './BirthEventDetails'
-import BreedingEventDetails from './BreedingEventDetails'
+import BreedingEventDetails, {
+  FarmBirthEventType
+} from './BreedingEventDetails'
 import EventModal from './EventModal'
 
 export interface FarmEventType {
   type: 'BIRTH' | 'ABORT' | 'BREEDING' | 'EMPTY'
   id: string
   birthData?: BirthDataType
-  // parents: ParentsType
+  parents?: ParentsType
   updatedAt: number
   createdAt: number
 }
@@ -16,7 +19,9 @@ export interface FarmEventType {
 export const FarmEvent = ({ event }: { event: FarmEventType }) => {
   return (
     <>
-      {event.type === 'BREEDING' && <BreedingEventDetails event={event} />}
+      {event.type === 'BREEDING' && (
+        <BreedingEventDetails event={event as FarmBirthEventType} />
+      )}
       {event.type === 'BIRTH' && <BirthEventCard event={event} />}
       {event.type === 'ABORT' && <AbortEventCard event={event} />}
       {event.type === 'EMPTY' && <EmptyEventCard event={event} />}

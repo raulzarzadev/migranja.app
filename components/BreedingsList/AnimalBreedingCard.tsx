@@ -23,8 +23,8 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
   // const { farmAnimals } = useFarm()
   const farmAnimals = useSelector(selectFarmAnimals)
   const lastVersionOfBreedingMale =
-    farmAnimals?.find(({ id }) => id === animal.breeding.breedingMale.id) ||
-    animal.breeding.breedingMale
+    farmAnimals?.find(({ id }) => id === animal?.breeding?.breedingMale?.id) ||
+    animal?.breeding?.breedingMale
 
   const lastVersionAnimal =
     farmAnimals?.find(({ id }) => id === animal.id) || animal
@@ -53,11 +53,11 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
   const breeding = animal.breeding
 
   const event: FarmEventType = {
-    createdAt: breeding.date,
-    id: breeding.id,
-    parents: breeding.parents,
+    createdAt: breeding?.date,
+    id: breeding?.id,
+    parents: breeding?.parents,
     type: 'BREEDING',
-    updatedAt: breeding.updatedAt,
+    updatedAt: breeding?.updatedAt,
     birthData: breeding
   }
 

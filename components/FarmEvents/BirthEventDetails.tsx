@@ -14,7 +14,7 @@ const BirthEventDetails = ({ event }: { event: FarmBirthEventType }) => {
         Fecha: {birthData?.date && myFormatDate(birthData?.date, 'dd-MMM-yy')}
       </div>
       <div>
-        <span className="mr-2">Lote {event.batch}</span>
+        <span className="mr-2">Lote {event?.birthData?.batch}</span>
       </div>
       <div className="flex items-center mx-auto w-full justify-center">
         <span className="mr-2">Genetica</span>
@@ -26,7 +26,7 @@ const BirthEventDetails = ({ event }: { event: FarmBirthEventType }) => {
       <div>
         {birthData && (
           <div>
-            <div>Aretes: {birthData.calfs.length}</div>
+            <div>Aretes: {birthData?.calfs?.length}</div>
             <div className="flex justify-evenly mt-2">
               {birthData?.calfs?.map((calf) => (
                 <div key={calf?.earring}>

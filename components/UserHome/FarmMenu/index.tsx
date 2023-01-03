@@ -7,7 +7,10 @@ import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
+import BatchForm, { BatchType } from 'components/forms/BatchForm'
+import BreedingForm from 'components/forms/BreedingForm'
 import useDebugInformation from 'components/hooks/useDebugInformation'
+import useFarm from 'components/hooks/useFarm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { ReactNode, useEffect, useState } from 'react'
@@ -29,9 +32,10 @@ type Option =
 
 const FarmMenu = () => {
   const farm = useSelector(selectFarmState)
-  // useDebugInformation('FarmMenu', { farm })
+  useDebugInformation('FarmPage', {})
   const [menuOptions, setMenuOptions] =
     useState<Partial<Record<MenuOptions, Option>>>()
+
   useEffect(() => {
     const localOptions = localStorage.getItem('menuOptions')
     if (!localOptions || localOptions === 'undefined') {
@@ -40,6 +44,7 @@ const FarmMenu = () => {
       setMenuOptions(JSON.parse(localOptions))
     }
   }, [])
+
   useEffect(() => {
     menuOptions &&
       localStorage.setItem('menuOptions', JSON.stringify(menuOptions))

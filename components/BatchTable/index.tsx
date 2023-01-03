@@ -54,8 +54,8 @@ const BatchTable = ({
     setLoading(true)
     setProgress(1)
     const farmData = {
-      id: currentFarm.id,
-      name: currentFarm.name
+      id: currentFarm?.id,
+      name: currentFarm?.name
     }
 
     try {

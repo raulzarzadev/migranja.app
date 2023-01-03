@@ -1,8 +1,6 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import { Merge, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
-import BreedingBatchesList from 'components/BreedingBatchesList'
-import BreedingEvent from 'components/BreedingEvent'
+import { Merge } from '@firebase/types.model.ts/TypeBase.model'
 import AnimalBreedingCard, {
   AnimalBreedingCardType
 } from 'components/BreedingsList/AnimalBreedingCard'
@@ -17,7 +15,18 @@ export interface FarmBirthEventType
 }
 const BreedingEventDetails = ({ event }: { event: FarmBirthEventType }) => {
   const animal = formatAnimalsBreedings([event])[0]
-  const breeding: AnimalBreedingCardType = { ...animal, breeding: event }
+  console.log({ animal })
+  //...animal, breeding: event
+  const breeding: AnimalBreedingCardType = {
+    breedingDates: {
+      birthStartAt: 0,
+      birthFinishAt: 0,
+      breedingStartAt: 0,
+      breedingFinishAt: 0,
+      birthStartInDays: 0,
+      birthFinishInDays: 0
+    }
+  }
   return (
     <div className="">
       <AnimalBreedingCard animal={breeding} />

@@ -1,15 +1,16 @@
-import {
-  createAbortEvent,
-  updateBreedingWithAbort
-} from '@firebase/Events/main'
+import { createBirthEvent, updateBreedingBatch } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import useFarm from 'components/hooks/useFarm'
 import InputContainer from 'components/inputs/InputContainer'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import { formatBirthData } from './birth.helper'
 
 const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
-  const { currentFarm } = useFarm()
+  // const { currentFarm } = useFarm()
+  const currentFarm = useSelector(selectFarmState)
+  const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({
     defaultValues: {
       date: new Date(),
@@ -42,8 +43,8 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       atBirth: 0
     },
     farm: {
-      id: currentFarm.id,
-      name: currentFarm.name
+      id: currentFarm?.id,
+      name: currentFarm?.name
     },
     parents: parentsDefaultData
   }
@@ -52,19 +53,28 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
   const onSubmit = async (data: any) => {
     setProgress(1)
-    const abortData = { ...data, ...defaultAnimalValues }
+
+    const { formatBirthEvent } = formatBirthData({
+      eventType: 'ABORT',
+      animal,
+      currentFarm,
+      farmAnimals,
+      formValues,
+      calfs: []
+    })
     try {
       console.log()
       // CRATE ABORT EVENT
-      const abort = await createAbortEvent({ ...data, ...defaultAnimalValues })
+      const abort = await createBirthEvent(formatBirthEvent)
       // UPDATE BREEDING EVENT
       console.log(abort)
       setProgress(50)
-      const breedingUpdate = await updateBreedingWithAbort(
-        animal?.breeding?.id,
-        animal?.id || '',
-        { abortData }
-      )
+      const breedingUpdate = await updateBreedingBatch({
+        breedingId: animal?.breeding?.id,
+        animalId: animal?.id || '',
+        eventType: 'ABORT',
+        eventData: formatBirthEvent
+      })
       console.log(breedingUpdate)
 
       setProgress(100)

@@ -54,34 +54,6 @@ export const listenUserEvents = async (cb: CallableFunction) => {
     cb
   )
 }
-/** ************** crete Birth Event ********** */
-
-export const createBirthEvent = async (newItem: CreateBirthEventType) =>
-  await eventsCRUD.createItem({ ...newItem, status: 'BIRTH' })
-
-/** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
-
-export const updateBreedingWithBirth = async (
-  breedingId: BreedingEventType['id'],
-  animalId: AnimalType['id'],
-  { birthData }: { birthData: any }
-) => {
-  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
-    breedingId
-  )
-  const breedingAnimal = [...(breeding?.breedingBatch || [])].find(
-    (animal) => animal?.id === animalId
-  )
-
-  return await eventsCRUD.updateItem(breedingId, {
-    breedingBatch: arrayRemove(breedingAnimal),
-    breedingBirths: arrayUnion({
-      ...breedingAnimal,
-      birthData,
-      status: 'BIRTH'
-    })
-  })
-}
 
 /** ************** LISTEN FARM BREEDINGS ********** */
 
@@ -94,14 +66,12 @@ export const listenFarmBreedings = async (
     cb
   )
 
-/** ************** CREATE  ABORT ********** */
+/** **
 
-export interface CreateBirthAbortType extends Partial<EventType> {
-  type: 'ABORT'
-  parents: AnimalType['parents']
-}
-export const createAbortEvent = async (newItem: CreateBirthAbortType) =>
-  await eventsCRUD.createItem({ ...newItem, type: 'ABORT' })
+/** ************** CREATE GENERIC BIRTH EVENT ********** */
+export interface CreateBirthType extends EventType {}
+export const createBirthEvent = async (newItem: CreateBirthEventType) =>
+  await eventsCRUD.createItem({ ...newItem })
 
 /** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
 
@@ -144,60 +114,7 @@ export const updateBreedingBatch = async ({
   })
   return await Promise.all([removeOldAnimal, setNewAnimal])
 }
-export const updateBreedingWithAbort = async (
-  breedingId: BreedingEventType['id'],
-  animalId: AnimalType['id'],
-  { abortData }: { abortData: any }
-) => {
-  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
-    breedingId
-  )
-  const breedingAnimal = [...(breeding?.breedingBatch || [])].find(
-    (animal) => animal?.id === animalId
-  )
-
-  return await eventsCRUD.updateItem(breedingId, {
-    breedingBatch: arrayRemove(breedingAnimal),
-    breedingAborts: arrayUnion({
-      ...breedingAnimal,
-      abortData,
-      status: 'ABORT'
-    })
-  })
-}
-
-/** ************** CREATE  EMPTY ********** */
-
-export interface CreateBirthAbortType extends Partial<EventType> {
-  type: 'ABORT'
-  parents: AnimalType['parents']
-}
-export const createEmptyPregnantEvent = async (newItem: CreateBirthAbortType) =>
-  await eventsCRUD.createItem({ ...newItem, type: 'EMPTY' })
-
-/** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
-
-export const updateBreedingWithEmptyPregnant = async (
-  breedingId: BreedingEventType['id'],
-  animalId: AnimalType['id'],
-  { emptyData }: { emptyData: any }
-) => {
-  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
-    breedingId
-  )
-  const breedingAnimal = [...(breeding?.breedingBatch || [])].find(
-    (animal) => animal?.id === animalId
-  )
-
-  return await eventsCRUD.updateItem(breedingId, {
-    breedingBatch: arrayRemove(breedingAnimal),
-    breedingEmpty: arrayUnion({
-      ...breedingAnimal,
-      emptyData,
-      status: 'EMPTY'
-    })
-  })
-}
+/** ************** REMOVE ANIMAL FROM BREEDING BATCH ********** */
 
 export const removeAnimalFromBreeding = async (
   breedingId: BreedingEventType['id'],
@@ -213,6 +130,7 @@ export const removeAnimalFromBreeding = async (
     breedingBatch: arrayRemove(breedingAnimal)
   })
 }
+
 export const getFarmEvents = async (farmId: string) => {
   return eventsCRUD.getItems([where('farm.id', '==', farmId)])
 }
