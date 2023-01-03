@@ -49,6 +49,25 @@ const AnimalBreedingOptions = ({
       title="Opciones de monta "
     >
       <div>
+        <div className="text-xs text-center">
+          Monta:<span className="font-bold"> {animal?.breeding?.batch}</span>
+        </div>
+        <div className="text-xs flex justify-evenly w-full">
+          <div>
+            Macho:{' '}
+            <span className="font-bold">
+              {animal?.breeding?.breedingMale?.earring}
+              <span> {animal?.breeding?.breedingMale?.name} </span>
+            </span>
+          </div>
+          <div>
+            Hembra:{' '}
+            <span className="font-bold">
+              {animal?.earring}
+              <span> {animal?.name} </span>
+            </span>
+          </div>
+        </div>
         <div className="flex justify-center my-2">
           <label className={`form-control `}>
             <span className="label-text">Opciones</span>

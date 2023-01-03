@@ -5,6 +5,7 @@ import AnimalForm from 'components/forms/AnimalForm'
 import useAnimal from 'components/hooks/useAnimal'
 
 import Icon from 'components/Icon'
+import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
 import {
   AnimalType,
@@ -206,8 +207,38 @@ export const AnimalDetails = ({
         </div>
       </main>
       <footer>
-        <AnimalEvents />
+        <EventsSection animalEarring={animal.earring} />
       </footer>
+    </div>
+  )
+}
+const EventsSection = ({ animalEarring }) => {
+  const [openEvents, setOpenEvents] = useState(false)
+  const handleOpen = () => setOpenEvents(!openEvents)
+  return (
+    <div>
+      <div>
+        <button
+          className="btn btn-ghost w-full"
+          onClick={() => {
+            setOpenEvents(!openEvents)
+          }}
+        >
+          {openEvents ? 'Ocultar events' : 'Mostrar eventos'}{' '}
+          <span className="ml-2">
+            <Icon name={!openEvents ? `down` : 'up'} />
+          </span>
+        </button>
+      </div>
+      {openEvents && (
+        <Modal
+          title="Eventos realcionados"
+          open={openEvents}
+          handleOpen={handleOpen}
+        >
+          <AnimalEvents animalEarring={animalEarring} />
+        </Modal>
+      )}
     </div>
   )
 }

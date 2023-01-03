@@ -4,6 +4,8 @@ import { FarmEventType } from 'components/FarmEvents/FarmEvent'
 import useFarm from 'components/hooks/useFarm'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
@@ -18,8 +20,8 @@ export interface AnimalBreedingCardType extends Partial<AnimalType> {
   }
 }
 const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
-  const { farmAnimals } = useFarm()
-
+  // const { farmAnimals } = useFarm()
+  const farmAnimals = useSelector(selectFarmAnimals)
   const lastVersionOfBreedingMale =
     farmAnimals?.find(({ id }) => id === animal.breeding.breedingMale.id) ||
     animal.breeding.breedingMale

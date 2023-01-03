@@ -15,6 +15,10 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import useDebugInformation from 'components/hooks/useDebugInformation'
+import { formatBirth } from './birth.helper'
 const schema = yup
   .object()
   .shape({
@@ -26,7 +30,13 @@ const schema = yup
   .required()
 
 const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
-  const { farmEarrings, currentFarm } = useFarm()
+  useDebugInformation('BirthForm', animal)
+  // const { farmEarrings, currentFarm } = useFarm()
+  const currentFarm = useSelector(selectFarmState)
+  const farmAnimals = useSelector(selectFarmAnimals)
+  const farmEarrings = useSelector(selectFarmAnimals)?.map(
+    ({ earring }) => earring
+  )
   const methods = useForm()
   const {
     watch,
@@ -37,119 +47,58 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     formState: { errors }
   } = methods
   const formValues = watch()
-  const motherLastVersion =
-    currentFarm?.animals?.find(({ id }) => id == animal.id) || animal
-  const fatherLastVersion =
-    currentFarm?.animals?.find(
-      ({ id }) => id == animal?.breeding?.breedingMale?.id
-    ) || animal?.breeding?.breedingMale
-  const parentsDefaultData: AnimalType['parents'] = {
-    father: {
-      breed: fatherLastVersion?.breed || '',
-      earring: fatherLastVersion?.earring || '',
-      name: fatherLastVersion?.name || '',
-      id: fatherLastVersion?.id || '',
-      inTheFarm: true
-    },
-    mother: {
-      breed: motherLastVersion?.breed || '',
-      earring: motherLastVersion?.earring || '',
-      name: motherLastVersion?.name || '',
-      id: motherLastVersion?.id || '',
-      inTheFarm: true
-    }
-  }
 
-  const defaultBirthValues: Partial<AnimalType> = {
-    birthday: formValues.date || new Date(),
-    type: 'ovine',
-    name: '',
-    batch: animal.breeding?.batch || '',
-    weight: {
-      atBirth: 0
-    },
-    farm: {
-      id: currentFarm.id,
-      name: currentFarm.name
-    },
-    parents: parentsDefaultData
-  }
   useEffect(() => {
     let calfs = []
     for (let i = 0; i < parseInt(formValues?.birthType || 0); i++) {
-      calfs.push(defaultBirthValues)
+      calfs.push({})
     }
     setValue('calfs', calfs)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animal, formValues?.birthType, formValues.date])
+  }, [animal, formValues?.birthType])
 
   const [progress, setProgress] = useState(0)
 
   const onSubmit = async (data: any) => {
     setProgress(1)
-    console.log(data)
-    const formatBirthEvent: CreateBirthEventType = {
-      type: 'BIRTH',
-      date: formValues.date,
-
-      farm: {
-        id: currentFarm?.id,
-        name: currentFarm?.name
-      },
-      parents: parentsDefaultData,
-      birthData: data
-    }
-    const motherBreed = parentsDefaultData.mother?.breed?.replaceAll(' ', '')
-    const fatherBreed = parentsDefaultData.father?.breed?.replaceAll(' ', '')
-    const breed =
-      !motherBreed || !fatherBreed
-        ? motherBreed || fatherBreed
-        : fatherBreed === motherBreed
-        ? fatherBreed
-        : `(1/2${motherBreed}-1/2${fatherBreed})`
-
-    const formattedCalfs = data?.calfs?.map((calf: any) => {
-      const statuses: AnimalType['statuses'] = {
-        isAlive: calf.isAlive,
-        isInTheFarm: true,
-        isPregnant: false
-      }
-
-      return {
-        ...calf,
-        birthType: data?.calfs?.length,
-        breed: breed?.replaceAll(' ', ''),
-        statuses
-      }
+    const { formatBirthEvent } = formatBirth({
+      animal,
+      calfs: data.calfs,
+      currentFarm,
+      farmAnimals,
+      formValues
     })
-    const formatBreedingEvent = { ...data, calfs: formattedCalfs }
-
+    //console.log(formatBreedingEvent.formatBirthEvent)
+    //return
+    const newCalfs = formatBirthEvent.birthData.calfs
     try {
       // *************************************************   create animals/calfs
-      formattedCalfs.forEach(async (calf: any, i: number) => {
+      const calfs = newCalfs.map((calf: any, i: number) => {
         //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
-        const r = await createAnimal({ ...calf }).then((res) =>
-          console.log(res)
-        )
-        setProgress((i * 100) / formattedCalfs?.length)
-        console.log(r)
+        setProgress((i * 100) / newCalfs?.length)
+        return createAnimal({ ...calf })
+        // console.log(r)
       })
       // ****************************************************   create birth
-      const event = await createBirthEvent(formatBirthEvent)
-      console.log(event)
-
+      const event = createBirthEvent(formatBirthEvent)
       setProgress(50)
 
       // ***************************************************   update breeding, move from batch to already done
 
-      const breeding = await updateBreedingWithBirth(
+      const breeding = updateBreedingWithBirth(
         animal?.breeding?.id as string,
         animal?.id as string,
         {
-          birthData: formatBreedingEvent
+          birthData: formatBirthEvent
         }
       )
-      console.log(breeding)
+      setProgress(75)
+
+      const promises = [...calfs, event, breeding]
+      await Promise.all(promises).then((res: any) => {
+        console.log(res)
+        //setProgress((i * 100) / promises?.length)
+      })
       setProgress(100)
 
       reset()

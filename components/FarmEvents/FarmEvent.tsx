@@ -1,3 +1,4 @@
+import { BirthDataType } from '@firebase/Events/event.model'
 import {
   AnimalType,
   ParentsType
@@ -10,12 +11,8 @@ import EventModal from './EventModal'
 export interface FarmEventType {
   type: 'BIRTH' | 'ABORT' | 'BREEDING' | 'EMPTY'
   id: string
-  birthData?: {
-    birthType: number
-    calfs: Partial<AnimalType[]>
-    date: number
-  }
-  parents: ParentsType
+  birthData?: BirthDataType
+  // parents: ParentsType
   updatedAt: number
   createdAt: number
 }
