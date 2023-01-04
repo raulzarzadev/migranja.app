@@ -1,5 +1,9 @@
 import { createAnimal } from '@firebase/Animal/main'
-import { createBirthEvent, updateBreedingBatch } from '@firebase/Events/main'
+import {
+  createBirthEvent,
+  createGenericBreedingEvent,
+  updateBreedingBatch
+} from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import InputContainer from 'components/inputs/InputContainer'
 import { useEffect, useState } from 'react'
@@ -8,7 +12,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import useDebugInformation from 'components/hooks/useDebugInformation'
-import { formatBirthData } from './birth.helper'
+import { formatBirthData, formatNewGenericFarmEvent } from './birth.helper'
+import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 
 const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   useDebugInformation('BirthForm', animal)
@@ -42,17 +47,18 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
   const onSubmit = async (data: any) => {
     setProgress(1)
-    const { formatBirthEvent } = formatBirthData({
+    const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
       eventType: 'BIRTH',
       animal,
       calfs: data.calfs,
       currentFarm,
       farmAnimals,
-      formValues
+      formValues,
+      breeding: animal.breeding
     })
     //console.log(formatBreedingEvent.formatBirthEvent)
     //return
-    const newCalfs = formatBirthEvent.birthData.calfs || []
+    const newCalfs = formatBirthEvent.eventData.calfs
     try {
       // *************************************************   create animals/calfs
       const calfs = newCalfs.map((calf: any, i: number) => {
@@ -62,7 +68,8 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
         // console.log(r)
       })
       // ****************************************************   create birth
-      const event = createBirthEvent(formatBirthEvent)
+      const event =
+        createGenericBreedingEvent<BirthDetailsEvent>(formatBirthEvent)
       setProgress(50)
 
       // ***************************************************   update breeding, move from batch to already done
@@ -173,23 +180,23 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
                 type="number"
                 placeholder="Peso"
                 className="w-[120px] my-1"
+                min="0"
+                step="0.01"
               />
               <div>
                 <div className="flex">
                   <label className="flex flex-col">
                     <span>Macho</span>
                     <input
-                      {...register(`calfs.${i}.gender`)}
+                      {...register(`calfs.${i}.gender`, { required: true })}
                       type={'radio'}
                       value="male"
-                      checked
                     />
                   </label>
                   <label className="flex flex-col">
                     <span>Hembra</span>
                     <input
-                      {...register(`calfs.${i}.gender`)}
-                      name={`calfs.${i}.gender`}
+                      {...register(`calfs.${i}.gender`, { required: true })}
                       type={'radio'}
                       value="female"
                     />

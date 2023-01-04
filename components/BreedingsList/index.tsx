@@ -1,10 +1,14 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import BreedingBatchesList from 'components/BreedingBatchesList'
-import { BreedingBatchesListType } from 'components/BreedingBatchesList'
+import BreedingBatchesList, {
+  BreedingBatchesListType
+} from 'components/BreedingBatchesList'
+import {
+  BreedingDetailsEvent,
+  GenericEventType
+} from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import useDebugInformation from 'components/hooks/useDebugInformation'
-import useFarm from 'components/hooks/useFarm'
 import useSortByField from 'components/hooks/useSortByField'
 import Icon from 'components/Icon'
 import DebouncedInput from 'components/inputs/DebouncedInput'
@@ -12,7 +16,10 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmEvents } from 'store/slices/farmSlice'
 import AnimalBreedingCard from './AnimalBreedingCard'
-import { BreedingFormatted, formatAnimalsBreedings } from './breeding.helpers'
+import {
+  BreedingFormatted,
+  formatBreedingsGenericEvent
+} from './breeding.helpers'
 
 interface SearchField {
   value: string
@@ -20,37 +27,77 @@ interface SearchField {
 }
 
 const BreedingsList = () => {
-  const [animals, setAnimals] = useState<Partial<AnimalType>[]>([])
-  const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
-  const [batches, setBatches] = useState<BreedingBatchesListType['breedings']>(
-    []
+  const farmEvents = useSelector(selectFarmEvents)
+  const farmBreedingsEvents = farmEvents.filter(
+    (event) => event.type === 'BREEDING'
   )
+  const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
+  const [view, setView] = useState<'breeding' | 'animals'>('breeding')
 
+  const [animals, setAnimals] = useState<Partial<AnimalType>[]>([])
   const [animalsFiltered, setAnimalsFilter] = useState<Partial<AnimalType>[]>(
     []
   )
-  const [batchesFiltered, setBreedingFilter] = useState<BreedingFormatted[]>([])
-  const [view, setView] = useState<'breeding' | 'animals'>('breeding')
+  const [batches, setBatches] = useState<
+    GenericEventType<BreedingDetailsEvent>[]
+  >([])
+  const [batchesFiltered, setBreedingFilter] = useState([])
+
   useDebugInformation('BreedingsList', {})
 
   const filterField = (field: string = '', search: string = '') => {
     return field?.toLowerCase()?.includes(search?.toLowerCase())
   }
-  const farmEvents = useSelector(selectFarmEvents)
 
   useEffect(() => {
-    // @ts-ignore
-    const farmBreedings: BreedingEventType[] = [...farmEvents].filter(
-      ({ type }) => type === 'BREEDING'
+    const batchesFormatted = farmBreedingsEvents.map(
+      ({
+        eventData,
+        farm,
+        type,
+        status,
+        createdAt,
+        id,
+        updatedAt,
+        userId
+      }): GenericEventType<BreedingDetailsEvent> => {
+        const formatted = {
+          createdAt,
+          eventData,
+          farm,
+          id,
+          type,
+          updatedAt,
+          userId,
+          status
+        }
+        return {
+          ...formatted,
+          eventData: { ...formatted.eventData, breedingId: 'juujuyhyujh' }
+        }
+        // const breedingBatchFormattedWithEventDetails =
+
+        //   event.eventData.breedingBatch?.map((animal) => {
+        //     return { ...animal, eventData: event }
+        //   })
+        // return {
+        //   ...event,
+        //   eventData: {
+        //     ...event.eventData,
+        //     breedingBatch: breedingBatchFormattedWithEventDetails
+        //   }
+        // }
+      }
     )
-    const formattedBreedings = formatAnimalsBreedings(farmBreedings)
-    const allAnimals = [...formattedBreedings]
-      ?.map((batch) => batch.animals)
-      .flat()
-      .filter(({ status }) => status === 'PENDING' || status === undefined)
-    setBatches(formattedBreedings)
-    setAnimals(allAnimals)
-  }, [farmEvents])
+    const animalsFormatted = batchesFormatted.map((batch) =>
+      batch.eventData.breedingBatch?.map((animal) => animal)
+    )
+    const dates = formatBreedingsGenericEvent(batchesFormatted)
+
+    setAnimals(animalsFormatted.flat())
+    setBatches(batchesFormatted)
+    console.log({ animals, batches, dates })
+  }, [])
 
   useEffect(() => {
     const animalsFiltered = [...animals].filter(
@@ -65,12 +112,12 @@ const BreedingsList = () => {
 
     const batchesFiltered = [...batches].filter((batch) =>
       // filter  by bull
-      filterField(batch?.breedingMale?.earring || '', search.value)
+      filterField(batch.eventData.breedingMale?.earring || '', search.value)
     )
     setAnimalsFilter(animalsFiltered)
     setBreedingFilter(batchesFiltered)
   }, [animals, batches, search.value])
-
+  return <></>
   return (
     <div className="w-full">
       <div className="flex w-full items-center">
@@ -103,11 +150,12 @@ const BreedingsList = () => {
           Por Animales
         </button>
       </div>
-      {view === 'animals' ? (
+      <BreedingBatchesList breedings={batchesFiltered} />
+      {/* {view === 'animals' ? (
         <AnimalsBreeding animals={animalsFiltered} />
       ) : (
         <BreedingBatchesList breedings={batchesFiltered} />
-      )}
+      )} */}
     </div>
   )
 }

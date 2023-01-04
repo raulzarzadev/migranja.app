@@ -1,7 +1,5 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import EventModal from 'components/FarmEvents/EventModal'
-import { FarmEventType } from 'components/FarmEvents/FarmEvent'
-import useFarm from 'components/hooks/useFarm'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -30,6 +28,7 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
     farmAnimals?.find(({ id }) => id === animal.id) || animal
 
   const breedingMale = lastVersionOfBreedingMale
+
   const {
     breedingDates: {
       birthStartAt,

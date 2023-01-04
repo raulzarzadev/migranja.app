@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import FarmEvents from '.'
 import EventModal from './EventModal'
-import FarmEvent, { FarmEventType } from './FarmEvent'
+import FarmEvent, { FarmEventType } from './FarmEvent/FarmEvent'
 
 const numberDate = new Date().getTime()
 export const FARM_EVENT: FarmEventType = {

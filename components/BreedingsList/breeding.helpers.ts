@@ -1,6 +1,11 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { DateType, Merge } from '@firebase/types.model.ts/TypeBase.model'
+import {
+  BreedingDetailsEvent,
+  GenericEventType,
+  ParentsType
+} from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { addDays } from 'date-fns'
 import { fromNow } from 'utils/dates/myDateUtils'
 
@@ -14,8 +19,8 @@ export const calculatePossibleBirth = ({
   breedingStartAt,
   breedingFinishAt
 }: {
-  breedingStartAt?: number | Date
-  breedingFinishAt?: number | Date
+  breedingStartAt: number | Date
+  breedingFinishAt: number | Date
 }): PossiblesBirthDates => {
   const birthsStartAt: DateType =
     (breedingStartAt && addDays(breedingStartAt, GESTATION_DAYS)) || 0
@@ -83,40 +88,31 @@ export interface BreedingDatesType {
 export interface AnimalFormatted extends Merge<AnimalType, BreedingDatesType> {
   breedingDates: BreedingDatesType
 }
-export interface BreedingFormatted
-  extends Merge<
-    Omit<
-      BreedingEventType,
-      | 'possibleBirth'
-      | 'breedingBirths'
-      | 'breedingAborts'
-      | 'breedingEmpty'
-      | 'parents'
-      | 'birthData'
-    >,
-    BreedingDatesType
-  > {
-  animals: Partial<AnimalType>[]
-  breedingDates?: BreedingDatesType
+export interface BreedingFormatted {
+  breedingBatch: Partial<AnimalType>[]
+  breedingDates: BreedingDatesType
+  breedingId: string
+  breedingMale?: Partial<AnimalType> | null
+  parents?: ParentsType | null
 }
 
 export const formatAnimalsBreedings = (
   breedings: BreedingEventType[]
 ): BreedingFormatted[] => {
-  return breedings.map((breeding) => {
+  return breedings?.map((breeding) => {
     const possibleBirth = calculatePossibleBirth({
-      breedingFinishAt: breeding.finishAt,
-      breedingStartAt: breeding.startAt
+      breedingFinishAt: breeding?.finishAt,
+      breedingStartAt: breeding?.startAt
     })
     const breedingDates = {
-      breedingStartAt: breeding.startAt,
-      breedingFinishAt: breeding.finishAt,
-      birthStartAt: possibleBirth.startAt,
-      birthFinishAt: possibleBirth.finishAt,
-      birthStartInDays: getPlusMinusDays(possibleBirth.startAt),
-      birthFinishInDays: getPlusMinusDays(possibleBirth.finishAt)
+      breedingStartAt: breeding?.startAt,
+      breedingFinishAt: breeding?.finishAt,
+      birthStartAt: possibleBirth?.startAt,
+      birthFinishAt: possibleBirth?.finishAt,
+      birthStartInDays: getPlusMinusDays(possibleBirth?.startAt),
+      birthFinishInDays: getPlusMinusDays(possibleBirth?.finishAt)
     }
-    const breedingBatch = breeding.breedingBatch.map((animal) => {
+    const breedingBatch = breeding?.breedingBatch?.map((animal) => {
       return {
         ...animal,
         ...breedingDates,
@@ -149,7 +145,7 @@ export const formatAnimalsBreedings = (
       }
     })
     const animals = [
-      ...breedingBatch,
+      ...(breedingBatch || []),
       ...(breedingBirths || []),
       ...(breedingAborts || []),
       ...(breedingEmpty || [])
@@ -165,4 +161,109 @@ export const formatAnimalsBreedings = (
       breedingBatch: breedingBatch
     }
   })
+}
+
+export const formatBreedingsGenericEvent = (
+  breedings: GenericEventType<BreedingDetailsEvent>[]
+): BreedingFormatted[] => {
+  return breedings.map(
+    (breeding: GenericEventType<BreedingDetailsEvent>): BreedingFormatted => {
+      const {
+        eventData: {
+          breedingBatch,
+          breedingId,
+          breedingMale,
+          finishAt,
+          startAt,
+          parents
+        }
+      } = breeding
+
+      const possibleBirth = calculatePossibleBirth({
+        breedingFinishAt: finishAt as number,
+        breedingStartAt: startAt as number
+      })
+      const breedingDates: BreedingDatesType = {
+        birthStartAt: possibleBirth?.startAt,
+        birthFinishAt: possibleBirth?.finishAt,
+        birthStartInDays: getPlusMinusDays(possibleBirth?.startAt),
+        birthFinishInDays: getPlusMinusDays(possibleBirth?.finishAt),
+        breedingStartAt: possibleBirth.startAt,
+        breedingFinishAt: possibleBirth.finishAt
+      }
+      const formattedBreeding: BreedingFormatted = {
+        breedingBatch,
+        breedingDates,
+        breedingId,
+        breedingMale,
+        parents
+      }
+
+      console.log(formattedBreeding)
+      return formattedBreeding
+    }
+  )
+
+  // return breedings?.map((breeding) => {
+  //   const possibleBirth = calculatePossibleBirth({
+  //     breedingFinishAt: breeding?.finishAt,
+  //     breedingStartAt: breeding?.startAt
+  //   })
+  //   const breedingDates = {
+  //     breedingStartAt: breeding?.startAt,
+  //     breedingFinishAt: breeding?.finishAt,
+  //     birthStartAt: possibleBirth?.startAt,
+  //     birthFinishAt: possibleBirth?.finishAt,
+  //     birthStartInDays: getPlusMinusDays(possibleBirth?.startAt),
+  //     birthFinishInDays: getPlusMinusDays(possibleBirth?.finishAt)
+  //   }
+  //   const breedingBatch = breeding?.breedingBatch?.map((animal) => {
+  //     return {
+  //       ...animal,
+  //       ...breedingDates,
+  //       breedingDates
+  //       //status: 'PENDING'
+  //     }
+  //   })
+  //   const breedingBirths = breeding?.breedingBirths?.map((animal) => {
+  //     return {
+  //       ...animal,
+  //       ...breedingDates,
+  //       breedingDates
+  //       // status: 'BIRTH'
+  //     }
+  //   })
+  //   const breedingAborts = breeding?.breedingAborts?.map((animal) => {
+  //     return {
+  //       ...animal,
+  //       ...breedingDates,
+  //       breedingDates
+  //       // status: 'ABORT'
+  //     }
+  //   })
+  //   const breedingEmpty = breeding?.breedingEmpty?.map((animal) => {
+  //     return {
+  //       ...animal,
+  //       ...breedingDates,
+  //       breedingDates
+  //       // status: 'EMPTY'
+  //     }
+  //   })
+  //   const animals = [
+  //     ...(breedingBatch || []),
+  //     ...(breedingBirths || []),
+  //     ...(breedingAborts || []),
+  //     ...(breedingEmpty || [])
+  //   ].map((animal) => {
+  //     return { ...animal, breeding }
+  //   })
+
+  //   return {
+  //     ...breeding,
+  //     breedingDates,
+  //     ...breedingDates,
+  //     animals,
+  //     breedingBatch: breedingBatch
+  //   }
+  // })
 }

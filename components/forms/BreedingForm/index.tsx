@@ -6,8 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useState } from 'react'
 import HelperText from 'components/HelperText'
-import { createEvent } from '@firebase/Events/main'
+import { createEvent, createGenericBreedingEvent } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import { BreedingDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -17,7 +20,10 @@ const schema = yup.object().shape({
 // .required()
 
 const BreedingForm = () => {
-  const { currentFarm, farmAnimals } = useFarm()
+  // const { currentFarm, farmAnimals } = useFarm()
+  const currentFarm = useSelector(selectFarmState)
+  const farmAnimals = useSelector(selectFarmAnimals)
+
   const [loading, setLoading] = useState(false)
 
   const methods = useForm({
@@ -35,27 +41,30 @@ const BreedingForm = () => {
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const breedingBatch = females
+    const breedingBatch: Partial<AnimalType>[] = females
       ?.filter(({ earring }) => sheepSelected?.includes(earring))
       .map((animal) => {
         return { ...animal, status: 'PENDING' }
       })
-    const male = males?.find(({ earring }) => earring === data.breedingMale)
+    const breedingMale: AnimalType | null =
+      males?.find(({ earring }) => earring === data.breedingMale) || null
     // console.log({ ...data, breedingMale: male, breedingBatch })
     try {
-      const res = await createEvent({
-        type: 'BREEDING',
-        batch: data?.batch,
-        breedingBatch: breedingBatch as AnimalType[],
-        breedingMale: male as AnimalType,
-        startAt: data.startAt,
-        finishAt: data.finishAt,
+      const res = await createGenericBreedingEvent<BreedingDetailsEvent>({
+        eventData: {
+          breedingBatch: breedingBatch,
+          breedingId: '',
+          breedingMale,
+          finishAt: data.finishAt,
+          startAt: data.startAt
+        },
         farm: {
           id: currentFarm?.id || '',
           name: currentFarm?.name || ''
-        }
+        },
+        type: 'BREEDING'
       })
-      console.log(res)
+
       setLoading(false)
     } catch (error) {
       console.log(error)

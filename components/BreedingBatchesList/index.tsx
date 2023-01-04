@@ -19,6 +19,7 @@ export interface BreedingBatchesListType {
   breedings: BreedingFormatted[]
 }
 const BreedingBatchesList = ({ breedings = [] }: BreedingBatchesListType) => {
+  console.log(breedings)
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
@@ -33,13 +34,13 @@ const BreedingBatchesList = ({ breedings = [] }: BreedingBatchesListType) => {
 
 const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
   const handleDelete = async () => {
-    const res = await deleteEvent(breeding.id)
+    const res = await deleteEvent(breeding?.id)
     return console.log(res)
   }
   const farmAnimals = useSelector(selectFarmAnimals)
   const breedingMale =
-    farmAnimals?.find(({ id }) => id === breeding.breedingMale.id) ||
-    breeding.breedingMale
+    farmAnimals?.find(({ id }) => id === breeding?.breedingMale?.id) ||
+    breeding?.breedingMale
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
       <header className="flex w-full justify-between p-2">
@@ -114,22 +115,20 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
 }
 
 export interface BreedingCardBody extends BreedingFormatted {}
-const BreedingCardBody = ({ breeding }: { breeding: BreedingCardBody }) => {
+
+const BreedingCardBody = ({ breeding }: { breeding }) => {
   type ViewBatchesType = 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY' | ''
   const [view, setView] = useState<ViewBatchesType>('')
-  const pendingAnimals = breeding.animals.filter(
+  console.log(breeding)
+  const animals = breeding?.eventData?.breedingBatch
+  const pendingAnimals = animals?.filter(
     ({ status }) => status === 'PENDING' || status === undefined
   )
-  const abortAnimals = breeding.animals.filter(
-    ({ status }) => status === 'ABORT'
-  )
-  const birthAnimals = breeding.animals.filter(
-    ({ status }) => status === 'BIRTH'
-  )
-  const emptyAnimals = breeding.animals.filter(
-    ({ status }) => status === 'EMPTY'
-  )
 
+  const abortAnimals = animals.filter(({ status }) => status === 'ABORT')
+  const birthAnimals = animals.filter(({ status }) => status === 'BIRTH')
+  const emptyAnimals = animals.filter(({ status }) => status === 'EMPTY')
+  console.log(animals)
   const handleSetView = (newView: ViewBatchesType) => {
     if (newView === view) {
       setView('')

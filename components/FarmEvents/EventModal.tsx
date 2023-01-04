@@ -1,10 +1,10 @@
+import { FarmEventType } from '@firebase/Events/event.model'
 import { deleteEvent } from '@firebase/Events/main'
 import Icon from 'components/Icon'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import { FarmEventType } from './FarmEvent'
 
 export const EventModal = ({ event }: { event: FarmEventType }) => {
   const [openEventDetails, setOpenEventDetails] = useState(false)
@@ -12,12 +12,13 @@ export const EventModal = ({ event }: { event: FarmEventType }) => {
     setOpenEventDetails(!openEventDetails)
   }
   const handleDeleteEvent = async () => {
-    await deleteEvent(event.id)
-      .then((res) => {
-        console.log(res)
-        return res
-      })
-      .catch((err) => console.log(err))
+    event.id &&
+      (await deleteEvent(event.id)
+        .then((res) => {
+          console.log(res)
+          return res
+        })
+        .catch((err) => console.log(err)))
   }
 
   const birthData = event?.birthData

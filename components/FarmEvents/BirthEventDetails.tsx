@@ -1,12 +1,17 @@
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import { FarmEventType } from './FarmEvent'
-export interface FarmBirthEventType extends FarmEventType {}
-const BirthEventDetails = ({ event }: { event: FarmBirthEventType }) => {
-  const { parents } = event
-  const father = parents?.father
-  const mother = parents?.mother
-  const birthData = event?.birthData
-  console.log(event)
+import {
+  BirthDetailsEvent,
+  GenericEventType
+} from './FarmEvent/FarmEvent.model'
+const BirthEventDetails = ({
+  event
+}: {
+  event: GenericEventType<BirthDetailsEvent>
+}) => {
+  const father = event.eventData.parents.father
+  const mother = event.eventData.parents.mother
+  const birthData = event?.eventData
+  // console.log(event)
 
   return (
     <div className="">
@@ -14,7 +19,7 @@ const BirthEventDetails = ({ event }: { event: FarmBirthEventType }) => {
         Fecha: {birthData?.date && myFormatDate(birthData?.date, 'dd-MMM-yy')}
       </div>
       <div>
-        <span className="mr-2">Lote {event?.birthData?.batch}</span>
+        <span className="mr-2">Lote {birthData?.batch}</span>
       </div>
       <div className="flex items-center mx-auto w-full justify-center">
         <span className="mr-2">Genetica</span>

@@ -1,6 +1,6 @@
 import { EventType } from '@firebase/Events/event.model'
 import { EventsList } from 'components/FarmEvents'
-import { FarmEventType } from 'components/FarmEvents/FarmEvent'
+import { FarmEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmEvents } from 'store/slices/farmSlice'

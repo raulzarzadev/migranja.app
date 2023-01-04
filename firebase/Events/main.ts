@@ -12,6 +12,7 @@ import {
 } from './event.model'
 
 import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
+import { CreateGenericEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 const storage = getStorage(app)
 
 const eventsCRUD = new FirebaseCRUD('events', db, storage)
@@ -69,9 +70,13 @@ export const listenFarmBreedings = async (
 /** **
 
 /** ************** CREATE GENERIC BIRTH EVENT ********** */
-export interface CreateBirthType extends EventType {}
+export interface CreateBirthType extends Partial<EventType> {}
 export const createBirthEvent = async (newItem: CreateBirthEventType) =>
   await eventsCRUD.createItem({ ...newItem })
+
+export const createGenericBreedingEvent = async <T>(
+  newItem: CreateGenericEventType<T>
+) => await eventsCRUD.createItem({ ...newItem })
 
 /** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
 

@@ -5,17 +5,15 @@ import AnimalBreedingCard, {
   AnimalBreedingCardType
 } from 'components/BreedingsList/AnimalBreedingCard'
 import { formatAnimalsBreedings } from 'components/BreedingsList/breeding.helpers'
-import { FarmEventType } from './FarmEvent'
+import { FarmEventType } from './FarmEvent/FarmEvent'
 export interface FarmBirthEventType
   extends Merge<FarmEventType, BreedingEventType> {
   breedingBatch: AnimalType[]
-  breedingBirths: AnimalType[]
-  breedingEmpty: AnimalType[]
   breedingMale: Pick<AnimalType, 'earring' | 'breed' | 'batch' | 'id' | 'name'>
 }
 const BreedingEventDetails = ({ event }: { event: FarmBirthEventType }) => {
-  const animal = formatAnimalsBreedings([event])[0]
-  console.log({ animal })
+  //const animal = formatAnimalsBreedings([event])[0]
+  console.log(event)
   //...animal, breeding: event
   const breeding: AnimalBreedingCardType = {
     breedingDates: {

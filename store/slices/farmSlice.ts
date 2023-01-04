@@ -3,14 +3,15 @@ import { AppState } from '..'
 import { HYDRATE } from 'next-redux-wrapper'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import { EventType } from '@firebase/Events/event.model'
+import { EventDataStoreDetails } from 'types/base/FarmEvent.model'
 
 // Type for our state
+
 export interface FarmState {
   farm: FarmType | null
   userFarm: FarmType | null
   animals: AnimalType[]
-  events: EventType[]
+  events: EventDataStoreDetails[]
 }
 
 // Initial state
