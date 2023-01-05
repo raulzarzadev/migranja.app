@@ -1,4 +1,4 @@
-import { CreateBirthEventType, EventType } from '@firebase/Events/event.model'
+import { EventType } from '@firebase/Events/event.model'
 import {
   AnimalType,
   ParentsType
@@ -11,6 +11,11 @@ import {
   CreateGenericEventType,
   EmptyDetailsEvent
 } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
+import { ParentType } from 'types/base/AnimalType.model'
+import {
+  DTO_CreateBreedingEventType,
+  EventData
+} from 'types/base/FarmEvent.model'
 import { BreedingFormatted } from '../breeding.helpers'
 export interface CreateBirthDataType {
   eventType: EventType['type']
@@ -20,106 +25,110 @@ export interface CreateBirthDataType {
   formValues: any
   calfs: any[]
 }
-export const formatBirthData = (
-  data: CreateBirthDataType
-): {
-  formatBirthEvent: CreateBirthEventType
-} => {
-  const currentFarm = data.currentFarm
-  const animal = data.animal
-  const formValues = data.formValues
-  const farmAnimals = data.farmAnimals
-  const eventType = data.eventType
-  const motherLastVersion =
-    farmAnimals?.find(({ id }) => id == animal.id) || animal
+// export const formatBirthData = (
+//   data: CreateBirthDataType
+// ): {
+//   formatBirthEvent: DTO_CreateBreedingEventType
+// } => {
+//   const currentFarm = data.currentFarm
+//   const farmAnimals = data.farmAnimals
+//   const animal = data.animal
+//   const formValues = data.formValues
+//   const eventType = data.eventType
 
-  const fatherLastVersion =
-    farmAnimals?.find(({ id }) => id == animal?.breeding?.breedingMale?.id) ||
-    animal?.breeding?.breedingMale
+//   const motherLastVersion =
+//     farmAnimals?.find(({ id }) => id == animal.id) || animal
 
-  const parentsDefaultData: AnimalType['parents'] = {
-    father: {
-      breed: fatherLastVersion?.breed || '',
-      earring: fatherLastVersion?.earring || '',
-      name: fatherLastVersion?.name || '',
-      id: fatherLastVersion?.id || '',
-      inTheFarm: true
-    },
-    mother: {
-      breed: motherLastVersion?.breed || '',
-      earring: motherLastVersion?.earring || '',
-      name: motherLastVersion?.name || '',
-      id: motherLastVersion?.id || '',
-      inTheFarm: true
-    }
-  }
+//   const fatherLastVersion =
+//     farmAnimals?.find(({ id }) => id == animal?.breeding?.breedingMale?.id) ||
+//     animal?.breeding?.breedingMale
 
-  const defaultBirthValues: Partial<AnimalType> = {
-    birthday: formValues.date || new Date(),
-    type: 'ovine',
-    name: '',
-    batch: animal.breeding?.batch || '',
-    weight: {
-      atBirth: 0
-    },
-    farm: {
-      id: currentFarm?.id,
-      name: currentFarm?.name
-    },
-    parents: parentsDefaultData
-  }
-  const motherBreed = parentsDefaultData.mother?.breed?.replaceAll(' ', '')
-  const fatherBreed = parentsDefaultData.father?.breed?.replaceAll(' ', '')
-  const breed =
-    !motherBreed || !fatherBreed
-      ? motherBreed || fatherBreed
-      : fatherBreed === motherBreed
-      ? fatherBreed
-      : `(1/2${motherBreed}-1/2${fatherBreed})`
+//   const parentsDefaultData: AnimalType['parents'] = {
+//     father: {
+//       breed: fatherLastVersion?.breed || '',
+//       earring: fatherLastVersion?.earring || '',
+//       name: fatherLastVersion?.name || '',
+//       id: fatherLastVersion?.id || '',
+//       inTheFarm: true
+//     },
+//     mother: {
+//       breed: motherLastVersion?.breed || '',
+//       earring: motherLastVersion?.earring || '',
+//       name: motherLastVersion?.name || '',
+//       id: motherLastVersion?.id || '',
+//       inTheFarm: true
+//     }
+//   }
 
-  const formattedCalfs = data?.calfs?.map((calf: any) => {
-    const statuses: AnimalType['statuses'] = {
-      isAlive: !!calf?.isAlive,
-      isInTheFarm: !!calf?.isAlive,
-      isPregnant: false
-    }
+//   const defaultBirthValues: Partial<AnimalType> = {
+//     birthday: formValues.date || new Date(),
+//     type: 'ovine',
+//     name: '',
+//     batch: animal.breeding?.batch || '',
+//     weight: {
+//       atBirth: 0
+//     },
+//     farm: {
+//       id: currentFarm?.id,
+//       name: currentFarm?.name
+//     },
+//     parents: parentsDefaultData
+//   }
+//   const motherBreed = parentsDefaultData.mother?.breed?.replaceAll(' ', '')
+//   const fatherBreed = parentsDefaultData.father?.breed?.replaceAll(' ', '')
+//   const breed =
+//     !motherBreed || !fatherBreed
+//       ? motherBreed || fatherBreed
+//       : fatherBreed === motherBreed
+//       ? fatherBreed
+//       : `(1/2${motherBreed}-1/2${fatherBreed})`
 
-    const calfFormatted = {
-      ...defaultBirthValues,
-      earring: calf.earring,
-      breed: breed?.replaceAll(' ', ''),
-      birthType: data?.calfs?.length,
-      statuses
-    }
-    return calfFormatted
-  })
+//   const formattedCalfs = data?.calfs?.map((calf: any) => {
+//     const statuses: AnimalType['statuses'] = {
+//       isAlive: !!calf?.isAlive,
+//       isInTheFarm: !!calf?.isAlive,
+//       isPregnant: false
+//     }
 
-  const birthData = {
-    ...formValues,
-    date: formValues.date,
-    parents: parentsDefaultData,
-    calfs: formattedCalfs,
-    batch: animal.breeding?.batch
-  }
+//     const calfFormatted = {
+//       ...defaultBirthValues,
+//       earring: calf.earring,
+//       breed: breed?.replaceAll(' ', ''),
+//       birthType: data?.calfs?.length,
+//       statuses
+//     }
+//     return calfFormatted
+//   })
 
-  const formatBirthEvent: CreateBirthEventType = {
-    type: eventType,
-    birthData,
-    farm: {
-      id: currentFarm?.id || '',
-      name: currentFarm?.name || ''
-    }
-  }
+//   const eventData: DTO_CreateBreedingEventType['eventData'] = {
+//     ...formValues,
+//     date: formValues.date,
+//     parents: parentsDefaultData,
+//     calfs: formattedCalfs,
+//     batch: animal.eventData?.breedingId
+//   }
 
-  return { formatBirthEvent }
-}
+//   const formatBirthEvent: DTO_CreateBreedingEventType = {
+//     type: eventType,
+//     eventData,
+//     farm: {
+//       id: currentFarm?.id || '',
+//       name: currentFarm?.name || ''
+//     }
+//   }
+
+//   return { formatBirthEvent }
+// }
 
 export interface DataToFormatGenericEventType {
   eventType: EventType['type']
   currentFarm: any
   farmAnimals: Partial<AnimalType>[]
   animal: any
-  breeding: BreedingFormatted
+  breeding: {
+    breedingId: string
+    breedingMale: ParentType | null
+  }
   formValues: any
   calfs: any[]
 }
@@ -135,6 +144,7 @@ export function formatNewGenericFarmEvent<T>(
   const farmAnimals = data.farmAnimals
   const eventType = data.eventType
   const breeding = data.breeding
+
   const motherLastVersion =
     farmAnimals?.find(({ id }) => id == animal.id) || animal
 
@@ -158,15 +168,16 @@ export function formatNewGenericFarmEvent<T>(
       inTheFarm: true
     }
   }
-
+  const breedingBatchId = breeding.breedingId
   const defaultBirthValues: Partial<AnimalType> = {
     birthday: formValues.date || new Date(),
     type: 'ovine',
     name: '',
-    batch: breeding?.batch || '',
+    batch: breedingBatchId || '',
     weight: {
       atBirth: 0
     },
+    gender: formValues?.gender || 'female',
     farm: {
       id: currentFarm?.id,
       name: currentFarm?.name
@@ -199,16 +210,16 @@ export function formatNewGenericFarmEvent<T>(
     return calfFormatted
   })
 
-  const eventData = formatEventData<T>(eventType, {
+  const eventData = formatEventData<EventData>(eventType, {
     ...formValues,
     date: formValues.date,
     parents: parentsDefaultData,
     calfs: formattedCalfs,
-    batch: breeding?.batch,
-    breedingId: breeding?.id
+    batch: breeding?.breedingId,
+    breedingId: breeding?.breedingId
   })
 
-  const formatBirthEvent: CreateGenericEventType<T> = {
+  const formatBirthEvent: DTO_CreateBreedingEventType = {
     type: eventType,
     eventData,
     farm: {

@@ -1,4 +1,5 @@
-import { AnimalType } from './AnimalType.model'
+import { BreedingDatesType } from 'components/BreedingsList/breeding.helpers'
+import { AnimalType, ParentsType } from './AnimalType.model'
 import { TypeBase } from './TypeBase.model'
 
 export interface BaseFarmEvent {
@@ -23,36 +24,27 @@ export interface ParentType
   > {
   inTheFarm: boolean
 }
-export interface ParentsType {
-  father?: ParentType | null
-  mother?: ParentType | null
-}
-export interface BirthDetailsEvent {
-  batch: string
+export interface BirthDetailsEvent extends BreedingEventDefaultInfo {
   birthType: number
   calfs: Partial<AnimalType>[]
-  date: number | string
-  parents: ParentsType
-  breedingId: string
 }
-export interface AbortDetailsEvent {
-  date: number | string
-  parents: ParentsType
-  batch: string
+export interface AbortDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
-  breedingId: string
 }
-export interface EmptyDetailsEvent {
-  date: number | string
-  parents: ParentsType
-  batch: string
+export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
-  breedingId: string
 }
-export interface BreedingDetailsEvent {
+export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  breedingDates?: BreedingDatesType
+}
+
+export interface BreedingEventDefaultInfo {
+  id: string
+  date?: number | string
   breedingId: string
+  batchId: string
   breedingBatch: Partial<AnimalType>[]
-  breedingMale: Partial<AnimalType> | null
+  breedingMale: ParentType | null
   parents: ParentsType
   startAt: number | string
   finishAt: number | string
@@ -66,11 +58,22 @@ export interface CreateGenericEventType<ContentType> extends BaseFarmEvent {
   eventData: ContentType
 }
 
+export interface FarmBreedingEvent
+  extends SetGenericEventType<BreedingDetailsEvent> {}
+
 export interface EventData
-  extends BreedingDetailsEvent,
+  extends BreedingEventDefaultInfo,
+    BreedingDetailsEvent,
     EmptyDetailsEvent,
     AbortDetailsEvent,
-    BirthDetailsEvent {}
+    BirthDetailsEvent {
+  breedingDates?: BreedingDatesType
+}
 
-export interface EventDataStoreDetails
-  extends CreateGenericEventType<Partial<EventData>> {}
+export interface EventDataStoreDetails extends SetGenericEventType<EventData> {}
+
+export interface BreedingEventCardDetails
+  extends SetGenericEventType<EventData> {}
+
+export interface DTO_CreateBreedingEventType
+  extends CreateGenericEventType<BreedingDetailsEvent> {}

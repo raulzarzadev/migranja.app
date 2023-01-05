@@ -1,12 +1,13 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { DateType, Merge } from '@firebase/types.model.ts/TypeBase.model'
+import { addDays } from 'date-fns'
+import { ParentsType } from 'types/base/AnimalType.model'
 import {
   BreedingDetailsEvent,
-  GenericEventType,
-  ParentsType
-} from 'components/FarmEvents/FarmEvent/FarmEvent.model'
-import { addDays } from 'date-fns'
+  EventDataStoreDetails,
+  SetGenericEventType
+} from 'types/base/FarmEvent.model'
 import { fromNow } from 'utils/dates/myDateUtils'
 
 export interface PossiblesBirthDates {
@@ -15,22 +16,33 @@ export interface PossiblesBirthDates {
 }
 
 const GESTATION_DAYS = 150
-export const calculatePossibleBirth = ({
-  breedingStartAt,
-  breedingFinishAt
-}: {
-  breedingStartAt: number | Date
-  breedingFinishAt: number | Date
-}): PossiblesBirthDates => {
-  const birthsStartAt: DateType =
-    (breedingStartAt && addDays(breedingStartAt, GESTATION_DAYS)) || 0
+export const calculatePossibleBirth = (
+  {
+    breedingStartAt,
+    breedingFinishAt
+  }: {
+    breedingStartAt: number | Date
+    breedingFinishAt: number | Date
+  },
+  options?: { asNumber?: boolean }
+): PossiblesBirthDates => {
+  if (options?.asNumber) {
+    return {
+      startAt: addDays(breedingStartAt, GESTATION_DAYS).getTime(),
+      finishAt: addDays(breedingFinishAt, GESTATION_DAYS).getTime()
+    }
+  }
+  const birthsStartAt: Date | number =
+    breedingStartAt && addDays(breedingStartAt, GESTATION_DAYS)
   let birthsFinishAt: DateType =
-    (breedingFinishAt && addDays(breedingFinishAt, GESTATION_DAYS)) || 0
+    breedingFinishAt && addDays(breedingFinishAt, GESTATION_DAYS)
+
   return {
     startAt: birthsStartAt,
     finishAt: birthsFinishAt
   }
 }
+
 export const getPlusMinusDays = (date?: Date | number) => {
   if (!date) return 0
   const auxArr = fromNow(date, {
@@ -76,6 +88,36 @@ export const formatBreedingsAsBreedingsList = (
   return animals
 }
 
+export const calculatePossibleBirthStartAndFinish = ({
+  startAt,
+  finishAt
+}: {
+  startAt: number | Date
+  finishAt: number | Date
+}): BreedingDatesType => {
+  const possibleBirth = calculatePossibleBirth(
+    {
+      breedingFinishAt: startAt,
+      breedingStartAt: finishAt
+    },
+    { asNumber: true }
+  )
+
+  const possibleBirthStartIn =
+    possibleBirth && getPlusMinusDays(possibleBirth?.startAt)
+  const possibleBirthFinishIn =
+    possibleBirth && getPlusMinusDays(possibleBirth?.finishAt)
+
+  return {
+    breedingStartAt: startAt,
+    breedingFinishAt: finishAt,
+    birthStartAt: possibleBirth.startAt,
+    birthFinishAt: possibleBirth.startAt,
+    birthStartInDays: possibleBirthStartIn,
+    birthFinishInDays: possibleBirthFinishIn
+  }
+}
+
 export interface BreedingDatesType {
   breedingStartAt: number | Date
   breedingFinishAt: number | Date
@@ -88,12 +130,14 @@ export interface BreedingDatesType {
 export interface AnimalFormatted extends Merge<AnimalType, BreedingDatesType> {
   breedingDates: BreedingDatesType
 }
-export interface BreedingFormatted {
-  breedingBatch: Partial<AnimalType>[]
+export interface BreedingFormatted
+  extends SetGenericEventType<BreedingDetailsEvent> {
   breedingDates: BreedingDatesType
+  breedingBatch: Partial<AnimalType>[]
   breedingId: string
   breedingMale?: Partial<AnimalType> | null
   parents?: ParentsType | null
+  date: string | number
 }
 
 export const formatAnimalsBreedings = (
@@ -164,10 +208,12 @@ export const formatAnimalsBreedings = (
 }
 
 export const formatBreedingsGenericEvent = (
-  breedings: GenericEventType<BreedingDetailsEvent>[]
+  breedings: EventDataStoreDetails[]
 ): BreedingFormatted[] => {
   return breedings.map(
-    (breeding: GenericEventType<BreedingDetailsEvent>): BreedingFormatted => {
+    (
+      breeding: SetGenericEventType<BreedingDetailsEvent>
+    ): BreedingFormatted => {
       const {
         eventData: {
           breedingBatch,
@@ -175,7 +221,8 @@ export const formatBreedingsGenericEvent = (
           breedingMale,
           finishAt,
           startAt,
-          parents
+          parents,
+          date
         }
       } = breeding
 
@@ -196,7 +243,8 @@ export const formatBreedingsGenericEvent = (
         breedingDates,
         breedingId,
         breedingMale,
-        parents
+        parents,
+        date
       }
 
       console.log(formattedBreeding)

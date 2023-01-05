@@ -1,9 +1,7 @@
-import { createAnimal } from '@firebase/Animal/main'
 import {
   createBirthEvent,
-  createEmptyPregnantEvent,
-  updateBreedingBatch,
-  updateBreedingWithEmptyPregnant
+  createGenericBreedingEvent,
+  updateBreedingEventBatch
 } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import useFarm from 'components/hooks/useFarm'
@@ -12,9 +10,14 @@ import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
-import { formatBirthData } from './birth.helper'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { formatNewGenericFarmEvent } from './birth.helper'
 
-const EmptyPregnantForm = ({ animal }: { animal: Partial<AnimalType> }) => {
+const EmptyPregnantForm = ({
+  animal
+}: {
+  animal: AnimalFormattedWhitGenericEvenData
+}) => {
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({
@@ -61,25 +64,27 @@ const EmptyPregnantForm = ({ animal }: { animal: Partial<AnimalType> }) => {
 
   const onSubmit = async (data: any) => {
     setProgress(1)
-    const { formatBirthEvent } = formatBirthData({
-      eventType: 'EMPTY',
-      animal,
-      calfs: data?.calfs || [],
-      currentFarm,
-      farmAnimals,
-      formValues
-    })
 
     try {
+      const { formatBirthEvent } = formatNewGenericFarmEvent({
+        eventType: 'EMPTY',
+        animal,
+        calfs: data?.calfs || [],
+        currentFarm,
+        farmAnimals,
+        formValues,
+        breeding: animal.eventData
+      })
       // ****************************************************   create birth
-      const event = createBirthEvent(formatBirthEvent)
+      const event = createGenericBreedingEvent(formatBirthEvent)
       setProgress(50)
 
       // ***************************************************   update breeding, move from batch to already done
 
-      const breeding = updateBreedingBatch({
-        breedingId: animal?.breeding?.id as string,
-        animalId: animal?.id as string,
+      const breeding = updateBreedingEventBatch({
+        //  breedingId: animal?.breeding?.id as string,
+        eventId: animal.eventData.id,
+        animalId: animal.id,
         eventType: 'BIRTH',
         eventData: formatBirthEvent
       })

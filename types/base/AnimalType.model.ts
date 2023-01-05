@@ -1,7 +1,13 @@
 import { BreedingEventType } from '@firebase/Events/event.model'
 import { FarmType } from '@firebase/Farm/farm.model'
+import { BreedingDatesType } from 'components/BreedingsList/breeding.helpers'
+import {
+  BreedingDetailsEvent,
+  EventData,
+  SetGenericEventType
+} from './FarmEvent.model'
 import { ImageType } from './ImageType.model'
-import { DateType, TypeBase } from './TypeBase.model'
+import { DateType, Merge, TypeBase } from './TypeBase.model'
 
 export interface AnimalType extends TypeBase {
   isDuplicated?: boolean
@@ -78,3 +84,9 @@ export interface ParentsType {
   father?: ParentType | null
   mother?: ParentType | null
 }
+
+export interface AnimalFormattedWhitGenericEvenData
+  extends Merge<
+    Partial<AnimalType>,
+    SetGenericEventType<BreedingDetailsEvent>
+  > {}

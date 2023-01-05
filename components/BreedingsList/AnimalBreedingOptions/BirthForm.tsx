@@ -1,8 +1,7 @@
 import { createAnimal } from '@firebase/Animal/main'
 import {
-  createBirthEvent,
   createGenericBreedingEvent,
-  updateBreedingBatch
+  updateBreedingEventBatch
 } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import InputContainer from 'components/inputs/InputContainer'
@@ -12,11 +11,19 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import useDebugInformation from 'components/hooks/useDebugInformation'
-import { formatBirthData, formatNewGenericFarmEvent } from './birth.helper'
+import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
+import {
+  AnimalFormattedWhitGenericEvenData,
+  ParentType
+} from 'types/base/AnimalType.model'
 
-const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
-  useDebugInformation('BirthForm', animal)
+const BirthForm = ({
+  animal
+}: {
+  animal: AnimalFormattedWhitGenericEvenData
+}) => {
+  // useDebugInformation('BirthForm', animal)
   // const { farmEarrings, currentFarm } = useFarm()
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
@@ -44,9 +51,12 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   }, [animal, formValues?.birthType])
 
   const [progress, setProgress] = useState(0)
-
+  const breedingEventId = animal.eventData.id
+  const breedingBatchId = animal.eventData.breedingId
+  const breedingMale = animal.eventData.breedingMale
   const onSubmit = async (data: any) => {
     setProgress(1)
+
     const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
       eventType: 'BIRTH',
       animal,
@@ -54,11 +64,15 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       currentFarm,
       farmAnimals,
       formValues,
-      breeding: animal.breeding
+      breeding: {
+        breedingId: breedingBatchId,
+        breedingMale
+      }
     })
-    //console.log(formatBreedingEvent.formatBirthEvent)
-    //return
+    //console.log({ formatBirthEvent })
+    // return
     const newCalfs = formatBirthEvent.eventData.calfs
+
     try {
       // *************************************************   create animals/calfs
       const calfs = newCalfs.map((calf: any, i: number) => {
@@ -73,23 +87,16 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       setProgress(50)
 
       // ***************************************************   update breeding, move from batch to already done
-
-      const breeding = updateBreedingBatch({
-        breedingId: animal?.breeding?.id as string,
+      const breeding = updateBreedingEventBatch({
+        eventId: breedingEventId,
         animalId: animal?.id as string,
         eventType: 'BIRTH',
         eventData: formatBirthEvent
-        // {
-        //   birthData: formatBirthEvent
-        // }
       })
       setProgress(75)
 
       const promises = [...calfs, event, breeding]
-      await Promise.all(promises).then((res: any) => {
-        console.log(res)
-        //setProgress((i * 100) / promises?.length)
-      })
+      await Promise.all(promises).then((res: any) => {})
       setProgress(100)
 
       reset()
@@ -130,7 +137,7 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
             </>
           )}
 
-          {formValues.birthType && (
+          {formValues?.birthType && (
             <div className="flex w-full justify-evenly  ">
               <span>Vivo</span>
               <span className="w-[100px] text-center">Arete</span>
@@ -184,23 +191,34 @@ const BirthForm = ({ animal }: { animal: Partial<AnimalType> }) => {
                 step="0.01"
               />
               <div>
-                <div className="flex">
-                  <label className="flex flex-col">
-                    <span>Macho</span>
-                    <input
-                      {...register(`calfs.${i}.gender`, { required: true })}
-                      type={'radio'}
-                      value="male"
-                    />
-                  </label>
-                  <label className="flex flex-col">
-                    <span>Hembra</span>
-                    <input
-                      {...register(`calfs.${i}.gender`, { required: true })}
-                      type={'radio'}
-                      value="female"
-                    />
-                  </label>
+                <div>
+                  <div className="flex justify-center">
+                    <label className="flex flex-col">
+                      <span>Macho</span>
+                      <input
+                        {...register(`calfs.${i}.gender`, {
+                          required: 'Selecciona el sexo'
+                        })}
+                        type={'radio'}
+                        value="male"
+                      />
+                    </label>
+                    <label className="flex flex-col">
+                      <span>Hembra</span>
+                      <input
+                        {...register(`calfs.${i}.gender`, {
+                          required: true
+                        })}
+                        type={'radio'}
+                        value="female"
+                      />
+                    </label>
+                  </div>
+                  {errors?.calfs?.[i]?.gender && (
+                    <span className="label-text text-error">
+                      {errors?.calfs[i]?.gender?.message}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

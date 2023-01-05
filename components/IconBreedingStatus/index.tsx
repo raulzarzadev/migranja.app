@@ -4,9 +4,13 @@ const IconBreedingStatus = ({
   startInDays,
   finishInDays
 }: {
-  startInDays: number
-  finishInDays: number
+  startInDays?: number
+  finishInDays?: number
 }) => {
+  if (!startInDays || !finishInDays) {
+    console.log('incorrect dates')
+    return <></>
+  }
   let status: IconStatus = 'info'
   if (startInDays > 1) status = 'success'
   if (startInDays <= 0) status = 'warning'

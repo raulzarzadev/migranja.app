@@ -1,8 +1,8 @@
 import { removeAnimalFromBreeding } from '@firebase/Events/main'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
 import EmptyPregnantForm from './EmptyPregnantForm'
@@ -12,10 +12,11 @@ const AnimalBreedingOptions = ({
   openModal,
   handleOpenModal
 }: {
-  animal: Partial<AnimalType>
+  animal: AnimalFormattedWhitGenericEvenData
   openModal: boolean
   handleOpenModal: () => void
 }) => {
+  const breedingMale = animal.eventData.breedingMale
   const options = [
     {
       label: 'Parto',
@@ -50,14 +51,15 @@ const AnimalBreedingOptions = ({
     >
       <div>
         <div className="text-xs text-center">
-          Monta:<span className="font-bold"> {animal?.breeding?.batch}</span>
+          Monta:
+          <span className="font-bold"> {animal?.eventData?.breedingId}</span>
         </div>
         <div className="text-xs flex justify-evenly w-full">
           <div>
             Macho:{' '}
             <span className="font-bold">
-              {animal?.breeding?.breedingMale?.earring}
-              <span> {animal?.breeding?.breedingMale?.name} </span>
+              {breedingMale?.earring}
+              <span> {breedingMale?.name} </span>
             </span>
           </div>
           <div>
@@ -84,7 +86,9 @@ const AnimalBreedingOptions = ({
             </select>
           </label>
         </div>
-        {option === 'birth' && <BirthForm animal={animal} />}
+        {option === 'birth' && (
+          <BirthForm animal={{ ...animal, type: 'ovine', status: 'PENDING' }} />
+        )}
         {option === 'abort' && <AbortForm animal={animal} />}
         {option === 'notPregnant' && <EmptyPregnantForm animal={animal} />}
         {option === 'discard' && (

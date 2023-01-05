@@ -1,5 +1,5 @@
 import { listenFarmAnimals } from '@firebase/Animal/main'
-import { listenFarmEvents } from '@firebase/Events/main'
+import { getFarmEvents, listenFarmEvents } from '@firebase/Events/main'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
@@ -24,6 +24,12 @@ export interface UseFarm {
 const useFarm = (props?: UseFarm) => {
   const dispatch = useDispatch()
   const { user } = useAuth()
+
+  const currentFarm = useSelector(selectFarmState)
+  const farmAnimals = useSelector(selectFarmAnimals)
+  const farmEvents = useSelector(selectFarmEvents)
+  const userFarm = useSelector(selectUserFarm)
+
   const [farmEarrings, setFarmEarrings] = useState<string[]>([])
 
   const {
@@ -31,12 +37,12 @@ const useFarm = (props?: UseFarm) => {
   } = useRouter()
 
   useEffect(() => {
-    if (user) {
+    if (user && userFarm === undefined) {
       listenUserFarms((res: FarmType[] | null) => {
         dispatch(setUserFarm(res?.[0] || null))
       })
     }
-  }, [dispatch, user])
+  }, [dispatch, user, userFarm])
 
   useEffect(() => {
     if (user && farmId) {
@@ -54,10 +60,6 @@ const useFarm = (props?: UseFarm) => {
     }
   }, [dispatch, farmId, user])
 
-  const currentFarm = useSelector(selectFarmState)
-  const farmAnimals = useSelector(selectFarmAnimals)
-  const farmEvents = useSelector(selectFarmEvents)
-  const userFarm = useSelector(selectUserFarm)
   return {
     currentFarm,
     farmAnimals,

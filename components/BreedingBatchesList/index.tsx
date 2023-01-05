@@ -2,24 +2,21 @@ import { deleteEvent } from '@firebase/Events/main'
 import AnimalBreedingCard, {
   AnimalBreedingCardType
 } from 'components/BreedingsList/AnimalBreedingCard'
-import {
-  AnimalFormatted,
-  BreedingFormatted
-} from 'components/BreedingsList/breeding.helpers'
-import useFarm from 'components/hooks/useFarm'
+import { BreedingFormatted } from 'components/BreedingsList/breeding.helpers'
+import useDebugInformation from 'components/hooks/useDebugInformation'
 import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
-import { useState } from 'react'
+import { Key, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
+import { BreedingEventCardDetails } from 'types/base/FarmEvent.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
 export interface BreedingBatchesListType {
-  breedings: BreedingFormatted[]
+  breedings: BreedingEventCardDetails[]
 }
 const BreedingBatchesList = ({ breedings = [] }: BreedingBatchesListType) => {
-  console.log(breedings)
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
@@ -32,22 +29,20 @@ const BreedingBatchesList = ({ breedings = [] }: BreedingBatchesListType) => {
   )
 }
 
-const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
+const BreedingCard = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
   const handleDelete = async () => {
     const res = await deleteEvent(breeding?.id)
     return console.log(res)
   }
-  const farmAnimals = useSelector(selectFarmAnimals)
-  const breedingMale =
-    farmAnimals?.find(({ id }) => id === breeding?.breedingMale?.id) ||
-    breeding?.breedingMale
+  const breedingMale = breeding.eventData.breedingMale
+  const breedingDates = breeding.eventData.breedingDates
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
       <header className="flex w-full justify-between p-2">
         <div className="flex pr-1 mt-1 ">
           <IconBreedingStatus
-            startInDays={breeding?.birthStartInDays as number}
-            finishInDays={breeding?.birthFinishInDays as number}
+            startInDays={breedingDates?.birthStartInDays as number}
+            finishInDays={breedingDates?.birthFinishInDays as number}
           />
         </div>
         <div className="w-full flex justify-between">
@@ -56,22 +51,22 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
               <span>Partos:</span>
               <span> del </span>
               <span className="font-bold">
-                {myFormatDate(breeding.birthStartAt, 'dd-MMM')}
+                {myFormatDate(breedingDates?.birthStartAt, 'dd-MMM')}
               </span>
               <span> al </span>
               <span className="font-bold">
-                {myFormatDate(breeding.birthFinishAt, 'dd-MMM-yy')}
+                {myFormatDate(breedingDates?.birthFinishAt, 'dd-MMM-yy')}
               </span>
             </div>
             <div className="text-xs">
               <span>Realizada: </span>
               <span> del </span>
               <span className="font-semibold">
-                {myFormatDate(breeding.startAt, 'dd-MMM')}
+                {myFormatDate(breedingDates?.breedingStartAt, 'dd-MMM')}
               </span>
               <span> al </span>
               <span className="font-semibold">
-                {myFormatDate(breeding.finishAt, 'dd-MMM-yy')}
+                {myFormatDate(breedingDates?.breedingFinishAt, 'dd-MMM-yy')}
               </span>
             </div>
             <div className="text-xs">
@@ -79,7 +74,10 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
               <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
             </div>
           </div>
-          <span>Lote:{breeding?.batch}</span>
+          <span>
+            Lote:{' '}
+            <span className="font-bold">{breeding.eventData?.breedingId}</span>
+          </span>
           <div className="relative">
             <span className="absolute -top-6 -right-2">
               <ModalDelete
@@ -105,7 +103,10 @@ const BreedingCard = ({ breeding }: { breeding: BreedingFormatted }) => {
                 <span>{breedingMale?.name}</span>
               </span>
             </div>
-            <span>{breedingMale?.breed}</span>
+            <span>
+              Raza:
+              <span>{breedingMale?.breed}</span>
+            </span>
           </div>
         </div>
       </header>
@@ -118,17 +119,16 @@ export interface BreedingCardBody extends BreedingFormatted {}
 
 const BreedingCardBody = ({ breeding }: { breeding }) => {
   type ViewBatchesType = 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY' | ''
-  const [view, setView] = useState<ViewBatchesType>('')
-  console.log(breeding)
-  const animals = breeding?.eventData?.breedingBatch
-  const pendingAnimals = animals?.filter(
-    ({ status }) => status === 'PENDING' || status === undefined
-  )
 
+  const [view, setView] = useState<ViewBatchesType>('')
+
+  const animals = breeding?.eventData?.breedingBatch
+
+  const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')
   const abortAnimals = animals.filter(({ status }) => status === 'ABORT')
   const birthAnimals = animals.filter(({ status }) => status === 'BIRTH')
   const emptyAnimals = animals.filter(({ status }) => status === 'EMPTY')
-  console.log(animals)
+
   const handleSetView = (newView: ViewBatchesType) => {
     if (newView === view) {
       setView('')
@@ -186,12 +186,14 @@ const BreedingCardBody = ({ breeding }: { breeding }) => {
       <div className="bg-base-100 p-1   pt-1 rounded-md">
         <div className="">
           {view === 'ALL' &&
-            breeding.animals.map((animal, i) => (
-              <AnimalBreedingCard
-                key={i}
-                animal={animal as AnimalBreedingCardType}
-              />
-            ))}
+            breeding.animals.map(
+              (animal: AnimalBreedingCardType, i: number) => (
+                <AnimalBreedingCard
+                  key={i}
+                  animal={animal as AnimalBreedingCardType}
+                />
+              )
+            )}
           {view === 'PENDING' &&
             pendingAnimals.map((animal, i) => (
               <AnimalBreedingCard

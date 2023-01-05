@@ -1,11 +1,14 @@
-import { createBirthEvent, updateBreedingBatch } from '@firebase/Events/main'
+import {
+  createBirthEvent,
+  updateBreedingEventBatch
+} from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import InputContainer from 'components/inputs/InputContainer'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
-import { formatBirthData } from './birth.helper'
+import { formatNewGenericFarmEvent } from './birth.helper'
 
 const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   // const { currentFarm } = useFarm()
@@ -20,48 +23,24 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
   const { watch, handleSubmit } = methods
   const formValues = watch()
 
-  const parentsDefaultData: AnimalType['parents'] = {
-    father: {
-      earring: animal.breeding?.breedingMale.earring || '',
-      name: animal.breeding?.breedingMale.name || '',
-      id: animal.breeding?.breedingMale.id || '',
-      inTheFarm: true
-    },
-    mother: {
-      earring: animal.earring || '',
-      name: animal.name || '',
-      id: animal.id || '',
-      inTheFarm: true
-    }
-  }
-  const defaultAnimalValues: Partial<AnimalType> = {
-    birthday: formValues.date || new Date(),
-    type: 'ovine',
-    name: '',
-    batch: animal.breeding?.batch || '',
-    weight: {
-      atBirth: 0
-    },
-    farm: {
-      id: currentFarm?.id,
-      name: currentFarm?.name
-    },
-    parents: parentsDefaultData
-  }
-
   const [progress, setProgress] = useState(0)
 
   const onSubmit = async (data: any) => {
     setProgress(1)
 
-    const { formatBirthEvent } = formatBirthData({
+    const breedingEventId = animal.eventData.id
+    // const breedingEventBatch = animal.eventData.breedingId
+    const breedingData = animal.eventData
+    const { formatBirthEvent } = formatNewGenericFarmEvent({
       eventType: 'ABORT',
       animal,
       currentFarm,
       farmAnimals,
       formValues,
-      calfs: []
+      calfs: [],
+      breeding: breedingData // TODO: encuentra breeding
     })
+    console.log(formatBirthEvent)
     try {
       console.log()
       // CRATE ABORT EVENT
@@ -69,8 +48,9 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       // UPDATE BREEDING EVENT
       console.log(abort)
       setProgress(50)
-      const breedingUpdate = await updateBreedingBatch({
-        breedingId: animal?.breeding?.id,
+      // TODO: change this breedingId for eventId. breedingId should be a string soft refrence
+      const breedingUpdate = await updateBreedingEventBatch({
+        eventId: breedingEventId,
         animalId: animal?.id || '',
         eventType: 'ABORT',
         eventData: formatBirthEvent

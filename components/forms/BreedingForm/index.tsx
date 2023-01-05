@@ -53,7 +53,7 @@ const BreedingForm = () => {
       const res = await createGenericBreedingEvent<BreedingDetailsEvent>({
         eventData: {
           breedingBatch: breedingBatch,
-          breedingId: '',
+          breedingId: data.batch,
           breedingMale,
           finishAt: data.finishAt,
           startAt: data.startAt

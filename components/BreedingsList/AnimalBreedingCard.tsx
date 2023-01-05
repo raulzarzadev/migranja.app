@@ -4,41 +4,52 @@ import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import {
+  BreedingDetailsEvent,
+  SetGenericEventType
+} from 'types/base/FarmEvent.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
+import { BreedingDatesType } from './breeding.helpers'
 
-export interface AnimalBreedingCardType extends Partial<AnimalType> {
-  breedingDates: {
-    birthStartAt: number | Date
-    birthFinishAt: number | Date
-    breedingStartAt: number | Date
-    breedingFinishAt: number | Date
-    birthStartInDays: number
-    birthFinishInDays: number
-  }
-}
-const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
+// export interface AnimalFormattedWhitGenericEvenData extends Partial<AnimalType> {
+//   breedingDates: BreedingDatesType
+// }
+const AnimalBreedingCard = ({
+  animal
+}: {
+  animal: AnimalFormattedWhitGenericEvenData
+}) => {
   // const { farmAnimals } = useFarm()
-  const farmAnimals = useSelector(selectFarmAnimals)
-  const lastVersionOfBreedingMale =
-    farmAnimals?.find(({ id }) => id === animal?.breeding?.breedingMale?.id) ||
-    animal?.breeding?.breedingMale
+  // const farmAnimals = useSelector(selectFarmAnimals)
+  const breedingDates = animal?.eventData?.breedingDates
+  const breedingData = animal?.eventData
+  const breedingMale = animal.eventData?.breedingMale
+  const breedingFemale = animal
 
-  const lastVersionAnimal =
-    farmAnimals?.find(({ id }) => id === animal.id) || animal
+  //return <></>
+  // const breedingInf = animal.breeding
 
-  const breedingMale = lastVersionOfBreedingMale
+  // const lastVersionOfBreedingMale =
+  //   farmAnimals?.find(({ id }) => id === animal?.breeding?.breedingMale?.id) ||
+  //   animal?.breeding?.breedingMale
 
-  const {
-    breedingDates: {
-      birthStartAt,
-      birthFinishAt,
-      birthStartInDays,
-      birthFinishInDays,
-      breedingFinishAt,
-      breedingStartAt
-    }
-  } = { ...animal }
+  // const lastVersionAnimal =
+  //   farmAnimals?.find(({ id }) => id === animal.id) || animal
+
+  //const breedingMale = lastVersionOfBreedingMale
+
+  // const {
+  //   breedingDates: {
+  //     birthStartAt,
+  //     birthFinishAt,
+  //     birthStartInDays,
+  //     birthFinishInDays,
+  //     breedingFinishAt,
+  //     breedingStartAt
+  //   }
+  // } = { ...animal.breeding }
 
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
@@ -49,17 +60,16 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
     animal?.status || ''
   )
 
-  const breeding = animal.breeding
-
-  const event: FarmEventType = {
-    createdAt: breeding?.date,
-    id: breeding?.id,
-    parents: breeding?.parents,
-    type: 'BREEDING',
-    updatedAt: breeding?.updatedAt,
-    birthData: breeding
-  }
-
+  // const event: SetGenericEventType<BreedingDetailsEvent> = {
+  //   createdAt: breeding?.date,
+  //   id: breeding?.id,
+  //   // parents: breeding?.parents,
+  //   type: 'BREEDING',
+  //   updatedAt: breeding?.updatedAt,
+  //   eventData: breeding.eventData,
+  //   userId: breeding.userId,
+  //   farm: breeding.farm
+  // }
   return (
     <>
       {openModal && (
@@ -83,32 +93,34 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
           <span>
             Monta
             <span className="text-xs h-full">
-              <span className=""> {lastVersionAnimal.batch} </span>
+              <span className=""> {breedingData?.breedingId} </span>
             </span>
           </span>
-          <span>{disableOptionsModal || <EventModal event={event} />}</span>
+          {/* <span>{disableOptionsModal || <EventModal event={{}} />}</span> */}
         </div>
         <div className="text-center"></div>
         <header className="flex w-full justify-between p-2 bg-base-200 ">
           <div className="flex items-center ">
             <IconBreedingStatus
-              finishInDays={birthFinishInDays}
-              startInDays={birthStartInDays}
+              finishInDays={breedingDates?.birthFinishInDays}
+              startInDays={breedingDates?.birthStartInDays}
             />
             <span className="flex flex-col">
               <span>{animal.status || 'PENDING'}</span>
               <span>
                 Partos:{' '}
                 <span className="font-bold">
-                  {birthStartAt && myFormatDate(birthStartAt, 'dd-MMM')}
+                  {breedingDates?.birthStartAt &&
+                    myFormatDate(breedingDates?.birthStartAt, 'dd-MMM')}
                 </span>{' '}
                 <span className="">al </span>
                 <span className="font-bold">
-                  {birthFinishAt && myFormatDate(birthFinishAt, 'dd-MMM yyyy')}
+                  {breedingDates?.birthFinishAt &&
+                    myFormatDate(breedingDates?.birthFinishAt, 'dd-MMM yyyy')}
                 </span>
               </span>
               <span className="text-xs italic">
-                {fromNow(birthStartAt, { addSuffix: true })}
+                {fromNow(breedingDates?.birthStartAt, { addSuffix: true })}
               </span>
             </span>
           </div>
@@ -117,12 +129,12 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
             <span>
               Arete:{' '}
               <span className="font-bold whitespace-nowrap">
-                {lastVersionAnimal.earring}
+                {breedingFemale.earring}
               </span>
             </span>
 
             <span className="text-xs">
-              <span className="">{lastVersionAnimal.breed}</span>
+              <span className="">{breedingFemale.breed}</span>
             </span>
           </span>
         </header>
@@ -131,9 +143,13 @@ const AnimalBreedingCard = ({ animal }: { animal: AnimalBreedingCardType }) => {
             <div className="flex flex-col text-center">
               <span>Fecha Monta</span>
               <div>
-                <span>{myFormatDate(breedingStartAt, 'dd-MMM')}</span>
+                <span>
+                  {myFormatDate(breedingDates?.breedingStartAt, 'dd-MMM')}
+                </span>
                 <span className="mx-2 text-xs italic">al</span>
-                <span>{myFormatDate(breedingFinishAt, 'dd-MMM-yy')}</span>
+                <span>
+                  {myFormatDate(breedingDates?.breedingFinishAt, 'dd-MMM-yy')}
+                </span>
               </div>
             </div>
             <div className="flex flex-col text-center">

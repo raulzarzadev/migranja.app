@@ -41,7 +41,7 @@ export const EventModal = ({ event }: { event: FarmEventType }) => {
         title="Detalles del Evento"
       >
         <div className="flex w-full justify-center flex-col items-center">
-          <div>Tipo: {event?.type}</div>
+          <div>Tipo:{event?.type}</div>
           <div>
             {event.type === 'BIRTH' && birthData && (
               <div>

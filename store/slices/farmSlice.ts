@@ -8,16 +8,16 @@ import { EventDataStoreDetails } from 'types/base/FarmEvent.model'
 // Type for our state
 
 export interface FarmState {
-  farm: FarmType | null
-  userFarm: FarmType | null
+  farm?: FarmType | null
+  userFarm?: FarmType | null
   animals: AnimalType[]
   events: EventDataStoreDetails[]
 }
 
 // Initial state
 const initialState: FarmState = {
-  farm: null,
-  userFarm: null,
+  farm: undefined,
+  userFarm: undefined,
   animals: [],
   events: []
 }
