@@ -5,7 +5,7 @@ import UserHome from '../components/UserHome'
 import VisitHome from '../components/VisitHome'
 const Home: NextPage = () => {
   const { user } = useAuth()
-  useDebugInformation('Home', {})
+  // useDebugInformation('Home', {})
 
   return (
     <>
