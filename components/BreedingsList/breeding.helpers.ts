@@ -130,8 +130,7 @@ export interface BreedingDatesType {
 export interface AnimalFormatted extends Merge<AnimalType, BreedingDatesType> {
   breedingDates: BreedingDatesType
 }
-export interface BreedingFormatted
-  extends SetGenericEventType<BreedingDetailsEvent> {
+export interface BreedingFormatted {
   breedingDates: BreedingDatesType
   breedingBatch: Partial<AnimalType>[]
   breedingId: string
@@ -139,7 +138,6 @@ export interface BreedingFormatted
   parents?: ParentsType | null
   date: string | number
 }
-
 export const formatBreedingsGenericEvent = (
   breedings: EventDataStoreDetails[]
 ): BreedingFormatted[] => {
@@ -177,7 +175,7 @@ export const formatBreedingsGenericEvent = (
         breedingId,
         breedingMale,
         parents,
-        date
+        date: date || ''
       }
 
       console.log(formattedBreeding)

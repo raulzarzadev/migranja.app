@@ -1,12 +1,12 @@
-import { FarmEventType } from '@firebase/Events/event.model'
 import { deleteEvent } from '@firebase/Events/main'
 import Icon from 'components/Icon'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
+import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
-export const EventModal = ({ event }: { event: FarmEventType }) => {
+export const EventModal = ({ event }: { event: FarmStateAnimalEvent }) => {
   const [openEventDetails, setOpenEventDetails] = useState(false)
   const handleOpenEventDetails = () => {
     setOpenEventDetails(!openEventDetails)
@@ -21,7 +21,7 @@ export const EventModal = ({ event }: { event: FarmEventType }) => {
         .catch((err) => console.log(err)))
   }
 
-  const birthData = event?.birthData
+  const eventData = event?.eventData
   return (
     <div role="details-modal">
       <div>
@@ -43,14 +43,13 @@ export const EventModal = ({ event }: { event: FarmEventType }) => {
         <div className="flex w-full justify-center flex-col items-center">
           <div>Tipo:{event?.type}</div>
           <div>
-            {event.type === 'BIRTH' && birthData && (
+            {event.type === 'BIRTH' && eventData && (
               <div>
                 <div>Nacimiento</div>
                 Fecha:
-                {event?.birthData?.date &&
-                  myFormatDate(event?.birthData?.date, 'dd MMM yy')}
-                <div>Crías:{birthData?.calfs?.length}</div>
-                {birthData?.calfs?.map((calf) => (
+                {eventData.date && myFormatDate(eventData.date, 'dd MMM yy')}
+                <div>Crías:{eventData?.calfs?.length}</div>
+                {eventData?.calfs?.map((calf) => (
                   <div key={calf?.earring}>{calf?.earring}</div>
                 ))}
               </div>

@@ -1,7 +1,6 @@
 import { createAnimal } from '@firebase/Animal/main'
 import {
   createGenericBreedingEvent,
-  updateBreedingEventBatch,
   updateEventBreedingBatch
 } from '@firebase/Events/main'
 import InputContainer from 'components/inputs/InputContainer'
@@ -79,8 +78,6 @@ const BirthForm = ({
         breedingMale
       }
     })
-    //console.log({ formatBirthEvent })
-    // return
 
     try {
       const newCalfs = formatBirthEvent.eventData.calfs
@@ -92,23 +89,15 @@ const BirthForm = ({
         // console.log(r)
       })
       // ****************************************************   create birth
-      const event =
-        createGenericBreedingEvent<BirthDetailsEvent>(formatBirthEvent)
+      const event = createGenericBreedingEvent(formatBirthEvent)
       setProgress(50)
 
       // ***************************************************   update breeding, move from batch to already done
-      // const breeding = updateBreedingEventBatch({
-      //   eventId: breedingEventId,
-      //   animalId: animal?.id as string,
-      //   eventType: 'BIRTH',
-      //   eventData: formatBirthEvent
-      // })
+
       const breeding = updateEventBreedingBatch({
         eventId: breedingEventId || '',
         animalId: animal?.id as string,
-        eventType: 'BIRTH',
-        breedingBatch: formatBirthEvent.eventData.breedingBatch
-        //eventData: formatBirthEvent
+        eventType: 'BIRTH'
       })
       setProgress(75)
 

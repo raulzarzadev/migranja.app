@@ -37,7 +37,7 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
   calfs?: Partial<AnimalType>[]
   breedingDates?: BreedingDatesType
-  birthT
+  birthType?: number
 }
 
 export interface BreedingEventDefaultInfo {

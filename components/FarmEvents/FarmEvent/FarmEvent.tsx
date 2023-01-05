@@ -1,5 +1,6 @@
 import { EventType } from '@firebase/Events/event.model'
 import { ReactNode } from 'react'
+import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { fromNow } from 'utils/dates/myDateUtils'
 import BirthEventDetails from '../BirthEventDetails'
 import EventModal from '../EventModal'
@@ -11,7 +12,7 @@ import {
   GenericEventType
 } from './FarmEvent.model'
 
-export const FarmEvent = ({ event }: { event: GenericEventType<any> }) => {
+export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
   interface FarmEventOptions {
     label: string
     Component: ReactNode
@@ -60,7 +61,7 @@ const HeaderEventCard = ({
   event,
   options
 }: {
-  event: GenericEventType<any>
+  event: FarmStateAnimalEvent
   options: { label: string }
 }) => {
   return (
@@ -89,26 +90,14 @@ const BreedingEventRow = ({
   return <div>{event.type}</div>
 }
 
-const BirthEventRow = ({
-  event
-}: {
-  event: GenericEventType<BirthDetailsEvent>
-}) => {
+const BirthEventRow = ({ event }: { event: FarmStateAnimalEvent }) => {
   return <div>{event.type}</div>
 }
-const AbortEventRow = ({
-  event
-}: {
-  event: GenericEventType<AbortDetailsEvent>
-}) => {
+const AbortEventRow = ({ event }: { event: FarmStateAnimalEvent }) => {
   return <div>{event.type}</div>
 }
 
-const EmptyEventRow = ({
-  event
-}: {
-  event: GenericEventType<EmptyDetailsEvent>
-}) => {
+const EmptyEventRow = ({ event }: { event: FarmStateAnimalEvent }) => {
   return <div>{event.type}</div>
 }
 

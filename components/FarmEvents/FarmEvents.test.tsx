@@ -1,34 +1,35 @@
 import { render, screen } from '@testing-library/react'
+import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import FarmEvents from '.'
 import EventModal from './EventModal'
-import FarmEvent, { FarmEventType } from './FarmEvent/FarmEvent'
+import FarmEvent from './FarmEvent/FarmEvent'
 
 const numberDate = new Date().getTime()
-export const FARM_EVENT: FarmEventType = {
+export const FARM_EVENT: FarmStateAnimalEvent = {
   id: '1',
   type: 'BIRTH',
-  birthData: {
-    birthType: 3,
-    calfs: [
-      {
-        earring: '109',
-        birthday: numberDate,
-        id: '34fsdf',
-        batch: '999',
-        gender: 'male',
-        userId: 'asdawwer',
-        updatedAt: numberDate,
-        birthType: 3,
-        breed: 'dorper',
-        createdAt: numberDate,
-        images: [],
-        joinedAt: numberDate,
-        name: 'PEPA',
-        type: 'ovine'
-      }
-    ],
-    date: numberDate
-  },
+  // birthData: {
+  //   birthType: 3,
+  //   calfs: [
+  //     {
+  //       earring: '109',
+  //       birthday: numberDate,
+  //       id: '34fsdf',
+  //       batch: '999',
+  //       gender: 'male',
+  //       userId: 'asdawwer',
+  //       updatedAt: numberDate,
+  //       birthType: 3,
+  //       breed: 'dorper',
+  //       createdAt: numberDate,
+  //       images: [],
+  //       joinedAt: numberDate,
+  //       name: 'PEPA',
+  //       type: 'ovine'
+  //     }
+  //   ],
+  //   date: numberDate
+  // },
   parents: {
     father: {
       inTheFarm: true,
@@ -50,7 +51,41 @@ export const FARM_EVENT: FarmEventType = {
     }
   },
   updatedAt: 0,
-  createdAt: 0
+  createdAt: 0,
+  farm: {
+    id: '',
+    name: ''
+  },
+  isDuplicated: undefined,
+  name: undefined,
+  birthday: undefined,
+  earring: undefined,
+  images: undefined,
+  gender: undefined,
+  breed: undefined,
+  status: undefined,
+  weight: undefined,
+  batch: undefined,
+  birthType: undefined,
+  joinedAt: undefined,
+  batchData: undefined,
+  breeding: undefined,
+  statuses: undefined,
+  currentStatus: undefined,
+  userId: '',
+  eventData: {
+    batchId: '',
+    breedingBatch: [],
+    breedingId: '',
+    breedingMale: {
+      inTheFarm: true
+    },
+    id: '',
+    finishAt: '',
+    parents: {},
+    startAt: '',
+    birthType: 1
+  }
 }
 describe('Farm Events List', () => {
   it('Farm Events List', () => {

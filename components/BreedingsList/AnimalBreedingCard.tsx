@@ -1,10 +1,10 @@
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
-import { FarmStateAnimal } from 'store/slices/farmSlice'
+import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
-const AnimalBreedingCard = ({ animal }: { animal: FarmStateAnimal }) => {
+const AnimalBreedingCard = ({ animal }: { animal: FarmStateAnimalEvent }) => {
   const breedingDates = animal?.eventData?.breedingDates
   const breedingData = animal?.eventData
   const breedingMale = animal.eventData?.breedingMale

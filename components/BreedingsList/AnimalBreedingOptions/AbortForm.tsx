@@ -8,13 +8,13 @@ import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import {
-  FarmStateAnimal,
+  FarmStateAnimalEvent,
   selectFarmAnimals,
   selectFarmState
 } from 'store/slices/farmSlice'
 import { formatNewGenericFarmEvent } from './birth.helper'
 
-const AbortForm = ({ animal }: { animal: FarmStateAnimal }) => {
+const AbortForm = ({ animal }: { animal: FarmStateAnimalEvent }) => {
   // const { currentFarm } = useFarm()
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)

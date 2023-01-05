@@ -86,15 +86,12 @@ export const updateEventBreedingBatch = async ({
   eventId: string
   animalId: string
   eventType: BaseFarmEvent['type']
-  //  breedingBatch: any
 }) => {
-  // const oldAnimal = [...(breedingBatch || [])].find(
-  //   (animal) => animal?.id === animalId
-  // )
-  //console.log({ oldAnimal, eventType, eventData })
-  // Get old animal from db
   const oldAnimal = await eventsCRUD.getItem(eventId).then((res) => {
-    return res?.eventData?.breedingBatch.find(({ id }) => id === animalId)
+    // @ts-ignore
+    return res?.eventData?.breedingBatch.find(
+      (animal: { id: string }) => animal?.id === animalId
+    )
   })
   const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
     'eventData.breedingBatch': arrayRemove(oldAnimal)

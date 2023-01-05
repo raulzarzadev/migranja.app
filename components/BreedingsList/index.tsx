@@ -1,26 +1,13 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import BreedingBatchesList from 'components/BreedingBatchesList'
-import useDebugInformation from 'components/hooks/useDebugInformation'
-import useFarm from 'components/hooks/useFarm'
-import useSortByField from 'components/hooks/useSortByField'
-import Icon from 'components/Icon'
 import DebouncedInput from 'components/inputs/DebouncedInput'
-import Loading from 'components/Loading'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmEvents } from 'store/slices/farmSlice'
+import { FarmStateAnimalEvent, selectFarmEvents } from 'store/slices/farmSlice'
 import {
   BreedingDetailsEvent,
-  EventDataStoreDetails,
-  FarmBreedingEvent,
   SetGenericEventType
 } from 'types/base/FarmEvent.model'
-import AnimalBreedingCard from './AnimalBreedingCard'
-import {
-  BreedingDatesType,
-  calculatePossibleBirthStartAndFinish,
-  formatBreedingsGenericEvent
-} from './breeding.helpers'
+import { calculatePossibleBirthStartAndFinish } from './breeding.helpers'
 import BreedingsByAnimals from './BreedingsByAnimals'
 import BreedingsByBatches from './BreedingsByBatches'
 
@@ -41,9 +28,7 @@ const BreedingsList = () => {
     SetGenericEventType<BreedingDetailsEvent>[]
   >([])
 
-  const [breedingsByAnimals, setBreedingsByAnimals] = useState<
-    AnimalFormattedWithBreedingDates[]
-  >([])
+  const [breedingsByAnimals, setBreedingsByAnimals] = useState<any[]>([])
 
   // useDebugInformation('BreedingsList', {})
 
@@ -88,8 +73,10 @@ const BreedingsList = () => {
     setBreedingsByAnimals(animals.flat())
   }, [farmEvents])
 
-  const [animalsFiltered, setAnimalsFilter] = useState([])
-  const [batchesFiltered, setBreedingFilter] = useState([])
+  const [animalsFiltered, setAnimalsFilter] = useState<FarmStateAnimalEvent[]>(
+    []
+  )
+  const [batchesFiltered, setBreedingFilter] = useState<any[]>([])
 
   useEffect(() => {
     const animalsFiltered = [...breedingsByAnimals].filter(

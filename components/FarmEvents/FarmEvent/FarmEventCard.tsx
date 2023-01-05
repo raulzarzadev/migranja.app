@@ -152,11 +152,11 @@ const BirthEventRow = ({
 
       <div className="flex justify-evenly">
         <div className="flex flex-col">
-          <span>Camadada: {eventData.calfs.length}</span>
+          <span>Camadada: {eventData?.calfs?.length}</span>
         </div>
         <div className="flex flex-col">
           <div>Aretes:</div>
-          {eventData.calfs.map((calf) => (
+          {eventData.calfs?.map((calf) => (
             <div key={calf.earring}>{calf.earring}</div>
           ))}
         </div>

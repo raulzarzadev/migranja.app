@@ -5,7 +5,7 @@ import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { BreedingEventCardDetails } from 'types/base/FarmEvent.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -122,7 +122,8 @@ const BreedingCardBody = ({
 
   const [view, setView] = useState<ViewBatchesType>('')
 
-  const animals = breeding?.eventData?.breedingBatch
+  const animals = breeding?.eventData
+    ?.breedingBatch as unknown as FarmStateAnimalEvent[]
 
   const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')
   const abortAnimals = animals.filter(({ status }) => status === 'ABORT')
