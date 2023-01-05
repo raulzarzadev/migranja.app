@@ -48,7 +48,6 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       // UPDATE BREEDING EVENT
       console.log(abort)
       setProgress(50)
-      // TODO: change this breedingId for eventId. breedingId should be a string soft refrence
       const breedingUpdate = await updateBreedingEventBatch({
         eventId: breedingEventId,
         animalId: animal?.id || '',

@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 import { selectFarmEvents } from 'store/slices/farmSlice'
+import { EventsList } from './EventsList'
 
 const FarmEvents = () => {
   const events = useSelector(selectFarmEvents)
@@ -7,18 +8,6 @@ const FarmEvents = () => {
   return (
     <div className="w-full">
       <EventsList events={events} />{' '}
-    </div>
-  )
-}
-
-export const EventsList = ({ events }: { events }) => {
-  return (
-    <div role="events-list">
-      {/* {eventsFormatted.map((event) => (
-        <div key={event?.id} className="my-2">
-          <FarmEvent event={event} />
-        </div>
-      ))} */}
     </div>
   )
 }

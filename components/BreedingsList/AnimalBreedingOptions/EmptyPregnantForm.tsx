@@ -1,10 +1,7 @@
 import {
-  createBirthEvent,
   createGenericBreedingEvent,
   updateBreedingEventBatch
 } from '@firebase/Events/main'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import useFarm from 'components/hooks/useFarm'
 import InputContainer from 'components/inputs/InputContainer'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -35,33 +32,6 @@ const EmptyPregnantForm = ({
   const formValues = watch()
 
   const [progress, setProgress] = useState(0)
-
-  // const onSubmit = async (data: any) => {
-  //   setProgress(1)
-  //   const emptyData = { ...data, ...defaultAnimalValues }
-  //   try {
-  //     console.log()
-  //     // CRATE ABORT EVENT
-  //     const abort = await createEmptyPregnantEvent({
-  //       ...data,
-  //       ...defaultAnimalValues
-  //     })
-  //     // UPDATE BREEDING EVENT
-  //     console.log(abort)
-  //     setProgress(50)
-  //     const breedingUpdate = await updateBreedingWithEmptyPregnant(
-  //       animal?.breeding?.id,
-  //       animal?.id || '',
-  //       { emptyData }
-  //     )
-  //     console.log(breedingUpdate)
-
-  //     setProgress(100)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
   const onSubmit = async (data: any) => {
     setProgress(1)
 
@@ -85,7 +55,7 @@ const EmptyPregnantForm = ({
         //  breedingId: animal?.breeding?.id as string,
         eventId: animal.eventData.id,
         animalId: animal.id,
-        eventType: 'BIRTH',
+        eventType: 'EMPTY',
         eventData: formatBirthEvent
       })
       setProgress(75)

@@ -1,3 +1,5 @@
+import GeneticTree from 'components/GeneticTree'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import {
   BirthDetailsEvent,
@@ -6,7 +8,7 @@ import {
 const BirthEventDetails = ({
   event
 }: {
-  event: GenericEventType<BirthDetailsEvent>
+  event: AnimalFormattedWhitGenericEvenData
 }) => {
   const father = event.eventData.parents.father
   const mother = event.eventData.parents.mother
@@ -19,8 +21,20 @@ const BirthEventDetails = ({
         Fecha: {birthData?.date && myFormatDate(birthData?.date, 'dd-MMM-yy')}
       </div>
       <div>
-        <span className="mr-2">Lote {birthData?.batch}</span>
+        <span className="mr-2">Lote {birthData?.breedingId}</span>
       </div>
+      {/* <GeneticTree
+        elements={{
+          father: {
+            id: father?.id as string,
+            label: father?.earring as string
+          },
+          mother: {
+            id: mother?.id as string,
+            label: mother?.earring as string
+          }
+        }}
+      /> */}
       <div className="flex items-center mx-auto w-full justify-center">
         <span className="mr-2">Genetica</span>
         <div className="flex flex-col ">
@@ -31,9 +45,9 @@ const BirthEventDetails = ({
       <div>
         {birthData && (
           <div>
-            <div>Aretes: {birthData?.calfs?.length}</div>
+            <div>Aretes: {birthData?.breedingBatch.length}</div>
             <div className="flex justify-evenly mt-2">
-              {birthData?.calfs?.map((calf) => (
+              {birthData?.breedingBatch?.map((calf) => (
                 <div key={calf?.earring}>
                   <div>{calf?.earring}</div>
                   <div></div>

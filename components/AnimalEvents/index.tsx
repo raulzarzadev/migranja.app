@@ -1,5 +1,5 @@
 import { EventType } from '@firebase/Events/event.model'
-import { EventsList } from 'components/FarmEvents'
+import { EventsList } from 'components/FarmEvents/EventsList'
 import { FarmEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -11,11 +11,12 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
 
   useEffect(() => {
     const birth = farmEvents.filter((event) =>
-      event?.birthData?.calfs?.find((calf) => calf?.earring === animalEarring)
+      event.eventData?.calfs?.find(({ earring }) => earring === animalEarring)
     )
+
     const breeding = farmEvents.filter((event) => {
-      const asMale = event?.breedingMale?.earring === animalEarring
-      const asFemale = event?.breedingBatch?.find(
+      const asMale = event?.eventData?.breedingMale?.earring === animalEarring
+      const asFemale = event?.eventData?.breedingBatch?.find(
         ({ earring }) => earring === animalEarring
       )
       return asMale || asFemale
@@ -24,12 +25,12 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
     const aborts = farmEvents.filter(
       (event) =>
         event?.type === 'ABORT' &&
-        event?.parents?.mother?.earring === animalEarring
+        event?.eventData?.parents?.mother?.earring === animalEarring
     )
     const empty = farmEvents.filter(
       (event) =>
         event?.type === 'EMPTY' &&
-        event?.parents?.mother?.earring === animalEarring
+        event?.eventData?.parents?.mother?.earring === animalEarring
     )
     setEvents([...birth, ...breeding, ...aborts, ...empty])
   }, [animalEarring, farmEvents])
