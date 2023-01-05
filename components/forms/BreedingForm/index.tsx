@@ -81,6 +81,9 @@ const BreedingForm = () => {
   }
   return (
     <div className="">
+      <div>
+        <h3 className="text-xl text-center">Nueva monta</h3>
+      </div>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* ******************************************** 

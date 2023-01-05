@@ -7,6 +7,7 @@ import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
+import BreedingForm from 'components/forms/BreedingForm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { ReactNode, useEffect, useState } from 'react'
@@ -62,7 +63,7 @@ const FarmMenu = () => {
   const farmIncludeTeam = farm?.haveATeam
 
   return (
-    <div className="flex w-full  flex-wrap ">
+    <div className="flex w-full  flex-wrap max-w-2xl mx-auto">
       {/* ********************************* FARM MENU ************************************* */}
       <MenuSection className=" w-full sm:w-2/6 ">
         <>
@@ -105,14 +106,16 @@ const FarmMenu = () => {
                   selected={menuOptions.column2 === 'sheep'}
                 />
               )}
+              {/* ************************************* *********** EVENTS MENU */}
+
               {menuOptions?.column1 === 'events' && (
                 <>
-                  <SquareOption
+                  {/* <SquareOption
                     title="Todos"
                     iconName="list"
                     onClick={() => handleChangeOption('column2', 'list')}
                     selected={menuOptions.column2 === 'list'}
-                  />
+                  /> */}
                   <SquareOption
                     title="Montas"
                     iconName="cart"
@@ -127,14 +130,16 @@ const FarmMenu = () => {
 
             {/****************  column 3 *********************/}
             <div className="flex flex-col">
+              {/* ************************************* *********** BREEDINGS MENU */}
+
               {column1 === 'events' && column2 === 'breedingEvent' && (
                 <>
-                  <SquareOption
+                  {/* <SquareOption
                     title="Montas"
                     iconName="list"
                     onClick={() => handleChangeOption('column3', 'list')}
                     selected={column3 === 'list'}
-                  />
+                  /> */}
                   <SquareOption
                     title="Nueva"
                     iconName="plus"
@@ -145,14 +150,15 @@ const FarmMenu = () => {
               )}
             </div>
             <div className="flex flex-col">
+              {/* ************************************* *********** SHEEP MENU */}
               {column2 === 'sheep' && (
                 <>
-                  <SquareOption
+                  {/* <SquareOption
                     title="Todos"
                     iconName="list"
                     onClick={() => handleChangeOption('column3', 'list')}
                     selected={column3 === 'list'}
-                  />
+                  /> */}
                   <SquareOption
                     title="Nuevo"
                     iconName="plus"
@@ -180,14 +186,15 @@ const FarmMenu = () => {
       <MenuSection className=" w-full sm:w-4/6 ">
         <>
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
-          {column1 === 'events' && column2 === 'list' && <FarmEvents />}
-          {column2 === 'breedingEvent' && column3 === 'add' && (
-            <BreedingEvent />
-          )}
-          {column2 === 'breedingEvent' && column3 === 'list' && (
-            <BreedingsList />
-          )}
-          {isSheepSelected && column3 === 'list' && <OvinesTable />}
+          {column1 === 'events' && !column2 && <FarmEvents />}
+          {column2 === 'breedingEvent' && !column3 && <BreedingsList />}
+          {/* TODO: ADD EVENT FORM ********************************+******+ +++************** ADD ANIMALS */}
+
+          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
+          {isSheepSelected && !column3 && <OvinesTable />}
+
+          {/* ********************************+******+ +++************** ADD ANIMALS */}
+
           {isSheepSelected && column3 === 'add' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               <AnimalForm
@@ -229,7 +236,7 @@ const MenuSection = ({
 }) => {
   return (
     <div className={`min-h-16 min-w-[150px]   ${className ?? ''}`}>
-      <div className="  w-full h-full flex justify-center">{children}</div>
+      <div className="  w-full h-full flex justify-center ">{children}</div>
     </div>
   )
 }
