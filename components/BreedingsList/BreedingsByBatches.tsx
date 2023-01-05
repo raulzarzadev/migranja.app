@@ -145,7 +145,7 @@ const BreedingCardBody = ({
             onClick={() => handleSetView('ALL')}
             className={` rounded-t-md p-2 ${view == 'ALL' && 'bg-base-100'}`}
           >
-            Todos {`(${breeding?.animals?.length || 0})`}
+            Todos {`(${animals?.length || 0})`}
           </button>
         </span>
         <span>
@@ -186,7 +186,7 @@ const BreedingCardBody = ({
       <div className="bg-base-100 p-1   pt-1 rounded-md">
         <div className="">
           {view === 'ALL' &&
-            breeding.animals.map(
+            animals?.map(
               (animal: AnimalFormattedWhitGenericEvenData, i: number) => (
                 <AnimalBreedingCard
                   key={i}
@@ -195,7 +195,7 @@ const BreedingCardBody = ({
               )
             )}
           {view === 'PENDING' &&
-            pendingAnimals.map((animal, i) => (
+            pendingAnimals?.map((animal, i) => (
               <AnimalBreedingCard
                 key={i}
                 animal={animal as AnimalFormattedWhitGenericEvenData}

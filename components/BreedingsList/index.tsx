@@ -143,9 +143,9 @@ const BreedingsList = () => {
         </button>
       </div>
       {view === 'animals' ? (
-        <BreedingsByBatches breedings={batchesFiltered} />
-      ) : (
         <BreedingsByAnimals animals={animalsFiltered} />
+      ) : (
+        <BreedingsByBatches breedings={batchesFiltered} />
       )}
     </div>
   )

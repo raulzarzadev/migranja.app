@@ -1,55 +1,18 @@
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import EventModal from 'components/FarmEvents/EventModal'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
-import {
-  BreedingDetailsEvent,
-  SetGenericEventType
-} from 'types/base/FarmEvent.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
-import { BreedingDatesType } from './breeding.helpers'
 
-// export interface AnimalFormattedWhitGenericEvenData extends Partial<AnimalType> {
-//   breedingDates: BreedingDatesType
-// }
 const AnimalBreedingCard = ({
   animal
 }: {
   animal: AnimalFormattedWhitGenericEvenData
 }) => {
-  // const { farmAnimals } = useFarm()
-  // const farmAnimals = useSelector(selectFarmAnimals)
   const breedingDates = animal?.eventData?.breedingDates
   const breedingData = animal?.eventData
   const breedingMale = animal.eventData?.breedingMale
   const breedingFemale = animal
-
-  //return <></>
-  // const breedingInf = animal.breeding
-
-  // const lastVersionOfBreedingMale =
-  //   farmAnimals?.find(({ id }) => id === animal?.breeding?.breedingMale?.id) ||
-  //   animal?.breeding?.breedingMale
-
-  // const lastVersionAnimal =
-  //   farmAnimals?.find(({ id }) => id === animal.id) || animal
-
-  //const breedingMale = lastVersionOfBreedingMale
-
-  // const {
-  //   breedingDates: {
-  //     birthStartAt,
-  //     birthFinishAt,
-  //     birthStartInDays,
-  //     birthFinishInDays,
-  //     breedingFinishAt,
-  //     breedingStartAt
-  //   }
-  // } = { ...animal.breeding }
 
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
@@ -60,16 +23,6 @@ const AnimalBreedingCard = ({
     animal?.status || ''
   )
 
-  // const event: SetGenericEventType<BreedingDetailsEvent> = {
-  //   createdAt: breeding?.date,
-  //   id: breeding?.id,
-  //   // parents: breeding?.parents,
-  //   type: 'BREEDING',
-  //   updatedAt: breeding?.updatedAt,
-  //   eventData: breeding.eventData,
-  //   userId: breeding.userId,
-  //   farm: breeding.farm
-  // }
   return (
     <>
       {openModal && (
