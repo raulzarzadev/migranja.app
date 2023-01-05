@@ -3,17 +3,15 @@ import { arrayRemove, arrayUnion, where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
-import {
-  EventDTO,
-  CreateEventDTO,
-  CreateBirthEventType,
-  BreedingEventType,
-  EventType
-} from './event.model'
+import { EventDTO, CreateEventDTO, BreedingEventType } from './event.model'
 
 import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
 import { CreateGenericEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
-import { GetAllFarmEventsType } from 'types/base/FarmEvent.model'
+import {
+  BaseFarmEvent,
+  BirthDetailsEvent,
+  EventData
+} from 'types/base/FarmEvent.model'
 const storage = getStorage(app)
 
 const eventsCRUD = new FirebaseCRUD('events', db, storage)
@@ -71,43 +69,66 @@ export const listenFarmBreedings = async (
 /** **
 
 /** ************** CREATE GENERIC BIRTH EVENT ********** */
-export interface CreateBirthType extends Partial<EventType> {}
-export const createBirthEvent = async (newItem: CreateBirthEventType) =>
-  await eventsCRUD.createItem({ ...newItem })
+export const createBirthEvent = async (
+  newItem: CreateGenericEventType<BirthDetailsEvent>
+) => await eventsCRUD.createItem({ ...newItem })
 
 export const createGenericBreedingEvent = async <T>(
   newItem: CreateGenericEventType<T>
 ) => await eventsCRUD.createItem({ ...newItem })
 
 /** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
-
-export const updateBreedingEventBatch = async ({
+export const updateEventBreedingBatch = async ({
   eventId,
   animalId,
-  eventType,
-  eventData = {}
+  eventType
 }: {
   eventId: string
   animalId: string
-  eventType: EventType['type']
-  eventData: any
+  eventType: BaseFarmEvent['type']
+  //  breedingBatch: any
 }) => {
-  const breeding: GetAllFarmEventsType | null = await eventsCRUD.getItem(
-    eventId
-  )
-  const oldAnimal = [...(breeding?.eventData?.breedingBatch || [])].find(
-    (animal) => animal?.id === animalId
-  )
-
+  // const oldAnimal = [...(breedingBatch || [])].find(
+  //   (animal) => animal?.id === animalId
+  // )
+  //console.log({ oldAnimal, eventType, eventData })
+  // Get old animal from db
+  const oldAnimal = await eventsCRUD.getItem(eventId).then((res) => {
+    return res?.eventData?.breedingBatch.find(({ id }) => id === animalId)
+  })
   const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
     'eventData.breedingBatch': arrayRemove(oldAnimal)
   })
   const newAnimal = { ...oldAnimal, status: eventType }
-  console.log(newAnimal)
   const setNewAnimal = await eventsCRUD.updateItem(eventId, {
     'eventData.breedingBatch': arrayUnion(newAnimal)
   })
-  return await Promise.all([removeOldAnimal, setNewAnimal])
+  return await Promise.all([oldAnimal, removeOldAnimal, setNewAnimal])
+}
+export const updateBreedingEventBatch = async ({
+  eventId,
+  animalId,
+  eventType,
+  eventData
+}: {
+  eventId: string
+  animalId: string
+  eventType: BaseFarmEvent['type']
+  eventData: any
+}) => {
+  const oldAnimal = [...(eventData?.breedingBatch || [])].find(
+    (animal) => animal?.id === animalId
+  )
+  console.log({ oldAnimal, eventType, eventData })
+
+  // const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
+  //   'eventData.breedingBatch': arrayRemove(oldAnimal)
+  // })
+  // const newAnimal = { ...oldAnimal, status: eventType }
+  // const setNewAnimal = await eventsCRUD.updateItem(eventId, {
+  //   'eventData.breedingBatch': arrayUnion(newAnimal)
+  // })
+  //return await Promise.all([removeOldAnimal, setNewAnimal])
 }
 /** ************** REMOVE ANIMAL FROM BREEDING BATCH ********** */
 

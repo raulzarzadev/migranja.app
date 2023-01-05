@@ -186,41 +186,24 @@ const BreedingCardBody = ({
       <div className="bg-base-100 p-1   pt-1 rounded-md">
         <div className="">
           {view === 'ALL' &&
-            animals?.map(
-              (animal: AnimalFormattedWhitGenericEvenData, i: number) => (
-                <AnimalBreedingCard
-                  key={i}
-                  animal={animal as AnimalFormattedWhitGenericEvenData}
-                />
-              )
-            )}
+            animals?.map((animal, i) => (
+              <AnimalBreedingCard key={i} animal={animal} />
+            ))}
           {view === 'PENDING' &&
             pendingAnimals?.map((animal, i) => (
-              <AnimalBreedingCard
-                key={i}
-                animal={animal as AnimalFormattedWhitGenericEvenData}
-              />
+              <AnimalBreedingCard key={i} animal={animal} />
             ))}
           {view === 'ABORT' &&
             abortAnimals.map((animal, i) => (
-              <AnimalBreedingCard
-                key={i}
-                animal={animal as AnimalFormattedWhitGenericEvenData}
-              />
+              <AnimalBreedingCard key={i} animal={animal} />
             ))}
           {view === 'BIRTH' &&
             birthAnimals.map((animal, i) => (
-              <AnimalBreedingCard
-                key={i}
-                animal={animal as AnimalFormattedWhitGenericEvenData}
-              />
+              <AnimalBreedingCard key={i} animal={animal} />
             ))}
           {view === 'EMPTY' &&
             emptyAnimals.map((animal, i) => (
-              <AnimalBreedingCard
-                key={i}
-                animal={animal as AnimalFormattedWhitGenericEvenData}
-              />
+              <AnimalBreedingCard key={i} animal={animal} />
             ))}
         </div>
       </div>

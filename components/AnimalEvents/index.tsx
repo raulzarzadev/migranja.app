@@ -1,12 +1,10 @@
-import { EventType } from '@firebase/Events/event.model'
 import { EventsList } from 'components/FarmEvents/EventsList'
-import { FarmEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmEvents } from 'store/slices/farmSlice'
+import { FarmState, selectFarmEvents } from 'store/slices/farmSlice'
 
 const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
-  const [events, setEvents] = useState<EventType[]>([])
+  const [events, setEvents] = useState<FarmState['events']>([])
   const farmEvents = useSelector(selectFarmEvents)
 
   useEffect(() => {
@@ -35,7 +33,7 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
     setEvents([...birth, ...breeding, ...aborts, ...empty])
   }, [animalEarring, farmEvents])
 
-  return <EventsList events={events as FarmEventType[]} />
+  return <EventsList events={events} />
 }
 
 export default AnimalEvents

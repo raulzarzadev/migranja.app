@@ -1,14 +1,10 @@
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { FarmStateAnimal } from 'store/slices/farmSlice'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
-const AnimalBreedingCard = ({
-  animal
-}: {
-  animal: AnimalFormattedWhitGenericEvenData
-}) => {
+const AnimalBreedingCard = ({ animal }: { animal: FarmStateAnimal }) => {
   const breedingDates = animal?.eventData?.breedingDates
   const breedingData = animal?.eventData
   const breedingMale = animal.eventData?.breedingMale

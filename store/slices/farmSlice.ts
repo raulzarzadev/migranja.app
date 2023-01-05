@@ -4,14 +4,16 @@ import { HYDRATE } from 'next-redux-wrapper'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { EventDataStoreDetails } from 'types/base/FarmEvent.model'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 
 // Type for our state
 
+export type FarmStateAnimalEvent = AnimalFormattedWhitGenericEvenData
 export interface FarmState {
   farm?: FarmType | null
   userFarm?: FarmType | null
   animals: AnimalType[]
-  events: EventDataStoreDetails[]
+  events: FarmStateAnimalEvent[]
 }
 
 // Initial state

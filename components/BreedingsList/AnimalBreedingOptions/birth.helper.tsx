@@ -120,7 +120,7 @@ export interface CreateBirthDataType {
 //   return { formatBirthEvent }
 // }
 
-export interface DataToFormatGenericEventType {
+export interface DataToFormatGenericEventType<T> {
   eventType: EventType['type']
   currentFarm: any
   farmAnimals: Partial<AnimalType>[]
@@ -134,9 +134,9 @@ export interface DataToFormatGenericEventType {
 }
 
 export function formatNewGenericFarmEvent<T>(
-  data: DataToFormatGenericEventType
+  data: DataToFormatGenericEventType<T>
 ): {
-  formatBirthEvent: CreateGenericEventType<T>
+  formatBirthEvent: DTO_CreateBreedingEventType
 } {
   const currentFarm = data.currentFarm
   const animal = data.animal
@@ -171,6 +171,7 @@ export function formatNewGenericFarmEvent<T>(
   const breedingBatchId = breeding.breedingId
   const defaultBirthValues: Partial<AnimalType> = {
     birthday: formValues.date || new Date(),
+    birthType: formValues.birthType || 1,
     type: 'ovine',
     name: '',
     batch: breedingBatchId || '',

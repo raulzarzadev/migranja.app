@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
+import { FarmState } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import FarmEventCard from './FarmEvent/FarmEventCard'
 
-export const EventsList = ({
-  events
-}: {
-  events: AnimalFormattedWhitGenericEvenData[]
-}) => {
+export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   const options = getEventTypesOptions(events)
   const [filteredEvents, setFilteredEvents] = useState(events)
   const [filterBy, setFilterBy] = useState('')
@@ -66,9 +63,12 @@ const FilterOptions = ({
   )
 }
 
-const getEventTypesOptions = (
-  events: AnimalFormattedWhitGenericEvenData[]
-): { label: string; value: string }[] => {
+interface SelectOption {
+  label: string
+  value: string
+}
+
+const getEventTypesOptions = (events: FarmState['events']): SelectOption[] => {
   const dictionary: Record<AnimalFormattedWhitGenericEvenData['type'], string> =
     {
       BREEDING: 'Monta',
@@ -78,10 +78,13 @@ const getEventTypesOptions = (
       EMPTY: 'Vacio'
     }
 
-  return events.reduce((prev, curr) => {
-    const notExist = prev.find((option) => option.value === curr?.type)
-    if (notExist) return prev
-    return [...prev, { label: dictionary[curr.type], value: curr.type }]
-  }, [])
-  return []
+  const options: SelectOption[] = events.reduce(
+    (prev: SelectOption[], curr) => {
+      const notExist = prev.find((option) => option.value === curr?.type)
+      if (notExist) return prev
+      return [...prev, { label: dictionary[curr.type], value: curr.type }]
+    },
+    []
+  )
+  return options
 }

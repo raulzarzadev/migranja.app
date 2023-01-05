@@ -7,10 +7,14 @@ import InputContainer from 'components/inputs/InputContainer'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import {
+  FarmStateAnimal,
+  selectFarmAnimals,
+  selectFarmState
+} from 'store/slices/farmSlice'
 import { formatNewGenericFarmEvent } from './birth.helper'
 
-const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
+const AbortForm = ({ animal }: { animal: FarmStateAnimal }) => {
   // const { currentFarm } = useFarm()
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
@@ -29,7 +33,6 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
     setProgress(1)
 
     const breedingEventId = animal.eventData.id
-    // const breedingEventBatch = animal.eventData.breedingId
     const breedingData = animal.eventData
     const { formatBirthEvent } = formatNewGenericFarmEvent({
       eventType: 'ABORT',
@@ -38,11 +41,9 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
       farmAnimals,
       formValues,
       calfs: [],
-      breeding: breedingData // TODO: encuentra breeding
+      breeding: breedingData
     })
-    console.log(formatBirthEvent)
     try {
-      console.log()
       // CRATE ABORT EVENT
       const abort = await createBirthEvent(formatBirthEvent)
       // UPDATE BREEDING EVENT
@@ -54,7 +55,6 @@ const AbortForm = ({ animal }: { animal: Partial<AnimalType> }) => {
         eventType: 'ABORT',
         eventData: formatBirthEvent
       })
-      console.log(breedingUpdate)
 
       setProgress(100)
     } catch (error) {

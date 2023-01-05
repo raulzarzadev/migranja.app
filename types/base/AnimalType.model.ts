@@ -1,11 +1,5 @@
-import { BreedingEventType } from '@firebase/Events/event.model'
 import { FarmType } from '@firebase/Farm/farm.model'
-import { BreedingDatesType } from 'components/BreedingsList/breeding.helpers'
-import {
-  BreedingDetailsEvent,
-  EventData,
-  SetGenericEventType
-} from './FarmEvent.model'
+import { BreedingDetailsEvent, SetGenericEventType } from './FarmEvent.model'
 import { ImageType } from './ImageType.model'
 import { DateType, Merge, TypeBase } from './TypeBase.model'
 

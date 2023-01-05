@@ -353,7 +353,7 @@ export class FirebaseCRUD {
 
   normalizeItems = (docs = []) => docs?.map((doc) => this.normalizeItem(doc))
 
-  normalizeItem = (doc) => {
+  normalizeItem = (doc: any) => {
     const id = doc.id
     if (!doc?.exists()) {
       console.error(

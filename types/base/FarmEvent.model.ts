@@ -25,8 +25,8 @@ export interface ParentType
   inTheFarm: boolean
 }
 export interface BirthDetailsEvent extends BreedingEventDefaultInfo {
-  birthType: number
-  calfs: Partial<AnimalType>[]
+  birthType?: number
+  calfs?: Partial<AnimalType>[]
 }
 export interface AbortDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
@@ -35,7 +35,9 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  calfs?: Partial<AnimalType>[]
   breedingDates?: BreedingDatesType
+  birthT
 }
 
 export interface BreedingEventDefaultInfo {
@@ -48,6 +50,7 @@ export interface BreedingEventDefaultInfo {
   parents: ParentsType
   startAt: number | string
   finishAt: number | string
+  // calfs?: Partial<AnimalType>[]
 }
 
 export interface SetGenericEventType<ContentType> extends FarmEvent {

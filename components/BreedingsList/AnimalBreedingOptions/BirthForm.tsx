@@ -1,16 +1,15 @@
 import { createAnimal } from '@firebase/Animal/main'
 import {
   createGenericBreedingEvent,
-  updateBreedingEventBatch
+  updateBreedingEventBatch,
+  updateEventBreedingBatch
 } from '@firebase/Events/main'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import InputContainer from 'components/inputs/InputContainer'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
-import useDebugInformation from 'components/hooks/useDebugInformation'
 import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import {
@@ -30,7 +29,18 @@ const BirthForm = ({
   const farmEarrings = useSelector(selectFarmAnimals)?.map(
     ({ earring }) => earring
   )
-  const methods = useForm()
+  const defaultCalf = {
+    gender: 'female',
+    earring: ''
+  }
+
+  const methods = useForm({
+    defaultValues: {
+      calfs: [defaultCalf],
+      birthType: 1,
+      date: new Date()
+    }
+  })
   const {
     watch,
     handleSubmit,
@@ -43,8 +53,8 @@ const BirthForm = ({
 
   useEffect(() => {
     let calfs = []
-    for (let i = 0; i < parseInt(formValues?.birthType || 0); i++) {
-      calfs.push({})
+    for (let i = 0; i < parseInt(`${formValues?.birthType}`); i++) {
+      calfs.push(defaultCalf)
     }
     setValue('calfs', calfs)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,11 +81,11 @@ const BirthForm = ({
     })
     //console.log({ formatBirthEvent })
     // return
-    const newCalfs = formatBirthEvent.eventData.calfs
 
     try {
+      const newCalfs = formatBirthEvent.eventData.calfs
       // *************************************************   create animals/calfs
-      const calfs = newCalfs.map((calf: any, i: number) => {
+      const calfs = newCalfs?.map((calf: any, i: number) => {
         //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
         setProgress((i * 100) / newCalfs?.length)
         return createAnimal({ ...calf })
@@ -87,15 +97,22 @@ const BirthForm = ({
       setProgress(50)
 
       // ***************************************************   update breeding, move from batch to already done
-      const breeding = updateBreedingEventBatch({
-        eventId: breedingEventId,
+      // const breeding = updateBreedingEventBatch({
+      //   eventId: breedingEventId,
+      //   animalId: animal?.id as string,
+      //   eventType: 'BIRTH',
+      //   eventData: formatBirthEvent
+      // })
+      const breeding = updateEventBreedingBatch({
+        eventId: breedingEventId || '',
         animalId: animal?.id as string,
         eventType: 'BIRTH',
-        eventData: formatBirthEvent
+        breedingBatch: formatBirthEvent.eventData.breedingBatch
+        //eventData: formatBirthEvent
       })
       setProgress(75)
 
-      const promises = [...calfs, event, breeding]
+      const promises = [...(calfs || []), event, breeding]
       await Promise.all(promises).then((res: any) => {})
       setProgress(100)
 
@@ -119,7 +136,7 @@ const BirthForm = ({
             />
           </div>
 
-          {!!formValues.date && (
+          {!!formValues?.date && (
             <>
               <div className="flex justify-evenly my-2">
                 <InputContainer

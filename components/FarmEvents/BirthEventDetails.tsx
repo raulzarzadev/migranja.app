@@ -1,17 +1,8 @@
-import GeneticTree from 'components/GeneticTree'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import {
-  BirthDetailsEvent,
-  GenericEventType
-} from './FarmEvent/FarmEvent.model'
-const BirthEventDetails = ({
-  event
-}: {
-  event: AnimalFormattedWhitGenericEvenData
-}) => {
-  const father = event.eventData.parents.father
-  const mother = event.eventData.parents.mother
+const BirthEventDetails = ({ event }: { event: FarmStateAnimalEvent }) => {
+  const father = event.eventData.parents?.father
+  const mother = event.eventData.parents?.mother
   const birthData = event?.eventData
   // console.log(event)
 
