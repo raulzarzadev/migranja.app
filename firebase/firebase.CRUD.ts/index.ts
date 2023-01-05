@@ -366,7 +366,7 @@ export class FirebaseCRUD {
     const res = this.deepFormatFirebaseDates(data, this.dateTarget)
     // console.log(res)
     if (res) {
-      return res
+      return { ...res, id }
     } else {
       console.log(
         `error formatting document ${id} in collection:${this.collectionName} not found`

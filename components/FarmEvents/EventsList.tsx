@@ -6,12 +6,12 @@ export const EventsList = ({
 }: {
   events: AnimalFormattedWhitGenericEvenData[]
 }) => {
+  console.log(events)
   return (
     <div role="events-list">
       {events.map((event) => (
         <div key={event?.id} className="my-2">
           <FarmEventCard event={event} />
-          {/* <FarmEvent event={event} /> */}
         </div>
       ))}
     </div>
