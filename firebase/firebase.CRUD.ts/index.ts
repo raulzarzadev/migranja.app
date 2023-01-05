@@ -353,20 +353,24 @@ export class FirebaseCRUD {
 
   normalizeItems = (docs = []) => docs?.map((doc) => this.normalizeItem(doc))
 
-  normalizeItem = (doc: any) => {
-    if (!doc?.exists()) return null // The document  not exist
-    const data = doc.data()
+  normalizeItem = (doc) => {
     const id = doc.id
+    if (!doc?.exists()) {
+      console.error(
+        `document ${id} in collection:${this.collectionName} not found`
+      )
+      return null
+    } // The document  not exist
+    const data = doc.data()
 
     const res = this.deepFormatFirebaseDates(data, this.dateTarget)
     // console.log(res)
-    // FIXME: this should return null when no object is findend, in the response always is setted as {id,...res }
     if (res) {
-      return {
-        id,
-        ...res
-      }
+      return res
     } else {
+      console.log(
+        `error formatting document ${id} in collection:${this.collectionName} not found`
+      )
       return null
     }
   }

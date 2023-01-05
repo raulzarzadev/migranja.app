@@ -73,7 +73,11 @@ export interface EventData
 export interface EventDataStoreDetails extends SetGenericEventType<EventData> {}
 
 export interface BreedingEventCardDetails
-  extends SetGenericEventType<EventData> {}
+  extends SetGenericEventType<EventData> {
+  animals: any
+}
 
 export interface DTO_CreateBreedingEventType
   extends CreateGenericEventType<BreedingDetailsEvent> {}
+
+export interface GetAllFarmEventsType extends SetGenericEventType<EventData> {}

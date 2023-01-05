@@ -5,6 +5,7 @@ import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import { BreedingEventCardDetails } from 'types/base/FarmEvent.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -112,7 +113,11 @@ const BreedingCard = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
 
 export interface BreedingCardBody extends BreedingFormatted {}
 
-const BreedingCardBody = ({ breeding }: { breeding }) => {
+const BreedingCardBody = ({
+  breeding
+}: {
+  breeding: BreedingEventCardDetails
+}) => {
   type ViewBatchesType = 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY' | ''
 
   const [view, setView] = useState<ViewBatchesType>('')
@@ -182,10 +187,10 @@ const BreedingCardBody = ({ breeding }: { breeding }) => {
         <div className="">
           {view === 'ALL' &&
             breeding.animals.map(
-              (animal: AnimalBreedingCardType, i: number) => (
+              (animal: AnimalFormattedWhitGenericEvenData, i: number) => (
                 <AnimalBreedingCard
                   key={i}
-                  animal={animal as AnimalBreedingCardType}
+                  animal={animal as AnimalFormattedWhitGenericEvenData}
                 />
               )
             )}
@@ -193,28 +198,28 @@ const BreedingCardBody = ({ breeding }: { breeding }) => {
             pendingAnimals.map((animal, i) => (
               <AnimalBreedingCard
                 key={i}
-                animal={animal as AnimalBreedingCardType}
+                animal={animal as AnimalFormattedWhitGenericEvenData}
               />
             ))}
           {view === 'ABORT' &&
             abortAnimals.map((animal, i) => (
               <AnimalBreedingCard
                 key={i}
-                animal={animal as AnimalBreedingCardType}
+                animal={animal as AnimalFormattedWhitGenericEvenData}
               />
             ))}
           {view === 'BIRTH' &&
             birthAnimals.map((animal, i) => (
               <AnimalBreedingCard
                 key={i}
-                animal={animal as AnimalBreedingCardType}
+                animal={animal as AnimalFormattedWhitGenericEvenData}
               />
             ))}
           {view === 'EMPTY' &&
             emptyAnimals.map((animal, i) => (
               <AnimalBreedingCard
                 key={i}
-                animal={animal as AnimalBreedingCardType}
+                animal={animal as AnimalFormattedWhitGenericEvenData}
               />
             ))}
         </div>

@@ -13,6 +13,7 @@ import {
 
 import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
 import { CreateGenericEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
+import { GetAllFarmEventsType } from 'types/base/FarmEvent.model'
 const storage = getStorage(app)
 
 const eventsCRUD = new FirebaseCRUD('events', db, storage)
@@ -91,7 +92,7 @@ export const updateBreedingEventBatch = async ({
   eventType: EventType['type']
   eventData: any
 }) => {
-  const breeding: Partial<BreedingEventType> | null = await eventsCRUD.getItem(
+  const breeding: GetAllFarmEventsType | null = await eventsCRUD.getItem(
     eventId
   )
   const oldAnimal = [...(breeding?.eventData?.breedingBatch || [])].find(

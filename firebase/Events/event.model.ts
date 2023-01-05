@@ -29,11 +29,11 @@ export interface BreedingEventType extends EventType {
   breedingEmpty?: Partial<AnimalType>[]
 }
 export interface CreateBirthEventType extends Partial<EventType> {
-  birthData: BirthDataType 
+  birthData: BirthDataType
 }
 
-export interface BreedingEvent extends Partial<EventType>{
-  breedingEvent:
+export interface BreedingEvent extends Partial<EventType> {
+  breedingEvent: any
 }
 
 export interface CreateEventDTO
