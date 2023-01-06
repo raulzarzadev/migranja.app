@@ -1,7 +1,16 @@
+import { FarmType } from '@firebase/Farm/farm.model'
 import Icon from 'components/Icon'
 import Link from 'next/link'
 
-const FarmNavigation = ({ farm, showGo, setEditing }) => {
+const FarmNavigation = ({
+  farm,
+  showGo,
+  setEditing
+}: {
+  farm?: FarmType | null
+  showGo?: boolean
+  setEditing?: (bool: boolean) => void
+}) => {
   return (
     <div>
       <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-between mb-2 items-center">

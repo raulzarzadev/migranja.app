@@ -21,9 +21,7 @@ const UserFarmNavigation = ({
   }, [currentFarmId, dispatch])
   const farm = useSelector(selectFarmState)
   const showGo = farm?.id !== currentFarmId
-  return (
-    <FarmNavigation farm={farm?.id} setEditing={setEditing} showGo={showGo} />
-  )
+  return <FarmNavigation farm={farm} setEditing={setEditing} showGo={showGo} />
 }
 
 export default UserFarmNavigation
