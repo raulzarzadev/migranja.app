@@ -270,7 +270,8 @@ function formatEventData<T>(
       breedingMale,
       startAt,
       finishAt,
-      breedingId
+      breedingId,
+      date
     }
     return data as T
   }

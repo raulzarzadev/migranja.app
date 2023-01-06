@@ -53,6 +53,7 @@ export interface BreedingDetailsEvent {
   parents?: ParentsType
   startAt: number | string
   finishAt: number | string
+  date: number | string
 }
 
 export interface GenericEventType<ContentType> extends FarmEventType {

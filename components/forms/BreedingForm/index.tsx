@@ -51,7 +51,8 @@ const BreedingForm = () => {
           breedingId: data.batch,
           breedingMale,
           finishAt: data.finishAt,
-          startAt: data.startAt
+          startAt: data.startAt,
+          date: data.startAt
         },
         farm: {
           id: currentFarm?.id || '',

@@ -27,7 +27,13 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
         options={options}
         setOption={(value) => setFilterBy(value)}
       />
-      <SortedOptions sortBy={handleSortBy} />
+      <SortedOptions
+        sortBy={handleSortBy}
+        options={[
+          { label: 'Ultimo actualizado', value: 'updatedAt' },
+          { label: 'Fecha', value: 'eventData.date' }
+        ]}
+      />
       {arraySorted.map((event) => (
         <div key={event?.id} className="my-2">
           <FarmEventCard event={event} />
@@ -37,15 +43,24 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   )
 }
 
-const SortedOptions = ({ options, sortBy }) => {
+const SortedOptions = ({
+  options,
+  sortBy
+}: {
+  options: { value: string; label: string }[]
+  sortBy: (val: string) => void
+}) => {
   return (
     <div className="flex w-full justify-center">
-      <button
-        className={`btn btn-outline btn-sm`}
-        onClick={() => sortBy('eventData.startAt')}
-      >
-        Fecha
-      </button>
+      {options?.map((option) => (
+        <button
+          key={option.value}
+          className={`btn btn-outline btn-sm`}
+          onClick={() => sortBy(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
     </div>
   )
 }

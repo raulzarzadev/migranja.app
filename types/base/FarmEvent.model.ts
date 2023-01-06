@@ -42,7 +42,7 @@ export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
 
 export interface BreedingEventDefaultInfo {
   id: string
-  date?: number | string
+  date: number | string
   breedingId: string
   batchId: string
   breedingBatch: Partial<AnimalType>[]

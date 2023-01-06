@@ -84,7 +84,8 @@ export const FARM_EVENT: FarmStateAnimalEvent = {
     finishAt: '',
     parents: {},
     startAt: '',
-    birthType: 1
+    birthType: 1,
+    date: ''
   }
 }
 describe('Farm Events List', () => {
