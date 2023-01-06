@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { getProperty } from 'dot-prop'
 
 const useSortByField = (array: any[]) => {
   const [sortReverse, setSortReverse] = useState<boolean>(false)
@@ -10,9 +11,15 @@ const useSortByField = (array: any[]) => {
 
   const sortByField = (arr: any[], fieldName: string, reverse: boolean) => {
     const auxArr = [...arr]
+    console.log(auxArr)
+    console.log(fieldName)
+    const nameArr = fieldName.split('.')
+
     return auxArr.sort((a, b) => {
-      if (a[fieldName] < b[fieldName]) return reverse ? -1 : 1
-      if (a[fieldName] > b[fieldName]) return reverse ? 1 : -1
+      if ((getProperty(a, fieldName) || '') < (getProperty(b, fieldName) || ''))
+        return reverse ? -1 : 1
+      if ((getProperty(a, fieldName) || '') > (getProperty(b, fieldName) || ''))
+        return reverse ? 1 : -1
       return 0
     })
   }

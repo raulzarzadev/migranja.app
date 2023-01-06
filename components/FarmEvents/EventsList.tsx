@@ -1,3 +1,4 @@
+import useSortByField from 'components/hooks/useSortByField'
 import { useEffect, useState } from 'react'
 import { FarmState } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
@@ -16,6 +17,8 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
     }
   }, [events, filterBy])
 
+  const { handleSortBy, arraySorted, reverse } = useSortByField(filteredEvents)
+
   return (
     <div role="events-list">
       <div>Filters</div>
@@ -24,11 +27,25 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
         options={options}
         setOption={(value) => setFilterBy(value)}
       />
-      {filteredEvents.map((event) => (
+      <SortedOptions sortBy={handleSortBy} />
+      {arraySorted.map((event) => (
         <div key={event?.id} className="my-2">
           <FarmEventCard event={event} />
         </div>
       ))}
+    </div>
+  )
+}
+
+const SortedOptions = ({ options, sortBy }) => {
+  return (
+    <div className="flex w-full justify-center">
+      <button
+        className={`btn btn-outline btn-sm`}
+        onClick={() => sortBy('eventData.startAt')}
+      >
+        Fecha
+      </button>
     </div>
   )
 }
