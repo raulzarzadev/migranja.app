@@ -11,9 +11,6 @@ const useSortByField = (array: any[]) => {
 
   const sortByField = (arr: any[], fieldName: string, reverse: boolean) => {
     const auxArr = [...arr]
-    console.log(auxArr)
-    console.log(fieldName)
-    const nameArr = fieldName.split('.')
 
     return auxArr.sort((a, b) => {
       if ((getProperty(a, fieldName) || '') < (getProperty(b, fieldName) || ''))

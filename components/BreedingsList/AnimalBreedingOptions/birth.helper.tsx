@@ -8,7 +8,6 @@ import {
   AbortDetailsEvent,
   BirthDetailsEvent,
   BreedingDetailsEvent,
-  CreateGenericEventType,
   EmptyDetailsEvent
 } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { ParentType } from 'types/base/AnimalType.model'
