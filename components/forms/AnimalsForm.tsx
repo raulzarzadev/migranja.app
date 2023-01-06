@@ -21,6 +21,7 @@ const schema = yup
       .string()
       .required('Este campo es necesario*')
       .min(3, 'Al menos 3 letras')
+      .max(3, 'Maximo 3 letras')
   })
   .required()
 
@@ -63,7 +64,10 @@ export const AnimalsForm = ({
       setError('earring', { type: 'validate', message: 'Este arete ya existe' })
     } else {
       setAnimals([...animals, data])
-      reset()
+      reset((formValues) => ({
+        ...formValues,
+        earring: ''
+      }))
     }
   }
 
@@ -103,13 +107,28 @@ export const AnimalsForm = ({
     <div>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onAddItem)}>
-          <header className="flex w-full justify-between flex-col sm:flex-row "></header>
+          <header className="">
+            <h3 className="text-xl font-bold">Crear varios</h3>{' '}
+          </header>
+          <h5 className="text-lg font-bold">Datos generales</h5>
+          <InputContainer name="batch" type="text" label="Lote" />
+          <InputContainer
+            name="birthday"
+            type="date"
+            label="Nacimiento (aprox)"
+          />
+          <InputContainer
+            name="joinedAt"
+            type="date"
+            label="Incorporación (aprox)"
+          />
+          <h5 className="text-lg font-bold">Aretes</h5>
           <main className="">
-            <table className="table table-compact mx-auto ">
+            <table className="table table-compact mx-auto  ">
               <thead>
                 <tr>
-                  <th>Arete</th>
-                  <th>Nombre</th>
+                  <th className="!z-0">Arete</th>
+                  {/* <th>Nombre</th> */}
                   <th>Sexo</th>
                   <th>Ops</th>
                 </tr>
@@ -118,7 +137,7 @@ export const AnimalsForm = ({
                 {animals.map((animal, i) => (
                   <tr key={animal.earring}>
                     <td>{animal.earring}</td>
-                    <td>{animal.name}</td>
+                    {/* <td>{animal.name}</td> */}
                     <td>{animal.gender}</td>
                     <td>
                       <button
@@ -140,9 +159,9 @@ export const AnimalsForm = ({
                       className="w-24"
                     />
                   </td>
-                  <td>
+                  {/* <td>
                     <InputContainer name="name" type="text" className="w-24" />
-                  </td>
+                  </td> */}
                   <td>
                     <div className="flex flex-col sm:flex-row">
                       <span className="flex flex-col p-0.5">
