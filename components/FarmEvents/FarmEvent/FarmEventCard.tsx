@@ -101,8 +101,8 @@ const BreedingEventRow = ({
       <GeneticTree
         elements={{
           father: {
-            id: eventData.breedingMale?.id as string,
-            label: eventData.breedingMale?.earring as string
+            id: eventData?.breedingMale?.id as string,
+            label: eventData?.breedingMale?.earring as string
           },
           mothers: eventData?.breedingBatch
         }}

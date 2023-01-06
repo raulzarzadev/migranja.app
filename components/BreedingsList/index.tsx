@@ -20,7 +20,7 @@ interface AnimalFormattedWithBreedingDates extends Partial<AnimalType> {
 }
 const BreedingsList = () => {
   const farmEvents = useSelector(selectFarmEvents)
-
+  console.log(farmEvents)
   const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
   const [view, setView] = useState<'breeding' | 'animals'>('breeding')
 
@@ -45,13 +45,13 @@ const BreedingsList = () => {
     const formatBreedingBatchesAnimalsWithBreedingData = breedingBatches.map(
       (batch) => {
         const breedingDates = calculatePossibleBirthStartAndFinish({
-          finishAt: batch.eventData.finishAt as number,
-          startAt: batch.eventData.startAt as number
+          finishAt: batch?.eventData?.finishAt as number,
+          startAt: batch?.eventData?.startAt as number
         })
-        const animals = batch.eventData.breedingBatch?.map((animal) => {
+        const animals = batch?.eventData?.breedingBatch?.map((animal) => {
           return {
             ...animal,
-            eventData: { ...batch.eventData, id: batch.id, breedingDates }
+            eventData: { ...batch?.eventData, id: batch.id, breedingDates }
           }
         })
 
