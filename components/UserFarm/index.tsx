@@ -1,3 +1,4 @@
+import FarmNavigation from 'components/FarmNavigation'
 import FarmForm from 'components/forms/FarmForm'
 import UserFarmNavigation from 'components/UserFarmNavigation'
 import { useState } from 'react'
@@ -12,7 +13,7 @@ const UserFarm = () => {
       {editing ? (
         <FarmForm farm={userFarm || undefined} setEditing={setEditing} />
       ) : (
-        <UserFarmNavigation setEditing={setEditing} />
+        <FarmNavigation farm={userFarm} setEditing={setEditing} showGo={true} />
       )}
     </div>
   )

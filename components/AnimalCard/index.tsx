@@ -20,7 +20,7 @@ import { myFormatDate } from 'utils/dates/myDateUtils'
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const [editing, setEditing] = useState<boolean>(false)
   const ovines = useSelector(selectFarmOvines)
-  useDebugInformation('AnimalCard', { animalId })
+  // useDebugInformation('AnimalCard', { animalId })
 
   const animal = ovines.find(({ id }) => id === animalId)
   if (!animal) return <></>

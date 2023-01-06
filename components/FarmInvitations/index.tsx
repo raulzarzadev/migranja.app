@@ -14,7 +14,9 @@ const FarmInvitations = () => {
     const removeOwnFarmInvitations = (invitations: FarmType[]) =>
       invitations.filter(({ userId }) => userId !== user?.id)
     user?.id &&
-      getInvitationsFarm(user.id).then((res) => setFarmInvitations(res))
+      getInvitationsFarm(user.id).then((res) =>
+        setFarmInvitations(removeOwnFarmInvitations(res))
+      )
   }, [user?.id])
 
   return (
