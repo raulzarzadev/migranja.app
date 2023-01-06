@@ -6,18 +6,16 @@ import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 
 const FarmPage = () => {
-  const currentFarm = useSelector(selectFarmState)
   useFarmFarmState()
-  console.log(currentFarm)
-  console.count()
+  const currentFarm = useSelector(selectFarmState)
   return (
     <div>
-      {/* <FarmNavigation
+      <FarmNavigation
         farm={currentFarm}
         showGo={undefined}
         setEditing={undefined}
       />
-      <FarmMenu /> */}
+      <FarmMenu />
     </div>
   )
 }

@@ -2,7 +2,6 @@ import { deleteAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
-import useAnimal from 'components/hooks/useAnimal'
 import useDebugInformation from 'components/hooks/useDebugInformation'
 
 import Icon from 'components/Icon'
@@ -21,7 +20,7 @@ import { myFormatDate } from 'utils/dates/myDateUtils'
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const [editing, setEditing] = useState<boolean>(false)
   const ovines = useSelector(selectFarmOvines)
-  useDebugInformation('AnimalCard', { animalId })
+  //  useDebugInformation('AnimalCard', { animalId })
 
   const animal = ovines.find(({ id }) => id === animalId)
   if (!animal) return <></>
@@ -69,7 +68,7 @@ export const AnimalDetails = ({
     console.log(res)
     return res
   }
-  useDebugInformation('AnimalDetails', animal)
+  // useDebugInformation('AnimalDetails', animal)
   return (
     <div className="">
       <div className="flex w-full justify-end ">

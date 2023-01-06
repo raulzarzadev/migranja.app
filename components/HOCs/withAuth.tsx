@@ -6,7 +6,7 @@ const withAuth = (Component: any) => {
   const Auth = (props: any) => {
     // Login data added to props via redux-store (or use react context for example)
     const user = useSelector(selectAuthState)
-    console.log({ user })
+    // console.log({ user })
 
     // If user is not logged in, return login component
     if (!user) {
