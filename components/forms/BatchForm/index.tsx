@@ -197,14 +197,14 @@ const DefineBatchForm = ({
                 className="w-24"
                 type="number"
                 name="earrings.fromNumber"
-                label="from"
+                label="Desde:"
                 min="0"
               />
               <InputContainer
                 className="w-24"
                 type="number"
                 name="earrings.toNumber"
-                label="to"
+                label="Hasta:"
                 min="0"
               />
               <InputContainer
