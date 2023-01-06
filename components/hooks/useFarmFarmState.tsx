@@ -1,7 +1,6 @@
 import { listenFarmAnimals } from '@firebase/Animal/main'
-import { getFarmEvents, listenFarmEvents } from '@firebase/Events/main'
-import { FarmType } from '@firebase/Farm/farm.model'
-import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
+import { listenFarmEvents } from '@firebase/Events/main'
+import { listenFarm } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,8 +8,7 @@ import { selectAuthState } from 'store/slices/authSlice'
 import {
   setFarmAnimals,
   setFarmEvents,
-  setFarmState,
-  setUserFarm
+  setFarmState
 } from 'store/slices/farmSlice'
 
 const useFarmFarmState = () => {
@@ -27,8 +25,6 @@ const useFarmFarmState = () => {
         dispatch(setFarmState(res))
       })
       listenFarmAnimals(farmId as string, (res: any[]) => {
-        //const earringsList = res?.map((animal) => `${animal.earring}`)
-        //setFarmEarrings(earringsList)
         dispatch(setFarmAnimals(res))
       })
       listenFarmEvents(farmId as string, (res: any[]) => {

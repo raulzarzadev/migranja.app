@@ -1,4 +1,4 @@
-import useDebugInformation from 'components/hooks/useDebugInformation'
+import useAuth from 'components/hooks/useAuth'
 import type { NextPage } from 'next'
 import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
@@ -6,7 +6,7 @@ import { selectAuthState } from 'store/slices/authSlice'
 import UserHome from '../components/UserHome'
 import VisitHome from '../components/VisitHome'
 const Home: NextPage = () => {
-  const user = useSelector(selectAuthState)
+  const { user } = useAuth()
   //useDebugInformation('Home', {})
 
   return (

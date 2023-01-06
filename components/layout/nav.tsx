@@ -1,4 +1,3 @@
-import useAuth from 'components/hooks/useAuth'
 import InstallButton from 'components/InstallButton'
 import UserNotifications from 'components/UserNotifications'
 import Image from 'next/image'
@@ -10,7 +9,6 @@ import { googleLogin, logout } from '../../firebase/Users/main'
 import { UserType } from '../../firebase/Users/user.model'
 
 export const Nav = () => {
-  useAuth()
   const user = useSelector(selectAuthState)
   return (
     <nav className="mb-2">
