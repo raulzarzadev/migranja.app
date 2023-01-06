@@ -107,7 +107,6 @@ const BreedingForm = () => {
     )
     setFemaleFiltered(animals)
   }, [farmAnimals, formValues.breedingMale])
-  console.log(femalesFiltered)
   return (
     <div className="">
       <div>

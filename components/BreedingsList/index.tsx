@@ -1,4 +1,5 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import useDebugInformation from 'components/hooks/useDebugInformation'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -20,7 +21,7 @@ interface AnimalFormattedWithBreedingDates extends Partial<AnimalType> {
 }
 const BreedingsList = () => {
   const farmEvents = useSelector(selectFarmEvents)
-  console.log(farmEvents)
+  // useDebugInformation('BreedingList', farmEvents)
   const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })
   const [view, setView] = useState<'breeding' | 'animals'>('breeding')
 
@@ -30,18 +31,14 @@ const BreedingsList = () => {
 
   const [breedingsByAnimals, setBreedingsByAnimals] = useState<any[]>([])
 
-  // useDebugInformation('BreedingsList', {})
-
   const filterField = (field: string = '', search: string = '') => {
     return field?.toLowerCase()?.includes(search?.toLowerCase())
   }
 
   useEffect(() => {
-    // console.log(formatBreedingBatchesAnimalsWithBreedingData)
     const breedingBatches = farmEvents.filter(
       (event) => event.type === 'BREEDING'
     )
-    // console.log({ breedingBatches })
     const formatBreedingBatchesAnimalsWithBreedingData = breedingBatches.map(
       (batch) => {
         const breedingDates = calculatePossibleBirthStartAndFinish({
