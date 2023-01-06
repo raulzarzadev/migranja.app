@@ -64,7 +64,7 @@ const FarmMenu = (props: any) => {
   const farmIncludeTeam = farm?.haveATeam
 
   return (
-    <div className="flex w-full  flex-wrap max-w-2xl mx-auto">
+    <div className="flex w-full  flex-wrap  mx-auto">
       {/* ********************************* FARM MENU ************************************* */}
 
       <MenuSection className=" w-full sm:w-2/6 ">
