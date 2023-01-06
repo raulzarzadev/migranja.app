@@ -12,11 +12,12 @@ import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import Loading from 'components/Loading'
 import useAnimal from 'components/hooks/useAnimal'
 import { useSelector } from 'react-redux'
-import { selectFarmState } from 'store/slices/farmSlice'
+import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 
 const schema = yup
   .object()
   .shape({
+    batch: yup.string().required('Este campo es necesario'),
     earring: yup
       .string()
       .required('Este campo es necesario*')
@@ -45,6 +46,9 @@ export const AnimalsForm = ({
     resolver: yupResolver(schema),
     defaultValues: {
       gender: 'female',
+      birthday: new Date(),
+      joinedAt: new Date(),
+      batch: '',
       name: '',
       ...animal
     }
@@ -53,11 +57,15 @@ export const AnimalsForm = ({
 
   const [animals, setAnimals] = useState<QuickAnimal[]>([])
   const { register } = methods
-
+  const farmAnimals = useSelector(selectFarmAnimals)
   const earringAlreadyExist = (earring: string) => {
-    return !![...(currentFarm?.animals || []), ...animals]?.find(
-      (animal: AnimalType | QuickAnimal) => animal?.earring === earring
-    )
+    const farmEarrings = farmAnimals.map(({ earring }) => earring)
+    console.log({ earring, farmEarrings })
+    return farmEarrings.includes(earring)
+
+    // return !![...(currentFarm?.animals || []), ...animals]?.find(
+    //   (animal: AnimalType | QuickAnimal) => animal?.earring === earring
+    // )
   }
   const onAddItem = (data: any) => {
     if (earringAlreadyExist(data?.earring)) {
@@ -83,6 +91,8 @@ export const AnimalsForm = ({
       id: currentFarm?.id || '',
       name: currentFarm?.name || ''
     }
+    // console.log(animals)
+    // return
     try {
       const savingAnimals = animals.map(async (animal) => {
         return await createAnimal({ ...animal, farm: farmData }).then(
