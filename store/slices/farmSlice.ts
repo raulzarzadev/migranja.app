@@ -3,7 +3,6 @@ import { AppState } from '..'
 import { HYDRATE } from 'next-redux-wrapper'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import { EventDataStoreDetails } from 'types/base/FarmEvent.model'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 
 // Type for our state
@@ -29,7 +28,6 @@ export const farmSlice = createSlice({
   name: 'farm',
   initialState,
   reducers: {
-    // Action to set the Farmentication status
     setFarmState(state, action) {
       state.farm = action.payload
     },

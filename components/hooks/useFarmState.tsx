@@ -12,7 +12,7 @@ import {
   setUserFarm
 } from 'store/slices/farmSlice'
 
-const useFarmFarmState = () => {
+const useFarmState = () => {
   const dispatch = useDispatch()
   const user = useSelector(selectAuthState)
 
@@ -44,4 +44,4 @@ const useFarmFarmState = () => {
   return {}
 }
 
-export default useFarmFarmState
+export default useFarmState
