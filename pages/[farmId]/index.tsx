@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 
 const FarmPage = () => {
-  useFarmFarmState()
+  useFarmFarmState() // Set the farm state, farm info, farm animals , and events
   const currentFarm = useSelector(selectFarmState)
   return (
     <div>

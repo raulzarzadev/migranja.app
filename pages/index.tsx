@@ -6,7 +6,7 @@ import { selectAuthState } from 'store/slices/authSlice'
 import UserHome from '../components/UserHome'
 import VisitHome from '../components/VisitHome'
 const Home: NextPage = () => {
-  const { user } = useAuth()
+  const { user } = useAuth() // Set user state in redux store
   //useDebugInformation('Home', {})
 
   return (

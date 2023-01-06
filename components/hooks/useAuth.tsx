@@ -28,9 +28,6 @@ const useAuth = () => {
         }
       } else {
         dispatch(setAuthState(dbUser))
-        getUserFarm(dbUser.id).then((res) => {
-          dispatch(setUserFarm(res))
-        })
       }
     })
   }, [auth, dispatch])
