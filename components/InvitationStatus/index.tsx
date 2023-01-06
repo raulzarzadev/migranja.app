@@ -1,11 +1,13 @@
 import { FarmType, InvitationStatusType } from '@firebase/Farm/farm.model'
 import { listenFarm, updateFarm } from '@firebase/Farm/main'
 import { UserType } from '@firebase/Users/user.model'
-import useAuth from 'components/hooks/useAuth'
+
 import useNotifications from 'components/hooks/useNotifications'
 import Icon from 'components/Icon'
 import Modal from 'components/modal/Modal_v2'
 import { ReactNode, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectAuthState } from 'store/slices/authSlice'
 
 const InvitationStatus = ({
   farmId,
@@ -14,7 +16,7 @@ const InvitationStatus = ({
   farmId?: string
   userId?: string
 }) => {
-  const { user } = useAuth()
+  const user = useSelector(selectAuthState)
   const [farm, setFarm] = useState<any>(undefined)
   useEffect(() => {
     farmId && listenFarm(farmId, (res: any) => setFarm(res))

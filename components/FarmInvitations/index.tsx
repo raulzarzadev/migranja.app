@@ -1,14 +1,15 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import { getInvitationsFarm, updateFarm } from '@firebase/Farm/main'
-import useAuth from 'components/hooks/useAuth'
+import { getInvitationsFarm } from '@firebase/Farm/main'
+
 import InvitationStatus from 'components/InvitationStatus'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectAuthState } from 'store/slices/authSlice'
 
 const FarmInvitations = () => {
   const [farmInvitations, setFarmInvitations] = useState<FarmType[]>([])
-  const { user } = useAuth()
-
+  const user = useSelector(selectAuthState)
   useEffect(() => {
     const removeOwnFarmInvitations = (invitations: FarmType[]) =>
       invitations.filter(({ userId }) => userId !== user?.id)
@@ -42,7 +43,7 @@ const FarmInvitation = ({
   }
 }) => {
   const farm = invitation.farm
-  const { user } = useAuth()
+  const user = useSelector(selectAuthState)
   return (
     <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-between mb-2 items-center">
       {/* <div>{farm?.images?.[0]?.url}</div> */}

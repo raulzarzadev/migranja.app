@@ -1,14 +1,17 @@
+import useAuth from 'components/hooks/useAuth'
 import InstallButton from 'components/InstallButton'
 import UserNotifications from 'components/UserNotifications'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { Component } from 'react'
+import { useSelector } from 'react-redux'
+import { selectAuthState } from 'store/slices/authSlice'
 import { googleLogin, logout } from '../../firebase/Users/main'
 import { UserType } from '../../firebase/Users/user.model'
-import useAuth from '../hooks/useAuth'
 
 export const Nav = () => {
-  const { user } = useAuth()
+  useAuth()
+  const user = useSelector(selectAuthState)
   return (
     <nav className="mb-2">
       <div className="navbar bg-base-300 rounded-lg shadow-md ">

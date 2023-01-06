@@ -1,10 +1,6 @@
 import { getUserFarm } from '@firebase/Farm/main'
 import { app } from '@firebase/main'
-import {
-  authStateChanged,
-  createUserFromGoogleProvider,
-  getUser
-} from '@firebase/Users/main'
+import { createUserFromGoogleProvider, getUser } from '@firebase/Users/main'
 import { UserType } from '@firebase/Users/user.model'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'

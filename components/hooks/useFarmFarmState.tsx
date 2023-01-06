@@ -5,17 +5,17 @@ import { listenFarm, listenUserFarms } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { selectAuthState } from 'store/slices/authSlice'
 import {
   setFarmAnimals,
   setFarmEvents,
   setFarmState,
   setUserFarm
 } from 'store/slices/farmSlice'
-import useAuth from './useAuth'
 
 const useFarmFarmState = () => {
   const dispatch = useDispatch()
-  const { user } = useAuth()
+  const user = useSelector(selectAuthState)
 
   const {
     query: { farmId }
