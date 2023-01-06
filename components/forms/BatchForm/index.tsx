@@ -11,7 +11,7 @@ import { ParentForm } from '../ParentForm'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-
+const EARRING_LENGTH = 3
 export interface BatchType {
   birthday: DateType
   animals: Partial<AnimalType>[]
@@ -46,6 +46,8 @@ const BatchForm = ({
     const animals: BatchType['animals'] = []
 
     for (let earring = fromNumber; earring <= toNumber; earring++) {
+      const earringLarge = `00000${earring}`.slice(-EARRING_LENGTH)
+
       animals.push({
         gender: 'female',
         birthday: birthday,
@@ -55,7 +57,7 @@ const BatchForm = ({
           father: father || null,
           mother: null
         },
-        earring: `${earring}${suffix ? '-' + suffix : ''}`,
+        earring: `${earringLarge}${suffix ? '-' + suffix : ''}`,
         batch: batchName,
         batchData: {
           batchName: batchName || '',
@@ -94,7 +96,8 @@ const batchSchema = yup
     batchName: yup
       .string()
       .required('Este campo es necesario*')
-      .min(3, 'Al menos 3 letras'),
+
+      .min(EARRING_LENGTH, `Al menos ${EARRING_LENGTH} letras`),
     earrings: yup.object({
       fromNumber: yup
         .number()
@@ -204,7 +207,7 @@ const DefineBatchForm = ({
                 className="w-24"
                 type="number"
                 name="earrings.toNumber"
-                label="Hasta:"
+                label="Hasta"
                 min="0"
               />
               <InputContainer
