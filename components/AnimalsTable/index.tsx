@@ -12,7 +12,7 @@ import {
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
 import { useEffect, useState } from 'react'
-import { myFormatDate } from 'utils/dates/myDateUtils'
+import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import ParentModal from 'components/ParentModal/indext'
@@ -53,11 +53,11 @@ const AnimalsTable = ({
       cell: (props) => <span>{GENDER_OPTIONS[props.getValue()]?.label}</span>
     }),
     columnHelper.accessor('birthday', {
-      header: 'Nac',
+      header: 'Edad',
       cell: (props) => (
         <span>
           {props.getValue()
-            ? props.getValue() && myFormatDate(props.getValue(), 'dd-MMM-yy')
+            ? props.getValue() && fromNow(props.getValue(), { unit: 'month' })
             : '-'}
         </span>
       )

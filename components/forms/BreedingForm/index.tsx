@@ -3,13 +3,15 @@ import InputContainer from 'components/inputs/InputContainer'
 import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import HelperText from 'components/HelperText'
 import { createGenericBreedingEvent } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { BreedingDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import { fromNow } from 'utils/dates/myDateUtils'
+import { getProperty } from 'dot-prop'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -25,18 +27,37 @@ const BreedingForm = () => {
     resolver: yupResolver(schema)
   })
   const { handleSubmit, watch, reset } = methods
-
+  const formValues = watch()
   const males = farmAnimals.filter(({ gender }) => gender === 'male')
-  const females = farmAnimals.filter(({ gender }) => gender === 'female')
+  //const females = farmAnimals.filter(({ gender }) => gender === 'female')
   const malesOptions = males?.map((ovine) => {
     return { label: ovine.earring, value: ovine.earring }
   })
+
+  const excludeMalesAnimals = (animals) =>
+    animals.filter(({ gender }) => gender === 'female')
+
+  const excludeYongAnimals = (animals) => {
+    const MIN_BREEDING_AGE_IN_MONTHS = 10
+    return animals.filter(({ birthday }) => {
+      const months = fromNow(birthday, { unit: 'month' }).split(' ')[0]
+      return parseInt(months || 0) > MIN_BREEDING_AGE_IN_MONTHS
+    })
+  }
+  const excludeRelativeAnimals = (animals, { breedingMaleEarring }) => {
+    return animals.filter((animal) => {
+      const animalFather = getProperty(animal, 'parents.father.earring')
+      console.log({ breedingMaleEarring, animalFather })
+
+      return !!breedingMaleEarring && breedingMaleEarring !== animalFather
+    })
+  }
 
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
 
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const breedingBatch: Partial<AnimalType>[] = females
+    const breedingBatch: Partial<AnimalType>[] = femalesFiltered
       ?.filter(({ earring }) => sheepSelected?.includes(earring))
       .map((animal) => {
         return { ...animal, status: 'PENDING' }
@@ -70,11 +91,20 @@ const BreedingForm = () => {
     reset()
   }
 
-  const formValues = watch()
   const handleClear = () => {
     setSheepSelected([])
     reset()
   }
+  const [femalesFiltered, setFemaleFiltered] = useState([])
+  useEffect(() => {
+    const animals = excludeMalesAnimals(
+      excludeRelativeAnimals(excludeYongAnimals(farmAnimals), {
+        breedingMaleEarring: formValues.breedingMale
+      })
+    )
+    setFemaleFiltered(animals)
+  }, [formValues.breedingMale])
+  console.log(femalesFiltered)
   return (
     <div className="">
       <div>
@@ -144,7 +174,7 @@ const BreedingForm = () => {
                 type="info"
               />
               <AnimalsTable
-                animalsData={females || []}
+                animalsData={femalesFiltered || []}
                 setSelectedRows={setSheepSelected}
                 setSelectedRow={(row) =>
                   setSheepSelected([row?.earring as string])
