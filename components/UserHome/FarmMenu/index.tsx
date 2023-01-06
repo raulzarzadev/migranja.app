@@ -8,6 +8,7 @@ import FarmTeam from 'components/FarmTeam'
 import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
 import BreedingForm from 'components/forms/BreedingForm'
+import PermissionsWrapper from 'components/HOCs/withPermissions'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { ReactNode, useEffect, useState } from 'react'
@@ -27,7 +28,7 @@ type Option =
   | 'addBatch'
   | 'breedingEvent'
 
-const FarmMenu = () => {
+const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
   // useDebugInformation('FarmPage', {})
   const [menuOptions, setMenuOptions] =
@@ -65,6 +66,7 @@ const FarmMenu = () => {
   return (
     <div className="flex w-full  flex-wrap max-w-2xl mx-auto">
       {/* ********************************* FARM MENU ************************************* */}
+
       <MenuSection className=" w-full sm:w-2/6 ">
         <>
           <div className="  p-1 flex justify-start w-min mx-auto  ">

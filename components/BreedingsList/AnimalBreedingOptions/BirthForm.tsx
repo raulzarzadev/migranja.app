@@ -21,8 +21,6 @@ const BirthForm = ({
 }: {
   animal: AnimalFormattedWhitGenericEvenData
 }) => {
-  // useDebugInformation('BirthForm', animal)
-  // const { farmEarrings, currentFarm } = useFarm()
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
   const farmEarrings = useSelector(selectFarmAnimals)?.map(

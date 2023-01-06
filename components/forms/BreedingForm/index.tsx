@@ -1,5 +1,4 @@
 import AnimalsTable from 'components/AnimalsTable'
-import useFarm from 'components/hooks/useFarm'
 import InputContainer from 'components/inputs/InputContainer'
 import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -14,13 +13,9 @@ import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
-  // startAt: yup.object().required('Este campo es necesario*').nullable(),
-  // finishAt: yup.object().required('Este campo es necesario*').nullable()
 })
-// .required()
 
 const BreedingForm = () => {
-  // const { currentFarm, farmAnimals } = useFarm()
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
 

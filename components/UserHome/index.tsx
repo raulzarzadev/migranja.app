@@ -4,7 +4,7 @@ import FarmInvitations from 'components/FarmInvitations'
 const UserHome = () => {
   return (
     <>
-      <UserFarm />
+      {/* <UserFarm /> */}
       <FarmInvitations />
     </>
   )

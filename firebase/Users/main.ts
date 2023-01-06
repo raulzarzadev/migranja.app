@@ -23,6 +23,7 @@ export const setUser = async (itemId: string, newItem: object) =>
 
 export const createUser = async (newItem: any) =>
   await usersCRUD.createItem(newItem)
+
 export const createUserFromGoogleProvider = async (newItem: any) => {
   const { uid, photoURL, emailVerified, email, displayName } = newItem
   const userFormatted: CreateUserDTO = {
@@ -48,6 +49,7 @@ export const listenUser = async (itemId: string, cb: CallableFunction) =>
   await usersCRUD.listenItem(itemId, cb)
 
 export function authStateChanged(cb: CallableFunction) {
+  console.log({ cb })
   onAuthStateChanged(auth, async (user) => {
     // FIXME: this function is called multiple times
     if (!user) {

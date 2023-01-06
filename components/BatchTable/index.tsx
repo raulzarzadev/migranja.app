@@ -3,12 +3,10 @@ import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { async } from '@firebase/util'
 import { AnimalDetails } from 'components/AnimalCard'
 import AnimalsTable from 'components/AnimalsTable'
-import useFarm from 'components/hooks/useFarm'
-
 import Modal from 'components/modal'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmOvines } from 'store/slices/farmSlice'
+import { selectFarmOvines, selectFarmState } from 'store/slices/farmSlice'
 import {
   findDuplicatesAnimals,
   getDuplicatedEarrings,
@@ -47,8 +45,7 @@ const BatchTable = ({
 
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0)
-  const { currentFarm } = useFarm()
-
+  const currentFarm = useSelector(selectFarmState)
   const handleSaveBatch = async () => {
     console.log('save', { animalsData })
     setLoading(true)

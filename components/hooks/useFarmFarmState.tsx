@@ -6,10 +6,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  selectFarmAnimals,
-  selectFarmEvents,
-  selectFarmState,
-  selectUserFarm,
   setFarmAnimals,
   setFarmEvents,
   setFarmState,
@@ -17,32 +13,13 @@ import {
 } from 'store/slices/farmSlice'
 import useAuth from './useAuth'
 
-export interface UseFarm {
-  getFarmById?: FarmType['id']
-}
-
-const useFarm = (props?: UseFarm) => {
+const useFarmFarmState = () => {
   const dispatch = useDispatch()
   const { user } = useAuth()
-
-  const currentFarm = useSelector(selectFarmState)
-  const farmAnimals = useSelector(selectFarmAnimals)
-  const farmEvents = useSelector(selectFarmEvents)
-  const userFarm = useSelector(selectUserFarm)
-
-  const [farmEarrings, setFarmEarrings] = useState<string[]>([])
 
   const {
     query: { farmId }
   } = useRouter()
-
-  useEffect(() => {
-    if (user && userFarm === undefined) {
-      listenUserFarms((res: FarmType[] | null) => {
-        dispatch(setUserFarm(res?.[0] || null))
-      })
-    }
-  }, [dispatch, user, userFarm])
 
   useEffect(() => {
     if (user && farmId) {
@@ -50,8 +27,8 @@ const useFarm = (props?: UseFarm) => {
         dispatch(setFarmState(res))
       })
       listenFarmAnimals(farmId as string, (res: any[]) => {
-        const earringsList = res?.map((animal) => `${animal.earring}`)
-        setFarmEarrings(earringsList)
+        //const earringsList = res?.map((animal) => `${animal.earring}`)
+        //setFarmEarrings(earringsList)
         dispatch(setFarmAnimals(res))
       })
       listenFarmEvents(farmId as string, (res: any[]) => {
@@ -60,13 +37,7 @@ const useFarm = (props?: UseFarm) => {
     }
   }, [dispatch, farmId, user])
 
-  return {
-    currentFarm,
-    farmAnimals,
-    farmEarrings,
-    userFarm,
-    farmEvents
-  }
+  return {}
 }
 
-export default useFarm
+export default useFarmFarmState

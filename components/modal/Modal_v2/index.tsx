@@ -39,7 +39,7 @@ const Modal = ({
         </button>
       )}
       <div
-        className={`top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black bg-opacity-50 z-20 ${
+        className={`top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black bg-opacity-50 z-30 ${
           openModal ? 'fixed' : 'hidden'
         } `}
         id={modalId}

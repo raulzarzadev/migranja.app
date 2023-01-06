@@ -4,6 +4,7 @@ import { TypeBase } from '../types.model.ts/TypeBase.model'
 
 export interface CreateUserDTO extends Partial<UserType> {}
 export interface UserType extends TypeBase {
+  isDev?: boolean
   photoURL: any
   image: string
   name?: string | null

@@ -1,12 +1,11 @@
 import { FarmType, InvitationStatusType } from '@firebase/Farm/farm.model'
-import { updateFarm } from '@firebase/Farm/main'
+import { listenFarm, updateFarm } from '@firebase/Farm/main'
 import { UserType } from '@firebase/Users/user.model'
 import useAuth from 'components/hooks/useAuth'
-import useFarm from 'components/hooks/useFarm'
 import useNotifications from 'components/hooks/useNotifications'
 import Icon from 'components/Icon'
 import Modal from 'components/modal/Modal_v2'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 const InvitationStatus = ({
   farmId,
@@ -16,8 +15,11 @@ const InvitationStatus = ({
   userId?: string
 }) => {
   const { user } = useAuth()
-  const { currentFarm: farm } = useFarm({ getFarmById: farmId })
-
+  const [farm, setFarm] = useState<any>(undefined)
+  useEffect(() => {
+    farmId && listenFarm(farmId, (res: any) => setFarm(res))
+  }, [farmId])
+  // const farm = useSelector(selectFarmState)
   const teamMember = farm?.team?.[userId || '']
 
   const isAdmin = farm?.userId === user?.id
@@ -87,8 +89,7 @@ const InvitationStatus = ({
       }).then((res) => console.log(res))
   }
 
-  const invitationStatus: InvitationStatusType =
-    teamMember?.invitation?.status || 'PENDING_TO_SEND'
+  const invitationStatus: InvitationStatusType = teamMember?.invitation?.status
 
   const invitationSentBy = farm?.name
   const memberId = teamMember?.id

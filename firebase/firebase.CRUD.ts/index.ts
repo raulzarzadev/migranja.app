@@ -186,7 +186,9 @@ export class FirebaseCRUD {
       itemDatesToFirebaseTimestamp
     )
       .then((res) =>
-        this.formatResponse(true, `${this.collectionName}_CREATED`, res)
+        this.formatResponse(true, `${this.collectionName}_CREATED`, {
+          item: itemDatesToFirebaseTimestamp
+        })
       )
       .catch((err) => console.error(err))
   }

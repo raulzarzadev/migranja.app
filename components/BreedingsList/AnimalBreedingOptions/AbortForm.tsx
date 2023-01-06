@@ -15,7 +15,6 @@ import {
 import { formatNewGenericFarmEvent } from './birth.helper'
 
 const AbortForm = ({ animal }: { animal: FarmStateAnimalEvent }) => {
-  // const { currentFarm } = useFarm()
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({

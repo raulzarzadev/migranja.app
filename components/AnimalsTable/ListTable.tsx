@@ -30,7 +30,6 @@ const AnimalsListTable = ({
 
   useEffect(() => {
     listenOvines((res: AnimalType[]) => setData(res))
-    return () => setData([])
   }, [])
 
   const columns = [

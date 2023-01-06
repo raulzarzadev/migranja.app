@@ -28,6 +28,7 @@ export type InvitationStatusType =
   | 'REJECTED'
   | 'SENT'
   | 'PENDING_TO_SEND'
+
 export interface MemberTeam {
   email: string
   name?: string

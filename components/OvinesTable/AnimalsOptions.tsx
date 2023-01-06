@@ -1,5 +1,4 @@
 import { deleteAnimal } from '@firebase/Animal/main'
-import useFarm from 'components/hooks/useFarm'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -19,7 +18,6 @@ const AnimalsOptions = ({
       setProgress(0)
     }
   }, [animalsEarrings])
-  // const { currentFarm } = useFarm()
   const farmAnimals = useSelector(selectFarmAnimals)
   const [progress, setProgress] = useState(0)
 

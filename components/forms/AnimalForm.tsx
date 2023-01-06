@@ -10,11 +10,12 @@ import { CreateAnimalDTO } from 'firebase/Animal/animal.model'
 
 import ModalDelete from 'components/modal/ModalDelete'
 import sheep_breeds from 'components/CONSTANTS/SHEEP_BREEDS'
-import useFarm from 'components/hooks/useFarm'
 import useAnimal from 'components/hooks/useAnimal'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useSelector } from 'react-redux'
+import { selectFarmState } from 'store/slices/farmSlice'
 const schema = yup
   .object()
   .shape({
@@ -32,7 +33,7 @@ export const AnimalForm = ({
   animal: CreateAnimalDTO
   setEditing?: (v: boolean) => void
 }) => {
-  const { currentFarm } = useFarm()
+  const currentFarm = useSelector(selectFarmState)
 
   const farmData = {
     id: currentFarm?.id,

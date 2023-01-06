@@ -71,7 +71,7 @@ const InputContainer = ({
             />
           )}
           {type === 'date' && (
-            <div className="z-20">
+            <div className="">
               <DatePicker
                 onBlur={onBlur}
                 className="input input-bordered input-sm w-full "
