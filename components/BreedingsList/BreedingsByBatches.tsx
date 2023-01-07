@@ -43,17 +43,10 @@ const BreedingCard = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
         </div>
         <div className="w-full flex justify-between">
           <div className="">
-            <div className="font-lg">
-              <span>Partos:</span>
-              <span> del </span>
-              <span className="font-bold">
-                {myFormatDate(breedingDates?.birthStartAt, 'dd-MMM')}
-              </span>
-              <span> al </span>
-              <span className="font-bold">
-                {myFormatDate(breedingDates?.birthFinishAt, 'dd-MMM-yy')}
-              </span>
-            </div>
+            <BreedingDatesInfo
+              startAt={breedingDates?.birthStartAt as number}
+              finishAt={breedingDates?.birthFinishAt as number}
+            />
             <div className="text-xs">
               <span>Realizada: </span>
               <span> del </span>
@@ -107,6 +100,36 @@ const BreedingCard = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
         </div>
       </header>
       <BreedingCardBody breeding={breeding} />
+    </div>
+  )
+}
+
+const BreedingDatesInfo = ({
+  startAt,
+  finishAt
+}: {
+  startAt?: number
+  finishAt?: number
+}) => {
+  const start = startAt && myFormatDate(startAt, 'dd-MMMM')
+  const finish = finishAt && myFormatDate(finishAt, 'dd-MMMM')
+  return (
+    <div className="font-lg flex flex-col">
+      <span>Partos:</span>
+      {start === finish ? (
+        start
+      ) : (
+        <>
+          <span className="font-bold">
+            <span className="text-sm font-normal"> del </span>
+            {start}
+          </span>
+          <span className="font-bold">
+            <span className="text-sm font-normal"> al </span>
+            {finish}
+          </span>
+        </>
+      )}
     </div>
   )
 }

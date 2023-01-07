@@ -112,7 +112,7 @@ export const calculatePossibleBirthStartAndFinish = ({
     breedingStartAt: startAt,
     breedingFinishAt: finishAt,
     birthStartAt: possibleBirth.startAt,
-    birthFinishAt: possibleBirth.startAt,
+    birthFinishAt: possibleBirth.finishAt,
     birthStartInDays: possibleBirthStartIn,
     birthFinishInDays: possibleBirthFinishIn
   }
