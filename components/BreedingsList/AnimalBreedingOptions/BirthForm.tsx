@@ -63,7 +63,6 @@ const BirthForm = ({
   const breedingMale = animal.eventData.breedingMale
   const onSubmit = async (data: any) => {
     setProgress(1)
-    debugger
     const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
       eventType: 'BIRTH',
       animal,
@@ -77,7 +76,7 @@ const BirthForm = ({
       }
     })
     //console.log({ formatBirthEvent, formValues })
-    return
+    // return
 
     try {
       const newCalfs = formatBirthEvent.eventData.calfs
@@ -114,7 +113,7 @@ const BirthForm = ({
       console.log(error)
     }
   }
-  console.log({ formValues })
+  // console.log({ formValues })
 
   return (
     <div>

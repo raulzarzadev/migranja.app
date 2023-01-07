@@ -30,8 +30,8 @@ const BreedingForm = () => {
   const formValues = watch()
   const males = farmAnimals.filter(({ gender }) => gender === 'male')
   //const females = farmAnimals.filter(({ gender }) => gender === 'female')
-  const malesOptions = males?.map((ovine) => {
-    return { label: ovine.earring, value: ovine.earring }
+  const malesOptions = males?.map(({ earring, name }) => {
+    return { label: `${earring}${name ? ` - ${name}` : ''}`, value: earring }
   })
 
   const excludeMalesAnimals = (animals: any[]) =>

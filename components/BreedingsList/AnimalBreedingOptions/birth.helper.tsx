@@ -236,8 +236,6 @@ function formatEventData<T>(
   eventType: EventType['type'],
   eventData: EventDataDetails
 ): T {
-  debugger
-
   const {
     date,
     parents,
