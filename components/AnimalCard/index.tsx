@@ -56,7 +56,6 @@ export const AnimalDetails = ({
     joinedAt,
     name
   } = animal
-
   const genderLabel: Record<AnimalType['gender'], GenderOptions> = {
     male: MaleOptions,
     female: FemaleOptions

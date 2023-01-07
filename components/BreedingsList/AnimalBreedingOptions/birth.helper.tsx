@@ -174,9 +174,6 @@ export function formatNewGenericFarmEvent<T>(
     type: 'ovine',
     name: '',
     batch: breedingBatchId || '',
-    weight: {
-      atBirth: 0
-    },
     gender: formValues?.gender || 'female',
     farm: {
       id: currentFarm?.id,
@@ -239,6 +236,8 @@ function formatEventData<T>(
   eventType: EventType['type'],
   eventData: EventDataDetails
 ): T {
+  debugger
+
   const {
     date,
     parents,
@@ -252,6 +251,7 @@ function formatEventData<T>(
     breedingMale,
     breedingBatch
   } = eventData
+
   if (eventType === 'ABORT') {
     const data: AbortDetailsEvent = {
       date,

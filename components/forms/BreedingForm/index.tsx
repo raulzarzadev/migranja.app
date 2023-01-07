@@ -38,7 +38,7 @@ const BreedingForm = () => {
     animals.filter(({ gender }) => gender === 'female')
 
   const excludeYongAnimals = (animals: any[]) => {
-    const MIN_BREEDING_AGE_IN_MONTHS = 10
+    const MIN_BREEDING_AGE_IN_MONTHS = 7
     return animals.filter(({ birthday }) => {
       const months = fromNow(birthday, { unit: 'month' }).split(' ')[0]
       return parseInt(months) > MIN_BREEDING_AGE_IN_MONTHS

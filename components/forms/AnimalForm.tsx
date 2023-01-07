@@ -63,7 +63,9 @@ export const AnimalForm = ({
     defaultValues
   })
   const { watch, handleSubmit, reset, setValue } = methods
-  const { id, images } = watch()
+  const formValues = watch()
+  const { id, images } = formValues
+  // console.log({ formValues })
   interface ErrorType {
     type: any
     message: string
@@ -273,7 +275,6 @@ export const AnimalForm = ({
                         <InputContainer name="weight.atBirth" type="number" />
                       </span>
                     </div>
-
                     <div className="flex flex-col justify-center text-center">
                       <span>Al destete: </span>
                       <span className="w-[80px]">

@@ -63,7 +63,7 @@ const BirthForm = ({
   const breedingMale = animal.eventData.breedingMale
   const onSubmit = async (data: any) => {
     setProgress(1)
-
+    debugger
     const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
       eventType: 'BIRTH',
       animal,
@@ -76,16 +76,13 @@ const BirthForm = ({
         breedingMale
       }
     })
+    //console.log({ formatBirthEvent, formValues })
+    return
 
     try {
       const newCalfs = formatBirthEvent.eventData.calfs
       // *************************************************   create animals/calfs
-      const calfs = newCalfs?.map((calf: any, i: number) => {
-        //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
-        setProgress((i * 100) / newCalfs?.length)
-        return createAnimal({ ...calf })
-        // console.log(r)
-      })
+
       // ****************************************************   create birth
       const event = createGenericBreedingEvent(formatBirthEvent)
       setProgress(50)
@@ -99,8 +96,16 @@ const BirthForm = ({
       })
       setProgress(75)
 
+      const calfs = newCalfs?.map((calf: any, i: number) => {
+        //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
+        setProgress((i * 100) / newCalfs?.length)
+        return createAnimal({ ...calf })
+        // console.log(r)
+      })
+
       const promises = [...(calfs || []), event, breeding]
-      await Promise.all(promises).then((res: any) => {})
+      const res = await Promise.all(promises).then((res: any) => {})
+      console.log(res)
       setProgress(100)
 
       reset()
@@ -109,10 +114,12 @@ const BirthForm = ({
       console.log(error)
     }
   }
+  console.log({ formValues })
 
   return (
     <div>
       <FormProvider {...methods}>
+        <h4 className="text-center text-xl ">Crear parto </h4>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full flex justify-center">
             <InputContainer
