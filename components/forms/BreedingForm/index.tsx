@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { fromNow } from 'utils/dates/myDateUtils'
 import { getProperty } from 'dot-prop'
+import { determinateRelationship } from 'utils/determinateRelationship'
+import { ParentsType } from 'types/base/AnimalType.model'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -50,7 +52,6 @@ const BreedingForm = () => {
   ) => {
     return animals.filter((animal: any) => {
       const animalFather = getProperty(animal, 'parents.father.earring')
-      console.log({ breedingMaleEarring, animalFather })
 
       return !!breedingMaleEarring && breedingMaleEarring !== animalFather
     })
@@ -99,14 +100,27 @@ const BreedingForm = () => {
     reset()
   }
   const [femalesFiltered, setFemaleFiltered] = useState<any[]>([])
+
   useEffect(() => {
-    const animals = excludeMalesAnimals(
-      excludeRelativeAnimals(excludeYongAnimals(farmAnimals), {
-        breedingMaleEarring: formValues.breedingMale
+    //const animals = excludeMalesAnimals(farmAnimals)
+    console.log({ sheepSelected })
+    const formatAnimalsWithRelationMaleRelation = (
+      cattle: { earring: string; parents?: ParentsType }[],
+      male: string
+    ) => {
+      return cattle.map((animal: { earring: string }) => {
+        const rel = determinateRelationship(male, animal.earring, cattle)
+        return { ...animal, relationship: rel }
       })
+    }
+
+    const res = formatAnimalsWithRelationMaleRelation(
+      farmAnimals,
+      formValues.breedingMale
     )
-    setFemaleFiltered(animals)
-  }, [farmAnimals, formValues.breedingMale])
+
+    setFemaleFiltered(excludeMalesAnimals(res))
+  }, [farmAnimals, formValues.breedingMale, sheepSelected])
   return (
     <div className="">
       <div>
@@ -176,6 +190,7 @@ const BreedingForm = () => {
                 type="info"
               />
               <AnimalsTable
+                showRelationshipCol
                 animalsData={femalesFiltered || []}
                 setSelectedRows={setSheepSelected}
                 setSelectedRow={(row) =>

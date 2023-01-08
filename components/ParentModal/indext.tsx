@@ -33,21 +33,23 @@ const ParentModal = ({
     <div>
       {parentReference && (
         <button
-          className="btn btn-ghost btn-sm btn-circle"
+          className=" flex flex-col justify-center items-center  "
           onClick={(e) => {
             e.stopPropagation()
             e.preventDefault()
             handleOpenParent(parentReference)
           }}
         >
-          <span className="text-info">
-            {type === 'father' ? (
+          {type === 'father' ? (
+            <div className="text-info">
               <Icon size="xs" name="male" />
-            ) : (
+            </div>
+          ) : (
+            <div className="text-pink-400">
               <Icon size="xs" name="female" />
-            )}
-          </span>
-          <span className="truncate">{parentReference}</span>
+            </div>
+          )}
+          <div className="truncate text-xs font-normal">{parentReference}</div>
         </button>
       )}
       <Modal

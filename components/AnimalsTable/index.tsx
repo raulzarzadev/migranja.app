@@ -23,24 +23,35 @@ export interface RowSelectedType {
   id?: string
   earring?: string
 }
+
+export interface AnimalsDataType extends Partial<AnimalType> {
+  relationship?: {
+    grade?: number
+    type?: string
+  }
+}
 export interface AnimalTableType {
-  animalsData: Partial<AnimalType>[]
+  animalsData: AnimalsDataType[]
   setSelectedRows?: (rows: string[] | null) => void
   setSelectedRow?: (row: RowSelectedType | null) => void
   settings?: {
     selectMany?: boolean
   }
   selectedRows?: string[] | null
+  showRelationshipCol?: boolean
 }
 const AnimalsTable = ({
   animalsData,
   settings,
   setSelectedRow,
   setSelectedRows,
-  selectedRows
+  selectedRows,
+  showRelationshipCol
 }: AnimalTableType) => {
   const [sorting, setSorting] = useState<SortingState>([])
-  const columnHelper = createColumnHelper<AnimalType>()
+
+  const columnHelper = createColumnHelper<AnimalsDataType>()
+
   const columns = [
     columnHelper.accessor('earring', {
       header: 'Arete'
@@ -50,7 +61,9 @@ const AnimalsTable = ({
     }),
     columnHelper.accessor('gender', {
       header: 'Sexo',
-      cell: (props) => <span>{GENDER_OPTIONS[props.getValue()]?.label}</span>
+      cell: (props) => (
+        <span>{GENDER_OPTIONS[props.getValue() || 'female']?.label}</span>
+      )
     }),
     columnHelper.accessor('birthday', {
       header: 'Edad',
@@ -86,6 +99,7 @@ const AnimalsTable = ({
       )
     })
   ]
+
   const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     // Rank the item
     const itemRank = rankItem(row.getValue(columnId), value)
@@ -98,10 +112,23 @@ const AnimalsTable = ({
     // Return if the item should be filtered in/out
     return itemRank.passed
   }
+  const extraCols: any[] = []
+  if (showRelationshipCol) {
+    extraCols.push(
+      columnHelper.accessor('relationship.grade', {
+        header: 'rel',
+        cell: (props) => (
+          <span className="flex w-full justify-between">
+            {!!props.getValue() ? `${props.getValue()}°` : ''}
+          </span>
+        )
+      })
+    )
+  }
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
     data: animalsData as any,
-    columns,
+    columns: [...extraCols, ...columns],
     filterFns: {
       fuzzy: fuzzyFilter
     },
@@ -271,6 +298,8 @@ const AnimalsTable = ({
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => {
+              const relationship = row.original?.relationship?.grade
+
               const itemId = row.original.id
               const itemEarring = row.original.earring
               const isDuplicatedInDb = row.original.isDuplicated
@@ -280,7 +309,7 @@ const AnimalsTable = ({
               const isEarringRowSelected =
                 _selectedRow?.earring === row.original.earring
               const isEarringRowsSelected = _selectedRows?.includes(
-                row.original.earring
+                row.original.earring || ''
               )
               const isDuplicated =
                 isDuplicatedInDb || isCurrentEarringsDuplicated
@@ -302,7 +331,18 @@ const AnimalsTable = ({
                       key={cell.id}
                       className={`font-normal
                       ${isSelected && 'bg-base-300'} 
-                      ${isDuplicated && ' bg-error'} `}
+                      ${isDuplicated && ' bg-error'} 
+                      ${
+                        showRelationshipCol &&
+                        relationship === 1 &&
+                        'bg-rose-400'
+                      }
+                      ${
+                        showRelationshipCol &&
+                        relationship === 2 &&
+                        'bg-rose-300'
+                      }
+                      `}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

@@ -56,7 +56,11 @@ const ParentForm = ({
   value: any
 }) => {
   const methods = useForm({
-    defaultValues: value
+    defaultValues: value || {
+      breed: '',
+      earring: '',
+      birthday: new Date()
+    }
   })
 
   const { register, watch, handleSubmit, reset, unregister } = methods

@@ -15,6 +15,7 @@ import {
   AnimalFormattedWhitGenericEvenData,
   ParentType
 } from 'types/base/AnimalType.model'
+import Link from 'next/link'
 
 const BirthForm = ({
   animal
@@ -79,12 +80,14 @@ const BirthForm = ({
     // return
 
     try {
+      setProgress(20)
+
       const newCalfs = formatBirthEvent.eventData.calfs
       // *************************************************   create animals/calfs
 
       // ****************************************************   create birth
       const event = createGenericBreedingEvent(formatBirthEvent)
-      setProgress(50)
+      setProgress(40)
 
       // ***************************************************   update breeding, move from batch to already done
 
@@ -93,26 +96,29 @@ const BirthForm = ({
         animalId: animal?.id as string,
         eventType: 'BIRTH'
       })
-      setProgress(75)
+      setProgress(60)
 
       const calfs = newCalfs?.map((calf: any, i: number) => {
         //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
-        setProgress((i * 100) / newCalfs?.length)
+        // setProgress((i * 100) / newCalfs?.length)
         return createAnimal({ ...calf })
         // console.log(r)
       })
 
+      setProgress(80)
+
       const promises = [...(calfs || []), event, breeding]
       const res = await Promise.all(promises).then((res: any) => {})
-      console.log(res)
+      // console.log(res)
       setProgress(100)
-
+      setFinishView(true)
       reset()
     } catch (error) {
       setProgress(0)
       console.log(error)
     }
   }
+  const [finishView, setFinishView] = useState(false)
   // console.log({ formValues })
 
   return (
@@ -241,6 +247,11 @@ const BirthForm = ({
               Guardar
             </button>
           </div>
+          {finishView && (
+            <div className="flex justify-center w-full mt-6">
+              <Link href={`/${currentFarm?.id}`}>Ver parto</Link>
+            </div>
+          )}
         </form>
       </FormProvider>
     </div>

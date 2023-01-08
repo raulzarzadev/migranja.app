@@ -202,6 +202,7 @@ export function formatNewGenericFarmEvent<T>(
       earring: calf.earring,
       breed: breed?.replaceAll(' ', ''),
       birthType: data?.calfs?.length,
+      gender: calf.gender,
       statuses
     }
     return calfFormatted
