@@ -26,7 +26,6 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   // }
 
   // **************************************** have parents
-  console.table({ p1Parents, p2Parents })
   if (
     !p1Parents?.father &&
     !p1Parents?.mother &&

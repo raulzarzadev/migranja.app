@@ -3,7 +3,7 @@ import InputContainer from 'components/inputs/InputContainer'
 import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useEffect, useState } from 'react'
+import { HTMLProps, useEffect, useRef, useState } from 'react'
 import HelperText from 'components/HelperText'
 import { createGenericBreedingEvent } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
@@ -197,6 +197,7 @@ const BreedingForm = () => {
                   setSheepSelected([row?.earring as string])
                 }
                 settings={{ selectMany: true }}
+                showSelectRow
               />
             </>
           )}

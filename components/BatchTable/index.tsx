@@ -1,6 +1,5 @@
 import { createAnimal } from '@firebase/Animal/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
-import { async } from '@firebase/util'
 import { AnimalDetails } from 'components/AnimalCard'
 import AnimalsTable from 'components/AnimalsTable'
 import Modal from 'components/modal'

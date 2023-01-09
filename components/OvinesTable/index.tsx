@@ -19,6 +19,7 @@ const OvinesTable = () => {
           setSelectedRow={setSelectedRow}
           setSelectedRows={setSelectedRows}
           settings={{ selectMany: true }}
+          showSelectRow
         />
       </div>
       <div className=" bg-base-300 shadow-md rounded-md m-2 lg:w-1/2 h-min">

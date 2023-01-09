@@ -75,7 +75,7 @@ const AnimalsOptions = ({
     //   setProgress(0)
     // }
   }
-  console.log({ progress })
+  //console.log({ progress })
   return (
     <div className="p-2">
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
