@@ -24,7 +24,12 @@ export interface AnimalType extends TypeBase {
   }
   batchData?: any
   breeding?: any
-  statuses?: { isAlive: boolean; isInTheFarm: boolean; isPregnant: boolean }
+  statuses?: {
+    isAlive?: boolean
+    isInTheFarm?: boolean
+    isPregnant?: boolean
+    isSold?: boolean
+  }
   currentStatus?:
     | 'ACTIVE'
     | 'PREGNANT'

@@ -1,4 +1,7 @@
 import { deleteAnimal } from '@firebase/Animal/main'
+import ChooseEventForm from 'components/forms/ChooseEventForm'
+import Icon from 'components/Icon'
+import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -22,7 +25,8 @@ const AnimalsOptions = ({
   const [progress, setProgress] = useState(0)
 
   const animalsIds = _earrings.map(
-    (earring) => farmAnimals?.find((animal) => animal.earring === earring)?.id
+    (earring) =>
+      farmAnimals?.find((animal) => animal.earring === earring)?.id || ''
   )
   const handleDeleteAll = async () => {
     setProgress(1)
@@ -76,8 +80,19 @@ const AnimalsOptions = ({
     // }
   }
   //console.log({ progress })
+  const [openEvent, setOpenEvent] = useState(false)
+  const handleOpenEvent = () => {
+    setOpenEvent(!openEvent)
+  }
   return (
     <div className="p-2">
+      <Modal
+        title="Registrar evento"
+        handleOpen={handleOpenEvent}
+        open={openEvent}
+      >
+        <ChooseEventForm animalsIds={animalsIds} />
+      </Modal>
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
         <span>
           Estos cambios se aplicaran a todos los animales selecciondos
@@ -98,6 +113,18 @@ const AnimalsOptions = ({
               </div>
             )}
           </ModalDelete>
+          <button
+            className="btn btn-info btn-outline"
+            onClick={(e) => {
+              e.preventDefault()
+              handleOpenEvent()
+            }}
+          >
+            Evento
+            <span className="ml-2">
+              <Icon name="event" />
+            </span>
+          </button>
           <button className="btn btn-info btn-outline" disabled>
             Editar
           </button>

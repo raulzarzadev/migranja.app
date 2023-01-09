@@ -14,7 +14,7 @@ import {
 } from 'types/base/FarmEvent.model'
 const storage = getStorage(app)
 
-const eventsCRUD = new FirebaseCRUD('events', db, storage)
+export const eventsCRUD = new FirebaseCRUD('events', db, storage)
 
 /** ************** CREATE ********** */
 export const createEvent = async (newItem: CreateEventDTO) =>

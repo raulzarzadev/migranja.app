@@ -2,6 +2,7 @@ import useSortByField from 'components/hooks/useSortByField'
 import { useEffect, useState } from 'react'
 import { FarmState } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 import FarmEventCard from './FarmEvent/FarmEventCard'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
@@ -101,14 +102,17 @@ interface SelectOption {
 }
 
 const getEventTypesOptions = (events: FarmState['events']): SelectOption[] => {
-  const dictionary: Record<AnimalFormattedWhitGenericEvenData['type'], string> =
-    {
-      BREEDING: 'Monta',
-      REMOVE: 'Eliminado',
-      BIRTH: 'Parto',
-      ABORT: 'Aborto',
-      EMPTY: 'Vacio'
-    }
+  const dictionary: Record<
+    AnimalFormattedWhitGenericEvenData['type'] | FarmEventDropOut['type'],
+    string
+  > = {
+    BREEDING: 'Monta',
+    REMOVE: 'Eliminado',
+    BIRTH: 'Parto',
+    ABORT: 'Aborto',
+    EMPTY: 'Vacio',
+    DROP_OUT: 'Baja'
+  }
 
   const options: SelectOption[] = events.reduce(
     (prev: SelectOption[], curr) => {

@@ -54,7 +54,9 @@ export const AnimalDetails = ({
     weight,
     breed,
     joinedAt,
-    name
+    name,
+    statuses,
+    currentStatus
   } = animal
   const genderLabel: Record<AnimalType['gender'], GenderOptions> = {
     male: MaleOptions,
@@ -99,8 +101,23 @@ export const AnimalDetails = ({
         <div>
           Detalles de animal
           <div>
-            <div className="text-xs">
-              <span>id:</span> <span className="">{id}</span>
+            <div className="text-xs flex flex-col whitespace-nowrap">
+              <span>
+                id: <span className="">{id}</span>
+              </span>
+              <span className="flex flex-col">
+                <span>Acutal:{currentStatus}</span>
+                {/* <span className="">
+                  {statuses?.isAlive ? 'vivo' : 'muerto'}
+                </span>
+                <span className="">
+                  {statuses?.isInTheFarm ? 'dentro' : 'fuera'}
+                </span>
+                <span className="">
+                  {statuses?.isPregnant ? 'en cinta' : 'vacio'}
+                </span>
+                <span className="">{statuses?.isSold ? 'vendido' : ''}</span> */}
+              </span>
             </div>
           </div>
         </div>

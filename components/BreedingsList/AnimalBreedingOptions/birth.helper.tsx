@@ -194,7 +194,8 @@ export function formatNewGenericFarmEvent<T>(
     const statuses: AnimalType['statuses'] = {
       isAlive: !!calf?.isAlive,
       isInTheFarm: !!calf?.isAlive,
-      isPregnant: false
+      isPregnant: false,
+      isSold: false
     }
 
     const calfFormatted = {
@@ -203,7 +204,8 @@ export function formatNewGenericFarmEvent<T>(
       breed: breed?.replaceAll(' ', ''),
       birthType: data?.calfs?.length,
       gender: calf.gender,
-      statuses
+      statuses,
+      currentStatus: !!calf?.isAlive ? 'ACTIVE' : 'DEAD'
     }
     return calfFormatted
   })

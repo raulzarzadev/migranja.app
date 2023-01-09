@@ -174,7 +174,7 @@ const AnimalsTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowSelection])
 
-  console.log({ rowSelection })
+  // console.log({ rowSelection })
 
   const [globalFilter, setGlobalFilter] = useState('')
 
@@ -211,6 +211,9 @@ const AnimalsTable = ({
           placeholder="Buscar..."
         />
       </div>
+      <div className="text-center">
+        {globalFilter && `${table.getFilteredRowModel().rows.length} filtrados`}
+      </div>
       <HelperText
         text="Selecciona de uno en uno para ver los detalles. Selecciona varios para editar en grupo. Selecciona todos los que estan filtrados."
         type="info"
@@ -221,7 +224,6 @@ const AnimalsTable = ({
           {table.getPreFilteredRowModel().rows.length} Seleccionados
         </div>
       )}
-
       <div className={`overflow-x-auto  mx-auto`}>
         <table className="mx-aut table table-compact mx-auto w-full  ">
           <thead>

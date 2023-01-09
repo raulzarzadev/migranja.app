@@ -3,7 +3,7 @@ import { AnimalType, ParentsType } from './AnimalType.model'
 import { TypeBase } from './TypeBase.model'
 
 export interface BaseFarmEvent {
-  type: 'BREEDING' | 'REMOVE' | 'BIRTH' | 'ABORT' | 'EMPTY'
+  type: 'BREEDING' | 'REMOVE' | 'BIRTH' | 'ABORT' | 'EMPTY' | 'DROP_OUT'
   status?: string
   farm: {
     id: string
@@ -35,6 +35,7 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  animals: any
   calfs?: Partial<AnimalType>[]
   breedingDates?: BreedingDatesType
   birthType?: number
@@ -71,13 +72,14 @@ export interface EventData
     AbortDetailsEvent,
     BirthDetailsEvent {
   breedingDates?: BreedingDatesType
+  // animals?: any[]
 }
 
 export interface EventDataStoreDetails extends SetGenericEventType<EventData> {}
 
 export interface BreedingEventCardDetails
   extends SetGenericEventType<EventData> {
-  animals: any
+  animals?: any
 }
 
 export interface DTO_CreateBreedingEventType

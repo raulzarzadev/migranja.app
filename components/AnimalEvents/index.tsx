@@ -30,7 +30,15 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
         event?.type === 'EMPTY' &&
         event?.eventData?.parents?.mother?.earring === animalEarring
     )
-    setEvents([...birth, ...breeding, ...aborts, ...empty])
+    const dropOut = farmEvents.filter(
+      (event) =>
+        event?.type === 'DROP_OUT' &&
+        event?.eventData?.animals?.find(
+          (animal: { earring: string }) => animal.earring === animalEarring
+        )
+    )
+
+    setEvents([...birth, ...breeding, ...aborts, ...empty, ...dropOut])
   }, [animalEarring, farmEvents])
 
   return <EventsList events={events} />

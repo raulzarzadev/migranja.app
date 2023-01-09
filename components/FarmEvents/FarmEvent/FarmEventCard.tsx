@@ -2,9 +2,11 @@ import GeneticTree from 'components/GeneticTree'
 import useDebugInformation from 'components/hooks/useDebugInformation'
 import { ReactNode } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import BirthEventDetails from '../BirthEventDetails'
 import EventModal from '../EventModal'
+import DropOutEventRow from './DropOutEventRow'
 
 export const FarmEventCard = ({
   event
@@ -16,7 +18,9 @@ export const FarmEventCard = ({
     Component: ReactNode
   }
   const DETAILS_OPTIONS: Record<
-    AnimalFormattedWhitGenericEvenData['type'] | 'NULL',
+    | AnimalFormattedWhitGenericEvenData['type']
+    | 'NULL'
+    | FarmEventDropOut['type'],
     FarmEventOptions
   > = {
     BREEDING: {
@@ -42,6 +46,12 @@ export const FarmEventCard = ({
     NULL: {
       label: 'Generico',
       Component: <div>Generico</div>
+    },
+    DROP_OUT: {
+      label: 'Baja ',
+      Component: (
+        <DropOutEventRow event={event as unknown as FarmEventDropOut} />
+      )
     }
   }
   return (
