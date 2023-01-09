@@ -74,6 +74,7 @@ export const FARM_EVENT: FarmStateAnimalEvent = {
   currentStatus: undefined,
   userId: '',
   eventData: {
+    animals: [],
     batchId: '',
     breedingBatch: [],
     breedingId: '',

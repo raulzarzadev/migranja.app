@@ -1,8 +1,9 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { Merge, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
+import { BaseFarmEvent } from 'types/base/FarmEvent.model'
 
 export interface FarmEventType extends TypeBase {
-  type: 'BREEDING' | 'REMOVE' | 'BIRTH' | 'ABORT' | 'EMPTY'
+  type: BaseFarmEvent['type']
   status?: string
   farm: {
     id: string

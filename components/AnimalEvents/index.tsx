@@ -20,6 +20,8 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
       return asMale || asFemale
     })
 
+    console.log({ farmEvents })
+
     const aborts = farmEvents.filter(
       (event) =>
         event?.type === 'ABORT' &&
@@ -38,7 +40,18 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
         )
     )
 
-    setEvents([...birth, ...breeding, ...aborts, ...empty, ...dropOut])
+    const births = farmEvents.filter(
+      (event) => event?.eventData?.parents?.mother?.earring === animalEarring
+    )
+
+    setEvents([
+      ...birth,
+      ...breeding,
+      ...aborts,
+      ...empty,
+      ...dropOut,
+      ...births
+    ])
   }, [animalEarring, farmEvents])
 
   return <EventsList events={events} />

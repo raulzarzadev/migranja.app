@@ -42,6 +42,10 @@ export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
       NULL: {
         label: 'Generico',
         Component: <div>Generico</div>
+      },
+      DROP_OUT: {
+        label: 'De baja ',
+        Component: <span>Baja</span>
       }
     }
   return (

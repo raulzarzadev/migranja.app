@@ -4,9 +4,10 @@ import {
 } from '@firebase/types.model.ts/AnimalType.model'
 import { DateType, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
 import { FarmType } from '@firebase/Farm/farm.model'
+import { BaseFarmEvent } from 'types/base/FarmEvent.model'
 
 export interface EventType extends TypeBase {
-  type: 'BREEDING' | 'REMOVE' | 'BIRTH' | 'ABORT' | 'EMPTY'
+  type: BaseFarmEvent['type']
   date: DateType
   startAt: DateType
   finishAt: DateType
