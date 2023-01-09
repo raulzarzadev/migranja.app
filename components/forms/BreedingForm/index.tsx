@@ -122,12 +122,12 @@ const BreedingForm = () => {
     setFemaleFiltered(excludeMalesAnimals(res))
   }, [farmAnimals, formValues.breedingMale, sheepSelected])
   return (
-    <div className="">
+    <div className="bg-base-300 rounded-md shadow-md  w-full mt-2">
       <div>
         <h3 className="text-xl text-center">Nueva monta</h3>
       </div>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className=" ">
           {/* ******************************************** 
                 Select bull               
      *******************************************rz */}
@@ -184,7 +184,7 @@ const BreedingForm = () => {
                 Select females               
        *******************************************rz */}
           {formValues.finishAt && formValues.startAt && (
-            <>
+            <div className=" sm:max-w-full">
               <HelperText
                 text="Selecciona las hembras que seran parte de la monta. Debes seleccionar al menos una"
                 type="info"
@@ -199,7 +199,7 @@ const BreedingForm = () => {
                 settings={{ selectMany: true }}
                 showSelectRow
               />
-            </>
+            </div>
           )}
           <div className="flex justify-evenly w-full my-4">
             <div>

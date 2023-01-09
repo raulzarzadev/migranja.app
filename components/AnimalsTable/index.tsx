@@ -56,17 +56,6 @@ const AnimalsTable = ({
   const columnHelper = createColumnHelper<AnimalsDataType>()
 
   const columns = [
-    // columnHelper.accessor('earring', {
-    //   header: 'Select',
-    //   cell: (props) => (
-    //     <span>
-    //       <input
-    //         checked={_selectedRows.includes(props.getValue())}
-    //         type={'checkbox'}
-    //       />
-    //     </span>
-    //   )
-    // }),
     columnHelper.accessor('earring', {
       header: 'Arete'
     }),
@@ -173,19 +162,17 @@ const AnimalsTable = ({
     let earrings: string[] = []
     Object.entries(rowSelection).forEach(([i, bool]: any) => {
       const newEarring = animalsData[i].earring
-      setSelectedRow?.({
-        id: animalsData[i]?.id,
-        earring: animalsData[i]?.earring
-      })
       earrings.push(newEarring || '')
     })
     setSelectedRows?.(earrings)
-    // if (earrings.length > 1) {
-    //   setSelectedRow?.(null)
-    // } else {
-    //   setSelectedRows?.(null)
-    // }
-  }, [animalsData, rowSelection, setSelectedRow, setSelectedRows])
+    if (earrings.length === 1) {
+      const animal = animalsData.find(({ earring }) => earring === earrings[0])
+      setSelectedRow?.({ id: animal?.id, earring: animal?.earring })
+    } else {
+      setSelectedRow?.(null)
+    }
+  }, [rowSelection])
+
   console.log({ rowSelection })
 
   const [globalFilter, setGlobalFilter] = useState('')
@@ -212,66 +199,6 @@ const AnimalsTable = ({
     getPaginationRowModel: getPaginationRowModel()
   })
 
-  // const [_selectMany, _setSelectMany] = useState(false)
-  // const [_selectedRows, _setSelectedRows] = useState<string[]>([])
-  // const [_selectedRow, _setSelectedRow] = useState<RowSelectedType | null>(null)
-
-  // useEffect(() => {
-  //   selectedRows && _setSelectedRows(selectedRows)
-  // }, [selectedRows])
-
-  // const _onSelectNewRow = (id?: string) => {
-  //   if (!id) return console.log('no row selected')
-  //   if (_selectedRows.includes(id)) {
-  //     const cleanRows = [..._selectedRows.filter((row) => row !== id)]
-  //     _setSelectedRows(cleanRows)
-  //     setSelectedRows?.(cleanRows)
-  //   } else {
-  //     const addRow = [..._selectedRows, id]
-  //     _setSelectedRows(addRow)
-  //     setSelectedRows?.(addRow)
-  //   }
-  // }
-
-  // const _onSelectRow = (row: RowSelectedType) => {
-  //   const { id, earring } = row
-  //   if (
-  //     (id ?? '') === _selectedRow?.id || // que no sea nullish e igual a selected id
-  //     (earring ?? '') === _selectedRow?.earring
-  //   ) {
-  //     _setSelectedRow(null)
-  //     setSelectedRow?.(null)
-  //   } else {
-  //     _setSelectedRow({ earring, id })
-  //     setSelectedRow?.({ earring, id })
-  //   }
-  // }
-  // const _onRowClick = (row: RowSelectedType | null) => {
-  //   if (!row) return 'no row selected'
-  //   // if (_selectMany) {
-  //   //   _onSelectNewRow(row?.earring)
-  //   // } else {
-  //   //   _onSelectRow(row)
-  //   // }
-  // }
-
-  // const handleSelectMany = (checked: boolean) => {
-  //   _setSelectMany(checked)
-  //   _setSelectedRows([])
-  //   _setSelectedRow(null)
-  //   setSelectedRow?.(null)
-  //   setSelectedRows?.(null)
-  // }
-  // const handleSelectAllInFilter = (checked: boolean) => {
-  //   const selected: string[] = checked
-  //     ? (table
-  //         .getFilteredRowModel()
-  //         .rows.map((row) => row.getAllCells()?.[0].getValue()) as string[])
-  //     : []
-  //   _setSelectedRows(selected)
-  //   setSelectedRows?.(selected)
-  //   console.log(selected)
-  // }
   const earringsDuplicated = getDuplicatedEarrings(animalsData)
   return (
     <div className="p-2">
@@ -282,9 +209,6 @@ const AnimalsTable = ({
           className=" input input-sm w-full input-bordered"
           placeholder="Buscar..."
         />
-        {/* <div className="whitespace-nowrap ml-1">
-          {table.getFilteredRowModel().rows.length} de {animalsData.length || 0}
-        </div> */}
       </div>
       <HelperText
         text="Selecciona de uno en uno para ver los detalles. Selecciona varios para editar en grupo. Selecciona todos los que estan filtrados."
@@ -296,48 +220,7 @@ const AnimalsTable = ({
           {table.getPreFilteredRowModel().rows.length} Seleccionados
         </div>
       )}
-      {/* <div className="flex w-full justify-between items-center">
-        {settings?.selectMany ? (
-          <div
-            className="flex from-control
-        "
-          >
-            <label className="label ">
-              <input
-                type={'checkbox'}
-                className="checkbox checkbox-sm"
-                onChange={({ target: { checked } }) =>
-                  handleSelectMany(checked)
-                }
-              />
-              <span className="label-text ml-1">Seleccionar varios</span>
-            </label>
 
-            <label className="label ">
-              <input
-                type={'checkbox'}
-                className="checkbox checkbox-sm"
-                onChange={({ target: { checked } }) =>
-                  handleSelectAllInFilter(checked)
-                }
-              />
-              <span className="label-text ml-1">Todos</span>
-            </label>
-          </div>
-        ) : (
-          ''
-        )}
-        {!!_selectedRows?.length && (
-          <span className="label-text ml-1">
-            Seleccionados: {_selectedRows?.length}
-          </span>
-        )}
-        {!!_selectedRow && (
-          <span className="label-text ml-1">
-            Seleccionado: {_selectedRow.earring}
-          </span>
-        )}
-      </div> */}
       <div className={`overflow-x-auto  mx-auto`}>
         <table className="mx-aut table table-compact mx-auto w-full  ">
           <thead>
@@ -371,34 +254,19 @@ const AnimalsTable = ({
           <tbody>
             {table.getRowModel().rows.map((row) => {
               const relationshipGrade = row.original?.relationship?.grade
-
-              //const itemId = row.original.id
               const itemEarring = row.original.earring
               const isDuplicatedInDb = row.original.isDuplicated
               const isCurrentEarringsDuplicated = earringsDuplicated.find(
                 ({ earring }) => earring === itemEarring
               )
 
-              // const isEarringRowSelected =
-              //   _selectedRow?.earring === row.original.earring
-              // const isEarringRowsSelected = _selectedRows?.includes(
-              //   row.original.earring || ''
-              // )
-
               const isDuplicated =
                 isDuplicatedInDb || isCurrentEarringsDuplicated
-              // const isSelected = isEarringRowSelected || isEarringRowsSelected
 
               return (
                 <tr
                   key={row.id}
                   className={`border-2 border-transparent hover:border-info cursor-pointer `}
-                  // onClick={() => {
-                  //   _onRowClick?.({
-                  //     id: itemId,
-                  //     earring: itemEarring
-                  //   })
-                  // }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td
