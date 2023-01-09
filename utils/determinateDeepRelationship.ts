@@ -71,7 +71,7 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   const p1Grandparents = getGrandparents(p1)
 
   // p1 is uncle of p2
-  console.log({ p1Grandparents, p2Grandparents, p2, p1, p1Parents })
+  // console.log({ p1Grandparents, p2Grandparents, p2, p1, p1Parents })
 
   // ****************************************  Are cousins
   for (let i = 0; i < p1Grandparents.length; i++) {
@@ -109,7 +109,7 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
     }
   }
 
-  return 'any'
+  return 'none'
 }
 
 export default determinateDeepRelationship

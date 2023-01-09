@@ -75,9 +75,6 @@ const AnimalsTable = ({
         </span>
       )
     }),
-    // columnHelper.accessor('status', {
-    //   header: 'Status'
-    // }),
 
     columnHelper.accessor('parents', {
       header: 'Padres',
@@ -115,11 +112,16 @@ const AnimalsTable = ({
   const extraCols: any[] = []
   if (showRelationshipCol) {
     extraCols.push(
-      columnHelper.accessor('relationship.grade', {
+      columnHelper.accessor('relationship', {
         header: 'rel',
         cell: (props) => (
-          <span className="flex w-full justify-between">
-            {!!props.getValue() ? `${props.getValue()}°` : ''}
+          <span className="flex w-full justify-between  flex-col">
+            <span>
+              {!!props.getValue() ? `${props.getValue()?.grade}°` : ''}
+            </span>
+            <span className="text-xs">
+              {!!props.getValue() ? `${props.getValue()?.type}` : ''}
+            </span>
           </span>
         )
       })
@@ -298,7 +300,7 @@ const AnimalsTable = ({
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => {
-              const relationship = row.original?.relationship?.grade
+              const relationshipGrade = row.original?.relationship.grade
 
               const itemId = row.original.id
               const itemEarring = row.original.earring
@@ -306,11 +308,13 @@ const AnimalsTable = ({
               const isCurrentEarringsDuplicated = earringsDuplicated.find(
                 ({ earring }) => earring === itemEarring
               )
+
               const isEarringRowSelected =
                 _selectedRow?.earring === row.original.earring
               const isEarringRowsSelected = _selectedRows?.includes(
                 row.original.earring || ''
               )
+
               const isDuplicated =
                 isDuplicatedInDb || isCurrentEarringsDuplicated
               const isSelected = isEarringRowSelected || isEarringRowsSelected
@@ -334,12 +338,12 @@ const AnimalsTable = ({
                       ${isDuplicated && ' bg-error'} 
                       ${
                         showRelationshipCol &&
-                        relationship === 1 &&
+                        relationshipGrade === 1 &&
                         'bg-rose-400'
                       }
                       ${
                         showRelationshipCol &&
-                        relationship === 2 &&
+                        relationshipGrade === 2 &&
                         'bg-rose-300'
                       }
                       `}
