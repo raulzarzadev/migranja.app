@@ -171,6 +171,7 @@ const AnimalsTable = ({
     } else {
       setSelectedRow?.(null)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowSelection])
 
   console.log({ rowSelection })
