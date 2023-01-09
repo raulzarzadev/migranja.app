@@ -300,7 +300,7 @@ const AnimalsTable = ({
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => {
-              const relationshipGrade = row.original?.relationship.grade
+              const relationshipGrade = row.original?.relationship?.grade
 
               const itemId = row.original.id
               const itemEarring = row.original.earring

@@ -1,3 +1,5 @@
+import { i } from 'vitest/dist/index-761e769b'
+
 export interface Member {
   name: string
   father: string | null
@@ -23,6 +25,16 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   //   return grandparents
   // }
 
+  // **************************************** have parents
+  console.table({ p1Parents, p2Parents })
+  if (
+    !p1Parents?.father &&
+    !p1Parents?.mother &&
+    !p2Parents?.father &&
+    !p2Parents?.mother
+  )
+    return 'none'
+
   // **************************************** Are brothers
 
   if (
@@ -31,7 +43,9 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   ) {
     return 'hermano/hermana'
   }
+
   // **************************************** Are father or mother
+
   if (
     p2Parents?.mother === p1Parents?.name ||
     p2Parents?.father === p1Parents?.name
@@ -87,10 +101,10 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   for (let j = 0; j < [p1Parents?.father, p1Parents?.mother].length; j++) {
     for (let i = 0; i < p2Grandparents.length; i++) {
       if (
-        p1Parents?.father === p2Grandparents[i] ||
-        p1Parents?.mother === p2Grandparents[i] ||
-        p1Parents?.father === p2Grandparents[j] ||
-        p1Parents?.mother === p2Grandparents[j]
+        (p1Parents?.father && p1Parents?.father === p2Grandparents[i]) ||
+        (p1Parents?.mother && p1Parents?.mother === p2Grandparents[i]) ||
+        (p1Parents?.father && p1Parents?.father === p2Grandparents[j]) ||
+        (p1Parents?.mother && p1Parents?.mother === p2Grandparents[j])
       )
         return 'tia/tio'
     }

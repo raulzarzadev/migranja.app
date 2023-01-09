@@ -20,13 +20,14 @@ const family = [
   { name: 'dan', father: 'carlos', mother: 'lulu' },
   { name: 'cam', father: 'carlos', mother: 'lulu' },
   { name: 'emi', father: 'jose', mother: 'lulu' },
-  { name: 'max', father: 'ed', mother: 'ana' }
+  { name: 'max', father: 'ed', mother: 'ana' },
+  { name: 'mich', father: null, mother: null }
 ]
 describe('Relationship validations', () => {
-  it('any relation', () => {
+  it('none relation', () => {
     const p1 = 'mich'
     const p2 = 'tam'
-    const r = 'any'
+    const r = 'none'
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })
   it('pepe y tam are brohters', () => {
@@ -92,9 +93,9 @@ describe('Relationship validations', () => {
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })
 
-  it('sebas is any of dan', () => {
+  it('sebas is none of dan', () => {
     const p1 = 'sebas'
-    const r = 'any'
+    const r = 'none'
     const p2 = 'dan'
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })
@@ -127,6 +128,26 @@ describe('Relationship validations', () => {
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })
 
+  it('mich is none of carlos', () => {
+    const p1 = 'mich'
+    const r = 'none'
+    const p2 = 'carlos'
+    expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
+  })
+  it('mich is none of max', () => {
+    const p1 = 'mich'
+    const r = 'none'
+    const p2 = 'max'
+    expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
+  })
+
+  it('carlos is padre/madre of luis', () => {
+    const p1 = 'carlos'
+    const r = 'padre/madre'
+    const p2 = 'luis'
+    expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
+  })
+
   // it('juan is 2°uncle of emi', () => {
   //   const p1 = 'juan'
   //   const r = 'tia/tio-2°'
@@ -140,9 +161,9 @@ describe('Relationship validations', () => {
   //   const p2 = 'dan'
   //   expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   // })
-  // it('ana is any of cam', () => {
+  // it('ana is none of cam', () => {
   //   const p1 = 'ana'
-  //   const r = 'any'
+  //   const r = 'none'
   //   const p2 = 'cam'
   //   expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   // })
