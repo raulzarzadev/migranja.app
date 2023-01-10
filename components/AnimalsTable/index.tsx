@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table'
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
@@ -102,8 +102,7 @@ const AnimalsTable = ({
 
   const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     // Rank the item
-    const itemRank = rankItem(row.getValue(columnId), value)
-
+    const itemRank = rankItem(row.getValue('earring'), value)
     // Store the itemRank info
     addMeta({
       itemRank
@@ -208,7 +207,7 @@ const AnimalsTable = ({
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
           className=" input input-sm w-full input-bordered"
-          placeholder="Buscar..."
+          placeholder="Buscar por arete..."
         />
       </div>
       <div className="text-center">
