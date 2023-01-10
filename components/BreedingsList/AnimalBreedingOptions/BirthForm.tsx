@@ -11,16 +11,15 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
-import {
-  AnimalFormattedWhitGenericEvenData,
-  ParentType
-} from 'types/base/AnimalType.model'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import Link from 'next/link'
 
 const BirthForm = ({
-  animal
+  animal,
+  possibleBirth
 }: {
   animal: AnimalFormattedWhitGenericEvenData
+  possibleBirth?: number | Date
 }) => {
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
@@ -37,7 +36,7 @@ const BirthForm = ({
     defaultValues: {
       calfs: [defaultCalf],
       birthType: 1,
-      date: new Date()
+      date: possibleBirth || new Date()
     }
   })
   const {

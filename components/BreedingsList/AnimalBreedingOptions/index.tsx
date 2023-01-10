@@ -87,7 +87,10 @@ const AnimalBreedingOptions = ({
           </label>
         </div>
         {option === 'birth' && (
-          <BirthForm animal={{ ...animal, status: 'PENDING' }} />
+          <BirthForm
+            animal={{ ...animal, status: 'PENDING' }}
+            possibleBirth={animal.eventData?.breedingDates?.birthStartAt}
+          />
         )}
         {option === 'abort' && <AbortForm animal={animal} />}
         {option === 'notPregnant' && <EmptyPregnantForm animal={animal} />}
