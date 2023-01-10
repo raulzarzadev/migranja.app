@@ -13,6 +13,7 @@ import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import Link from 'next/link'
+import ProgressButton from 'components/ProgressButton'
 
 const BirthForm = ({
   animal,
@@ -234,19 +235,22 @@ const BirthForm = ({
               </div>
             </div>
           ))}
-          {progress > 0 && (
+          <div className="mt-10">
+            <ProgressButton progress={progress} />
+          </div>
+          {/* {progress > 0 && (
             <progress className="progress w-full" value={progress} max={100} />
           )}
           <div className="flex justify-center w-full mt-6">
             <button disabled={progress > 0} className="btn btn-info">
               Guardar
             </button>
-          </div>
-          {finishView && (
+          </div> */}
+          {/* {finishView && (
             <div className="flex justify-center w-full mt-6">
               <Link href={`/${currentFarm?.id}`}>Ver parto</Link>
             </div>
-          )}
+          )} */}
         </form>
       </FormProvider>
     </div>

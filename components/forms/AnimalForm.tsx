@@ -65,15 +65,12 @@ export const AnimalForm = ({
   const { watch, handleSubmit, reset, setValue } = methods
   const formValues = watch()
   const { id, images } = formValues
-  // console.log({ formValues })
   interface ErrorType {
     type: any
     message: string
   }
   const [error, setError] = useState<ErrorType | null>()
   const onSubmit = (data: any) => {
-    //console.log(data)
-    console.log(data)
     setLoading(true)
     if (id) {
       updateAnimal(id, data)

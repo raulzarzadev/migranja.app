@@ -22,7 +22,7 @@ const ParentModal = ({
   }
   const handleOpenParent = (parentReference: string) => {
     // can be a id or a earring
-    console.log(parentReference)
+    // console.log(parentReference)
     const parent = [...ovines].find(
       ({ earring, id }) => earring === parentReference || id === parentReference
     )

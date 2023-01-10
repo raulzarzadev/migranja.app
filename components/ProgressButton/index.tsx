@@ -12,9 +12,11 @@ const ProgressButton = ({ progress }: { progress: number }) => {
         </div>
       )}
       {progress == 100 && <div className="text-center">Listo. </div>}
-      <button className="btn btn-info" disabled={progress > 0}>
-        Guardar
-      </button>
+      <div className="flex w-full justify-center">
+        <button className="btn btn-info" disabled={progress > 0}>
+          Guardar
+        </button>
+      </div>
     </div>
   )
 }

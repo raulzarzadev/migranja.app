@@ -191,7 +191,6 @@ export function formatNewGenericFarmEvent<T>(
       : `(1/2${motherBreed}-1/2${fatherBreed})`
 
   const formattedCalfs = data?.calfs?.map((calf: any) => {
-    console.log(calf)
     const statuses: AnimalType['statuses'] = {
       isAlive: !!calf?.isAlive,
       isInTheFarm: !!calf?.isAlive,
