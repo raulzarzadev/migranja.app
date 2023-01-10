@@ -9,7 +9,7 @@ export interface FarmType extends TypeBase {
   team: Record<MemberTeam['id'], MemberTeam>
   images: ImageType[]
   email?: string
-  animals?: AnimalType[]
+  //animals?: AnimalType[]
 }
 
 export interface PermissionOption {

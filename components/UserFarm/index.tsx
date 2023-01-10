@@ -1,9 +1,8 @@
 import FarmNavigation from 'components/FarmNavigation'
 import FarmForm from 'components/forms/FarmForm'
-import UserFarmNavigation from 'components/UserFarmNavigation'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmState, selectUserFarm } from 'store/slices/farmSlice'
+import { selectUserFarm } from 'store/slices/farmSlice'
 
 const UserFarm = () => {
   const [editing, setEditing] = useState(false)

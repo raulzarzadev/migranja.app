@@ -1,24 +1,32 @@
 import { FarmType } from '@firebase/Farm/farm.model'
 import Icon from 'components/Icon'
+import InvitationStatus from 'components/InvitationStatus'
 import Link from 'next/link'
+import { useSelector } from 'react-redux'
+import { selectAuthState } from 'store/slices/authSlice'
 
 const FarmNavigation = ({
   farm,
   showGo,
-  setEditing
+  setEditing,
+  showInvitationsStatus
 }: {
-  farm?: FarmType | null
+  farm?: {
+    id: FarmType['id']
+    name: FarmType['name']
+  }
   showGo?: boolean
   setEditing?: (bool: boolean) => void
+  showInvitationsStatus?: boolean
 }) => {
+  const user = useSelector(selectAuthState)
   return (
     <div>
-      <div className="flex w-full bg-base-300 p-2 rounded-md shadow-md justify-between mb-2 items-center">
+      <div className=" w-full bg-base-300 p-2 rounded-md shadow-md  mb-2  grid grid-flow-col grid-cols-4 place-items-center ">
         {farm ? (
           <>
             {/* <div>{farm?.images?.[0]?.url}</div> */}
-            <div>{farm?.name}</div>
-            <div className="flex w-[110px] justify-between  items-center">
+            <span>
               {setEditing && (
                 <button
                   className="btn btn-circle btn-sm btn-info"
@@ -27,7 +35,9 @@ const FarmNavigation = ({
                   <Icon name="edit" size="xs" />
                 </button>
               )}
-
+            </span>
+            <div>{farm?.name}</div>
+            <div className="flex w-[110px] justify-between  items-center">
               {showGo && (
                 <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">
                   ir
@@ -48,6 +58,11 @@ const FarmNavigation = ({
             )}
           </div>
         )}
+        <span>
+          {showInvitationsStatus && (
+            <InvitationStatus farmId={farm?.id} userId={user?.id} />
+          )}
+        </span>
       </div>
     </div>
   )
