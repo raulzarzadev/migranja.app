@@ -28,6 +28,7 @@ const BirthForm = ({
     ({ earring }) => earring
   )
   const defaultCalf = {
+    isAlive: true,
     gender: 'female',
     earring: ''
   }
@@ -48,7 +49,7 @@ const BirthForm = ({
     formState: { errors }
   } = methods
   const formValues = watch()
-
+  console.log({ formValues })
   useEffect(() => {
     let calfs = []
     for (let i = 0; i < parseInt(`${formValues?.birthType}`); i++) {
@@ -154,30 +155,48 @@ const BirthForm = ({
           )}
 
           {formValues?.birthType && (
-            <div className="flex w-full justify-evenly  ">
+            <div className="grid grid-cols-4 place-items-center my-3 mt-8 font-bold  ">
               <span>Vivo</span>
-              <span className="w-[100px] text-center">Arete</span>
-              <span className="w-[120px] text-center">Nombre</span>
-              <span className="w-[120px] text-center">Peso</span>
               <span className="w-[120px] text-center">Sexo</span>
+              <span className="w-[100px] text-center">Arete</span>
+              {/* <span className="w-[120px] text-center">Nombre</span> */}
+              <span className="w-[120px] text-center">Peso</span>
             </div>
           )}
 
           {formValues?.calfs?.map((_newAnimal: any, i: number) => (
-            <div
-              key={i}
-              className="flex w-full items-center justify-evenly flex-col sm:flex-row my-2 "
-            >
-              <div className="divider" />
+            <div key={i} className="grid grid-cols-4 place-items-center">
               <InputContainer
                 name={`calfs.${i}.isAlive`}
                 type="checkbox"
                 inputClassName="checkbox-success"
+                defaultChecked
               />
+              <div className="flex justify-center">
+                <label className="flex flex-col">
+                  <span>Macho</span>
+                  <input
+                    {...register(`calfs.${i}.gender`, {
+                      required: 'Selecciona el sexo'
+                    })}
+                    type={'radio'}
+                    value="male"
+                  />
+                </label>
+                <label className="flex flex-col">
+                  <span>Hembra</span>
+                  <input
+                    {...register(`calfs.${i}.gender`, {
+                      required: true
+                    })}
+                    type={'radio'}
+                    value="female"
+                  />
+                </label>
+              </div>
               <InputContainer
                 rules={{
                   // required: 'Este campo es necesario',
-
                   validate: {
                     alreadyExist: (value) =>
                       ![...farmEarrings].includes(value) || 'Ya existe!',
@@ -192,44 +211,23 @@ const BirthForm = ({
                 className="w-[100px] my-1"
               />
 
-              <InputContainer
+              {/* <InputContainer
                 name={`calfs.${i}.name`}
                 type="text"
                 placeholder="Nombre"
                 className="w-[120px] my-1"
-              />
+              /> */}
               <InputContainer
                 name={`calfs.${i}.weight.atBirth`}
                 type="number"
                 placeholder="Peso"
                 className="w-[120px] my-1"
                 min="0"
+                max="10"
                 step="0.01"
               />
               <div>
                 <div>
-                  <div className="flex justify-center">
-                    <label className="flex flex-col">
-                      <span>Macho</span>
-                      <input
-                        {...register(`calfs.${i}.gender`, {
-                          required: 'Selecciona el sexo'
-                        })}
-                        type={'radio'}
-                        value="male"
-                      />
-                    </label>
-                    <label className="flex flex-col">
-                      <span>Hembra</span>
-                      <input
-                        {...register(`calfs.${i}.gender`, {
-                          required: true
-                        })}
-                        type={'radio'}
-                        value="female"
-                      />
-                    </label>
-                  </div>
                   {errors?.calfs?.[i]?.gender && (
                     <span className="label-text text-error">
                       {errors?.calfs[i]?.gender?.message}
