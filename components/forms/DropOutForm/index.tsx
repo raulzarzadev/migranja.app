@@ -1,6 +1,7 @@
 import { updateAnimal } from '@firebase/Animal/main'
 import { createDropOutEvent } from '@firebase/Events/dropOput.event'
 import InputContainer from 'components/inputs/InputContainer'
+import ProgressButton from 'components/ProgressButton'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
@@ -96,10 +97,10 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
 
   return (
     <div>
-      <h2>Baja de animal</h2>
+      <h2 className="text-center font-bold my-4">Baja de animal</h2>
       <div>
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
             <InputContainer
               type="select"
               selectOptions={dropOutReasons}
@@ -107,14 +108,7 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
             />
             <InputContainer type="date" name="date" />
             <InputContainer type="textarea" name="comments" />
-            {!!progress && (
-              <progress
-                value={progress}
-                max={100}
-                className="progress"
-              ></progress>
-            )}
-            <button className="btn btn-info">Guardar</button>
+            <ProgressButton progress={progress} />
           </form>
         </FormProvider>
       </div>

@@ -20,6 +20,7 @@ const ChooseEventForm = ({
   return (
     <div>
       <select
+        className="input select input-bordered w-full"
         onChange={({ target: { value } }: any) => setOptionSelected(value)}
       >
         <option value={'default'}> Selecciona el tipo de evento</option>
@@ -33,7 +34,9 @@ const ChooseEventForm = ({
 
 const DefaultFormInfo = () => {
   return (
-    <div>Segun el evento, habra diferentes campos que llenar. Se cuidadoso</div>
+    <div className="h-32 w-full max-w-2/3 flex justify-center items-center">
+      Segun el evento, habra diferentes campos que llenar. Se cuidadoso
+    </div>
   )
 }
 
