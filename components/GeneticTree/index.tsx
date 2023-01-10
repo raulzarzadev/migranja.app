@@ -1,6 +1,15 @@
+import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+
 interface GeneticTreeElement {
   id: string
   label: string
+}
+const LABELS: Record<NonNullable<AnimalType['status']>, string> = {
+  BIRTH: 'Parto',
+  ABORT: 'Aborto',
+  EMPTY: 'Vacio',
+  PENDING: 'Pendiente',
+  ALL: 'Todo'
 }
 const GeneticTree = ({
   elements,
@@ -28,7 +37,12 @@ const GeneticTree = ({
               <span>Madres:</span>
               <div>
                 {mothers.map((mom) => (
-                  <div key={mom.earring}>{mom.earring}</div>
+                  <div key={mom.earring} className="flex">
+                    <div className="w-[80px] text-end pr-4">{mom.earring}</div>
+                    <span>
+                      {LABELS[mom?.status as NonNullable<AnimalType['status']>]}
+                    </span>
+                  </div>
                 ))}
               </div>
             </div>

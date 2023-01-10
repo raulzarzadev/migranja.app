@@ -20,21 +20,31 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
       return asMale || asFemale
     })
 
-    console.log({ farmEvents })
+    // console.log({ farmEvents })
 
     const aborts = farmEvents.filter(
       (event) =>
         event?.type === 'ABORT' &&
         event?.eventData?.parents?.mother?.earring === animalEarring
     )
+
     const empty = farmEvents.filter(
       (event) =>
         event?.type === 'EMPTY' &&
         event?.eventData?.parents?.mother?.earring === animalEarring
     )
+
     const dropOut = farmEvents.filter(
       (event) =>
         event?.type === 'DROP_OUT' &&
+        event?.eventData?.animals?.find(
+          (animal: { earring: string }) => animal.earring === animalEarring
+        )
+    )
+
+    const dropIn = farmEvents.filter(
+      (event) =>
+        event?.type === 'DROP_IN' &&
         event?.eventData?.animals?.find(
           (animal: { earring: string }) => animal.earring === animalEarring
         )
@@ -50,7 +60,8 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
       ...aborts,
       ...empty,
       ...dropOut,
-      ...births
+      ...births,
+      ...dropIn
     ])
   }, [animalEarring, farmEvents])
 

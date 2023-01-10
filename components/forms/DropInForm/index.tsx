@@ -1,6 +1,7 @@
 import { updateAnimal } from '@firebase/Animal/main'
 import { createDropOutEvent } from '@firebase/Events/dropOput.event'
 import InputContainer from 'components/inputs/InputContainer'
+import Loading from 'components/Loading'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
@@ -60,6 +61,7 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
           currentStatus:
             defineCurrentStatus[data?.reason as FarmEventDropOut['reason']]
         })
+        setProgress((i * 80) / animals.length)
         console.log({ resup })
       }
       setProgress(50)
@@ -113,7 +115,19 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
                 className="progress"
               ></progress>
             )}
-            <button className="btn btn-info">Guardar</button>
+            {progress > 0 && progress !== 100 && (
+              <div>
+                Espera mientras terminar <Loading />
+              </div>
+            )}
+            {progress == 100 && (
+              <div className="text-center">
+                Listo. Puedes cerrar este modal{' '}
+              </div>
+            )}
+            <button className="btn btn-info" disabled={progress > 0}>
+              Guardar
+            </button>
           </form>
         </FormProvider>
       </div>

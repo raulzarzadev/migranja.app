@@ -111,6 +111,7 @@ const BreedingEventRow = ({
   const eventData = event.eventData
   return (
     <div>
+      {event.id}
       <div className="text-center">
         <span>Lote: {eventData?.breedingId}</span>
       </div>

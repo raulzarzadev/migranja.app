@@ -6,3 +6,8 @@ export interface AnimalTableType extends AnimalType {
     relationship?: string
   }
 }
+
+// ✅ Remove nullable types from the type's keys
+export type WithoutNullableKeys<Type> = {
+  [Key in keyof Type]-?: WithoutNullableKeys<NonNullable<Type[Key]>>
+}

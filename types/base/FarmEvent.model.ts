@@ -3,7 +3,14 @@ import { AnimalType, ParentsType } from './AnimalType.model'
 import { TypeBase } from './TypeBase.model'
 
 export interface BaseFarmEvent {
-  type: 'BREEDING' | 'REMOVE' | 'BIRTH' | 'ABORT' | 'EMPTY' | 'DROP_OUT'
+  type:
+    | 'BREEDING'
+    | 'REMOVE'
+    | 'BIRTH'
+    | 'ABORT'
+    | 'EMPTY'
+    | 'DROP_OUT'
+    | 'DROP_IN'
   status?: string
   farm: {
     id: string
