@@ -1,45 +1,62 @@
 import useSortByField from 'components/hooks/useSortByField'
+import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
-import { FarmState } from 'store/slices/farmSlice'
+import { FarmState, FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 import FarmEventCard from './FarmEvent/FarmEventCard'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
-  const options = getEventTypesOptions(events)
-  const [filteredEvents, setFilteredEvents] = useState(events)
-  const [filterBy, setFilterBy] = useState('')
+  const [filteredEvents, setFilteredEvents] = useState(events || [])
+  const [filterBy, setFilterBy] = useState<string>('')
   useEffect(() => {
     if (!filterBy) {
       setFilteredEvents(events)
     } else {
-      const filtered = events.filter(({ type }) => type === filterBy)
+      const filtered = events.filter((event) => {
+        const dictionary: Record<FarmStateAnimalEvent['type'], string> = {
+          BREEDING: 'Monta',
+          REMOVE: 'Removida',
+          BIRTH: 'Parto',
+          ABORT: 'Aborto',
+          EMPTY: 'Vacio',
+          DROP_OUT: 'Baja',
+          DROP_IN: 'Alta'
+        }
+        return (
+          dictionary[event.type]
+            .toLowerCase()
+            .includes(filterBy.toLowerCase()) ||
+          event?.eventData.breedingBatch?.find(({ earring }) =>
+            earring?.includes(filterBy)
+          ) ||
+          event?.eventData.calfs?.find(({ earring }) =>
+            earring?.includes(filterBy)
+          ) ||
+          event?.eventData?.parents?.father?.earring?.includes(filterBy) ||
+          event?.eventData?.parents?.mother?.earring?.includes(filterBy)
+        )
+      })
       setFilteredEvents(filtered)
     }
   }, [events, filterBy])
 
-  const { handleSortBy, arraySorted, reverse } = useSortByField(filteredEvents)
-
+  const sortByLastUpdated = (a: any, b: any) => b.updatedAt - a.updatedAt
   return (
     <div role="events-list">
-      <div>Filters</div>
-      <FilterOptions
-        label="Por tipo:"
-        options={options}
-        setOption={(value) => setFilterBy(value)}
+      <DebouncedInput
+        onChange={(value) => setFilterBy(`${value}`)}
+        value={filterBy}
+        className="input input-bordered w-full placeholder:font-bold mb-2 "
+        placeholder="Buscar ..."
       />
-      <SortedOptions
-        sortBy={handleSortBy}
-        options={[
-          { label: 'Ultimo actualizado', value: 'updatedAt' },
-          { label: 'Fecha', value: 'eventData.date' }
-        ]}
-      />
-      {arraySorted.map((event) => (
-        <div key={event?.id} className="my-2">
-          <FarmEventCard event={event} />
-        </div>
-      ))}
+      <div className="event-list overflow-auto shadow-inner">
+        {[...filteredEvents].sort(sortByLastUpdated).map((event) => (
+          <div key={event?.id} className="my-2">
+            <FarmEventCard event={event} />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

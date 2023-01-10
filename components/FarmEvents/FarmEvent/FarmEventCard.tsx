@@ -1,5 +1,4 @@
 import GeneticTree from 'components/GeneticTree'
-import useDebugInformation from 'components/hooks/useDebugInformation'
 import { ReactNode } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
@@ -61,13 +60,16 @@ export const FarmEventCard = ({
     }
   }
   return (
-    <div className="bg-base-300 rounded-md pb-2 shadow-md">
+    <div
+      className="bg-base-300 rounded-md pb-2 shadow-md collapse"
+      tabIndex={0}
+    >
       <HeaderEventCard
         event={event}
         options={{ label: DETAILS_OPTIONS[event?.type].label }}
       />
-      <div className="bg-base-200">
-        <div className="p-2 ">
+      <div className="bg-base-200 collapse-content">
+        <div className="p-2  ">
           {DETAILS_OPTIONS[event?.type ?? 'NULL'].Component}
         </div>
       </div>
@@ -111,7 +113,6 @@ const BreedingEventRow = ({
   const eventData = event.eventData
   return (
     <div>
-      {event.id}
       <div className="text-center">
         <span>Lote: {eventData?.breedingId}</span>
       </div>

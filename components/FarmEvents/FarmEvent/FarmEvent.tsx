@@ -4,13 +4,7 @@ import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { fromNow } from 'utils/dates/myDateUtils'
 import BirthEventDetails from '../BirthEventDetails'
 import EventModal from '../EventModal'
-import {
-  AbortDetailsEvent,
-  BirthDetailsEvent,
-  BreedingDetailsEvent,
-  EmptyDetailsEvent,
-  GenericEventType
-} from './FarmEvent.model'
+import { BreedingDetailsEvent, GenericEventType } from './FarmEvent.model'
 
 export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
   interface FarmEventOptions {
@@ -46,6 +40,10 @@ export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
       DROP_OUT: {
         label: 'De baja ',
         Component: <span>Baja</span>
+      },
+      DROP_IN: {
+        label: 'De alta ',
+        Component: <span>Alta</span>
       }
     }
   return (

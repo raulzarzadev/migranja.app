@@ -12,8 +12,8 @@ const FarmNavigation = ({
   showInvitationsStatus
 }: {
   farm?: {
-    id: FarmType['id']
-    name: FarmType['name']
+    id?: FarmType['id']
+    name?: FarmType['name']
   }
   showGo?: boolean
   setEditing?: (bool: boolean) => void
@@ -36,7 +36,7 @@ const FarmNavigation = ({
                 </button>
               )}
             </span>
-            <div>{farm?.name}</div>
+            <div className="text-xl font-bold">{farm?.name}</div>
             <div className="flex w-[110px] justify-between  items-center">
               {showGo && (
                 <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">

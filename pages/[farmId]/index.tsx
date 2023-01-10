@@ -9,7 +9,7 @@ const FarmPage = () => {
   return (
     <div>
       <FarmNavigation
-        farm={currentFarm}
+        farm={{ id: currentFarm?.id, name: currentFarm?.name }}
         showGo={undefined}
         setEditing={undefined}
       />

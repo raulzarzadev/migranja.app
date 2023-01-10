@@ -12,7 +12,14 @@ const UserFarm = () => {
       {editing ? (
         <FarmForm farm={userFarm || undefined} setEditing={setEditing} />
       ) : (
-        <FarmNavigation farm={userFarm} setEditing={setEditing} showGo={true} />
+        <FarmNavigation
+          farm={{
+            id: userFarm?.id,
+            name: userFarm?.name
+          }}
+          setEditing={setEditing}
+          showGo={true}
+        />
       )}
     </div>
   )
