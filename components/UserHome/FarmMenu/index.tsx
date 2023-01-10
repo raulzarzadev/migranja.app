@@ -190,6 +190,7 @@ const FarmMenu = (props: any) => {
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {column1 === 'events' && !column2 && <FarmEvents />}
           {column2 === 'breedingEvent' && !column3 && <BreedingsList />}
+
           {/* TODO: ADD EVENT FORM ********************************+******+ +++************** ADD ANIMALS */}
 
           {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}

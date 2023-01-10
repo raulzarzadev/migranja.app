@@ -34,8 +34,14 @@ const ChooseEventForm = ({
 
 const DefaultFormInfo = () => {
   return (
-    <div className="h-32 w-full max-w-2/3 flex justify-center items-center">
-      Segun el evento, habra diferentes campos que llenar. Se cuidadoso
+    <div className="h-32 w-full max-w-2/3 flex justify-center items-center flex-col max-w-xs mx-auto text-center">
+      <p className="my-4">
+        Segun el evento, habra diferentes campos que llenar.
+      </p>
+      <p>
+        Se cuidadoso, este evento afectara a todos los animales previamente
+        seleccionados.
+      </p>
     </div>
   )
 }

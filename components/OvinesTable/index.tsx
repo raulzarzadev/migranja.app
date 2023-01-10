@@ -23,8 +23,8 @@ const OvinesTable = () => {
         />
       </div>
       <div className=" bg-base-300 shadow-md rounded-md m-2 lg:w-1/2 h-min">
-        {selectedRow && <AnimalCard animalId={selectedRow.id} />}
-        {selectedRows && (
+        {/* {selectedRow && <AnimalCard animalId={selectedRow.id} />} */}
+        {!!selectedRows?.length && (
           <AnimalsOptions
             animalsEarrings={selectedRows}
             setAnimalsEarrings={setSelectedRows}

@@ -236,7 +236,7 @@ const EventsSection = ({ animalEarring }: { animalEarring: string }) => {
         >
           {openEvents ? 'Ocultar events' : 'Mostrar eventos'}{' '}
           <span className="ml-2">
-            <Icon name={!openEvents ? `down` : 'up'} />
+            <Icon name="event" />
           </span>
         </button>
       </div>

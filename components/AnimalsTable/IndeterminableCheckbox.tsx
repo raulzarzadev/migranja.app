@@ -14,11 +14,20 @@ export default function IndeterminateCheckbox({
   }, [ref, indeterminate, rest.checked])
 
   return (
-    <input
-      type="checkbox"
-      ref={ref}
-      className={className + ' cursor-pointer'}
-      {...rest}
-    />
+    <div className="form-control">
+      <label
+        className="label"
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
+      >
+        <input
+          type="checkbox"
+          ref={ref}
+          className={className + ' cursor-pointer checkbox checkbox-xs'}
+          {...rest}
+        />
+      </label>
+    </div>
   )
 }

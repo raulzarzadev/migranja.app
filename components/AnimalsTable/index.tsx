@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table'
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { fromNow } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
@@ -20,6 +20,8 @@ import { getDuplicatedEarrings } from 'components/BatchTable/batch.helpers'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import HelperText from 'components/HelperText'
 import IndeterminateCheckbox from './IndeterminableCheckbox'
+import Modal from 'components/modal'
+import AnimalCard from 'components/AnimalCard'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -200,8 +202,26 @@ const AnimalsTable = ({
   })
 
   const earringsDuplicated = getDuplicatedEarrings(animalsData)
+
+  const [openDetailsModal, setOpenDetailsModal] = useState(false)
+
+  const [animaId, setAnimalId] = useState('')
+  const handleOpenDetailsModal = (animalId: SetStateAction<string>) => {
+    setOpenDetailsModal(!openDetailsModal)
+    setAnimalId(animalId)
+  }
+
   return (
     <div className="p-2">
+      <Modal
+        title="Detalles del animal"
+        open={openDetailsModal}
+        handleOpen={() => handleOpenDetailsModal('')}
+      >
+        <div>
+          <AnimalCard animalId={animaId} />
+        </div>
+      </Modal>
       <div className=" justify-center flex my-2 items-center w-full">
         <DebouncedInput
           value={globalFilter ?? ''}
@@ -257,6 +277,7 @@ const AnimalsTable = ({
             {table.getRowModel().rows.map((row) => {
               const relationshipGrade = row.original?.relationship?.grade
               const itemEarring = row.original.earring
+              const itemId = row.original.id
               const isDuplicatedInDb = row.original.isDuplicated
               const isCurrentEarringsDuplicated = earringsDuplicated.find(
                 ({ earring }) => earring === itemEarring
@@ -269,6 +290,10 @@ const AnimalsTable = ({
                 <tr
                   key={row.id}
                   className={`border-2 border-transparent hover:border-info cursor-pointer `}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleOpenDetailsModal(itemId)
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td

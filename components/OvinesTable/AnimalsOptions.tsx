@@ -46,40 +46,7 @@ const AnimalsOptions = ({
       console.log(error)
       setProgress(0)
     }
-    //
-    // try {
-    //   setProgress(10)
-    //   for (let i = 0; i < animalsIds.length; i++) {
-    //     const id = animalsIds[i]
-    //     await deleteAnimal(id as string).then((res) => console.log(res))
-    //     debugger
-    //     setProgress((i * 100) / animalsIds.length)
-    //   }
-    //   setProgress(100)
-    //   _setEarrings([])
-    //   setAnimalsEarrings?.([])
-    // } catch (error) {
-    //   console.log(error)
-    //   setProgress(0)
-    // }
-    //   // animalsIds.forEach(async (id, i) => {
-    //   //   await deleteAnimal(id as string).then((res) => console.log(res))
-    //   //   setProgress((i * 100) / animalsIds.length)
-    //   // })
-    //   for (let i = 0; i < animalsIds.length; i++) {
-    //     const id = animalsIds[i]
-    //     await deleteAnimal(id as string).then((res) => console.log(res))
-    //     setProgress((i * 100) / animalsIds.length)
-    //   }
-    //   setProgress(100)
-    //   _setEarrings([])
-    //   setAnimalsEarrings?.([])
-    // } catch (error) {
-    //   console.log(error)
-    //   setProgress(0)
-    // }
   }
-  //console.log({ progress })
   const [openEvent, setOpenEvent] = useState(false)
   const handleOpenEvent = () => {
     setOpenEvent(!openEvent)
