@@ -12,7 +12,7 @@ import {
   FarmEventDropOut
 } from 'types/base/FarmEventDropOut.model'
 
-const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
+const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
   const methods = useForm({
     defaultValues: {
       reason: '',
@@ -26,9 +26,8 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
     value: FarmEventDropOut['reason']
   }
   const dropOutReasons: DropOutReason[] = [
-    { label: 'Por muerte', value: 'DEAD' },
-    { label: 'Por venta', value: 'SOLD' },
-    { label: 'Por robo', value: 'STOLE' }
+    { label: 'Por compra', value: 'BUY' },
+    { label: 'Por nacimiento', value: 'BIRTH' }
   ]
   const farmAnimals = useSelector(selectFarmAnimals)
   const farmData = useSelector(selectFarmState)
@@ -66,7 +65,7 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
       setProgress(50)
 
       const event: DTO_CreateFarmEventDropOut = {
-        type: 'DROP_OUT',
+        type: 'DROP_IN',
         reason: data.reason,
         eventData: {
           animals: animals,
@@ -96,7 +95,7 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
 
   return (
     <div>
-      <h2>Baja de animal</h2>
+      <h2>Baja de alta animales</h2>
       <div>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -122,4 +121,4 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
   )
 }
 
-export default DropOutForm
+export default DropInForm

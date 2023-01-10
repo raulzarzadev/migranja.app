@@ -58,7 +58,7 @@ const BreedingForm = () => {
   }
 
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
-
+  console.log({ sheepSelected })
   const onSubmit = async (data: any) => {
     setLoading(true)
     const breedingBatch: Partial<AnimalType>[] = femalesFiltered
@@ -103,7 +103,6 @@ const BreedingForm = () => {
 
   useEffect(() => {
     //const animals = excludeMalesAnimals(farmAnimals)
-    console.log({ sheepSelected })
     const formatAnimalsWithRelationMaleRelation = (
       cattle: { earring: string; parents?: ParentsType }[],
       male: string
@@ -193,9 +192,9 @@ const BreedingForm = () => {
                 showRelationshipCol
                 animalsData={femalesFiltered || []}
                 setSelectedRows={setSheepSelected}
-                setSelectedRow={(row) =>
-                  setSheepSelected([row?.earring as string])
-                }
+                // setSelectedRow={(row) =>
+                //   setSheepSelected([row?.earring as string])
+                // }
                 settings={{ selectMany: true }}
                 showSelectRow
               />

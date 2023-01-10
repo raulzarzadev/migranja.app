@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
+import DropInForm from '../DropInForm'
 import DropOutForm from '../DropOutForm'
 
 const ChooseEventForm = ({
@@ -9,7 +10,8 @@ const ChooseEventForm = ({
 }) => {
   const EVENTS_FORMS = {
     default: <DefaultFormInfo />,
-    dropOut: <DropOutForm animalsIds={animalsIds} />
+    dropOut: <DropOutForm animalsIds={animalsIds} />,
+    dropIn: <DropInForm animalsIds={animalsIds} />
   } as const
   type EventName = keyof typeof EVENTS_FORMS
 
@@ -22,6 +24,7 @@ const ChooseEventForm = ({
       >
         <option value={'default'}> Selecciona el tipo de evento</option>
         <option value={'dropOut'}> Dar de baja</option>
+        <option value={'dropIn'}> Dar de alta</option>
       </select>
       {EVENTS_FORMS[optionSelected || 'default']}
     </div>

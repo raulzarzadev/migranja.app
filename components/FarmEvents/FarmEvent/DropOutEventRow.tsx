@@ -1,16 +1,21 @@
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
+export const DROP_IN_DROP_OUT_LABELS: Record<
+  FarmEventDropOut['reason'],
+  string
+> = {
+  DEAD: 'Muerte',
+  STOLE: 'Robo',
+  SOLD: 'Venta',
+  LOST: 'Perdida',
+  BIRTH: 'Nacimiento',
+  BUY: 'Compra'
+}
 const DropOutEventRow = ({ event }: { event: FarmEventDropOut }) => {
-  const labels: Record<FarmEventDropOut['reason'], string> = {
-    DEAD: 'Muerte',
-    STOLE: 'Robo',
-    SOLD: 'Venta',
-    LOST: 'Perdida'
-  }
   return (
     <div>
-      <h4 className="text-center">{labels[event.reason]}</h4>
+      <h4 className="text-center">{DROP_IN_DROP_OUT_LABELS[event.reason]}</h4>
       <div>Fecha: {myFormatDate(event.eventData.date, 'dd MMM yy')}</div>
       <div>
         <div>Animales:</div>

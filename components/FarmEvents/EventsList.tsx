@@ -111,7 +111,8 @@ const getEventTypesOptions = (events: FarmState['events']): SelectOption[] => {
     BIRTH: 'Parto',
     ABORT: 'Aborto',
     EMPTY: 'Vacio',
-    DROP_OUT: 'Baja'
+    DROP_OUT: 'Baja',
+    DROP_IN: 'Alta'
   }
 
   const options: SelectOption[] = events.reduce(

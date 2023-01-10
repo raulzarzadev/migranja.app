@@ -52,6 +52,12 @@ export const FarmEventCard = ({
       Component: (
         <DropOutEventRow event={event as unknown as FarmEventDropOut} />
       )
+    },
+    DROP_IN: {
+      label: 'Alta ',
+      Component: (
+        <DropOutEventRow event={event as unknown as FarmEventDropOut} />
+      )
     }
   }
   return (

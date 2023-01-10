@@ -13,8 +13,8 @@ export interface DropOutEventData {
 }
 
 export interface FarmEventDropOut extends Omit<FarmEvent, 'type'> {
-  type: 'DROP_OUT'
-  reason: 'DEAD' | 'STOLE' | 'SOLD' | 'LOST'
+  type: 'DROP_OUT' | 'DROP_IN'
+  reason: 'DEAD' | 'STOLE' | 'SOLD' | 'LOST' | 'BUY' | 'BIRTH'
   eventData: DropOutEventData
   createdBy: {
     id: string
