@@ -48,7 +48,7 @@ const BirthForm = ({
     formState: { errors }
   } = methods
   const formValues = watch()
-  console.log({ formValues })
+  // console.log({ formValues })
   useEffect(() => {
     let calfs = []
     for (let i = 0; i < parseInt(`${formValues?.birthType}`); i++) {
@@ -78,12 +78,9 @@ const BirthForm = ({
     })
     //console.log({ formatBirthEvent, formValues })
     // return
-
     try {
       setProgress(20)
-
       const newCalfs = formatBirthEvent.eventData.calfs
-      // *************************************************   create animals/calfs
 
       // ****************************************************   create birth
       const event = createGenericBreedingEvent(formatBirthEvent)
@@ -98,6 +95,7 @@ const BirthForm = ({
       })
       setProgress(60)
 
+      // *************************************************   create animals/calfs
       const calfs = newCalfs?.map((calf: any, i: number) => {
         //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
         // setProgress((i * 100) / newCalfs?.length)

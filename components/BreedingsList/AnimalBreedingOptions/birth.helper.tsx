@@ -191,6 +191,7 @@ export function formatNewGenericFarmEvent<T>(
       : `(1/2${motherBreed}-1/2${fatherBreed})`
 
   const formattedCalfs = data?.calfs?.map((calf: any) => {
+    console.log(calf)
     const statuses: AnimalType['statuses'] = {
       isAlive: !!calf?.isAlive,
       isInTheFarm: !!calf?.isAlive,
@@ -205,7 +206,10 @@ export function formatNewGenericFarmEvent<T>(
       birthType: data?.calfs?.length,
       gender: calf.gender,
       statuses,
-      currentStatus: !!calf?.isAlive ? 'ACTIVE' : 'DEAD'
+      currentStatus: !!calf?.isAlive ? 'ACTIVE' : 'DEAD',
+      weight: {
+        ...calf.weight
+      }
     }
     return calfFormatted
   })
