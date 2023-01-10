@@ -2,7 +2,7 @@ import { BreedingEventType } from '@firebase/Events/event.model'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { ImageType } from './ImageType.model'
 import { DateType, TypeBase } from './TypeBase.model'
-
+import { AnimalType as AnimalModelType } from 'types/base/AnimalType.model'
 export interface AnimalType extends TypeBase {
   isDuplicated?: boolean
   name: string
@@ -30,15 +30,7 @@ export interface AnimalType extends TypeBase {
     isPregnant?: boolean
     isSold?: boolean
   }
-  currentStatus?:
-    | 'ACTIVE'
-    | 'PREGNANT'
-    | 'DEAD'
-    | 'STOLEN'
-    | 'SICK'
-    | 'LOST'
-    | 'SOLD'
-    | 'PENDING'
+  currentStatus?: AnimalModelType['currentStatus']
 }
 export type AnimalStatus =
   | 'PENDING'

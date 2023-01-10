@@ -22,6 +22,7 @@ import HelperText from 'components/HelperText'
 import IndeterminateCheckbox from './IndeterminableCheckbox'
 import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
+import { animalCurrentStatusLabels } from 'types/base/AnimalType.model'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -44,6 +45,7 @@ export interface AnimalTableType {
   showRelationshipCol?: boolean
   showSelectRow?: boolean
 }
+
 const AnimalsTable = ({
   animalsData,
   settings,
@@ -53,6 +55,25 @@ const AnimalsTable = ({
   showRelationshipCol,
   showSelectRow
 }: AnimalTableType) => {
+  const [animals, setAnimals] = useState(animalsData || [])
+  const [filterBy, setFilterBy] = useState('')
+  useEffect(() => {
+    if (filterBy) {
+      const filteredAnimal = animalsData.filter(
+        ({ currentStatus }) => currentStatus === filterBy
+      )
+      setAnimals(filteredAnimal)
+    } else {
+      setAnimals(animalsData)
+    }
+  }, [animalsData, filterBy])
+
+  const filterByStatusOptions = Object.entries(animalCurrentStatusLabels).map(
+    ([key, value]) => {
+      return { label: value, value: key }
+    }
+  )
+
   const [sorting, setSorting] = useState<SortingState>([])
 
   const columnHelper = createColumnHelper<AnimalsDataType>()
@@ -140,6 +161,7 @@ const AnimalsTable = ({
       )
     })
   }
+
   if (showRelationshipCol) {
     extraCols.push(
       columnHelper.accessor('relationship', {
@@ -159,10 +181,11 @@ const AnimalsTable = ({
   }
 
   const [rowSelection, setRowSelection] = useState({})
+
   useEffect(() => {
     let earrings: string[] = []
     Object.entries(rowSelection).forEach(([i, bool]: any) => {
-      const newEarring = animalsData[i].earring
+      const newEarring = animalsData[i]?.earring
       earrings.push(newEarring || '')
     })
     setSelectedRows?.(earrings)
@@ -175,12 +198,10 @@ const AnimalsTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowSelection])
 
-  // console.log({ rowSelection })
-
   const [globalFilter, setGlobalFilter] = useState('')
 
   const table = useReactTable({
-    data: animalsData as any,
+    data: [...animals] as any,
     columns: [...extraCols, ...columns],
     filterFns: {
       fuzzy: fuzzyFilter
@@ -229,7 +250,19 @@ const AnimalsTable = ({
           className=" input input-sm w-full input-bordered"
           placeholder="Buscar por arete..."
         />
+        <select
+          className="select select-sm ml-2 "
+          onChange={(e) => setFilterBy(e?.target?.value)}
+        >
+          <option value="">Todas </option>
+          {filterByStatusOptions.map(({ label, value }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
       </div>
+
       <div className="text-center">
         {globalFilter && `${table.getFilteredRowModel().rows.length} filtrados`}
       </div>

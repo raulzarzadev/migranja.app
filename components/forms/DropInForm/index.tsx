@@ -85,8 +85,9 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
       }
 
       // crear evento
+      console.log({ event })
       const res = await createDropOutEvent({ ...event })
-      console.log({ event, res })
+      console.log({ res })
       setProgress(100)
     } catch (error) {
       console.log({ error })

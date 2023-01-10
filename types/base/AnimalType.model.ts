@@ -40,6 +40,19 @@ export interface AnimalType extends TypeBase {
     | 'SOLD'
     | 'PENDING'
 }
+export const animalCurrentStatusLabels: Record<
+  NonNullable<AnimalType['currentStatus']>,
+  string
+> = {
+  PENDING: 'Pendiente',
+  ACTIVE: 'Activa',
+  PREGNANT: 'Cargada',
+  DEAD: 'Muerta',
+  STOLEN: 'Robada',
+  SICK: 'Enferma',
+  LOST: 'Perdida',
+  SOLD: 'Vendia'
+}
 export type AnimalStatus =
   | 'PENDING'
   | 'BIRTH'

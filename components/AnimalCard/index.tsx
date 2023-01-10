@@ -15,6 +15,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
+import { animalCurrentStatusLabels } from 'types/base/AnimalType.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
@@ -105,7 +106,9 @@ export const AnimalDetails = ({
                 id: <span className="">{id}</span>
               </span>
               <span className="flex flex-col">
-                <span>Acutal:{currentStatus}</span>
+                <span>
+                  Acutal:{animalCurrentStatusLabels[currentStatus || 'ACTIVE']}
+                </span>
               </span>
             </div>
           </div>

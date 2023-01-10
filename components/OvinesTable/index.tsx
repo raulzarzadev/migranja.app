@@ -1,4 +1,3 @@
-import AnimalCard from 'components/AnimalCard'
 import AnimalsTable, { RowSelectedType } from 'components/AnimalsTable'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
