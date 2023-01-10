@@ -13,10 +13,15 @@ export interface BreedingBatchesListType {
   breedings: BreedingEventCardDetails[]
 }
 const BreedingsByBatches = ({ breedings = [] }: BreedingBatchesListType) => {
+  const sortByUpdated = (a: any, b: any) => {
+    if (a?.updatedAt < b?.updatedAt) return 1
+    if (a?.updatedAt > b?.updatedAt) return -1
+    return 0
+  }
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
-      {breedings.map((breeding) => (
+      {breedings.sort(sortByUpdated).map((breeding) => (
         <div className="my-2 " key={breeding?.id}>
           <BreedingCard breeding={breeding} />
         </div>

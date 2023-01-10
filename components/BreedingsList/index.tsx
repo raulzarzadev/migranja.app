@@ -37,7 +37,10 @@ const BreedingsList = () => {
 
   useEffect(() => {
     const breedingBatches = farmEvents.filter(
-      (event) => event.type === 'BREEDING'
+      // ************************************** get just breeding events and breedings with pending status. They are not solved
+      (event) =>
+        event.type === 'BREEDING' &&
+        event.eventData.breedingBatch.find(({ status }) => status === 'PENDING')
     )
     const formatBreedingBatchesAnimalsWithBreedingData = breedingBatches.map(
       (batch) => {
@@ -67,7 +70,9 @@ const BreedingsList = () => {
         breedingBatch.eventData.breedingBatch.map((animal) => animal)
     )
     setBreedingsByBatch(formatBreedingBatchesAnimalsWithBreedingData)
-    setBreedingsByAnimals(animals.flat())
+    setBreedingsByAnimals(
+      animals.flat().filter(({ status }) => status === 'PENDING')
+    )
   }, [farmEvents])
 
   const [animalsFiltered, setAnimalsFilter] = useState<FarmStateAnimalEvent[]>(
