@@ -85,6 +85,7 @@ const InputContainer = ({
                 name={name}
                 minDate={rest?.min as unknown as Date}
                 maxDate={rest?.max as unknown as Date}
+                {...rest}
               />
             </div>
           )}

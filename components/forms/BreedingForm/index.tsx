@@ -26,9 +26,15 @@ const BreedingForm = () => {
   const [loading, setLoading] = useState(false)
 
   const methods = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: {
+      breedingMale: '',
+      startAt: '',
+      finishAt: '',
+      batch: ''
+    }
   })
-  const { handleSubmit, watch, reset } = methods
+  const { handleSubmit, watch, reset, setValue } = methods
   const formValues = watch()
   const males = farmAnimals.filter(({ gender }) => gender === 'male')
   //const females = farmAnimals.filter(({ gender }) => gender === 'female')
@@ -58,7 +64,6 @@ const BreedingForm = () => {
   }
 
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
-  console.log({ sheepSelected })
   const onSubmit = async (data: any) => {
     setLoading(true)
     const breedingBatch: Partial<AnimalType>[] = femalesFiltered
@@ -120,6 +125,12 @@ const BreedingForm = () => {
 
     setFemaleFiltered(excludeMalesAnimals(res))
   }, [farmAnimals, formValues.breedingMale, sheepSelected])
+
+  useEffect(() => {
+    if (formValues?.startAt) {
+      setValue('finishAt', formValues?.startAt)
+    }
+  }, [formValues?.startAt, setValue])
   return (
     <div className="bg-base-300 rounded-md shadow-md  w-full mt-2">
       <div>
@@ -167,7 +178,7 @@ const BreedingForm = () => {
               <div className="flex w-full justify-between my-2 p-2">
                 <InputContainer type="date" name="startAt" label="Desde" />
 
-                {formValues.startAt && (
+                {formValues?.startAt && (
                   <InputContainer
                     type="date"
                     name="finishAt"
@@ -192,9 +203,6 @@ const BreedingForm = () => {
                 showRelationshipCol
                 animalsData={femalesFiltered || []}
                 setSelectedRows={setSheepSelected}
-                // setSelectedRow={(row) =>
-                //   setSheepSelected([row?.earring as string])
-                // }
                 settings={{ selectMany: true }}
                 showSelectRow
               />
