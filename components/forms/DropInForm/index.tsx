@@ -1,3 +1,4 @@
+import { DorpInOutReasonsType } from '@comps/FarmEvents/FarmEvent/DropOutEventRow'
 import { updateAnimal } from '@firebase/Animal/main'
 import { createDropOutEvent } from '@firebase/Events/dropOput.event'
 import InputContainer from 'components/inputs/InputContainer'
@@ -24,7 +25,7 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
   const { handleSubmit } = methods
   interface DropOutReason {
     label: string
-    value: FarmEventDropOut['reason']
+    value: DorpInOutReasonsType
   }
   const dropOutReasons: DropOutReason[] = [
     { label: 'Por compra', value: 'BUY' },
@@ -44,12 +45,12 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
     setProgress(1)
     // actualizar animales
     const defineCurrentStatus: Record<
-      FarmEventDropOut['reason'],
+      DorpInOutReasonsType,
       AnimalType['currentStatus']
     > = {
       DEAD: 'DEAD',
       SOLD: 'SOLD',
-      STOLE: 'STOLEN',
+      STOLEN: 'STOLEN',
       LOST: 'LOST',
       BUY: 'ACTIVE',
       BIRTH: 'ACTIVE'
@@ -59,7 +60,7 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
         const element = animals[i]
         const resup = await updateAnimal(element.id, {
           currentStatus:
-            defineCurrentStatus[data?.reason as FarmEventDropOut['reason']]
+            defineCurrentStatus[data?.reason as DorpInOutReasonsType]
         })
         setProgress((i * 80) / animals.length)
         console.log({ resup })

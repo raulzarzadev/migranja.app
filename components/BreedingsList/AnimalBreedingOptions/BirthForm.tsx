@@ -109,7 +109,7 @@ const BirthForm = ({
 
       for (let i = 0; i < newCalfs?.length; i++) {
         const calf = newCalfs[i]
-        await createAnimal({ ...calf })
+        await createAnimal({ ...calf, status: 'ACTIVE' })
         setProgress((i * 50) / newCalfs.length)
       }
       // const calfs = newCalfs?.map((calf: any, i: number) => {

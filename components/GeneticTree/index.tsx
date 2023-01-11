@@ -1,5 +1,4 @@
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { AnimalBreedingType } from 'types/base/FarmEvent.model'
 
 interface GeneticTreeElement {
