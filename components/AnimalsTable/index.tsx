@@ -322,7 +322,7 @@ const AnimalsTable = ({
               return (
                 <tr
                   key={row.id}
-                  className={`border-2 border-transparent hover:border-info cursor-pointer `}
+                  className={`border-2 border-transparent hover cursor-pointer `}
                   onClick={(e) => {
                     e.preventDefault()
                     handleOpenDetailsModal(itemId)
