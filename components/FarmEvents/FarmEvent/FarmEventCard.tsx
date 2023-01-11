@@ -1,3 +1,4 @@
+import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import GeneticTree from 'components/GeneticTree'
 import { ReactNode } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
@@ -68,7 +69,7 @@ export const FarmEventCard = ({
         event={event}
         options={{ label: DETAILS_OPTIONS[event?.type].label }}
       />
-      <div className="bg-base-200 collapse-content">
+      <div className="bg-base-200 ">
         <div className="p-2  ">
           {DETAILS_OPTIONS[event?.type ?? 'NULL'].Component}
         </div>
@@ -175,7 +176,15 @@ const BirthEventRow = ({
         <div className="flex flex-col">
           <div>Aretes:</div>
           {eventData.calfs?.map((calf) => (
-            <div key={calf.earring}>{calf.earring}</div>
+            <div key={calf.earring}>
+              <div>
+                {calf.earring}{' '}
+                <LinkFarmAnimal
+                  farmId={event.farm.id}
+                  animalEarringOrId={calf?.earring || ''}
+                />
+              </div>
+            </div>
           ))}
         </div>
       </div>

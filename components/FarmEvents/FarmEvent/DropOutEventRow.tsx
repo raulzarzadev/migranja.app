@@ -1,3 +1,4 @@
+import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -21,7 +22,8 @@ const DropOutEventRow = ({ event }: { event: FarmEventDropOut }) => {
         <div>Animales:</div>
         {event.eventData.animals.map((animal) => (
           <div key={animal.id}>
-            {animal.earring} {animal.name}
+            {animal.earring} {animal.name}{' '}
+            <LinkFarmAnimal animalEarringOrId={animal.id} />
           </div>
         ))}
       </div>

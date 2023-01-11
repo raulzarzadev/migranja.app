@@ -2,7 +2,6 @@ import { deleteAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
-import useDebugInformation from 'components/hooks/useDebugInformation'
 
 import Icon from 'components/Icon'
 import Modal from 'components/modal'
@@ -11,6 +10,7 @@ import {
   AnimalType,
   GenderOptions
 } from 'firebase/types.model.ts/AnimalType.model'
+
 import Image from 'next/image'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -23,8 +23,17 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const ovines = useSelector(selectFarmOvines)
   // useDebugInformation('AnimalCard', { animalId })
 
-  const animal = ovines.find(({ id }) => id === animalId)
-  if (!animal) return <></>
+  const animal = ovines.find(
+    ({ id, earring }) => id === animalId || earring === animalId
+  )
+  if (!animal)
+    return (
+      <>
+        {' '}
+        Este animal no esta. Puede que el arete haya sido modificado o haya sido
+        eliminado de la granja de forma permanente
+      </>
+    )
   return (
     <div className="p-2 ">
       {editing ? (

@@ -1,4 +1,3 @@
-import useSortByField from 'components/hooks/useSortByField'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { FarmState, FarmStateAnimalEvent } from 'store/slices/farmSlice'

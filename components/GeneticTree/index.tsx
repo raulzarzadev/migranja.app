@@ -1,3 +1,4 @@
+import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 
 interface GeneticTreeElement {
@@ -30,18 +31,27 @@ const GeneticTree = ({
       <div className="flex items-center mx-auto w-full justify-center">
         <span className="mr-5 self-start">Genetica: </span>
         <div className="flex flex-col ">
-          <span>Padre: {father?.label}</span>
-          {!mothers && <span>Madre: {mother?.label || '-'}</span>}
+          <span>
+            Padre: {father?.label}{' '}
+            <LinkFarmAnimal animalEarringOrId={father?.id} />
+          </span>
+          {!mothers && (
+            <span>
+              Madre: {mother?.label || '-'}{' '}
+              <LinkFarmAnimal animalEarringOrId={mother?.id} />{' '}
+            </span>
+          )}
           {mothers && (
             <div className="flex">
               <span>Madres:</span>
               <div>
                 {mothers.map((mom) => (
                   <div key={mom.earring} className="flex">
-                    <div className="w-[80px] text-end pr-4">{mom.earring}</div>
+                    <div className="w-[80px] text-end pr-4">{mom.earring} </div>
                     <span>
                       {LABELS[mom?.status as NonNullable<AnimalType['status']>]}
                     </span>
+                    <LinkFarmAnimal animalEarringOrId={mom.earring} />
                   </div>
                 ))}
               </div>
