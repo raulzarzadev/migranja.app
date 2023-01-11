@@ -12,11 +12,11 @@ const AnimalBreedingOptions = ({
   openModal,
   handleOpenModal
 }: {
-  animal: AnimalFormattedWhitGenericEvenData
+  animal: Partial<AnimalFormattedWhitGenericEvenData>
   openModal: boolean
   handleOpenModal: () => void
 }) => {
-  const breedingMale = animal.eventData.breedingMale
+  const breedingMale = animal.eventData?.breedingMale
   const options = [
     {
       label: 'Parto',

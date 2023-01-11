@@ -22,7 +22,7 @@ import HelperText from 'components/HelperText'
 import IndeterminateCheckbox from './IndeterminableCheckbox'
 import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
-import { animalCurrentStatusLabels } from 'types/base/AnimalType.model'
+import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 export interface RowSelectedType {
   id?: string
   earring?: string

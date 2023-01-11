@@ -13,7 +13,7 @@ import { formatNewGenericFarmEvent } from './birth.helper'
 const EmptyPregnantForm = ({
   animal
 }: {
-  animal: AnimalFormattedWhitGenericEvenData
+  animal: Partial<AnimalFormattedWhitGenericEvenData>
 }) => {
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
@@ -52,9 +52,7 @@ const EmptyPregnantForm = ({
       // ***************************************************   update breeding, move from batch to already done
 
       const breeding = updateBreedingEventBatch({
-        //  breedingId: animal?.breeding?.id as string,
-        eventId: animal.eventData.id,
-        animalId: animal.id,
+        animalId: animal?.id,
         eventType: 'EMPTY',
         eventData: formatBirthEvent
       })

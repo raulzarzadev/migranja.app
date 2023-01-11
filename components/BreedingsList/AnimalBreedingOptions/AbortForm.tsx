@@ -14,7 +14,7 @@ import {
 } from 'store/slices/farmSlice'
 import { formatNewGenericFarmEvent } from './birth.helper'
 
-const AbortForm = ({ animal }: { animal: FarmStateAnimalEvent }) => {
+const AbortForm = ({ animal }: { animal: Partial<FarmStateAnimalEvent> }) => {
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({
@@ -31,7 +31,7 @@ const AbortForm = ({ animal }: { animal: FarmStateAnimalEvent }) => {
   const onSubmit = async (data: any) => {
     setProgress(1)
 
-    const breedingEventId = animal.eventData.id
+    const breedingEventId = animal.eventData?.id
     const breedingData = animal.eventData
     const { formatBirthEvent } = formatNewGenericFarmEvent({
       eventType: 'ABORT',
@@ -49,7 +49,6 @@ const AbortForm = ({ animal }: { animal: FarmStateAnimalEvent }) => {
       console.log(abort)
       setProgress(50)
       const breedingUpdate = await updateBreedingEventBatch({
-        eventId: breedingEventId,
         animalId: animal?.id || '',
         eventType: 'ABORT',
         eventData: formatBirthEvent

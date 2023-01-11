@@ -103,13 +103,11 @@ export const updateEventBreedingBatch = async ({
   return await Promise.all([oldAnimal, removeOldAnimal, setNewAnimal])
 }
 export const updateBreedingEventBatch = async ({
-  eventId,
   animalId,
   eventType,
   eventData
 }: {
-  eventId: string
-  animalId: string
+  animalId?: string
   eventType: BaseFarmEvent['type']
   eventData: any
 }) => {

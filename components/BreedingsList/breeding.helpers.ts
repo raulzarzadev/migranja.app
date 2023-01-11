@@ -4,6 +4,7 @@ import { DateType, Merge } from '@firebase/types.model.ts/TypeBase.model'
 import { addDays } from 'date-fns'
 import { ParentsType } from 'types/base/AnimalType.model'
 import {
+  AnimalBreedingType,
   BreedingDetailsEvent,
   EventDataStoreDetails,
   SetGenericEventType
@@ -132,7 +133,7 @@ export interface AnimalFormatted extends Merge<AnimalType, BreedingDatesType> {
 }
 export interface BreedingFormatted {
   breedingDates: BreedingDatesType
-  breedingBatch: Partial<AnimalType>[]
+  breedingBatch: AnimalBreedingType[]
   breedingId: string
   breedingMale?: Partial<AnimalType> | null
   parents?: ParentsType | null
@@ -182,67 +183,4 @@ export const formatBreedingsGenericEvent = (
       return formattedBreeding
     }
   )
-
-  // return breedings?.map((breeding) => {
-  //   const possibleBirth = calculatePossibleBirth({
-  //     breedingFinishAt: breeding?.finishAt,
-  //     breedingStartAt: breeding?.startAt
-  //   })
-  //   const breedingDates = {
-  //     breedingStartAt: breeding?.startAt,
-  //     breedingFinishAt: breeding?.finishAt,
-  //     birthStartAt: possibleBirth?.startAt,
-  //     birthFinishAt: possibleBirth?.finishAt,
-  //     birthStartInDays: getPlusMinusDays(possibleBirth?.startAt),
-  //     birthFinishInDays: getPlusMinusDays(possibleBirth?.finishAt)
-  //   }
-  //   const breedingBatch = breeding?.breedingBatch?.map((animal) => {
-  //     return {
-  //       ...animal,
-  //       ...breedingDates,
-  //       breedingDates
-  //       //status: 'PENDING'
-  //     }
-  //   })
-  //   const breedingBirths = breeding?.breedingBirths?.map((animal) => {
-  //     return {
-  //       ...animal,
-  //       ...breedingDates,
-  //       breedingDates
-  //       // status: 'BIRTH'
-  //     }
-  //   })
-  //   const breedingAborts = breeding?.breedingAborts?.map((animal) => {
-  //     return {
-  //       ...animal,
-  //       ...breedingDates,
-  //       breedingDates
-  //       // status: 'ABORT'
-  //     }
-  //   })
-  //   const breedingEmpty = breeding?.breedingEmpty?.map((animal) => {
-  //     return {
-  //       ...animal,
-  //       ...breedingDates,
-  //       breedingDates
-  //       // status: 'EMPTY'
-  //     }
-  //   })
-  //   const animals = [
-  //     ...(breedingBatch || []),
-  //     ...(breedingBirths || []),
-  //     ...(breedingAborts || []),
-  //     ...(breedingEmpty || [])
-  //   ].map((animal) => {
-  //     return { ...animal, breeding }
-  //   })
-
-  //   return {
-  //     ...breeding,
-  //     breedingDates,
-  //     ...breedingDates,
-  //     animals,
-  //     breedingBatch: breedingBatch
-  //   }
-  // })
 }

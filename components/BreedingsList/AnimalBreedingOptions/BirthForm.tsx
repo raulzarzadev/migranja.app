@@ -1,5 +1,6 @@
 import { createAnimal } from '@firebase/Animal/main'
 import {
+  createEvent,
   createGenericBreedingEvent,
   updateEventBreedingBatch
 } from '@firebase/Events/main'
@@ -13,12 +14,15 @@ import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import ProgressButton from '@comps/ProgressButton'
+import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
+import { addDays } from 'date-fns'
+import FARM_DATES from '@comps/CONSTANTS/FARM_CONFIG/FARM_DATES'
 
 const BirthForm = ({
   animal,
   possibleBirth
 }: {
-  animal: AnimalFormattedWhitGenericEvenData
+  animal: Partial<AnimalFormattedWhitGenericEvenData>
   possibleBirth?: number | Date
 }) => {
   const currentFarm = useSelector(selectFarmState)
@@ -59,9 +63,10 @@ const BirthForm = ({
   }, [animal, formValues?.birthType])
 
   const [progress, setProgress] = useState(0)
-  const breedingEventId = animal.eventData.id
-  const breedingBatchId = animal.eventData.breedingId
-  const breedingMale = animal.eventData.breedingMale
+  const [labelStatus, setLabelStatus] = useState('')
+  const breedingEventId = animal.eventData?.id
+  const breedingBatchId = animal.eventData?.breedingId
+  const breedingMale = animal.eventData?.breedingMale
   const onSubmit = async (data: any) => {
     setProgress(1)
     const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
@@ -79,34 +84,85 @@ const BirthForm = ({
     //console.log({ formatBirthEvent, formValues })
     // return
     try {
+      setLabelStatus('Iniciando')
       setProgress(20)
-      const newCalfs = formatBirthEvent.eventData.calfs
+      const newCalfs = formatBirthEvent.eventData.calfs || []
 
       // ****************************************************   create birth
+      setLabelStatus('Creando event')
       const event = createGenericBreedingEvent(formatBirthEvent)
       setProgress(40)
 
       // ***************************************************   update breeding, move from batch to already done
+      setLabelStatus('Actualizando breeding')
 
       const breeding = updateEventBreedingBatch({
         eventId: breedingEventId || '',
         animalId: animal?.id as string,
         eventType: 'BIRTH'
       })
-      setProgress(60)
+      setLabelStatus('Creando animales')
+
+      // setProgress(50)
 
       // *************************************************   create animals/calfs
-      const calfs = newCalfs?.map((calf: any, i: number) => {
-        //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
-        // setProgress((i * 100) / newCalfs?.length)
-        return createAnimal({ ...calf })
-        // console.log(r)
-      })
 
-      setProgress(80)
+      for (let i = 0; i < newCalfs?.length; i++) {
+        const calf = newCalfs[i]
+        await createAnimal({ ...calf })
+        setProgress((i * 50) / newCalfs.length)
+      }
+      // const calfs = newCalfs?.map((calf: any, i: number) => {
+      //   //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
+      //   // setProgress((i * 100) / newCalfs?.length)
 
-      const promises = [...(calfs || []), event, breeding]
-      const res = await Promise.all(promises).then((res: any) => {})
+      //   return createAnimal({ ...calf })
+
+      //   // console.log(r)
+      // })
+
+      setLabelStatus('Creando detetes')
+      for (let i = 0; i < newCalfs.length; i++) {
+        const calf = newCalfs[i]
+        await creteAnimalWeaning({
+          type: 'WEANING',
+          eventData: {
+            status: 'PENDING',
+            earring: calf.earring || '',
+            date: addDays(data.date, FARM_DATES.DAYS_UNTIL_WEANING_AFTER_BIRTH)
+          },
+          farm: {
+            id: currentFarm?.id || '',
+            name: currentFarm?.name || ''
+          }
+        })
+        setProgress((i * 100) / newCalfs.length)
+      }
+
+      setTimeout(() => {
+        setLabelStatus('Listo')
+        setProgress(100)
+        setFinishView(true)
+        reset()
+      }, 5000)
+      // const weaning = newCalfs?.map((calf: any, i: number) => {
+      //   //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
+      //   // setProgress((i * 100) / newCalfs?.length)
+      //   return creteAnimalWeaning({
+      //     type: 'WEANING',
+      //     status: 'PENDING',
+      //     eventData: {
+      //       earring: calf.earring,
+      //       date: addDays(data.date, FARM_DATES.DAYS_UNTIL_WEANING_AFTER_BIRTH)
+      //     }
+      //   })
+      // console.log(r)
+      //})
+
+      //setProgress(90)
+
+      // const promises = [...(calfs || []), event, breeding]
+      // const res = await Promise.all(promises).then((res: any) => {})
       // console.log(res)
       setProgress(100)
       setFinishView(true)
@@ -235,7 +291,7 @@ const BirthForm = ({
             </div>
           ))}
           <div className="mt-10">
-            <ProgressButton progress={progress} />
+            <ProgressButton label={labelStatus} progress={progress} />
           </div>
           {/* {progress > 0 && (
             <progress className="progress w-full" value={progress} max={100} />

@@ -1,11 +1,15 @@
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
+import { AnimalBreedingType } from 'types/base/FarmEvent.model'
 
 interface GeneticTreeElement {
   id: string
   label: string
 }
-const LABELS: Record<NonNullable<AnimalType['status']>, string> = {
+const LABELS: Record<
+  NonNullable<AnimalBreedingType['status']> | 'ALL',
+  string
+> = {
   BIRTH: 'Parto',
   ABORT: 'Aborto',
   EMPTY: 'Vacio',
@@ -49,7 +53,13 @@ const GeneticTree = ({
                   <div key={mom.earring} className="flex">
                     <div className="w-[80px] text-end pr-4">{mom.earring} </div>
                     <span>
-                      {LABELS[mom?.status as NonNullable<AnimalType['status']>]}
+                      {
+                        LABELS[
+                          mom?.status as
+                            | NonNullable<AnimalBreedingType['status']>
+                            | 'ALL'
+                        ]
+                      }
                     </span>
                     <LinkFarmAnimal animalEarringOrId={mom.earring} />
                   </div>

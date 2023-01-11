@@ -1,4 +1,5 @@
 import { FarmEvent } from './FarmEvent.model'
+import { AnimalCurrentStatusType } from './LABELS_TYPES/AnimalCurrentStatus'
 import { TypeBase } from './TypeBase.model'
 
 export interface AnimalElementalInfo {
@@ -14,7 +15,7 @@ export interface DropOutEventData {
 
 export interface FarmEventDropOut extends Omit<FarmEvent, 'type'> {
   type: 'DROP_OUT' | 'DROP_IN'
-  reason: 'DEAD' | 'STOLE' | 'SOLD' | 'LOST' | 'BUY' | 'BIRTH'
+  reason: AnimalCurrentStatusType
   eventData: DropOutEventData
   createdBy: {
     id: string

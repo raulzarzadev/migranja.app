@@ -44,6 +44,10 @@ export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
       DROP_IN: {
         label: 'De alta ',
         Component: <span>Alta</span>
+      },
+      WEANING: {
+        label: 'Destete ',
+        Component: <span>Destete</span>
       }
     }
   return (

@@ -2,7 +2,9 @@ import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { FarmState, FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { AnimalWeaning } from 'types/base/AnimalWeaning.model'
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
+import { labelsOfFarmEventTypes } from 'types/base/LABELS_TYPES/EventTypes'
 import FarmEventCard from './FarmEvent/FarmEventCard'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
@@ -13,17 +15,21 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
       setFilteredEvents(events)
     } else {
       const filtered = events.filter((event) => {
-        const dictionary: Record<FarmStateAnimalEvent['type'], string> = {
+        const dictionary: Record<
+          FarmStateAnimalEvent['type'] | AnimalWeaning['type'],
+          string
+        > = {
           BREEDING: 'Monta',
           REMOVE: 'Removida',
           BIRTH: 'Parto',
           ABORT: 'Aborto',
           EMPTY: 'Vacio',
           DROP_OUT: 'Baja',
-          DROP_IN: 'Alta'
+          DROP_IN: 'Alta',
+          WEANING: 'Destete'
         }
         return (
-          dictionary[event.type]
+          dictionary[event?.type]
             .toLowerCase()
             .includes(filterBy.toLowerCase()) ||
           event?.eventData.breedingBatch?.find(({ earring }) =>
@@ -118,18 +124,7 @@ interface SelectOption {
 }
 
 const getEventTypesOptions = (events: FarmState['events']): SelectOption[] => {
-  const dictionary: Record<
-    AnimalFormattedWhitGenericEvenData['type'] | FarmEventDropOut['type'],
-    string
-  > = {
-    BREEDING: 'Monta',
-    REMOVE: 'Eliminado',
-    BIRTH: 'Parto',
-    ABORT: 'Aborto',
-    EMPTY: 'Vacio',
-    DROP_OUT: 'Baja',
-    DROP_IN: 'Alta'
-  }
+  const dictionary = labelsOfFarmEventTypes
 
   const options: SelectOption[] = events.reduce(
     (prev: SelectOption[], curr) => {

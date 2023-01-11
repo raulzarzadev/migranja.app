@@ -7,6 +7,8 @@ import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
 import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { BreedingEventCardDetails } from 'types/base/FarmEvent.model'
+import { AnimalCurrentStatusType } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
+import { AnimalBreedingStatus } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
 export interface BreedingBatchesListType {
@@ -146,12 +148,15 @@ const BreedingCardBody = ({
 }: {
   breeding: BreedingEventCardDetails
 }) => {
-  type ViewBatchesType = 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY' | ''
+  type ViewBatchesType = AnimalBreedingStatus | '' | 'ALL'
 
   const [view, setView] = useState<ViewBatchesType>('')
 
-  const animals = breeding?.eventData
-    ?.breedingBatch as unknown as FarmStateAnimalEvent[]
+  const animals = breeding?.eventData?.breedingBatch.map((animal) => {
+    return { ...animal, eventData: breeding.eventData }
+  })
+
+  console.log({ breeding })
 
   const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')
   const abortAnimals = animals.filter(({ status }) => status === 'ABORT')

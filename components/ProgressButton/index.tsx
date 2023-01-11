@@ -1,6 +1,12 @@
 import Loading from '@comps/Loading'
 
-export const ProgressButton = ({ progress }: { progress: number }) => {
+export const ProgressButton = ({
+  progress,
+  label
+}: {
+  label?: string
+  progress: number
+}) => {
   return (
     <div role="buttonProgress">
       {!!progress && (
@@ -10,6 +16,9 @@ export const ProgressButton = ({ progress }: { progress: number }) => {
         <div>
           Espera mientras terminar <Loading />
         </div>
+      )}
+      {progress < 100 && progress > 1 && (
+        <div className="text-center">{label} </div>
       )}
       {progress == 100 && <div className="text-center">Listo. </div>}
       <div className="flex w-full justify-center">

@@ -1,17 +1,15 @@
 import { BreedingDatesType } from 'components/BreedingsList/breeding.helpers'
 import { AnimalType, ParentsType } from './AnimalType.model'
-import { TypeBase } from './TypeBase.model'
+import {
+  AnimalBreedingStatus,
+  StatusOfFarmEvent,
+  TypeOfFarmEvent
+} from './LABELS_TYPES/EventTypes'
+import { Merge, TypeBase } from './TypeBase.model'
 
 export interface BaseFarmEvent {
-  type:
-    | 'BREEDING'
-    | 'REMOVE'
-    | 'BIRTH'
-    | 'ABORT'
-    | 'EMPTY'
-    | 'DROP_OUT'
-    | 'DROP_IN'
-  status?: string
+  type: TypeOfFarmEvent
+  status?: StatusOfFarmEvent
   farm: {
     id: string
     name: string
@@ -33,7 +31,7 @@ export interface ParentType
 }
 export interface BirthDetailsEvent extends BreedingEventDefaultInfo {
   birthType?: number
-  calfs?: Partial<AnimalType>[]
+  calfs?: AnimalBreedingType[]
 }
 export interface AbortDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
@@ -43,17 +41,23 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
   animals: any
-  calfs?: Partial<AnimalType>[]
+  calfs?: AnimalBreedingType[]
   breedingDates?: BreedingDatesType
   birthType?: number
 }
+
+export interface AnimalBreedingType
+  extends Merge<
+    Omit<Partial<AnimalType>, 'status'>,
+    { status: AnimalBreedingStatus }
+  > {}
 
 export interface BreedingEventDefaultInfo {
   id: string
   date: number | string
   breedingId: string
   batchId: string
-  breedingBatch: Partial<AnimalType>[]
+  breedingBatch: AnimalBreedingType[]
   breedingMale: ParentType | null
   parents: ParentsType
   startAt: number | string

@@ -15,7 +15,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
-import { animalCurrentStatusLabels } from 'types/base/AnimalType.model'
+import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const AnimalCard = ({ animalId }: { animalId?: string }) => {

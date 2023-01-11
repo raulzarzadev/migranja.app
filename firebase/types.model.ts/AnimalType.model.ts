@@ -3,6 +3,7 @@ import { FarmType } from '@firebase/Farm/farm.model'
 import { ImageType } from './ImageType.model'
 import { DateType, TypeBase } from './TypeBase.model'
 import { AnimalType as AnimalModelType } from 'types/base/AnimalType.model'
+import { AnimalCurrentStatusType } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 export interface AnimalType extends TypeBase {
   isDuplicated?: boolean
   name: string
@@ -12,7 +13,7 @@ export interface AnimalType extends TypeBase {
   gender: 'male' | 'female'
   breed: string
   type: 'ovine' | 'bovine'
-  status?: 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY'
+  status?: AnimalCurrentStatusType
   parents?: ParentsType
   weight?: AnimalWeight
   batch: string | null
@@ -32,18 +33,6 @@ export interface AnimalType extends TypeBase {
   }
   currentStatus?: AnimalModelType['currentStatus']
 }
-export type AnimalStatus =
-  | 'PENDING'
-  | 'BIRTH'
-  | 'ABORT'
-  | 'EMPTY'
-  | 'ACTIVE'
-  | 'PREGNANT'
-  | 'DEAD'
-  | 'STOLEN'
-  | 'SICK'
-  | 'LOST'
-  | 'SOLD'
 
 export interface GenderOptions {
   id?: 'male' | 'female'

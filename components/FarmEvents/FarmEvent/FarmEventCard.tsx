@@ -2,7 +2,9 @@ import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import GeneticTree from 'components/GeneticTree'
 import { ReactNode } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { AnimalWeaningType } from 'types/base/AnimalWeaning.model'
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
+import { TypeOfFarmEvent } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import BirthEventDetails from '../BirthEventDetails'
 import EventModal from '../EventModal'
@@ -17,12 +19,7 @@ export const FarmEventCard = ({
     label: string
     Component: ReactNode
   }
-  const DETAILS_OPTIONS: Record<
-    | AnimalFormattedWhitGenericEvenData['type']
-    | 'NULL'
-    | FarmEventDropOut['type'],
-    FarmEventOptions
-  > = {
+  const DETAILS_OPTIONS: Record<TypeOfFarmEvent | 'NULL', FarmEventOptions> = {
     BREEDING: {
       label: 'Monta',
       Component: <BreedingEventRow event={event} />
@@ -58,6 +55,10 @@ export const FarmEventCard = ({
       Component: (
         <DropOutEventRow event={event as unknown as FarmEventDropOut} />
       )
+    },
+    WEANING: {
+      label: 'Destete ',
+      Component: <WeaningEventCard event={event} />
     }
   }
   return (
@@ -67,12 +68,35 @@ export const FarmEventCard = ({
     >
       <HeaderEventCard
         event={event}
-        options={{ label: DETAILS_OPTIONS[event?.type].label }}
+        options={{ label: DETAILS_OPTIONS[event?.type]?.label }}
       />
       <div className="bg-base-200 ">
         <div className="p-2  ">
-          {DETAILS_OPTIONS[event?.type ?? 'NULL'].Component}
+          {DETAILS_OPTIONS[event?.type ?? 'NULL']?.Component}
         </div>
+      </div>
+    </div>
+  )
+}
+
+const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
+  return (
+    <div>
+      <div className="grid grid-cols-3">
+        <div>Arete</div>
+        <div>Fecha</div>
+        <div>Status</div>
+      </div>
+      <div className="grid grid-cols-3">
+        <div>
+          {event.eventData?.earring}{' '}
+          <LinkFarmAnimal animalEarringOrId={event.eventData?.earring} />
+        </div>
+        <div>
+          {event.eventData?.date &&
+            myFormatDate(event.eventData?.date, 'dd MMM yy')}
+        </div>
+        <div>{event.eventData?.status}</div>
       </div>
     </div>
   )

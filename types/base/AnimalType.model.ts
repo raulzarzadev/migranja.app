@@ -1,6 +1,7 @@
 import { FarmType } from '@firebase/Farm/farm.model'
 import { BreedingDetailsEvent, SetGenericEventType } from './FarmEvent.model'
 import { ImageType } from './ImageType.model'
+import { AnimalCurrentStatusType } from './LABELS_TYPES/AnimalCurrentStatus'
 import { DateType, Merge, TypeBase } from './TypeBase.model'
 
 export interface AnimalType extends TypeBase {
@@ -12,7 +13,7 @@ export interface AnimalType extends TypeBase {
   gender: 'male' | 'female'
   breed: string
   type: 'ovine' | 'bovine'
-  status?: 'PENDING' | 'BIRTH' | 'ALL' | 'ABORT' | 'EMPTY'
+  status?: AnimalCurrentStatusType
   parents?: ParentsType
   weight?: AnimalWeight
   batch: string | null
@@ -30,41 +31,8 @@ export interface AnimalType extends TypeBase {
     isPregnant?: boolean
     isSold?: boolean
   }
-  currentStatus?:
-    | 'ACTIVE'
-    | 'PREGNANT'
-    | 'DEAD'
-    | 'STOLEN'
-    | 'SICK'
-    | 'LOST'
-    | 'SOLD'
-    | 'PENDING'
+  currentStatus?: AnimalCurrentStatusType
 }
-export const animalCurrentStatusLabels: Record<
-  NonNullable<AnimalType['currentStatus']>,
-  string
-> = {
-  PENDING: 'Pendiente',
-  ACTIVE: 'Activa',
-  PREGNANT: 'Cargada',
-  DEAD: 'Muerta',
-  STOLEN: 'Robada',
-  SICK: 'Enferma',
-  LOST: 'Perdida',
-  SOLD: 'Vendia'
-}
-export type AnimalStatus =
-  | 'PENDING'
-  | 'BIRTH'
-  | 'ABORT'
-  | 'EMPTY'
-  | 'ACTIVE'
-  | 'PREGNANT'
-  | 'DEAD'
-  | 'STOLEN'
-  | 'SICK'
-  | 'LOST'
-  | 'SOLD'
 
 export interface GenderOptions {
   id?: 'male' | 'female'
