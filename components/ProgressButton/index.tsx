@@ -21,4 +21,4 @@ export const ProgressButton = ({ progress }: { progress: number }) => {
   )
 }
 
-// export default ProgressButton
+export default ProgressButton

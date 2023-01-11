@@ -12,8 +12,7 @@ import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
-import Link from 'next/link'
-import ProgressButton from 'components/ProgressButton'
+import ProgressButton from '@comps/ProgressButton'
 
 const BirthForm = ({
   animal,

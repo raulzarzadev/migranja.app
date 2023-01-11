@@ -1,6 +1,6 @@
 import { expect, test, it, describe, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
-import { ProgressButton } from '@comps/ProgressButton'
+import ProgressButton from '@comps/ProgressButton'
 
 describe('Progress button', () => {
   afterEach(cleanup)
