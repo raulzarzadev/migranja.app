@@ -1,8 +1,8 @@
-import Loading from 'components/Loading'
+import Loading from '@comps/Loading'
 
-const ProgressButton = ({ progress }: { progress: number }) => {
+export const ProgressButton = ({ progress }: { progress: number }) => {
   return (
-    <div>
+    <div role="buttonProgress">
       {!!progress && (
         <progress value={progress} max={100} className="progress"></progress>
       )}
@@ -21,4 +21,4 @@ const ProgressButton = ({ progress }: { progress: number }) => {
   )
 }
 
-export default ProgressButton
+// export default ProgressButton
