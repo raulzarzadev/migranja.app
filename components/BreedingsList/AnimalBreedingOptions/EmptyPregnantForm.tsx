@@ -8,13 +8,10 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { formatNewGenericFarmEvent } from './birth.helper'
 
-const EmptyPregnantForm = ({
-  animal
-}: {
-  animal: Partial<AnimalFormattedWhitGenericEvenData>
-}) => {
+const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({

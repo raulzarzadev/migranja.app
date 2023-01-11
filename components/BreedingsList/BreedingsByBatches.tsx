@@ -155,7 +155,7 @@ const BreedingCardBody = ({
   const animals = breeding?.eventData?.breedingBatch.map((animal) => {
     return { ...animal, eventData: breeding.eventData }
   })
-
+  console.log({ animals })
   console.log({ breeding })
 
   const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')

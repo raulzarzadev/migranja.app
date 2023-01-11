@@ -97,3 +97,7 @@ export interface DTO_CreateBreedingEventType
   extends CreateGenericEventType<BreedingDetailsEvent> {}
 
 export interface GetAllFarmEventsType extends SetGenericEventType<EventData> {}
+
+export interface AnimalBreedingEventCard extends Partial<AnimalType> {
+  eventData: EventData
+}

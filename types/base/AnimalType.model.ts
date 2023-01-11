@@ -1,5 +1,9 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import { BreedingDetailsEvent, SetGenericEventType } from './FarmEvent.model'
+import {
+  AnimalBreedingType,
+  BreedingDetailsEvent,
+  SetGenericEventType
+} from './FarmEvent.model'
 import { ImageType } from './ImageType.model'
 import { AnimalCurrentStatusType } from './LABELS_TYPES/AnimalCurrentStatus'
 import { DateType, Merge, TypeBase } from './TypeBase.model'
@@ -67,6 +71,6 @@ export interface ParentsType {
 
 export interface AnimalFormattedWhitGenericEvenData
   extends Merge<
-    Partial<AnimalType>,
+    Partial<AnimalBreedingType>,
     SetGenericEventType<BreedingDetailsEvent>
   > {}

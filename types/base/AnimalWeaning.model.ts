@@ -1,3 +1,4 @@
+import { AnimalType } from './AnimalType.model'
 import { FarmEvent, SetGenericEventType } from './FarmEvent.model'
 import { TypeBase } from './TypeBase.model'
 
@@ -21,6 +22,8 @@ export interface AnimalWeaningEventData {
   status: 'PENDING' | 'DONE'
 }
 
-export interface AnimalWeaningType
-  extends SetGenericEventType<AnimalWeaningEventData> {}
+export interface AnimalWeaningType extends Partial<AnimalType> {
+  eventData: AnimalWeaningEventData
+}
+
 export interface DTO_CreteAnimalWeaning extends AnimalWeaning {}

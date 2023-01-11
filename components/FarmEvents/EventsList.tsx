@@ -1,7 +1,6 @@
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { FarmState, FarmStateAnimalEvent } from 'store/slices/farmSlice'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import { AnimalWeaning } from 'types/base/AnimalWeaning.model'
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 import { labelsOfFarmEventTypes } from 'types/base/LABELS_TYPES/EventTypes'

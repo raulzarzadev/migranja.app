@@ -58,7 +58,11 @@ export const FarmEventCard = ({
     },
     WEANING: {
       label: 'Destete ',
-      Component: <WeaningEventCard event={event} />
+      Component: (
+        <WeaningEventCard
+          event={event as unknown as Partial<AnimalWeaningType>}
+        />
+      )
     }
   }
   return (

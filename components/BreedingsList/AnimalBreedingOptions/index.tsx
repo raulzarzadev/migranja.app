@@ -3,6 +3,7 @@ import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
 import EmptyPregnantForm from './EmptyPregnantForm'
@@ -12,7 +13,7 @@ const AnimalBreedingOptions = ({
   openModal,
   handleOpenModal
 }: {
-  animal: Partial<AnimalFormattedWhitGenericEvenData>
+  animal: AnimalBreedingEventCard
   openModal: boolean
   handleOpenModal: () => void
 }) => {

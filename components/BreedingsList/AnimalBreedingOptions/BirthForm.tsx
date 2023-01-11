@@ -17,12 +17,13 @@ import ProgressButton from '@comps/ProgressButton'
 import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
 import { addDays } from 'date-fns'
 import FARM_DATES from '@comps/CONSTANTS/FARM_CONFIG/FARM_DATES'
+import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 
 const BirthForm = ({
   animal,
   possibleBirth
 }: {
-  animal: Partial<AnimalFormattedWhitGenericEvenData>
+  animal: AnimalBreedingEventCard
   possibleBirth?: number | Date
 }) => {
   const currentFarm = useSelector(selectFarmState)

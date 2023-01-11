@@ -12,9 +12,10 @@ import {
   selectFarmAnimals,
   selectFarmState
 } from 'store/slices/farmSlice'
+import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { formatNewGenericFarmEvent } from './birth.helper'
 
-const AbortForm = ({ animal }: { animal: Partial<FarmStateAnimalEvent> }) => {
+const AbortForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({
