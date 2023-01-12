@@ -43,3 +43,5 @@ public/sw.js.map
 
 public/workbox**
 
+# vitess
+.env.testing

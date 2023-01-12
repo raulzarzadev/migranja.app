@@ -1,8 +1,15 @@
 import { initializeApp, getApps } from 'firebase/app'
 import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore'
 
-const firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG ?? ''
-
+let firebaseConfig = ''
+if (process.env.VITE_ENV === 'test') {
+  firebaseConfig = process.env.VITE_NEXT_PUBLIC_FIREBASE_CONFIG || ''
+} else if (process.env.NEXT_PUBLIC_ENV === 'env') {
+  firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG || ''
+} else {
+  firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG || ''
+}
+//const firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG ?? ''
 const apps = getApps()
 
 export const app = initializeApp(JSON.parse(firebaseConfig))
