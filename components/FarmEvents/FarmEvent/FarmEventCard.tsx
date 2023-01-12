@@ -66,11 +66,11 @@ export const FarmEventCard = ({
     >
       <HeaderEventCard
         event={event}
-        options={{ label: DETAILS_OPTIONS[event?.type].label }}
+        options={{ label: DETAILS_OPTIONS[event?.type || '']?.label }}
       />
       <div className="bg-base-200 collapse-content">
         <div className="p-2  ">
-          {DETAILS_OPTIONS[event?.type ?? 'NULL'].Component}
+          {DETAILS_OPTIONS[event?.type ?? 'NULL']?.Component}
         </div>
       </div>
     </div>
