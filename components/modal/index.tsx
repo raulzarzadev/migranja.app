@@ -39,7 +39,7 @@ const Modal = ({
       >
         <header
           className={
-            'flex justify-between sticky top-0 bg-base-100 z-10 px-3 py-1'
+            'flex justify-between sticky top-0 bg-base-100 z-[1] px-3 py-1'
           }
         >
           <div className={''}>
