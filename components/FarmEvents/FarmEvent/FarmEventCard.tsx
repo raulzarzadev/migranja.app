@@ -70,10 +70,13 @@ export const FarmEventCard = ({
       className="bg-base-300 rounded-md pb-2 shadow-md collapse"
       tabIndex={0}
     >
-      <HeaderEventCard
-        event={event}
-        options={{ label: DETAILS_OPTIONS[event?.type || '']?.label }}
-      />
+      <input type={'checkbox'} />
+      <div className="collapse-title">
+        <HeaderEventCard
+          event={event}
+          options={{ label: DETAILS_OPTIONS[event?.type || '']?.label }}
+        />
+      </div>
       <div className="bg-base-200 collapse-content">
         <div className="p-2  ">
           {DETAILS_OPTIONS[event?.type ?? 'NULL']?.Component}
