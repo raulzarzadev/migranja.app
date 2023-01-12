@@ -38,7 +38,7 @@ const AnimalBreedingOptions = ({
   ]
   const [option, setOption] = useState('')
   const handleRemove = () => {
-    removeAnimalFromBreeding(animal.breeding.id, animal.id || '')
+    removeAnimalFromBreeding(animal.eventData.id, animal.id || '')
       .then((res) => {
         console.log(res)
       })

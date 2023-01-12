@@ -24,7 +24,7 @@ export const EventModal = ({ event }: { event: FarmStateAnimalEvent }) => {
   const eventData = event?.eventData
   return (
     <div role="details-modal">
-      <div>
+      <div className="p-1 pb-0">
         <button
           onClick={(e) => {
             e.preventDefault()

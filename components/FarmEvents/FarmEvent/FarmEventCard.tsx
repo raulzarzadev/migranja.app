@@ -1,6 +1,7 @@
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
+import ModalEditEvent from '@comps/modal/ModalEditWeaning/indext'
 import GeneticTree from 'components/GeneticTree'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import { AnimalWeaningType } from 'types/base/AnimalWeaning.model'
 import { FarmEventDropOut } from 'types/base/FarmEventDropOut.model'
@@ -66,20 +67,22 @@ export const FarmEventCard = ({
     }
   }
   return (
-    <div
-      className="bg-base-300 rounded-md pb-2 shadow-md collapse"
-      tabIndex={0}
-    >
-      <input type={'checkbox'} />
-      <div className="collapse-title">
-        <HeaderEventCard
-          event={event}
-          options={{ label: DETAILS_OPTIONS[event?.type || '']?.label }}
-        />
+    <div className="bg-base-300 rounded-md pb-2 shadow-md ">
+      <div className="text-end">
+        <EventModal event={event} />
       </div>
-      <div className="bg-base-200 collapse-content">
-        <div className="p-2  ">
-          {DETAILS_OPTIONS[event?.type ?? 'NULL']?.Component}
+      <div className="collapse">
+        <input type={'checkbox'} />
+        <div className="collapse-title pt-0 pb-0">
+          <HeaderEventCard
+            event={event}
+            options={{ label: DETAILS_OPTIONS[event?.type || '']?.label }}
+          />
+        </div>
+        <div className="bg-base-200 collapse-content">
+          <div className="p-2  ">
+            {DETAILS_OPTIONS[event?.type ?? 'NULL']?.Component}
+          </div>
         </div>
       </div>
     </div>
@@ -87,6 +90,11 @@ export const FarmEventCard = ({
 }
 
 const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
+  const label: Record<AnimalWeaningType['eventData']['status'], string> = {
+    DONE: 'Hecho',
+    PENDING: 'Pendiente'
+  }
+
   return (
     <div>
       <div className="grid grid-cols-3">
@@ -103,7 +111,19 @@ const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
           {event.eventData?.date &&
             myFormatDate(event.eventData?.date, 'dd MMM yy')}
         </div>
-        <div>{event.eventData?.status}</div>
+        <div className="flex items-center">
+          <span>
+            {
+              label[
+                event?.eventData
+                  ?.status as AnimalWeaningType['eventData']['status']
+              ]
+            }
+          </span>
+          <div className="ml-4">
+            <ModalEditEvent eventId={event.id || ''} />
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -119,12 +139,9 @@ const HeaderEventCard = ({
   const eventDate = event?.eventData?.date
   return (
     <div role={'farm-event'} className={`bg-base-300 w-full rounded-md `}>
-      <div className="flex justify-between items-center px-2 pt-1 w-full ">
+      <div className="flex justify-between items-center px-2 w-full ">
         <span>{options.label}</span>
         <span>{eventDate && myFormatDate(eventDate, 'dd MMM yy')}</span>
-        <span>
-          <EventModal event={event} />
-        </span>
       </div>
       <header className="p-2 w-full flex justify-between items-center ">
         <div className="flex flex-col ">

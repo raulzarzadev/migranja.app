@@ -1,6 +1,6 @@
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { Merge, TypeBase } from '@firebase/types.model.ts/TypeBase.model'
-import { BaseFarmEvent } from 'types/base/FarmEvent.model'
+import { BaseFarmEvent, ShortParentsType } from 'types/base/FarmEvent.model'
 
 export interface FarmEventType extends TypeBase {
   type: BaseFarmEvent['type']
@@ -51,7 +51,7 @@ export interface BreedingDetailsEvent {
   breedingId: string
   breedingBatch: Partial<AnimalType>[]
   breedingMale: Partial<AnimalType> | null
-  parents?: ParentsType
+  parents?: ShortParentsType
   startAt: number | string
   finishAt: number | string
   date: number | string

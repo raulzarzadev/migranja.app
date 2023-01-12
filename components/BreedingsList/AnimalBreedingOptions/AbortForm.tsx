@@ -1,58 +1,63 @@
+import ProgressButton from '@comps/ProgressButton'
 import {
-  createBirthEvent,
-  updateBreedingEventBatch
+  createTypedEvent,
+  updateAnimalStatusInBreedingBatch
 } from '@firebase/Events/main'
-import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import InputContainer from 'components/inputs/InputContainer'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
+import { selectFarmState } from 'store/slices/farmSlice'
 import {
-  FarmStateAnimalEvent,
-  selectFarmAnimals,
-  selectFarmState
-} from 'store/slices/farmSlice'
-import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
-import { formatNewGenericFarmEvent } from './birth.helper'
+  AbortDetailsEvent,
+  AnimalBreedingEventCard
+} from 'types/base/FarmEvent.model'
 
 const AbortForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
   const currentFarm = useSelector(selectFarmState)
-  const farmAnimals = useSelector(selectFarmAnimals)
+  //const farmAnimals = useSelector(selectFarmAnimals)
   const methods = useForm({
     defaultValues: {
       date: new Date(),
       comments: ''
     }
   })
-  const { watch, handleSubmit } = methods
-  const formValues = watch()
+  const { handleSubmit } = methods
 
   const [progress, setProgress] = useState(0)
 
   const onSubmit = async (data: any) => {
-    setProgress(1)
-
-    const breedingEventId = animal.eventData?.id
-    const breedingData = animal.eventData
-    const { formatBirthEvent } = formatNewGenericFarmEvent({
-      eventType: 'ABORT',
-      animal,
-      currentFarm,
-      farmAnimals,
-      formValues,
-      calfs: [],
-      breeding: breedingData
-    })
+    setProgress(10)
     try {
       // CRATE ABORT EVENT
-      const abort = await createBirthEvent(formatBirthEvent)
+      const abortEvent = await createTypedEvent<AbortDetailsEvent>({
+        eventData: {
+          ...animal.eventData,
+          parents: {
+            father: {
+              id: animal.eventData.breedingMale?.id,
+              earring: animal.eventData.breedingMale?.earring,
+              name: animal.eventData.breedingMale?.name
+            },
+            mother: {
+              id: animal.id,
+              earring: animal.earring,
+              name: animal.name
+            }
+          }
+        },
+        farm: {
+          id: currentFarm?.id || '',
+          name: currentFarm?.name || ''
+        },
+        type: 'ABORT'
+      })
       // UPDATE BREEDING EVENT
-      console.log(abort)
       setProgress(50)
-      const breedingUpdate = await updateBreedingEventBatch({
-        animalId: animal?.id || '',
+      const breedingUpdate = await updateAnimalStatusInBreedingBatch({
         eventType: 'ABORT',
-        eventData: formatBirthEvent
+        animalId: animal?.id || '',
+        eventId: animal.eventData.id
       })
 
       setProgress(100)
@@ -81,16 +86,7 @@ const AbortForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
             placeholder="Commentarios"
             className="my-1"
           />
-
-          {progress > 0 && (
-            <progress className="progress w-full" value={progress} max={100} />
-          )}
-
-          <div className="flex justify-center w-full">
-            <button disabled={progress > 0} className="btn btn-info">
-              Guardar
-            </button>
-          </div>
+          <ProgressButton progress={progress} />
         </form>
       </FormProvider>
     </div>

@@ -1,5 +1,6 @@
 import { BreedingDatesType } from 'components/BreedingsList/breeding.helpers'
 import { AnimalType, ParentsType } from './AnimalType.model'
+import { AnimalWeaningEventData } from './AnimalWeaning.model'
 import {
   AnimalBreedingStatus,
   StatusOfFarmEvent,
@@ -27,7 +28,7 @@ export interface ParentType
       'earring' | 'breed' | 'birthday' | 'gender' | 'name' | 'id'
     >
   > {
-  inTheFarm: boolean
+  inTheFarm?: boolean
 }
 export interface BirthDetailsEvent extends BreedingEventDefaultInfo {
   birthType?: number
@@ -35,6 +36,7 @@ export interface BirthDetailsEvent extends BreedingEventDefaultInfo {
 }
 export interface AbortDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
+  // parents?: ShortParentsType | null
 }
 export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
@@ -59,7 +61,7 @@ export interface BreedingEventDefaultInfo {
   batchId: string
   breedingBatch: AnimalBreedingType[]
   breedingMale: ParentType | null
-  parents: ParentsType
+  parents: ShortParentsType
   startAt: number | string
   finishAt: number | string
   // calfs?: Partial<AnimalType>[]
@@ -81,7 +83,8 @@ export interface EventData
     BreedingDetailsEvent,
     EmptyDetailsEvent,
     AbortDetailsEvent,
-    BirthDetailsEvent {
+    BirthDetailsEvent,
+    AnimalWeaningEventData {
   breedingDates?: BreedingDatesType
   // animals?: any[]
 }
@@ -99,5 +102,21 @@ export interface DTO_CreateBreedingEventType
 export interface GetAllFarmEventsType extends SetGenericEventType<EventData> {}
 
 export interface AnimalBreedingEventCard extends Partial<AnimalType> {
-  eventData: EventData
+  eventData: BreedingEventData
+}
+export interface BreedingEventData extends Omit<EventData, 'parents'> {
+  parents?: ShortParentsType | null
+}
+
+export interface ShortParentsType {
+  father?: {
+    id?: string
+    name?: string
+    earring?: string
+  } | null
+  mother?: {
+    id?: string
+    name?: string
+    earring?: string
+  } | null
 }

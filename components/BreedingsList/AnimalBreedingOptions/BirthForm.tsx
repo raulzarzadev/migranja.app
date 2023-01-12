@@ -78,11 +78,33 @@ const BirthForm = ({
       farmAnimals,
       formValues,
       breeding: {
-        breedingId: breedingBatchId,
-        breedingMale
+        breedingId: breedingBatchId
+        //breedingMale
       }
     })
-    console.log({ animalEventData: animal.eventData, breedingEventId })
+    console.log({
+      formatBirthEvent,
+      updateBreeding: {
+        eventId: breedingEventId || '',
+        animalId: animal?.id as string,
+        eventType: 'BIRTH'
+      },
+      calfs: formatBirthEvent.eventData.calfs,
+      weaning: formatBirthEvent.eventData.calfs?.map((calf) => {
+        return {
+          type: 'WEANING',
+          eventData: {
+            status: 'PENDING',
+            earring: calf.earring || '',
+            date: addDays(data.date, FARM_DATES.DAYS_UNTIL_WEANING_AFTER_BIRTH)
+          },
+          farm: {
+            id: currentFarm?.id || '',
+            name: currentFarm?.name || ''
+          }
+        }
+      })
+    })
     //console.log({ formatBirthEvent, formValues })
     // return
     if (!breedingEventId) return console.log('no eventId')
@@ -123,7 +145,10 @@ const BirthForm = ({
           eventData: {
             status: 'PENDING',
             earring: calf.earring || '',
-            date: addDays(data.date, FARM_DATES.DAYS_UNTIL_WEANING_AFTER_BIRTH)
+            date: addDays(
+              data.date,
+              FARM_DATES.DAYS_UNTIL_WEANING_AFTER_BIRTH
+            ).getTime()
           },
           farm: {
             id: currentFarm?.id || '',

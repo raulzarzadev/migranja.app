@@ -1,11 +1,7 @@
 import Icon from '@comps/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
-import {
-  AnimalBreedingEventCard,
-  BreedingEventCardDetails
-} from 'types/base/FarmEvent.model'
+import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'

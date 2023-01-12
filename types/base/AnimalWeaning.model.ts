@@ -4,21 +4,16 @@ import { TypeBase } from './TypeBase.model'
 
 export interface AnimalWeaning {
   type: 'WEANING'
-  //status: 'DONE' | 'PENDING'
   farm: {
     id: string
     name: string
   }
-  eventData: {
-    earring: string
-    date: Date | string | number
-    status: 'PENDING' | 'DONE'
-  }
+  eventData: AnimalWeaningEventData
 }
 
 export interface AnimalWeaningEventData {
   earring: string
-  date: Date | string | number
+  date: number | string
   status: 'PENDING' | 'DONE'
 }
 

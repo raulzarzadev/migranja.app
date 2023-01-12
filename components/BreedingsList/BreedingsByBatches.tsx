@@ -6,8 +6,10 @@ import IconBreedingStatus from 'components/IconBreedingStatus'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
 import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
-import { BreedingEventCardDetails } from 'types/base/FarmEvent.model'
-import { AnimalCurrentStatusType } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
+import {
+  AnimalBreedingEventCard,
+  BreedingEventCardDetails
+} from 'types/base/FarmEvent.model'
 import { AnimalBreedingStatus } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -151,10 +153,28 @@ const BreedingCardBody = ({
   type ViewBatchesType = AnimalBreedingStatus | '' | 'ALL'
 
   const [view, setView] = useState<ViewBatchesType>('')
-
-  const animals = breeding?.eventData?.breedingBatch.map((animal) => {
-    return { ...animal, eventData: { ...breeding.eventData, id: breeding.id } }
-  })
+  const animals: AnimalBreedingEventCard[] =
+    breeding?.eventData?.breedingBatch.map((animal) => {
+      return {
+        ...animal,
+        eventData: {
+          ...breeding.eventData,
+          id: breeding.id,
+          parents: {
+            father: {
+              id: breeding.eventData.breedingMale?.id,
+              earring: breeding.eventData.breedingMale?.earring,
+              name: breeding.eventData.breedingMale?.name
+            },
+            mother: {
+              id: animal.id,
+              earring: animal.earring,
+              name: animal.name
+            }
+          }
+        }
+      }
+    })
 
   const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')
   const abortAnimals = animals.filter(({ status }) => status === 'ABORT')

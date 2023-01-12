@@ -1,20 +1,13 @@
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
+import { AnimalType } from 'types/base/AnimalType.model'
 import { AnimalBreedingType } from 'types/base/FarmEvent.model'
+import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 
 interface GeneticTreeElement {
   id: string
   label: string
 }
-const LABELS: Record<
-  NonNullable<AnimalBreedingType['status']> | 'ALL',
-  string
-> = {
-  BIRTH: 'Parto',
-  ABORT: 'Aborto',
-  EMPTY: 'Vacio',
-  PENDING: 'Pendiente',
-  ALL: 'Todo'
-}
+const LABELS = animalCurrentStatusLabels
 const GeneticTree = ({
   elements,
   onClick
@@ -29,6 +22,7 @@ const GeneticTree = ({
   const mother = elements?.mother
   const father = elements?.father
   const mothers = elements?.mothers
+  console.log({ mothers })
   return (
     <div>
       <div className="flex items-center mx-auto w-full justify-center">
@@ -47,16 +41,17 @@ const GeneticTree = ({
           {mothers && (
             <div className="flex">
               <span>Madres:</span>
-              <div>
-                {mothers.map((mom) => (
+              <div className="whitespace-nowrap">
+                {mothers?.map((mom) => (
                   <div key={mom.earring} className="flex">
-                    <div className="w-[80px] text-end pr-4">{mom.earring} </div>
+                    <div className="w-[120px] text-end pr-4">
+                      {mom.earring}{' '}
+                    </div>
                     <span>
                       {
                         LABELS[
-                          mom?.status as
-                            | NonNullable<AnimalBreedingType['status']>
-                            | 'ALL'
+                          (mom?.status as AnimalType['currentStatus']) ||
+                            'PENDING'
                         ]
                       }
                     </span>

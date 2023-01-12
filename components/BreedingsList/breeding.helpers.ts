@@ -7,7 +7,8 @@ import {
   AnimalBreedingType,
   BreedingDetailsEvent,
   EventDataStoreDetails,
-  SetGenericEventType
+  SetGenericEventType,
+  ShortParentsType
 } from 'types/base/FarmEvent.model'
 import { fromNow } from 'utils/dates/myDateUtils'
 
@@ -136,7 +137,7 @@ export interface BreedingFormatted {
   breedingBatch: AnimalBreedingType[]
   breedingId: string
   breedingMale?: Partial<AnimalType> | null
-  parents?: ParentsType | null
+  parents?: ShortParentsType | null
   date: string | number
 }
 export const formatBreedingsGenericEvent = (
