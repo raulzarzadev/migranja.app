@@ -12,6 +12,7 @@ import {
 } from 'types/base/FarmEvent.model'
 import { AnimalBreedingStatus } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
+import AnimalBreedingCardSmall from './AnimalBreedingCardSmall'
 
 export interface BreedingBatchesListType {
   breedings: BreedingEventCardDetails[]
@@ -239,23 +240,23 @@ const BreedingCardBody = ({
         <div className="">
           {view === 'ALL' &&
             animals?.map((animal, i) => (
-              <AnimalBreedingCard key={i} animal={animal} />
+              <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
           {view === 'PENDING' &&
             pendingAnimals?.map((animal, i) => (
-              <AnimalBreedingCard key={i} animal={animal} />
+              <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
           {view === 'ABORT' &&
             abortAnimals.map((animal, i) => (
-              <AnimalBreedingCard key={i} animal={animal} />
+              <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
           {view === 'BIRTH' &&
             birthAnimals.map((animal, i) => (
-              <AnimalBreedingCard key={i} animal={animal} />
+              <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
           {view === 'EMPTY' &&
             emptyAnimals.map((animal, i) => (
-              <AnimalBreedingCard key={i} animal={animal} />
+              <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
         </div>
       </div>
