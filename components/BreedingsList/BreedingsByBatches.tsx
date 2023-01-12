@@ -153,10 +153,8 @@ const BreedingCardBody = ({
   const [view, setView] = useState<ViewBatchesType>('')
 
   const animals = breeding?.eventData?.breedingBatch.map((animal) => {
-    return { ...animal, eventData: breeding.eventData }
+    return { ...animal, eventData: { ...breeding.eventData, id: breeding.id } }
   })
-  console.log({ animals })
-  console.log({ breeding })
 
   const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')
   const abortAnimals = animals.filter(({ status }) => status === 'ABORT')

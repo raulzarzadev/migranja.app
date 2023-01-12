@@ -82,47 +82,39 @@ const BirthForm = ({
         breedingMale
       }
     })
+    console.log({ animalEventData: animal.eventData, breedingEventId })
     //console.log({ formatBirthEvent, formValues })
     // return
     try {
-      setLabelStatus('Iniciando')
-      setProgress(20)
       const newCalfs = formatBirthEvent.eventData.calfs || []
-
       // ****************************************************   create birth
-      setLabelStatus('Creando event')
-      const event = createGenericBreedingEvent(formatBirthEvent)
-      setProgress(40)
+      setLabelStatus('Creando evento')
+      setProgress(10)
+      console.log({ formatBirthEvent })
+      const event = await createGenericBreedingEvent(formatBirthEvent)
 
       // ***************************************************   update breeding, move from batch to already done
-      setLabelStatus('Actualizando breeding')
 
-      const breeding = updateEventBreedingBatch({
+      setLabelStatus('Actualizando breeding')
+      setProgress(30)
+      const breeding = await updateEventBreedingBatch({
         eventId: breedingEventId || '',
         animalId: animal?.id as string,
         eventType: 'BIRTH'
       })
-      setLabelStatus('Creando animales')
-
-      // setProgress(50)
 
       // *************************************************   create animals/calfs
 
+      setLabelStatus('Creando animales')
       for (let i = 0; i < newCalfs?.length; i++) {
         const calf = newCalfs[i]
         await createAnimal({ ...calf, status: 'ACTIVE' })
-        setProgress((i * 50) / newCalfs.length)
+        setProgress((i * 60) / newCalfs.length)
       }
-      // const calfs = newCalfs?.map((calf: any, i: number) => {
-      //   //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
-      //   // setProgress((i * 100) / newCalfs?.length)
-
-      //   return createAnimal({ ...calf })
-
-      //   // console.log(r)
-      // })
 
       setLabelStatus('Creando detetes')
+      // *************************************************   create animals weaning
+
       for (let i = 0; i < newCalfs.length; i++) {
         const calf = newCalfs[i]
         await creteAnimalWeaning({
@@ -140,12 +132,12 @@ const BirthForm = ({
         setProgress((i * 100) / newCalfs.length)
       }
 
-      setTimeout(() => {
-        setLabelStatus('Listo')
-        setProgress(100)
-        setFinishView(true)
-        reset()
-      }, 5000)
+      // setTimeout(() => {
+      //   setLabelStatus('Listo')
+      //   setProgress(100)
+      //   setFinishView(true)
+      //   reset()
+      // }, 5000)
       // const weaning = newCalfs?.map((calf: any, i: number) => {
       //   //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
       //   // setProgress((i * 100) / newCalfs?.length)
