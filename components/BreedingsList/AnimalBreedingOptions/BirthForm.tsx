@@ -85,6 +85,7 @@ const BirthForm = ({
     console.log({ animalEventData: animal.eventData, breedingEventId })
     //console.log({ formatBirthEvent, formValues })
     // return
+    if (!breedingEventId) return console.log('no eventId')
     try {
       const newCalfs = formatBirthEvent.eventData.calfs || []
       // ****************************************************   create birth
@@ -132,31 +133,6 @@ const BirthForm = ({
         setProgress((i * 100) / newCalfs.length)
       }
 
-      // setTimeout(() => {
-      //   setLabelStatus('Listo')
-      //   setProgress(100)
-      //   setFinishView(true)
-      //   reset()
-      // }, 5000)
-      // const weaning = newCalfs?.map((calf: any, i: number) => {
-      //   //const newAnimal: AnimalType = { weight:{atBirth:calf.w} }
-      //   // setProgress((i * 100) / newCalfs?.length)
-      //   return creteAnimalWeaning({
-      //     type: 'WEANING',
-      //     status: 'PENDING',
-      //     eventData: {
-      //       earring: calf.earring,
-      //       date: addDays(data.date, FARM_DATES.DAYS_UNTIL_WEANING_AFTER_BIRTH)
-      //     }
-      //   })
-      // console.log(r)
-      //})
-
-      //setProgress(90)
-
-      // const promises = [...(calfs || []), event, breeding]
-      // const res = await Promise.all(promises).then((res: any) => {})
-      // console.log(res)
       setProgress(100)
       setFinishView(true)
       reset()
