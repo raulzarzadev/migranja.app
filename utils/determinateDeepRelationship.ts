@@ -37,7 +37,9 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   // **************************************** Are brothers
 
   if (
+    p1Parents?.mother &&
     p1Parents?.father === p2Parents?.father &&
+    p1Parents?.mother &&
     p1Parents?.mother === p2Parents?.mother
   ) {
     return 'hermano/hermana'
@@ -46,22 +48,25 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   // **************************************** Are father or mother
 
   if (
-    p2Parents?.mother === p1Parents?.name ||
-    p2Parents?.father === p1Parents?.name
+    (p2Parents?.mother && p2Parents?.mother === p1Parents?.name) ||
+    (p2Parents?.father && p2Parents?.father === p1Parents?.name)
   ) {
     return 'padre/madre'
   }
 
   // **************************************** Are father or soon
-  if (p1Parents?.mother === p2 || p1Parents?.father === p2) {
+  if (
+    (p1Parents?.mother && p1Parents?.mother === p2) ||
+    (p1Parents?.father && p1Parents?.father === p2)
+  ) {
     return 'hija/hijo'
   }
 
   // **************************************** Are step brother or step sister or soon
 
   if (
-    p1Parents?.father === p2Parents?.father ||
-    p1Parents?.mother === p2Parents?.mother
+    (p1Parents?.father && p1Parents?.father === p2Parents?.father) ||
+    (p1Parents?.mother && p1Parents?.mother === p2Parents?.mother)
   ) {
     return 'stepBrother'
   }
@@ -113,10 +118,10 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   for (let i = 0; i < p1Grandparents.length; i++) {
     for (let j = 0; j < [p2Parents?.father, p2Parents?.mother].length; j++) {
       if (
-        p2Parents?.father === p1Grandparents[i] ||
-        p2Parents?.mother === p1Grandparents[i] ||
-        p2Parents?.father === p1Grandparents[j] ||
-        p2Parents?.mother === p1Grandparents[j]
+        (p2Parents?.father && p2Parents?.father === p1Grandparents[i]) ||
+        (p2Parents?.mother && p2Parents?.mother === p1Grandparents[i]) ||
+        (p2Parents?.father && p2Parents?.father === p1Grandparents[j]) ||
+        (p2Parents?.mother && p2Parents?.mother === p1Grandparents[j])
       )
         return 'sobrino/sobrina'
     }
