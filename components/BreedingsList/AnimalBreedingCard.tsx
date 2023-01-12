@@ -1,3 +1,4 @@
+import Icon from '@comps/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
@@ -5,6 +6,7 @@ import {
   AnimalBreedingEventCard,
   BreedingEventCardDetails
 } from 'types/base/FarmEvent.model'
+import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
@@ -41,17 +43,26 @@ const AnimalBreedingCard = ({
         className={`bg-base-300 my-2 rounded-md shadow-md ${
           disableOptionsModal && ' opacity-50  shadow-none'
         } `}
-        onClick={() => {
-          disableOptionsModal || handleOpenModal()
-        }}
       >
         <div className="flex justify-between items-center px-2 pt-1 w-full ">
           <span></span>
           <span>
-            Monta
-            <span className="text-xs h-full">
-              <span className=""> {breedingData?.breedingId} </span>
+            <span className="">
+              Monta:{' '}
+              <span className="font-bold"> {breedingData?.breedingId} </span>
             </span>
+          </span>
+          <span className="p-1">
+            <button
+              className="text-info"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                disableOptionsModal || handleOpenModal()
+              }}
+            >
+              <Icon name="event" />
+            </button>
           </span>
           {/* <span>{disableOptionsModal || <EventModal event={{}} />}</span> */}
         </div>
@@ -63,7 +74,6 @@ const AnimalBreedingCard = ({
               startInDays={breedingDates?.birthStartInDays}
             />
             <span className="flex flex-col">
-              <span>{animal.status || 'PENDING'}</span>
               <span>
                 Partos:{' '}
                 <span className="font-bold">
@@ -84,10 +94,13 @@ const AnimalBreedingCard = ({
 
           <span className="flex flex-col">
             <span>
-              Arete:{' '}
+              Hembra:{' '}
               <span className="font-bold whitespace-nowrap">
                 {breedingFemale.earring}
               </span>
+            </span>
+            <span>
+              {animalCurrentStatusLabels[animal?.status || 'PENDING']}
             </span>
 
             <span className="text-xs">
