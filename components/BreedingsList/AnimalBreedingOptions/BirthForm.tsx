@@ -78,8 +78,11 @@ const BirthForm = ({
       farmAnimals,
       formValues,
       breeding: {
-        breedingId: breedingBatchId
-        //breedingMale
+        breedingId: breedingBatchId,
+        breedingMale: {
+          inTheFarm: breedingMale?.inTheFarm || false,
+          ...breedingMale
+        }
       }
     })
     console.log({
