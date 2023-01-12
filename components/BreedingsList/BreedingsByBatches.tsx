@@ -153,9 +153,14 @@ const BreedingCardBody = ({
 }) => {
   type ViewBatchesType = AnimalBreedingStatus | '' | 'ALL'
 
+  const sortByEarring = (a: any, b: any) => {
+    if (a.earring > b.earring) return 1
+    if (a.earring < b.earring) return -1
+    return 0
+  }
   const [view, setView] = useState<ViewBatchesType>('')
-  const animals: AnimalBreedingEventCard[] =
-    breeding?.eventData?.breedingBatch.map((animal) => {
+  const animals: AnimalBreedingEventCard[] = breeding?.eventData?.breedingBatch
+    .map((animal) => {
       return {
         ...animal,
         eventData: {
@@ -176,6 +181,7 @@ const BreedingCardBody = ({
         }
       }
     })
+    .sort(sortByEarring)
 
   const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')
   const abortAnimals = animals.filter(({ status }) => status === 'ABORT')
