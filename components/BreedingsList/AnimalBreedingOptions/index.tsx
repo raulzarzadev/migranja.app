@@ -1,4 +1,5 @@
 import RevertBirthForm from '@comps/forms/RevertBirthForm'
+import { SelectOption } from '@comps/inputs/InputContainer'
 import { removeAnimalFromBreeding } from '@firebase/Events/main'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
@@ -27,17 +28,20 @@ const AnimalBreedingOptions = ({
     ?.eventData.breedingBatch?.find(
       ({ earring }) => earring === animal?.earring
     )
-  const birthEventData: BirthEventDataType = breedingAnimal?.birthEventData
+  console.log(breedingAnimal)
+  const birthEventData: BirthEventDataType | undefined =
+    breedingAnimal?.birthEventData
   console.log({ breedingAnimal })
   const breedingMale = animal.eventData?.breedingMale
 
-  const optionBirth = { label: 'Parto', value: 'BIRTH' }
-  const optionAbort = { label: 'Aborto', value: 'ABORT' }
-  const optionEmpty = { label: 'Vacio', value: 'EMPTY' }
-  const optionDiscard = { label: 'Descartar', value: 'DISCARD' }
-  const optionRevert = { label: 'Revertir', value: 'REVERT' }
+  const optionBirth: SelectOption = { label: 'Parto', value: 'BIRTH' }
+  const optionAbort: SelectOption = { label: 'Aborto', value: 'ABORT' }
+  const optionEmpty: SelectOption = { label: 'Vacio', value: 'EMPTY' }
+  const optionDiscard: SelectOption = { label: 'Descartar', value: 'DISCARD' }
+  const optionRevert: SelectOption = { label: 'Revertir', value: 'REVERT' }
 
-  const OPTIONS_STATUS = {
+  type OptionValue = 'PENDING' | 'BIRTH' | 'ABORT' | 'EMPTY'
+  const OPTIONS_STATUS: Record<OptionValue, SelectOption[]> = {
     PENDING: [optionBirth, optionAbort, optionEmpty, optionDiscard],
     BIRTH: [optionRevert],
     ABORT: [optionRevert],
@@ -115,7 +119,7 @@ const AnimalBreedingOptions = ({
               className="input input-bordered input-sm mx-auto w-[150px] "
             >
               <option value={''}>Selecciona </option>
-              {OPTIONS_STATUS[animal.status || 'PENDING'].map(
+              {OPTIONS_STATUS[animal.status as OptionValue].map(
                 ({ value, label }) => (
                   <option key={value} value={value}>
                     {label}

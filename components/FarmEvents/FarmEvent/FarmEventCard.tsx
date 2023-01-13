@@ -64,6 +64,10 @@ export const FarmEventCard = ({
           event={event as unknown as Partial<AnimalWeaningType>}
         />
       )
+    },
+    PENDING: {
+      label: 'Pendiente ',
+      Component: <div>Pendiente</div>
     }
   }
   return (

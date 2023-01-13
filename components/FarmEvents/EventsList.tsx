@@ -24,7 +24,8 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
           EMPTY: 'Vacio',
           DROP_OUT: 'Baja',
           DROP_IN: 'Alta',
-          WEANING: 'Destete'
+          WEANING: 'Destete',
+          PENDING: 'Pendiente'
         }
         return (
           dictionary[event?.type]

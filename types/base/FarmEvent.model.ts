@@ -1,6 +1,7 @@
 import { BreedingDatesType } from 'components/BreedingsList/breeding.helpers'
 import { AnimalType, ParentsType } from './AnimalType.model'
 import { AnimalWeaningEventData } from './AnimalWeaning.model'
+import { BirthEventDataType } from './BirtEventDataType.model'
 import {
   AnimalBreedingStatus,
   StatusOfFarmEvent,
@@ -51,7 +52,7 @@ export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
 export interface AnimalBreedingType
   extends Merge<
     Omit<Partial<AnimalType>, 'status'>,
-    { status: AnimalBreedingStatus }
+    { status: AnimalBreedingStatus; birthEventData?: BirthEventDataType }
   > {}
 
 export interface BreedingEventDefaultInfo {
@@ -86,6 +87,7 @@ export interface EventData
     BirthDetailsEvent,
     AnimalWeaningEventData {
   breedingDates?: BreedingDatesType
+
   // animals?: any[]
 }
 

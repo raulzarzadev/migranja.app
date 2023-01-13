@@ -48,6 +48,10 @@ export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
       WEANING: {
         label: 'Destete ',
         Component: <span>Destete</span>
+      },
+      PENDING: {
+        label: 'Pendiente ',
+        Component: <span>Pendeinte</span>
       }
     }
   return (

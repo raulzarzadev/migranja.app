@@ -12,7 +12,7 @@ const RevertBirthForm = ({
   birthEventData
 }: {
   animal: any
-  birthEventData: BirthEventDataType
+  birthEventData?: BirthEventDataType
 }) => {
   //console.log({ birthEventData })
   const handleRevertBreedingToPending = async () => {
