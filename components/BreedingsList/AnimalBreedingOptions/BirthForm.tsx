@@ -140,17 +140,17 @@ const BirthForm = ({
       setLabelStatus('Actualizando breeding')
       setProgress(30)
 
-      const birthEventData = {
-        birthEventId: event?.res?.id,
-        newCalfsIds: newAnimals.map((animal) => animal?.res?.id),
-        calfsWeaningsIds: weanings.map((weaning) => weaning?.res.id)
-      }
+      // const birthEventData = {
+      //   birthEventId: event?.res?.id,
+      //   newCalfsIds: newAnimals.map((animal) => animal?.res?.id),
+      //   calfsWeaningsIds: weanings.map((weaning) => weaning?.res.id)
+      // }
       // console.log({ birthEventData })
       const breeding = await updateEventBreedingBatch({
         eventId: breedingEventId || '',
         animalId: animal?.id as string,
-        eventType: 'BIRTH',
-        birthEventData
+        eventType: 'BIRTH'
+        //birthEventData
       })
 
       setProgress(100)

@@ -83,17 +83,11 @@ export const createGenericBreedingEvent = async <T>(
 export const updateEventBreedingBatch = async ({
   eventId,
   animalId,
-  eventType,
-  birthEventData
+  eventType
 }: {
   eventId: string
   animalId: string
   eventType: BaseFarmEvent['type']
-  birthEventData: {
-    birthEventId: string
-    newCalfsIds: string[]
-    calfsWeaningsIds: string[]
-  }
 }) => {
   const oldAnimal = await eventsCRUD.getItem(eventId).then((res) => {
     // @ts-ignore
@@ -106,8 +100,8 @@ export const updateEventBreedingBatch = async ({
   })
   const newAnimal = {
     ...oldAnimal,
-    status: eventType,
-    eventData: birthEventData
+    status: eventType
+    //eventData: birthEventData
   }
   const setNewAnimal = await eventsCRUD.updateItem(eventId, {
     'eventData.breedingBatch': arrayUnion(newAnimal)
