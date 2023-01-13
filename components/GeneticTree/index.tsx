@@ -22,7 +22,6 @@ const GeneticTree = ({
   const mother = elements?.mother
   const father = elements?.father
   const mothers = elements?.mothers
-  console.log({ mothers })
   return (
     <div>
       <div className="flex items-center mx-auto w-full justify-center">

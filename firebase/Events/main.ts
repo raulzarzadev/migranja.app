@@ -13,6 +13,7 @@ import {
   BirthDetailsEvent,
   EventData
 } from 'types/base/FarmEvent.model'
+import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
 const storage = getStorage(app)
 
 export const eventsCRUD = new FirebaseCRUD('events', db, storage)
@@ -83,11 +84,13 @@ export const createGenericBreedingEvent = async <T>(
 export const updateEventBreedingBatch = async ({
   eventId,
   animalId,
-  eventType
+  eventType,
+  birthEventData
 }: {
   eventId: string
   animalId: string
   eventType: BaseFarmEvent['type']
+  birthEventData?: BirthEventDataType
 }) => {
   const oldAnimal = await eventsCRUD.getItem(eventId).then((res) => {
     // @ts-ignore
@@ -100,8 +103,8 @@ export const updateEventBreedingBatch = async ({
   })
   const newAnimal = {
     ...oldAnimal,
-    status: eventType
-    //eventData: birthEventData
+    status: eventType,
+    birthEventData
   }
   const setNewAnimal = await eventsCRUD.updateItem(eventId, {
     'eventData.breedingBatch': arrayUnion(newAnimal)

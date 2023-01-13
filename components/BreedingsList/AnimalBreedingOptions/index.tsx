@@ -5,6 +5,7 @@ import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
+import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
@@ -20,12 +21,14 @@ const AnimalBreedingOptions = ({
   handleOpenModal: () => void
 }) => {
   const farmEvents = useSelector(selectFarmEvents)
-
-  const event = farmEvents
-    .find(({ id }) => animal.eventData.id === id)
-    ?.eventData.breedingBatch.find(({ earring }) => earring === animal.id)
-  console.log({ event })
-
+  const farmAnimals = useSelector(selectFarmAnimals)
+  const breedingAnimal = farmEvents
+    .find(({ id }) => animal?.eventData?.id === id)
+    ?.eventData.breedingBatch?.find(
+      ({ earring }) => earring === animal?.earring
+    )
+  const birthEventData: BirthEventDataType = breedingAnimal?.birthEventData
+  console.log({ breedingAnimal })
   const breedingMale = animal.eventData?.breedingMale
 
   const optionBirth = { label: 'Parto', value: 'BIRTH' }
@@ -49,8 +52,6 @@ const AnimalBreedingOptions = ({
       })
       .then((err) => console.log(err))
   }
-  // console.log({ animal })
-
   return (
     <Modal
       handleOpen={handleOpenModal}
@@ -78,6 +79,34 @@ const AnimalBreedingOptions = ({
             </span>
           </div>
         </div>
+        {animal.status === 'BIRTH' && birthEventData && (
+          <div>
+            <div>Detalles de parto</div>
+            <div>
+              Evento
+              <div className="text-center">{birthEventData.birthEventId}</div>
+            </div>
+            <div>
+              Animales creados{' '}
+              <div className="text-center">
+                {birthEventData.newCalfsIds.map((animal, i) => (
+                  <div key={animal}>
+                    {farmAnimals.find(({ id }) => id === animal)?.earring ||
+                      animal}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              Destetes programados{' '}
+              <div className="text-center">
+                {birthEventData.calfsWeaningsIds.map((weaning) => (
+                  <div key={weaning}>{weaning}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex justify-center my-2">
           <label className={`form-control `}>
             <span className="label-text">Opciones</span>
@@ -96,7 +125,9 @@ const AnimalBreedingOptions = ({
             </select>
           </label>
         </div>
-        {option === 'REVERT' && <RevertBirthForm />}
+        {option === 'REVERT' && (
+          <RevertBirthForm animal={animal} birthEventData={birthEventData} />
+        )}
         {option === 'BIRTH' && (
           <BirthForm
             animal={{ ...animal, status: 'PENDING' }}

@@ -2,10 +2,17 @@ import Loading from '@comps/Loading'
 
 export const ProgressButton = ({
   progress,
-  label
+  label,
+  buttonLabel = 'Guardar',
+  onClick,
+  className,
+  ...rest
 }: {
   label?: string
   progress: number
+  buttonLabel?: string
+  className?: string
+  onClick?: () => void
 }) => {
   return (
     <div role="buttonProgress">
@@ -22,8 +29,12 @@ export const ProgressButton = ({
       )}
       {progress == 100 && <div className="text-center">Listo. </div>}
       <div className="flex w-full justify-center">
-        <button className="btn btn-info" disabled={progress > 0}>
-          Guardar
+        <button
+          onClick={onClick}
+          className={`btn btn-info ${className}`}
+          disabled={progress > 0}
+        >
+          {buttonLabel}
         </button>
       </div>
     </div>

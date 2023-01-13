@@ -1,6 +1,5 @@
 import { createAnimal } from '@firebase/Animal/main'
 import {
-  createEvent,
   createGenericBreedingEvent,
   updateEventBreedingBatch
 } from '@firebase/Events/main'
@@ -12,7 +11,6 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import ProgressButton from '@comps/ProgressButton'
 import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
 import { addDays } from 'date-fns'
@@ -97,25 +95,20 @@ const BirthForm = ({
       //  console.log({ formatBirthEvent })
 
       const event = await createGenericBreedingEvent(formatBirthEvent)
-
+      console.log({ event })
       // *************************************************   create animals/calfs
-
       setLabelStatus('Creando animales')
-      const newAnimals = []
-      for (let i = 0; i < newCalfs?.length; i++) {
-        const calf = newCalfs[i]
-        const animal = await createAnimal({ ...calf, status: 'ACTIVE' })
-        newAnimals.push(animal)
-        setProgress((i * 60) / newCalfs.length)
-      }
+      const newAnimalsPromises = newCalfs.map((calf) => {
+        return createAnimal({ ...calf, status: 'ACTIVE' })
+      })
+
+      const newAnimals = await Promise.all(newAnimalsPromises)
+      console.log({ newAnimals })
 
       setLabelStatus('Creando detetes')
       // *************************************************   create animals weaning
-
-      const weanings = []
-      for (let i = 0; i < newCalfs.length; i++) {
-        const calf = newCalfs[i]
-        const weaning = await creteAnimalWeaning({
+      const newWeaningsPromises = newCalfs.map((calf) => {
+        return creteAnimalWeaning({
           type: 'WEANING',
           eventData: {
             status: 'PENDING',
@@ -130,27 +123,28 @@ const BirthForm = ({
             name: currentFarm?.name || ''
           }
         })
-        weanings.push(weaning)
-
-        setProgress((i * 100) / newCalfs.length)
-      }
+      })
+      const newWeanings = await Promise.all(newWeaningsPromises)
+      console.log({ newWeanings })
+      setProgress(40)
 
       // ***************************************************   update breeding, move from batch to already done
 
       setLabelStatus('Actualizando breeding')
-      setProgress(30)
+      setProgress(80)
 
-      // const birthEventData = {
-      //   birthEventId: event?.res?.id,
-      //   newCalfsIds: newAnimals.map((animal) => animal?.res?.id),
-      //   calfsWeaningsIds: weanings.map((weaning) => weaning?.res.id)
-      // }
-      // console.log({ birthEventData })
+      const birthEventData = {
+        birthEventId: event?.res?.id,
+        newCalfsIds: newAnimals.map((animal) => animal?.res?.id),
+        calfsWeaningsIds: newWeanings.map((weaning) => weaning?.res.id)
+      }
+
+      console.log({ birthEventData })
       const breeding = await updateEventBreedingBatch({
         eventId: breedingEventId || '',
         animalId: animal?.id as string,
-        eventType: 'BIRTH'
-        //birthEventData
+        eventType: 'BIRTH',
+        birthEventData
       })
 
       setProgress(100)
