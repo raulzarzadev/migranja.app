@@ -7,6 +7,8 @@ import { GiCow, GiSheep, GiShepherdsCrook } from 'react-icons/gi'
 import { VscDesktopDownload } from 'react-icons/vsc'
 
 import { AiOutlineTeam } from 'react-icons/ai'
+import { FaBirthdayCake, FaSkullCrossbones } from 'react-icons/fa'
+import { MdOutlineNoFood } from 'react-icons/md'
 
 import {
   SlActionRedo,
@@ -106,7 +108,10 @@ const ICON_LIST = {
   team: AiOutlineTeam,
   install: VscDesktopDownload,
   time: SlClock,
-  send: SlActionRedo
+  send: SlActionRedo,
+  birth: FaBirthdayCake,
+  dead: FaSkullCrossbones,
+  noFood: MdOutlineNoFood
   // emergency: MdOutlineEmergency,
   // email: TiMail,
   // whatsapp: SiWhatsapp,

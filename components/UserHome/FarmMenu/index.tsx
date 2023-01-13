@@ -1,3 +1,5 @@
+import BirthEvents from '@comps/BirthEvents'
+import WeaningEvents from '@comps/WeaningEvents'
 import { FarmType } from '@firebase/Farm/farm.model'
 import Batch from 'components/Batch'
 import BatchTable from 'components/BatchTable'
@@ -27,6 +29,8 @@ type Option =
   | 'addMany'
   | 'addBatch'
   | 'breedingEvent'
+  | 'birthEvents'
+  | 'weaningEvents'
 
 const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
@@ -126,6 +130,20 @@ const FarmMenu = (props: any) => {
                     }
                     selected={menuOptions.column2 === 'breedingEvent'}
                   />
+                  <SquareOption
+                    title="Partos"
+                    iconName="birth"
+                    onClick={() => handleChangeOption('column2', 'birthEvents')}
+                    selected={menuOptions.column2 === 'birthEvents'}
+                  />
+                  <SquareOption
+                    title="Destetes"
+                    iconName="noFood"
+                    onClick={() =>
+                      handleChangeOption('column2', 'weaningEvents')
+                    }
+                    selected={menuOptions.column2 === 'weaningEvents'}
+                  />
                 </>
               )}
             </div>
@@ -189,7 +207,14 @@ const FarmMenu = (props: any) => {
         <>
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {column1 === 'events' && !column2 && <FarmEvents />}
+
+          {/* ********************************+ FARM EVENTS *************************************** */}
+          {/* ********************************+ BREEDINGS *************************************** */}
           {column2 === 'breedingEvent' && !column3 && <BreedingsList />}
+          {/* ********************************+ BIRTH EVENTS *************************************** */}
+          {column2 === 'birthEvents' && !column3 && <BirthEvents />}
+          {/* ********************************+ WEANING EVENTS *************************************** */}
+          {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
 
           {/* TODO: ADD EVENT FORM ********************************+******+ +++************** ADD ANIMALS */}
 
