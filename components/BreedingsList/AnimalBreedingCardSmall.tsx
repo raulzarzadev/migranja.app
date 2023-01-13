@@ -3,7 +3,6 @@ import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
-import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
 const AnimalBreedingCardSmall = ({
@@ -21,10 +20,6 @@ const AnimalBreedingCardSmall = ({
     setOpenModal(!openModal)
   }
 
-  const disableOptionsModal = ['ABORT', 'BIRTH', 'EMPTY'].includes(
-    animal?.status || ''
-  )
-
   return (
     <>
       {openModal && (
@@ -35,11 +30,7 @@ const AnimalBreedingCardSmall = ({
         />
       )}
 
-      <div
-        className={`bg-base-300 my-2 rounded-md shadow-md ${
-          disableOptionsModal && ' opacity-50  shadow-none'
-        } `}
-      >
+      <div className={`bg-base-300 my-2 rounded-md shadow-md  `}>
         <div className="flex justify-between items-center px-2 pt-1 w-full ">
           <span>
             Arete:
@@ -62,7 +53,7 @@ const AnimalBreedingCardSmall = ({
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                disableOptionsModal || handleOpenModal()
+                handleOpenModal()
               }}
             >
               <Icon name="event" />

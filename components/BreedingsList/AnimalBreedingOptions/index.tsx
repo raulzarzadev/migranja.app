@@ -1,8 +1,10 @@
+import RevertBirthForm from '@comps/forms/RevertBirthForm'
 import { removeAnimalFromBreeding } from '@firebase/Events/main'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
 import { useState } from 'react'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
@@ -17,25 +19,28 @@ const AnimalBreedingOptions = ({
   openModal: boolean
   handleOpenModal: () => void
 }) => {
+  const farmEvents = useSelector(selectFarmEvents)
+
+  const event = farmEvents
+    .find(({ id }) => animal.eventData.id === id)
+    ?.eventData.breedingBatch.find(({ earring }) => earring === animal.id)
+  console.log({ event })
+
   const breedingMale = animal.eventData?.breedingMale
-  const options = [
-    {
-      label: 'Parto',
-      value: 'birth'
-    },
-    {
-      label: 'Aborto',
-      value: 'abort'
-    },
-    {
-      label: 'No preña',
-      value: 'notPregnant'
-    },
-    {
-      label: 'Descartar',
-      value: 'discard'
-    }
-  ]
+
+  const optionBirth = { label: 'Parto', value: 'BIRTH' }
+  const optionAbort = { label: 'Aborto', value: 'ABORT' }
+  const optionEmpty = { label: 'Vacio', value: 'EMPTY' }
+  const optionDiscard = { label: 'Descartar', value: 'DISCARD' }
+  const optionRevert = { label: 'Revertir', value: 'REVERT' }
+
+  const OPTIONS_STATUS = {
+    PENDING: [optionBirth, optionAbort, optionEmpty, optionDiscard],
+    BIRTH: [optionRevert],
+    ABORT: [optionRevert],
+    EMPTY: [optionRevert]
+  }
+
   const [option, setOption] = useState('')
   const handleRemove = () => {
     removeAnimalFromBreeding(animal.eventData.id, animal.id || '')
@@ -44,6 +49,8 @@ const AnimalBreedingOptions = ({
       })
       .then((err) => console.log(err))
   }
+  // console.log({ animal })
+
   return (
     <Modal
       handleOpen={handleOpenModal}
@@ -79,23 +86,26 @@ const AnimalBreedingOptions = ({
               className="input input-bordered input-sm mx-auto w-[150px] "
             >
               <option value={''}>Selecciona </option>
-              {options.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
+              {OPTIONS_STATUS[animal.status || 'PENDING'].map(
+                ({ value, label }) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                )
+              )}
             </select>
           </label>
         </div>
-        {option === 'birth' && (
+        {option === 'REVERT' && <RevertBirthForm />}
+        {option === 'BIRTH' && (
           <BirthForm
             animal={{ ...animal, status: 'PENDING' }}
             possibleBirth={animal.eventData?.breedingDates?.birthStartAt}
           />
         )}
-        {option === 'abort' && <AbortForm animal={animal} />}
-        {option === 'notPregnant' && <EmptyPregnantForm animal={animal} />}
-        {option === 'discard' && (
+        {option === 'ABORT' && <AbortForm animal={animal} />}
+        {option === 'EMPTY' && <EmptyPregnantForm animal={animal} />}
+        {option === 'DISCARD' && (
           <div className="flex w-full justify-center my-6">
             <ModalDelete
               text={`Eliminar este animal de la monta de forma permanente ${
