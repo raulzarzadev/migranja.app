@@ -14,7 +14,8 @@ export const animalCurrentStatusLabels: Record<
   SOLD: 'Vendia',
   ABORT: 'Aborto',
   BIRTH: 'Parto',
-  EMPTY: 'Vacia'
+  EMPTY: 'Vacia',
+  DONE: 'Hecho'
 }
 
 export type AnimalCurrentStatusType =
@@ -29,3 +30,4 @@ export type AnimalCurrentStatusType =
   | 'ABORT'
   | 'BIRTH'
   | 'EMPTY'
+  | 'DONE'

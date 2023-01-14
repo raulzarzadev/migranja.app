@@ -21,7 +21,9 @@ const IconBreedingStatus = ({
     </span>
   )
 }
+
 type IconStatus = 'error' | 'success' | 'warning' | 'info'
+
 export const IconStatus = ({ status }: { status: IconStatus }) => (
   <span className="">
     {status === 'error' && (

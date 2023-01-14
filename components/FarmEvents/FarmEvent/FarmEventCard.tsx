@@ -1,5 +1,4 @@
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
-import ModalEditEvent from '@comps/modal/ModalEditWeaning/indext'
 import GeneticTree from 'components/GeneticTree'
 import { ReactNode, useState } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
@@ -10,6 +9,7 @@ import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import BirthEventDetails from '../BirthEventDetails'
 import EventModal from '../EventModal'
 import DropOutEventRow from './DropOutEventRow'
+import WeaningEventCard from './WeaningEventCard'
 
 export const FarmEventCard = ({
   event
@@ -86,46 +86,6 @@ export const FarmEventCard = ({
         <div className="bg-base-200 collapse-content">
           <div className="p-2  ">
             {DETAILS_OPTIONS[event?.type ?? 'NULL']?.Component}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
-  const label: Record<AnimalWeaningType['eventData']['status'], string> = {
-    DONE: 'Hecho',
-    PENDING: 'Pendiente'
-  }
-
-  return (
-    <div>
-      <div className="grid grid-cols-3">
-        <div>Arete</div>
-        <div>Fecha</div>
-        <div>Status</div>
-      </div>
-      <div className="grid grid-cols-3">
-        <div>
-          {event.eventData?.earring}{' '}
-          <LinkFarmAnimal animalEarringOrId={event.eventData?.earring} />
-        </div>
-        <div>
-          {event.eventData?.date &&
-            myFormatDate(event.eventData?.date, 'dd MMM yy')}
-        </div>
-        <div className="flex items-center">
-          <span>
-            {
-              label[
-                event?.eventData
-                  ?.status as AnimalWeaningType['eventData']['status']
-              ]
-            }
-          </span>
-          <div className="ml-4">
-            <ModalEditEvent eventId={event.id || ''} />
           </div>
         </div>
       </div>
@@ -228,7 +188,7 @@ const BirthEventRow = ({
         <div className="flex flex-col">
           <div>Aretes:</div>
           {eventData.calfs?.map((calf) => (
-            <div key={calf.earring}>
+            <div key={calf.id}>
               <div>
                 {calf.earring}{' '}
                 <LinkFarmAnimal
