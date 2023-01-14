@@ -45,3 +45,5 @@ public/workbox**
 
 # vitess
 .env.testing
+
+.env.test
