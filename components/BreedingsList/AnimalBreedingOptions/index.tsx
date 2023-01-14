@@ -28,10 +28,8 @@ const AnimalBreedingOptions = ({
     ?.eventData.breedingBatch?.find(
       ({ earring }) => earring === animal?.earring
     )
-  console.log(breedingAnimal)
   const birthEventData: BirthEventDataType | undefined =
     breedingAnimal?.birthEventData
-  console.log({ breedingAnimal })
   const breedingMale = animal.eventData?.breedingMale
 
   const optionBirth: SelectOption = { label: 'Parto', value: 'BIRTH' }

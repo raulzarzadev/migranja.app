@@ -4,7 +4,6 @@ import { EventsList } from './EventsList'
 
 const FarmEvents = () => {
   const events = useSelector(selectFarmEvents)
-  console.log(events.filter((event) => event.type === 'WEANING'))
   return (
     <div className="w-full">
       <EventsList events={events} />{' '}

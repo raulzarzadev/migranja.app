@@ -45,16 +45,16 @@ export const farmSlice = createSlice({
     }
 
     // Special reducer for hydrating the state. Special case for next-redux-wrapper
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      // console.log('HYDRATE', action.payload)
-      return {
-        ...state,
-        ...action.payload.farm
-      }
-    }
   }
+  // extraReducers: {
+  //   [HYDRATE]: (state, action) => {
+  //     // console.log('HYDRATE', action.payload)
+  //     return {
+  //       ...state,
+  //       ...action.payload.farm
+  //     }
+  //   }
+  // }
 })
 
 export const {

@@ -5,7 +5,6 @@ import { selectFarmEvents } from 'store/slices/farmSlice'
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
   const births = events.filter((event) => event.type === 'WEANING')
-  console.log(births)
   return (
     <div className="w-full">
       <EventsList events={births} />

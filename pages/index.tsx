@@ -7,7 +7,7 @@ import UserHome from '../components/UserHome'
 import VisitHome from '../components/VisitHome'
 const Home: NextPage = () => {
   const user = useSelector(selectAuthState)
-  useDebugInformation('Home', {})
+  // useDebugInformation('Home', {})
 
   return (
     <>
