@@ -1,5 +1,7 @@
 import { EventsList } from '@comps/FarmEvents/EventsList'
-import WeaningEventCard from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
+import WeaningEventCard, {
+  WEANING_STATUS_LABELS
+} from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
 import { IconStatus } from '@comps/IconBreedingStatus'
 import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
 import { subDays } from 'date-fns'
@@ -13,9 +15,7 @@ import { defineStatusByDate } from 'utils/defineStatusByDate'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
-  const weaning: Partial<AnimalWeaningType>[] = events.filter(
-    (event) => event.type === 'WEANING'
-  )
+  const weaning = events.filter((event) => event.type === 'WEANING')
 
   return (
     <div className="w-full p-2">
@@ -36,16 +36,13 @@ const WeaningEvents = () => {
               <td>
                 <span>
                   <IconStatus
-                    status={defineStatusByDate(event?.eventData?.date)}
+                    status={
+                      defineStatusByDate(event?.eventData?.date as number) ||
+                      'info'
+                    }
                   />{' '}
                 </span>
-                <span>
-                  {
-                    animalCurrentStatusLabels[
-                      event?.eventData?.status || 'PENDING'
-                    ]
-                  }
-                </span>
+                <span>{WEANING_STATUS_LABELS[event?.eventData?.status]}</span>
                 <ModalEditWeaning eventId={event.id || ''} />
               </td>
             </tr>

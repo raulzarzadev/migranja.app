@@ -4,6 +4,7 @@ import { AnimalWeaningEventData } from './AnimalWeaning.model'
 import { BirthEventDataType } from './BirtEventDataType.model'
 import {
   AnimalBreedingStatus,
+  EventStatus,
   StatusOfFarmEvent,
   TypeOfFarmEvent
 } from './LABELS_TYPES/EventTypes'
@@ -43,6 +44,8 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  status: EventStatus
+  earring: string
   animals: any
   calfs?: AnimalBreedingType[]
   breedingDates?: BreedingDatesType
@@ -87,7 +90,8 @@ export interface EventData
     BirthDetailsEvent,
     AnimalWeaningEventData {
   breedingDates?: BreedingDatesType
-
+  earring: string
+  status: EventStatus
   // animals?: any[]
 }
 

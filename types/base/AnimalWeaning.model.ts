@@ -1,5 +1,6 @@
 import { AnimalType } from './AnimalType.model'
 import { FarmEvent, SetGenericEventType } from './FarmEvent.model'
+import { EventStatus } from './LABELS_TYPES/EventTypes'
 import { TypeBase } from './TypeBase.model'
 
 export interface AnimalWeaning {
@@ -14,7 +15,7 @@ export interface AnimalWeaning {
 export interface AnimalWeaningEventData {
   earring: string
   date: number | string
-  status: 'PENDING' | 'DONE'
+  status: EventStatus
 }
 
 export interface AnimalWeaningType extends Partial<AnimalType> {

@@ -74,6 +74,8 @@ export const FARM_EVENT: FarmStateAnimalEvent = {
   currentStatus: undefined,
   userId: '',
   eventData: {
+    status: 'CANCELLED',
+    earring: '',
     animals: [],
     batchId: '',
     breedingBatch: [],

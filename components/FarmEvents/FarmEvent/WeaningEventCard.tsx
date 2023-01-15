@@ -3,12 +3,15 @@ import { AnimalWeaningType } from 'types/base/AnimalWeaning.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
 
+export const WEANING_STATUS_LABELS: Record<
+  AnimalWeaningType['eventData']['status'],
+  string
+> = {
+  DONE: 'Hecho',
+  PENDING: 'Pendiente',
+  CANCELLED: 'Cancelado'
+}
 const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
-  const label: Record<AnimalWeaningType['eventData']['status'], string> = {
-    DONE: 'Hecho',
-    PENDING: 'Pendiente'
-  }
-
   return (
     <div>
       <div className="grid grid-cols-3">
@@ -27,12 +30,7 @@ const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
         </div>
         <div className="flex items-center">
           <span>
-            {
-              label[
-                event?.eventData
-                  ?.status as AnimalWeaningType['eventData']['status']
-              ]
-            }
+            {WEANING_STATUS_LABELS[event?.eventData?.status || 'PENDING']}
           </span>
           <div className="ml-4">
             <ModalEditWeaning eventId={event.id || ''} />

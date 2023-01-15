@@ -7,12 +7,12 @@ const withPWA = require('next-pwa')({
 })
 
 const nextConfig = withPWA({
-  pwa: {
-    dest: 'public',
-    scope: '/',
-    runtimeCaching,
-    disable: process.env.NODE_ENV === 'development'
-  },
+  // pwa: {
+  //   dest: 'public',
+  //   scope: '/',
+  //   disable: process.env.NODE_ENV === 'development'
+  //   runtimeCaching,
+  // },
   reactStrictMode: true,
   images: {
     domains: ['lh3.googleusercontent.com']

@@ -30,15 +30,17 @@ const BirthForm = ({
     ({ earring }) => earring
   )
 
+  const sortByCreatedDate = (a: any, b: any) => b?.createdAt - a?.createdAt
+
   // Show the last male earring to have a reference for the next earrings
   const lastMaleCalfEarring = farmAnimals
     .filter(({ gender }) => gender === 'male')
-    .sort((a, b) => b?.createdAt - a?.createdAt)
+    .sort(sortByCreatedDate)
     .shift()
   // Show the last female earring to have a reference for the next earrings
   const lastFemaleCalfEarring = farmAnimals
     .filter(({ gender }) => gender === 'female')
-    .sort((a, b) => b?.createdAt - a?.createdAt)
+    .sort(sortByCreatedDate)
     .shift()
   const defaultCalf = {
     isAlive: true,
