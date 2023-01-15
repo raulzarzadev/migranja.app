@@ -54,7 +54,10 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
       (event) => event?.eventData?.parents?.mother?.earring === animalEarring
     )
 
-    const weanings = farmEvents.filter((event) => event?.type === 'WEANING')
+    const weanings = farmEvents.filter(
+      (event) =>
+        event?.type === 'WEANING' && event.eventData?.earring === animalEarring
+    )
 
     setEvents([
       ...birth,

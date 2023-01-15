@@ -29,9 +29,20 @@ const BirthForm = ({
   const farmEarrings = useSelector(selectFarmAnimals)?.map(
     ({ earring }) => earring
   )
+
+  // Show the last male earring to have a reference for the next earrings
+  const lastMaleCalfEarring = farmAnimals
+    .filter(({ gender }) => gender === 'male')
+    .sort((a, b) => b?.createdAt - a?.createdAt)
+    .shift()
+  // Show the last female earring to have a reference for the next earrings
+  const lastFemaleCalfEarring = farmAnimals
+    .filter(({ gender }) => gender === 'female')
+    .sort((a, b) => b?.createdAt - a?.createdAt)
+    .shift()
   const defaultCalf = {
     isAlive: true,
-    gender: 'female',
+    gender: 'male',
     earring: '',
     weight: {
       atBirth: 0
@@ -68,6 +79,7 @@ const BirthForm = ({
   const breedingEventId = animal.eventData?.id
   const breedingBatchId = animal.eventData?.breedingId
   const breedingMale = animal.eventData?.breedingMale
+
   const onSubmit = async (data: any) => {
     setProgress(1)
     const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
@@ -191,12 +203,18 @@ const BirthForm = ({
           )}
 
           {formValues?.birthType && (
-            <div className="grid grid-cols-4 place-items-center my-3 mt-8 font-bold  ">
-              <span>Vivo</span>
-              <span className="w-[120px] text-center">Sexo</span>
-              <span className="w-[100px] text-center">Arete</span>
-              {/* <span className="w-[120px] text-center">Nombre</span> */}
-              <span className="w-[120px] text-center">Peso</span>
+            <div>
+              <div className="grid justify-center text-sm">
+                <span>ultimo macho: {lastMaleCalfEarring?.earring}</span>
+                <span>ultima hembra: {lastFemaleCalfEarring?.earring}</span>
+              </div>
+              <div className="grid grid-cols-4 place-items-center my-3 mt-8 font-bold  ">
+                <span>Vivo</span>
+                <span className="w-[120px] text-center">Sexo</span>
+                <span className="w-[100px] text-center">Arete</span>
+                {/* <span className="w-[120px] text-center">Nombre</span> */}
+                <span className="w-[120px] text-center">Peso</span>
+              </div>
             </div>
           )}
 
