@@ -1,3 +1,4 @@
+import Modal from '@comps/modal'
 import { deleteEvent } from '@firebase/Events/main'
 import AnimalBreedingCard from 'components/BreedingsList/AnimalBreedingCard'
 import { BreedingFormatted } from 'components/BreedingsList/breeding.helpers'
@@ -13,6 +14,7 @@ import {
 import { AnimalBreedingStatus } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingCardSmall from './AnimalBreedingCardSmall'
+import ModalBreedingOptions from './ModalBreedingOptions'
 
 export interface BreedingBatchesListType {
   breedings: BreedingEventCardDetails[]
@@ -36,12 +38,9 @@ const BreedingsByBatches = ({ breedings = [] }: BreedingBatchesListType) => {
 }
 
 const BreedingCard = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
-  const handleDelete = async () => {
-    const res = await deleteEvent(breeding?.id)
-    return console.log(res)
-  }
   const breedingMale = breeding.eventData.breedingMale
   const breedingDates = breeding.eventData.breedingDates
+
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
       <header className="flex w-full justify-between p-2">
@@ -79,19 +78,7 @@ const BreedingCard = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
           </span>
           <div className="relative">
             <span className="absolute -top-6 -right-2">
-              <ModalDelete
-                buttonLabel={null}
-                handleDelete={() => handleDelete()}
-                title="Eliminar monta"
-                openModalItem={(props) => (
-                  <button
-                    className="btn btn-circle btn-sm shadow-md btn-error"
-                    {...props}
-                  >
-                    <Icon name="delete" />
-                  </button>
-                )}
-              />
+              <ModalBreedingOptions breeding={breeding} />
             </span>
             <div>
               <span>

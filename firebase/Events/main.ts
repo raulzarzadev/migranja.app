@@ -188,3 +188,12 @@ export const listenFarmEvents = async (
 ) => {
   eventsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
 }
+
+export const addAnimalToBreedingBatchEvent = async (
+  eventId: string,
+  animal: AnimalType
+) => {
+  return await eventsCRUD.updateItem(eventId, {
+    'eventData.breedingBatch': arrayUnion({ ...animal, status: 'PENDING' })
+  })
+}

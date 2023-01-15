@@ -45,23 +45,23 @@ const BreedingForm = () => {
   const excludeMalesAnimals = (animals: any[]) =>
     animals.filter(({ gender }) => gender === 'female')
 
-  const excludeYongAnimals = (animals: any[]) => {
-    const MIN_BREEDING_AGE_IN_MONTHS = 7
-    return animals.filter(({ birthday }) => {
-      const months = fromNow(birthday, { unit: 'month' }).split(' ')[0]
-      return parseInt(months) > MIN_BREEDING_AGE_IN_MONTHS
-    })
-  }
-  const excludeRelativeAnimals = (
-    animals: any[],
-    { breedingMaleEarring }: { breedingMaleEarring: any }
-  ) => {
-    return animals.filter((animal: any) => {
-      const animalFather = getProperty(animal, 'parents.father.earring')
+  // const excludeYongAnimals = (animals: any[]) => {
+  //   const MIN_BREEDING_AGE_IN_MONTHS = 7
+  //   return animals.filter(({ birthday }) => {
+  //     const months = fromNow(birthday, { unit: 'month' }).split(' ')[0]
+  //     return parseInt(months) > MIN_BREEDING_AGE_IN_MONTHS
+  //   })
+  // }
+  // const excludeRelativeAnimals = (
+  //   animals: any[],
+  //   { breedingMaleEarring }: { breedingMaleEarring: any }
+  // ) => {
+  //   return animals.filter((animal: any) => {
+  //     const animalFather = getProperty(animal, 'parents.father.earring')
 
-      return !!breedingMaleEarring && breedingMaleEarring !== animalFather
-    })
-  }
+  //     return !!breedingMaleEarring && breedingMaleEarring !== animalFather
+  //   })
+  // }
 
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
   const onSubmit = async (data: any) => {
