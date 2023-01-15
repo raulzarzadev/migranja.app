@@ -39,6 +39,8 @@ next-env.d.ts
 
 public/sw.**
 
+public/sw.*
+
 public/sw.js.map
 
 public/workbox**
