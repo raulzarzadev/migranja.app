@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import React from 'react'
 import Nav from './nav'
 export interface LayoutProps {
@@ -7,7 +8,7 @@ export interface LayoutProps {
 
 function Layout({ children }: LayoutProps) {
   return (
-    <div className="p-2 prose">
+    <div className="p-2 prose pb-20">
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -47,6 +48,14 @@ function Layout({ children }: LayoutProps) {
 
       <Nav />
       <main className="">{children}</main>
+      <footer>
+        <div className="flex w-full h-20 justify-center items-center flex-col">
+          <span className="text-xs ">una app de</span>
+          <Link href={'https://raulzarza.com'} className="link">
+            RZ
+          </Link>
+        </div>
+      </footer>
     </div>
   )
 }
