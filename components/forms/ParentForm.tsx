@@ -1,4 +1,3 @@
-import { getFarmFemaleOvines, getFarmMaleOvines } from '@firebase/Animal/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
@@ -8,19 +7,24 @@ import Modal from 'components/modal'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-export const ParentForm = ({
+import { useSelector } from 'react-redux'
+import { selectFarmOvines } from 'store/slices/farmSlice'
+import SearchEarring from '@comps/SearchEarring'
+const ParentForm = ({
   gender,
   setValue,
-  value,
-  farmId
+  value
 }: {
   gender: AnimalType['gender']
   setValue: (data: any) => void
   value: any
-  farmId: string
 }) => {
   const methods = useForm({
-    defaultValues: value
+    defaultValues: value || {
+      breed: '',
+      earring: '',
+      birthday: new Date()
+    }
   })
 
   const { register, watch, handleSubmit, reset, unregister } = methods
@@ -34,28 +38,22 @@ export const ParentForm = ({
   const isPartOfTheFarm = watch(`inTheFarm`)
   const [parents, setParents] = useState<AnimalType[]>([])
 
-  const formatParentsAsOptions = (parents: AnimalType[]): SelectOption[] => {
-    return parents.map((animal) => {
-      return { label: animal.earring, value: animal.earring, id: animal.id }
-    })
-  }
-
+  // const formatParentsAsOptions = (parents: AnimalType[]): SelectOption[] => {
+  //   return parents.map((animal) => {
+  //     return { label: animal.earring, value: animal.earring, id: animal.id }
+  //   })
+  // }
+  const ovines = useSelector(selectFarmOvines)
   useEffect(() => {
-    if (isPartOfTheFarm === 'true' && farmId) {
+    if (isPartOfTheFarm === 'true') {
       unregister('breed')
       unregister('birthday')
-      if (gender === 'female') {
-        getFarmFemaleOvines(farmId).then((res: AnimalType[]) => setParents(res))
-      } else {
-        getFarmMaleOvines(farmId)
-          .then((res: AnimalType[]) => setParents(res))
-          .catch((err) => console.log(err))
-      }
+      const animals = ovines.filter((sheep) => sheep.gender === gender)
+      setParents(animals)
     }
-  }, [gender, isPartOfTheFarm, unregister, farmId])
+  }, [gender, isPartOfTheFarm, ovines, unregister])
 
   const onSubmit = (data: any) => {
-    // console.log(data)
     setValue?.(data)
     setOpenModal(false)
   }
@@ -112,11 +110,11 @@ export const ParentForm = ({
 
             {isPartOfTheFarm == 'true' && (
               <>
-                <InputContainer
-                  name={`earring`}
-                  label="Arete"
-                  type="select"
-                  selectOptions={formatParentsAsOptions(parents)}
+                <SearchEarring
+                  onEarringClick={(e) =>
+                    methods.setValue('earring', e?.earring)
+                  }
+                  gender={gender}
                 />
               </>
             )}
@@ -163,3 +161,5 @@ export const ParentForm = ({
     </>
   )
 }
+
+export default ParentForm

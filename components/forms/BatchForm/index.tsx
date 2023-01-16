@@ -7,10 +7,10 @@ import InputContainer from 'components/inputs/InputContainer'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { ParentForm } from '../ParentForm'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import ParentForm from '../ParentForm'
 const EARRING_LENGTH = 3
 export interface BatchType {
   birthday: DateType
