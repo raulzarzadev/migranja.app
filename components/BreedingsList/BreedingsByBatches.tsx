@@ -32,7 +32,11 @@ const BreedingsByBatches = ({ breedings = [] }: BreedingBatchesListType) => {
   )
 }
 
-const BreedingCard = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
+export const BreedingCard = ({
+  breeding
+}: {
+  breeding: BreedingEventCardDetails
+}) => {
   const breedingMale = breeding.eventData.breedingMale
   const breedingDates = breeding.eventData.breedingDates
 
@@ -149,7 +153,7 @@ const BreedingCardBody = ({
   }, [breeding.id])
 
   const animals: AnimalBreedingEventCard[] = _breeding?.eventData?.breedingBatch
-    .map((animal) => {
+    ?.map((animal) => {
       return {
         ...animal,
         eventData: {
@@ -173,9 +177,9 @@ const BreedingCardBody = ({
     .sort(sortByEarring)
 
   const pendingAnimals = animals?.filter(({ status }) => status === 'PENDING')
-  const abortAnimals = animals.filter(({ status }) => status === 'ABORT')
-  const birthAnimals = animals.filter(({ status }) => status === 'BIRTH')
-  const emptyAnimals = animals.filter(({ status }) => status === 'EMPTY')
+  const abortAnimals = animals?.filter(({ status }) => status === 'ABORT')
+  const birthAnimals = animals?.filter(({ status }) => status === 'BIRTH')
+  const emptyAnimals = animals?.filter(({ status }) => status === 'EMPTY')
 
   const handleSetView = (newView: ViewBatchesType) => {
     if (newView === view) {

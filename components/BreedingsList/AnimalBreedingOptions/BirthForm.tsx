@@ -16,6 +16,9 @@ import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
 import { addDays } from 'date-fns'
 import FARM_DATES from '@comps/CONSTANTS/FARM_CONFIG/FARM_DATES'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
+import Modal from '@comps/modal'
+import { AnimalDetails } from '@comps/AnimalCard'
+import { AnimalType } from 'types/base/AnimalType.model'
 
 const BirthForm = ({
   animal,
@@ -172,8 +175,27 @@ const BirthForm = ({
   const [finishView, setFinishView] = useState(false)
   // console.log({ formValues })
 
+  const [openAlreadyExist, setOpenAlreadyExist] = useState(false)
+  const handleOpenAlreadyExist = () => {
+    setOpenAlreadyExist(!openAlreadyExist)
+  }
+  const [alreadyExist, setAlreadyExist] = useState<
+    AnimalType | null | undefined
+  >(null)
+  const handleSeeAlreadyExist = (earring: string) => {
+    setAlreadyExist(farmAnimals.find((animal) => animal.earring === earring))
+    handleOpenAlreadyExist()
+  }
   return (
     <div>
+      <Modal
+        open={openAlreadyExist}
+        handleOpen={handleOpenAlreadyExist}
+        title="Este arete ya existe"
+      >
+        {alreadyExist && <AnimalDetails animal={alreadyExist} />}
+      </Modal>
+
       <FormProvider {...methods}>
         <h4 className="text-center text-xl ">Crear parto </h4>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -261,6 +283,7 @@ const BirthForm = ({
                       String(value).length >= 3 || 'Al menos 3 numeros'
                   }
                 }}
+                onClickAlreadyExist={handleSeeAlreadyExist}
                 name={`calfs.${i}.earring`}
                 type="text"
                 placeholder="Arete"

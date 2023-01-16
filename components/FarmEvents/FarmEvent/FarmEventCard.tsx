@@ -1,4 +1,6 @@
+import { BreedingCard } from '@comps/BreedingsList/BreedingsByBatches'
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
+import Modal from '@comps/modal'
 import GeneticTree from 'components/GeneticTree'
 import { ReactNode, useState } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
@@ -152,8 +154,8 @@ const GenericBreedingInfo = ({
 
   return (
     <div>
-      <div className="text-center">
-        <span>Lote: {eventData?.breedingId}</span>
+      <div className="text-center ">
+        <span className="">Lote: {eventData?.breedingId}</span>
       </div>
       <GeneticTree
         elements={{

@@ -26,6 +26,7 @@ export interface CustomInputTypes
   className?: string
   inputClassName?: string
   defaultChecked?: boolean
+  onClickAlreadyExist?: (earring: string) => void
 }
 const InputContainer = ({
   name,
@@ -37,6 +38,7 @@ const InputContainer = ({
   className,
   inputClassName,
   defaultChecked,
+  onClickAlreadyExist,
   ...rest
 }: CustomInputTypes) => {
   return (
@@ -133,10 +135,17 @@ const InputContainer = ({
               {...rest}
             />
           )}
-
           {error?.type && (
             <span className="label-text text-alt text-error ">
               {error?.message}
+              {error?.type === 'alreadyExist' && (
+                <span
+                  className="ml-2 link"
+                  onClick={(e) => onClickAlreadyExist?.(value)}
+                >
+                  ver
+                </span>
+              )}
             </span>
           )}
         </label>
