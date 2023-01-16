@@ -187,8 +187,8 @@ const BirthEventRow = ({
         </div>
         <div className="flex flex-col">
           <div>Aretes:</div>
-          {eventData.calfs?.map((calf) => (
-            <div key={calf.id}>
+          {eventData.calfs?.map((calf, i) => (
+            <div key={`${calf.id}-${i}`}>
               <div>
                 {calf.earring}{' '}
                 <LinkFarmAnimal

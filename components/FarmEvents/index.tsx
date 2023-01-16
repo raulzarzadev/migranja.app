@@ -4,6 +4,7 @@ import { EventsList } from './EventsList'
 
 const FarmEvents = () => {
   const events = useSelector(selectFarmEvents)
+
   return (
     <div className="w-full">
       <EventsList events={events} />{' '}

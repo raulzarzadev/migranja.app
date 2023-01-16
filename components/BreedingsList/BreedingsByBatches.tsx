@@ -1,12 +1,7 @@
-import Modal from '@comps/modal'
-import { deleteEvent } from '@firebase/Events/main'
-import AnimalBreedingCard from 'components/BreedingsList/AnimalBreedingCard'
+import { listenEvent } from '@firebase/Events/main'
 import { BreedingFormatted } from 'components/BreedingsList/breeding.helpers'
-import Icon from 'components/Icon'
 import IconBreedingStatus from 'components/IconBreedingStatus'
-import ModalDelete from 'components/modal/ModalDelete'
-import { useState } from 'react'
-import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
+import { useEffect, useState } from 'react'
 import {
   AnimalBreedingEventCard,
   BreedingEventCardDetails
@@ -146,7 +141,14 @@ const BreedingCardBody = ({
     return 0
   }
   const [view, setView] = useState<ViewBatchesType>('')
-  const animals: AnimalBreedingEventCard[] = breeding?.eventData?.breedingBatch
+  const [_breeding, _setBreeding] = useState(breeding)
+  useEffect(() => {
+    listenEvent(breeding.id, (res: BreedingEventCardDetails) =>
+      _setBreeding(res)
+    )
+  }, [breeding.id])
+
+  const animals: AnimalBreedingEventCard[] = _breeding?.eventData?.breedingBatch
     .map((animal) => {
       return {
         ...animal,

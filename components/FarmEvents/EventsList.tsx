@@ -52,8 +52,9 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
         onChange={(value) => setFilterBy(`${value}`)}
         value={filterBy}
         className="input input-bordered w-full placeholder:font-bold mb-2 "
-        placeholder="Buscar ..."
+        placeholder="Buscar ... "
       />
+      <span>Total: {events.length}</span>
       <div className="event-list overflow-auto shadow-inner">
         {[...filteredEvents].sort(sortByLastUpdated).map((event) => (
           <div key={event?.id} className="my-2">

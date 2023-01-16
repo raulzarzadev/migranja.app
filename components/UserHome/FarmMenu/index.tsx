@@ -68,10 +68,10 @@ const FarmMenu = (props: any) => {
   const farmIncludeTeam = farm?.haveATeam
 
   return (
-    <div className="flex w-full  flex-wrap  mx-auto justify-around">
+    <div className=" sm:flex">
       {/* ********************************* FARM MENU ************************************* */}
 
-      <MenuSection className=" w-full sm:w-2/6  ">
+      <MenuSection className="  sm:w-[320px]  ">
         <>
           <div className="  p-1 flex justify-start w-min mx-auto  ">
             {/****************  column 1 *********************/}
@@ -203,7 +203,8 @@ const FarmMenu = (props: any) => {
           </div>
         </>
       </MenuSection>
-      <MenuSection className=" w-full sm:w-7/12  ">
+
+      <MenuSection className="w-full min-h-screen  ">
         <>
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {column1 === 'events' && !column2 && <FarmEvents />}

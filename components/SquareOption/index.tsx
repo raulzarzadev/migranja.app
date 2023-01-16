@@ -21,7 +21,7 @@ const SquareOption = ({
   return (
     <button
       className={`
-        border-4 m-0.5  hover:border-gray-500 rounded-xl
+        border-4  hover:border-gray-500 rounded-xl
         ${selected ? ' border-base-content ' : 'border-transparent'} 
         `}
       onClick={onClick}

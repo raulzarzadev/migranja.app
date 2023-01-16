@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth'
-import { arrayRemove, arrayUnion, where } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, limit, where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
@@ -7,12 +7,7 @@ import { EventDTO, CreateEventDTO, BreedingEventType } from './event.model'
 
 import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
 import { CreateGenericEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
-import {
-  AnimalBreedingType,
-  BaseFarmEvent,
-  BirthDetailsEvent,
-  EventData
-} from 'types/base/FarmEvent.model'
+import { BaseFarmEvent, BirthDetailsEvent } from 'types/base/FarmEvent.model'
 import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
 const storage = getStorage(app)
 
@@ -182,11 +177,19 @@ export const removeAnimalFromBreeding = async (
 export const getFarmEvents = async (farmId: string) => {
   return eventsCRUD.getItems([where('farm.id', '==', farmId)])
 }
+
+interface ListenFarmEventsOptions {
+  limit: number
+}
 export const listenFarmEvents = async (
   farmId: string,
-  cb: CallableFunction
+  cb: CallableFunction,
+  options?: ListenFarmEventsOptions
 ) => {
-  eventsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
+  eventsCRUD.listenItems(
+    [where('farm.id', '==', farmId), limit(options?.limit || 999)],
+    cb
+  )
 }
 
 export const addAnimalToBreedingBatchEvent = async (

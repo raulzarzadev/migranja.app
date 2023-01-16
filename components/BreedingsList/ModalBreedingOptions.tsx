@@ -4,10 +4,9 @@ import ModalDelete from '@comps/modal/ModalDelete'
 import SearchEarring from '@comps/SearchEarring'
 import {
   addAnimalToBreedingBatchEvent,
-  deleteEvent,
-  updateEventBreedingBatch
+  deleteEvent
 } from '@firebase/Events/main'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { BreedingEventCardDetails } from 'types/base/FarmEvent.model'
@@ -18,6 +17,7 @@ const ModalBreedingOptions = ({
   breeding: BreedingEventCardDetails
 }) => {
   const farmAnimals = useSelector(selectFarmAnimals)
+
   const [openOptions, setOpenOptions] = useState(false)
   const handleOpenOptions = () => {
     setOpenOptions(!openOptions)
@@ -31,7 +31,7 @@ const ModalBreedingOptions = ({
     setOpenModalToAddEarring(!openModalToAddEarring)
   }
   const handleAddEarring = ({ earring }: { earring: string }) => {
-    console.log({ earring })
+    // console.log({ earring })
     const animal = farmAnimals.find((animal) => animal.earring === earring)
     animal
       ? addAnimalToBreedingBatchEvent(breeding.id, animal)
