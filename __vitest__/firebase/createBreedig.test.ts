@@ -2,7 +2,6 @@
 import {
   createEvent,
   deleteEvent,
-  getEvent,
   getFarmEvents
 } from '../../firebase/Events/main'
 import { assert, describe, it, expect } from 'vitest'
@@ -49,22 +48,3 @@ describe.skip('create a breeding event with all dependencies', () => {
     }
   })
 })
-
-// describe('', () => {
-//   it('', () => {})
-// })
-// const testEvent: CreateEventDTO = {
-//   breedingBatch: [],
-//   type: 'BIRTH',
-//   startAt: 0,
-//   finishAt: 0,
-//   breedingMale: {
-//     id: 'test-1'
-//   },
-//   farm: {
-//     id: 'test-farm',
-//     name: 'test-farm'
-//   },
-//   batch: ''
-// }
-//

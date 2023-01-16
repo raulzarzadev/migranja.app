@@ -61,7 +61,12 @@ const SearchEarring = ({
                 isHighlighted ? ' bg-base-100 ' : ' bg-base-300 '
               }  -m-1 pl-5 p-0.5 cursor-pointer rounded-lg py-1`}
             >
-              {item.label} {item.name}
+              <div className="flex">
+                <div className="w-10">
+                  {alreadyIn(item.label) ? <IconStatus status="success" /> : ''}
+                </div>
+                {item.label} {item.name}
+              </div>
             </div>
           )}
           sortItems={(a, b) => a.label - b.label}

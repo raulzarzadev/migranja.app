@@ -1,21 +1,22 @@
-import { EventsList } from '@comps/FarmEvents/EventsList'
-import WeaningEventCard, {
-  WEANING_STATUS_LABELS
-} from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
+import { WEANING_STATUS_LABELS } from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
 import { IconStatus } from '@comps/IconBreedingStatus'
 import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
-import { subDays } from 'date-fns'
-import { addDays } from 'date-fns/esm'
 import { useSelector } from 'react-redux'
 import { selectFarmEvents } from 'store/slices/farmSlice'
-import { AnimalWeaningType } from 'types/base/AnimalWeaning.model'
-import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { defineStatusByDate } from 'utils/defineStatusByDate'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
-  const weaning = events.filter((event) => event.type === 'WEANING')
+  const weaning = events
+    .filter((event) => event.type === 'WEANING')
+    .filter((event) => event.eventData.status !== 'DONE')
+    .filter((event) => event.eventData.status !== 'DONE')
+    .sort((a, b) => {
+      if (a.eventData.earring > b.eventData.earring) return -1
+      if (a.eventData.earring < b.eventData.earring) return 1
+      return 0
+    })
 
   return (
     <div className="w-full p-2">

@@ -73,7 +73,11 @@ const ModalBreedingOptions = ({
             handleOpen={handleOpenModalToAddEarring}
           >
             <div>
-              <div className="h-screen">
+              <h2>
+                Busca aretes que ya esten registrados para agregarlos a esta
+                monta. (solo apareceran hembras)
+              </h2>
+              <div className="">
                 <SearchEarring
                   omitEarrings={breeding?.eventData?.breedingBatch?.map(
                     (animal: any) => animal?.earring

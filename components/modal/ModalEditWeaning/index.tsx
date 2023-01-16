@@ -22,7 +22,7 @@ const ModalEditWeaning = ({ eventId }: { eventId: string }) => {
       <Modal
         open={openEditEvent}
         handleOpen={handleOpenEditEvent}
-        title="Edit event"
+        title="Editar destete"
       >
         <div className="flex flex-col w-full justify-center items-center my-5">
           <p>Marcar como hecho.</p>

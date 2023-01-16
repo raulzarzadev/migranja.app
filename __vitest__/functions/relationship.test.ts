@@ -26,8 +26,8 @@ const family = [
 describe('Relationship validations', () => {
   it('none relation', () => {
     const p1 = 'mich'
+    const r = null
     const p2 = 'tam'
-    const r = 'none'
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })
   it('pepe y tam are brohters', () => {
@@ -95,7 +95,7 @@ describe('Relationship validations', () => {
 
   it('sebas is none of dan', () => {
     const p1 = 'sebas'
-    const r = 'none'
+    const r = null
     const p2 = 'dan'
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })
@@ -130,13 +130,13 @@ describe('Relationship validations', () => {
 
   it('mich is none of carlos', () => {
     const p1 = 'mich'
-    const r = 'none'
+    const r = null
     const p2 = 'carlos'
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })
   it('mich is none of max', () => {
     const p1 = 'mich'
-    const r = 'none'
+    const r = null
     const p2 = 'max'
     expect(determinateDeepRelationship(p1, p2, family)).toBe(r)
   })

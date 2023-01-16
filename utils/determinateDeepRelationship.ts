@@ -5,6 +5,7 @@ export interface Member {
   father: string | null
   mother: string | null
 }
+
 const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
   const getParents = (
     p?: Member['name'] | null,
@@ -32,7 +33,7 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
     !p2Parents?.father &&
     !p2Parents?.mother
   )
-    return 'none'
+    return null
 
   // **************************************** Are brothers
 
@@ -127,7 +128,7 @@ const determinateDeepRelationship = (p1: string, p2: string, fam: Member[]) => {
     }
   }
 
-  return 'none'
+  return null
 }
 
 export default determinateDeepRelationship
