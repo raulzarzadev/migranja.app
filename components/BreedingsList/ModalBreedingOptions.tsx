@@ -79,10 +79,13 @@ const ModalBreedingOptions = ({
               </h2>
               <div className="">
                 <SearchEarring
+                  placeholder="Buscar hembras"
                   omitEarrings={breeding?.eventData?.breedingBatch?.map(
                     (animal: any) => animal?.earring
                   )}
+                  gender="female"
                   onEarringClick={(earring) => handleAddEarring(earring)}
+                  relativeTo={breeding.eventData.breedingMale?.earring}
                 />
               </div>
             </div>

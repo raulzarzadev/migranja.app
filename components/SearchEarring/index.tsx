@@ -1,19 +1,25 @@
 import { IconStatus } from '@comps/IconBreedingStatus'
-import DebouncedInput from '@comps/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
 import Autocomplete from 'react-autocomplete'
+import findAnimalRelationships from 'utils/findAnimalRealtionships'
 
 const SearchEarring = ({
   onEarringClick,
   omitEarrings = [],
-  gender = 'all'
+  gender = 'all',
+  placeholder = 'Buscar arete',
+  relativeTo,
+  label
 }: {
   omitEarrings?: string[]
   onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
   gender?: 'male' | 'female' | 'all'
+  placeholder?: string
+  relativeTo?: AnimalType['earring']
+  label?: string
 }) => {
   const [search, setSearch] = useState<string | number>('')
   const [matches, setMatches] = useState<AnimalType[]>([])
@@ -25,15 +31,14 @@ const SearchEarring = ({
     } else {
       const animals = farmAnimals
         .filter((animal) =>
-          gender === 'all' ? animal : animal.gender === gender
+          gender === 'all' ? true : animal.gender === gender
         )
         .filter(
           (animal) =>
-            animal.earring.includes(`${search}`) ||
-            animal.batch?.includes(`${search}`)
+            animal?.earring?.includes(`${search}`) ||
+            animal?.name?.includes(`${search}`)
         )
         .sort((a: any, b: any) => a.earring - b.earring)
-
       setMatches(animals)
     }
   }, [farmAnimals, gender, search])
@@ -41,14 +46,17 @@ const SearchEarring = ({
   const alreadyIn = (earring: string) => {
     return omitEarrings.includes(earring)
   }
+  const isRelative = (earring: string) =>
+    relativeTo && !!findAnimalRelationships(earring, relativeTo, farmAnimals)
+
   return (
     <div className="flex w-full justify-center">
-      <div className=" relative">
+      <div className=" form-control relative ">
+        {label && <span>{label}</span>}
         <Autocomplete
-          open
           inputProps={{
-            placeholder: 'Busca arete',
-            className: 'input input-sm input-outline input-bordered w-full '
+            placeholder,
+            className: 'input input-sm input-outline input-bordered w-full w-36'
           }}
           getItemValue={(item) => item.label}
           items={matches.map((animal) => {
@@ -57,9 +65,9 @@ const SearchEarring = ({
           renderItem={(item, isHighlighted) => (
             <div
               key={item.label}
-              className={` ${
-                isHighlighted ? ' bg-base-100 ' : ' bg-base-300 '
-              }  -m-1 pl-5 p-0.5 cursor-pointer rounded-lg py-1`}
+              className={` ${isHighlighted ? ' bg-base-100 ' : ' bg-base-300 '} 
+              ${isRelative(item.label) ? ' bg-error ' : ''}
+              -m-1 pl-5 p-0.5 cursor-pointer rounded-lg py-1`}
             >
               <div className="flex">
                 <div className="w-10">
@@ -73,59 +81,17 @@ const SearchEarring = ({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onSelect={(val) => {
-            setSearch(val)
-            onEarringClick({
-              earring: val,
-              id: matches.find(({ earring }) => earring === val)?.id || ''
-            })
+            !alreadyIn(val) && setSearch(val)
+            !alreadyIn(val) &&
+              onEarringClick({
+                earring: val,
+                id: matches.find(({ earring }) => earring === val)?.id || ''
+              })
           }}
         ></Autocomplete>
       </div>
     </div>
   )
 }
-
-/* ******************************************** 
-              <DebouncedInput
-          onChange={(e) => setSearch(e)}
-          value={search}
-          placeholder="Buscar arete"
-          className="input input-bordered input-sm"
-        />
-        <div className="w-[280px] mx-auto absolute bg-base-200 rounded-md shadow-2xl ">
-          <div className="grid grid-cols-3 my-1 items-center place-items-center  text-sm">
-            <div className="w-7">Ya</div>
-            <div>Arete</div>
-            <div>Nombre</div>
-            {/* <div className="col-span-2">Lote</div> 
-          </div>
-          <div className="max-h-40 overflow-y-auto w-full ">
-            {matches.map((animal) => (
-              <div
-                key={animal?.id}
-                onClick={(e) => {
-                  e.preventDefault()
-                  !alreadyIn(animal.earring) &&
-                    onEarringClick({ earring: animal.earring, id: animal.id })
-                }}
-                className="hover:bg-base-300 cursor-pointer px-2"
-              >
-                <div className="grid grid-cols-3 my-1  ">
-                  <div className="w-7 ">
-                    {alreadyIn(animal.earring) ? (
-                      <IconStatus status="success" />
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                  <span className="font-bold">{animal.earring}</span>
-                  <span> {animal.name}</span>
-                  {/* <span className="col-span-2"> {animal.batch}</span> 
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>               
- *******************************************rz */
 
 export default SearchEarring

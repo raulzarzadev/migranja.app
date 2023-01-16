@@ -147,15 +147,9 @@ const BreedingForm = () => {
             type="info"
           />
           <div className="">
-            {/* <InputContainer
-              className="w-36 mx-auto"
-              label="Seleccionar macho "
-              type="select"
-              name="breedingMale"
-              placeholder="Selecciona"
-              selectOptions={malesOptions}
-            /> */}
             <SearchEarring
+              label="Buscar macho"
+              placeholder="Buscar macho"
               gender="male"
               onEarringClick={(e) =>
                 methods.setValue('breedingMale', e.earring)
