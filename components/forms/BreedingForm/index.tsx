@@ -14,6 +14,7 @@ import { fromNow } from 'utils/dates/myDateUtils'
 import { getProperty } from 'dot-prop'
 import { determinateRelationship } from 'utils/determinateRelationship'
 import { ParentsType } from 'types/base/AnimalType.model'
+import SearchEarring from '@comps/SearchEarring'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -146,13 +147,19 @@ const BreedingForm = () => {
             type="info"
           />
           <div className="">
-            <InputContainer
+            {/* <InputContainer
               className="w-36 mx-auto"
               label="Seleccionar macho "
               type="select"
               name="breedingMale"
               placeholder="Selecciona"
               selectOptions={malesOptions}
+            /> */}
+            <SearchEarring
+              gender="male"
+              onEarringClick={(e) =>
+                methods.setValue('breedingMale', e.earring)
+              }
             />
           </div>
           {/* ******************************************** 
