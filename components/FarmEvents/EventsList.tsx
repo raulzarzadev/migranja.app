@@ -3,6 +3,10 @@ import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { FarmState, FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { AnimalWeaning } from 'types/base/AnimalWeaning.model'
+import {
+  animalCurrentStatusLabels,
+  AnimalCurrentStatusType
+} from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { labelsOfFarmEventTypes } from 'types/base/LABELS_TYPES/EventTypes'
 import FarmEventCard from './FarmEvent/FarmEventCard'
 
@@ -16,28 +20,14 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
       setFilteredEvents([...arraySorted])
     } else {
       const filtered = [...arraySorted].filter((event) => {
-        const dictionary: Record<
-          FarmStateAnimalEvent['type'] | AnimalWeaning['type'],
-          string
-        > = {
-          BREEDING: 'Monta',
-          REMOVE: 'Removida',
-          BIRTH: 'Parto',
-          ABORT: 'Aborto',
-          EMPTY: 'Vacio',
-          DROP_OUT: 'Baja',
-          DROP_IN: 'Alta',
-          WEANING: 'Destete',
-          PENDING: 'Pendiente'
-        }
         return (
-          dictionary[event?.type]
+          animalCurrentStatusLabels[event?.type as AnimalCurrentStatusType]
             .toLowerCase()
             .includes(filterBy.toLowerCase()) ||
-          event?.eventData.breedingBatch?.find(({ earring }) =>
+          event?.eventData.breedingBatch?.find(({ earring }: any) =>
             earring?.includes(filterBy)
           ) ||
-          event?.eventData.calfs?.find(({ earring }) =>
+          event?.eventData.calfs?.find(({ earring }: any) =>
             earring?.includes(filterBy)
           ) ||
           event?.eventData?.parents?.father?.earring?.includes(filterBy) ||
@@ -89,75 +79,4 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
       </div>
     </div>
   )
-}
-
-const SortedOptions = ({
-  options,
-  sortBy
-}: {
-  options: { value: string; label: string }[]
-  sortBy: (val: string) => void
-}) => {
-  return (
-    <div className="flex w-full justify-center">
-      {options?.map((option) => (
-        <button
-          key={option.value}
-          className={`btn btn-outline btn-sm`}
-          onClick={() => sortBy(option.value)}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-const FilterOptions = ({
-  label,
-  options,
-  setOption
-}: {
-  label: string
-  options: { label: string; value: string }[]
-  setOption: (value: string) => void
-}) => {
-  return (
-    <div className="form-control">
-      <label htmlFor="filter" className="label">
-        <span className="text-label">{label}</span>
-      </label>
-      <select
-        onChange={({ target: { value } }) => setOption(value)}
-        id="filter"
-        className="input input-sm w-min input-bordered"
-      >
-        <option value={''}>Todos </option>
-        {options?.map(({ label, value }) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        ))}
-      </select>
-    </div>
-  )
-}
-
-interface SelectOption {
-  label: string
-  value: string
-}
-
-const getEventTypesOptions = (events: FarmState['events']): SelectOption[] => {
-  const dictionary = labelsOfFarmEventTypes
-
-  const options: SelectOption[] = events.reduce(
-    (prev: SelectOption[], curr) => {
-      const notExist = prev.find((option) => option.value === curr?.type)
-      if (notExist) return prev
-      return [...prev, { label: dictionary[curr.type], value: curr.type }]
-    },
-    []
-  )
-  return options
 }
