@@ -36,7 +36,7 @@ const useFarmState = () => {
         dispatch(setFarmAnimals(res))
       })
       listenFarmEvents(farmId as string, (res: any[]) => {
-        console.log('ask even')
+        console.log('ask events')
         dispatch(setFarmEvents(res))
       })
     }

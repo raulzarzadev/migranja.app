@@ -204,7 +204,7 @@ const FarmMenu = (props: any) => {
         </>
       </MenuSection>
 
-      <MenuSection className="w-full min-h-screen  ">
+      <MenuSection className="w-full   ">
         <>
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {column1 === 'events' && !column2 && <FarmEvents />}

@@ -1,3 +1,4 @@
+import useSortByField from '@comps/hooks/useSortByField'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { FarmState, FarmStateAnimalEvent } from 'store/slices/farmSlice'
@@ -8,11 +9,13 @@ import FarmEventCard from './FarmEvent/FarmEventCard'
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   const [filteredEvents, setFilteredEvents] = useState(events || [])
   const [filterBy, setFilterBy] = useState<string>('')
+  const { arraySorted, handleSortBy } = useSortByField(events)
+
   useEffect(() => {
     if (!filterBy) {
-      setFilteredEvents(events)
+      setFilteredEvents([...arraySorted])
     } else {
-      const filtered = events.filter((event) => {
+      const filtered = [...arraySorted].filter((event) => {
         const dictionary: Record<
           FarmStateAnimalEvent['type'] | AnimalWeaning['type'],
           string
@@ -43,9 +46,11 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
       })
       setFilteredEvents(filtered)
     }
-  }, [events, filterBy])
+  }, [arraySorted, events, filterBy])
 
-  const sortByLastUpdated = (a: any, b: any) => b.updatedAt - a.updatedAt
+  //console.log({ arraySorted })
+
+  // const sortByLastUpdated = (a: any, b: any) => b.updatedAt - a.updatedAt
   return (
     <div role="events-list">
       <DebouncedInput
@@ -55,8 +60,28 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
         placeholder="Buscar ... "
       />
       <span>Total: {events.length}</span>
+      <div className="flex w-full justify-around my-4">
+        <button
+          className="btn btn-outline btn-sm "
+          onClick={(e) => {
+            e.preventDefault()
+            handleSortBy('eventData.date')
+          }}
+        >
+          Por fecha
+        </button>
+        <button
+          className="btn btn-outline btn-sm "
+          onClick={(e) => {
+            e.preventDefault()
+            handleSortBy('updatedAt')
+          }}
+        >
+          actualizado
+        </button>
+      </div>
       <div className="event-list overflow-auto shadow-inner">
-        {[...filteredEvents].sort(sortByLastUpdated).map((event) => (
+        {[...filteredEvents].map((event) => (
           <div key={event?.id} className="my-2">
             <FarmEventCard event={event} />
           </div>

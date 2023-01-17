@@ -15,6 +15,8 @@ import { getProperty } from 'dot-prop'
 import { determinateRelationship } from 'utils/determinateRelationship'
 import { ParentsType } from 'types/base/AnimalType.model'
 import SearchEarring from '@comps/SearchEarring'
+import findAnimalRelationships from 'utils/findAnimalRealtionships'
+import determinateDeepRelationship from 'utils/determinateDeepRelationship'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -114,8 +116,22 @@ const BreedingForm = () => {
       male: string
     ) => {
       return cattle.map((animal: { earring: string }) => {
-        const rel = determinateRelationship(male, animal.earring, cattle)
-        return { ...animal, relationship: rel }
+        const rel = determinateDeepRelationship(
+          male,
+          animal.earring,
+          cattle.map((animal) => {
+            return {
+              father: animal.parents?.father?.earring || '',
+              mother: animal.parents?.mother?.earring || '',
+              name: animal.earring || ''
+            }
+          })
+        )
+        if (rel) {
+          return { ...animal, relationship: { type: rel, grade: 1 } }
+        } else {
+          return { ...animal, relationship: null }
+        }
       })
     }
 

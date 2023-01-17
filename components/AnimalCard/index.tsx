@@ -254,7 +254,7 @@ const EventsSection = ({ animalEarring }: { animalEarring: string }) => {
       </div>
       {openEvents && (
         <Modal
-          title="Eventos realcionados"
+          title={`Eventos de ${animalEarring}`}
           open={openEvents}
           handleOpen={handleOpen}
         >

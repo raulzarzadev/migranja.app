@@ -112,17 +112,21 @@ const BirthForm = ({
       //  console.log({ formatBirthEvent })
 
       const event = await createGenericBreedingEvent(formatBirthEvent)
-      console.log({ event })
+      // console.log({ event })
+
       // *************************************************   create animals/calfs
       setLabelStatus('Creando animales')
+      setProgress(30)
+
       const newAnimalsPromises = newCalfs.map((calf) => {
         return createAnimal({ ...calf, status: 'ACTIVE' })
       })
 
       const newAnimals = await Promise.all(newAnimalsPromises)
-      console.log({ newAnimals })
+      // console.log({ newAnimals })
 
       setLabelStatus('Creando detetes')
+      setProgress(60)
       // *************************************************   create animals weaning
       const newWeaningsPromises = newCalfs.map((calf) => {
         return creteAnimalWeaning({
@@ -142,12 +146,11 @@ const BirthForm = ({
         })
       })
       const newWeanings = await Promise.all(newWeaningsPromises)
-      console.log({ newWeanings })
-      setProgress(40)
+      //console.log({ newWeanings })
 
       // ***************************************************   update breeding, move from batch to already done
 
-      setLabelStatus('Actualizando breeding')
+      setLabelStatus('Actualizando monta')
       setProgress(80)
 
       const birthEventData = {
@@ -156,7 +159,7 @@ const BirthForm = ({
         calfsWeaningsIds: newWeanings.map((weaning) => weaning?.res.id)
       }
 
-      console.log({ birthEventData })
+      // console.log({ birthEventData })
       const breeding = await updateEventBreedingBatch({
         eventId: breedingEventId || '',
         animalId: animal?.id as string,

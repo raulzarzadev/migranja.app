@@ -20,7 +20,7 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
       return asMale || asFemale
     })
 
-    console.log({ farmEvents })
+    //  console.log({ farmEvents })
 
     const aborts = farmEvents.filter(
       (event) =>
