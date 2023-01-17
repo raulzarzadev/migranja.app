@@ -242,7 +242,8 @@ const EventsSection = ({ animalEarring }: { animalEarring: string }) => {
       <div>
         <button
           className="btn btn-ghost w-full"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault()
             setOpenEvents(!openEvents)
           }}
         >
