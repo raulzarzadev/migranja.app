@@ -43,7 +43,7 @@ const Modal = ({
           }
         >
           <div className={''}>
-            <h5 className="font-bold max-w-[180px] truncate">{title}</h5>
+            <h5 className="font-bold max-w-[240px] truncate">{title}</h5>
           </div>
           <button
             className={''}

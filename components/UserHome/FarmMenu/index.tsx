@@ -1,4 +1,5 @@
 import BirthEvents from '@comps/BirthEvents'
+import FarmNumbers from '@comps/FarmNumbers'
 import WeaningEvents from '@comps/WeaningEvents'
 import { FarmType } from '@firebase/Farm/farm.model'
 import Batch from 'components/Batch'
@@ -31,6 +32,7 @@ type Option =
   | 'breedingEvent'
   | 'birthEvents'
   | 'weaningEvents'
+  | 'numbers'
 
 const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
@@ -77,6 +79,13 @@ const FarmMenu = (props: any) => {
             {/****************  column 1 *********************/}
 
             <div className="flex-col flex ">
+              <SquareOption
+                title="Numeros"
+                iconName="chart"
+                onClick={() => handleChangeOption('column1', 'numbers')}
+                selected={menuOptions.column1 === 'numbers'}
+              />
+
               <SquareOption
                 title="Animals"
                 iconName="herd"
@@ -206,9 +215,11 @@ const FarmMenu = (props: any) => {
 
       <MenuSection className="w-full   ">
         <>
+          {' '}
+          {/* ********************************+ NUMBERS AND CHARTS *************************************** */}
+          {column1 === 'numbers' && !column2 && <FarmNumbers />}
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
           {column1 === 'events' && !column2 && <FarmEvents />}
-
           {/* ********************************+ FARM EVENTS *************************************** */}
           {/* ********************************+ BREEDINGS *************************************** */}
           {column2 === 'breedingEvent' && !column3 && <BreedingsList />}
@@ -216,14 +227,10 @@ const FarmMenu = (props: any) => {
           {column2 === 'birthEvents' && !column3 && <BirthEvents />}
           {/* ********************************+ WEANING EVENTS *************************************** */}
           {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
-
           {/* TODO: ADD EVENT FORM ********************************+******+ +++************** ADD ANIMALS */}
-
           {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
           {isSheepSelected && !column3 && <OvinesTable />}
-
           {/* ********************************+******+ +++************** ADD ANIMALS */}
-
           {isSheepSelected && column3 === 'add' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               <AnimalForm

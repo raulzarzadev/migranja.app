@@ -24,7 +24,7 @@ const ModalAnimalDetails = ({
   return (
     <span>
       <button
-        className="link mx-2 font-bold text-xl"
+        className="link mx-2 font-bold text-xl underline-offset-4"
         onClick={(e) => {
           e.preventDefault()
           handleOpenAnimalDetails()
