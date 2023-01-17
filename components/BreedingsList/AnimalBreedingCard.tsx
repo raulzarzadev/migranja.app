@@ -92,7 +92,7 @@ const AnimalBreedingCard = ({
           <span className="flex flex-col">
             <span>
               Hembra:{' '}
-              <span className="font-bold whitespace-nowrap">
+              <span className=" whitespace-nowrap">
                 <ModalAnimalDetails earring={breedingFemale.earring} />
               </span>
             </span>
@@ -122,7 +122,7 @@ const AnimalBreedingCard = ({
             <div className="flex flex-col text-center">
               <span>Macho</span>
               <div>
-                <span className="mx-2 font-bold">
+                <span className="mx-2 ">
                   <ModalAnimalDetails earring={breedingMale?.earring} />
                 </span>
 
