@@ -1,6 +1,7 @@
 import { listenEvent } from '@firebase/Events/main'
 import { BreedingFormatted } from 'components/BreedingsList/breeding.helpers'
 import IconBreedingStatus from 'components/IconBreedingStatus'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {
   AnimalBreedingEventCard,
@@ -83,7 +84,12 @@ export const BreedingCard = ({
               <span>
                 Macho:{' '}
                 <span className="font-bold text-xl">
-                  {breedingMale?.earring}
+                  <Link
+                    className="link"
+                    href={`/${breeding.farm.id}/animals/${breedingMale?.id}`}
+                  >
+                    {breedingMale?.earring}
+                  </Link>
                 </span>{' '}
                 <span>{breedingMale?.name}</span>
               </span>

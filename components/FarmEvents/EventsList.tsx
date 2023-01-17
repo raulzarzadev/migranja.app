@@ -22,8 +22,8 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
       const filtered = [...arraySorted].filter((event) => {
         return (
           animalCurrentStatusLabels[event?.type as AnimalCurrentStatusType]
-            .toLowerCase()
-            .includes(filterBy.toLowerCase()) ||
+            ?.toLowerCase()
+            ?.includes(filterBy?.toLowerCase()) ||
           event?.eventData.breedingBatch?.find(({ earring }: any) =>
             earring?.includes(filterBy)
           ) ||
