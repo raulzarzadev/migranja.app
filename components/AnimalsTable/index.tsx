@@ -120,6 +120,10 @@ const AnimalsTable = ({
           }
         </span>
       )
+    }),
+    columnHelper.accessor('currentStatus', {
+      header: 'Status',
+      cell: (props) => <span>{props.getValue() ? props.getValue() : '-'}</span>
     })
   ]
 

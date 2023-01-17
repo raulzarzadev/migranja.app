@@ -9,10 +9,7 @@ import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
-import {
-  DTO_CreateFarmEventDropOut,
-  FarmEventDropOut
-} from 'types/base/FarmEventDropOut.model'
+import { DTO_CreateFarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 
 const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
   const methods = useForm({
@@ -58,6 +55,7 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
     try {
       for (let i = 0; i < animals.length; i++) {
         const element = animals[i]
+
         const resup = await updateAnimal(element.id, {
           currentStatus:
             defineCurrentStatus[data?.reason as DorpInOutReasonsType]
