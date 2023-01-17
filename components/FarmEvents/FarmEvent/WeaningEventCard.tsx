@@ -2,6 +2,7 @@ import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import { AnimalWeaningType } from 'types/base/AnimalWeaning.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 
 export const WEANING_STATUS_LABELS: Record<
   AnimalWeaningType['eventData']['status'],
@@ -21,8 +22,7 @@ const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
       </div>
       <div className="grid grid-cols-3">
         <div>
-          {event.eventData?.earring}{' '}
-          <LinkFarmAnimal animalEarringOrId={event.eventData?.earring} />
+          <ModalAnimalDetails earring={event.eventData?.earring || ''} />
         </div>
         <div>
           {event.eventData?.date &&

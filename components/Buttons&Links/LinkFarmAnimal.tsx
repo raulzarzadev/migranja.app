@@ -1,4 +1,3 @@
-import Icon from '@comps/Icon'
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'

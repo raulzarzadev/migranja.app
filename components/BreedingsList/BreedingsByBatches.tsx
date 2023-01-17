@@ -1,3 +1,4 @@
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { listenEvent } from '@firebase/Events/main'
 import { BreedingFormatted } from 'components/BreedingsList/breeding.helpers'
 import IconBreedingStatus from 'components/IconBreedingStatus'
@@ -84,12 +85,7 @@ export const BreedingCard = ({
               <span>
                 Macho:{' '}
                 <span className="font-bold text-xl">
-                  <Link
-                    className="link"
-                    href={`/${breeding.farm.id}/animals/${breedingMale?.id}`}
-                  >
-                    {breedingMale?.earring}
-                  </Link>
+                  <ModalAnimalDetails earring={breedingMale?.earring} />
                 </span>{' '}
                 <span>{breedingMale?.name}</span>
               </span>

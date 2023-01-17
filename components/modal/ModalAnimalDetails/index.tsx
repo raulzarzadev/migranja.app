@@ -6,21 +6,25 @@ import { selectFarmAnimals } from 'store/slices/farmSlice'
 import Modal from '..'
 
 const ModalAnimalDetails = ({
-  earring
+  earring = ''
 }: {
-  earring: AnimalType['earring']
+  earring?: AnimalType['earring']
 }) => {
   const [openAnimalDetails, setOpenAnimalDetails] = useState(false)
   const [animal, setAnimal] = useState<AnimalType | undefined>(undefined)
   const farmAnimals = useSelector(selectFarmAnimals)
   const handleOpenAnimalDetails = () => {
     setOpenAnimalDetails(!openAnimalDetails)
-    setAnimal(farmAnimals.find((animal) => animal.earring === earring))
+    setAnimal(
+      farmAnimals.find(
+        (animal) => animal.earring === earring || animal.id === earring
+      )
+    )
   }
   return (
-    <div>
+    <span>
       <button
-        className="link"
+        className="link mx-2"
         onClick={(e) => {
           e.preventDefault()
           handleOpenAnimalDetails()
@@ -35,7 +39,7 @@ const ModalAnimalDetails = ({
       >
         {animal && <AnimalDetails animal={animal} />}
       </Modal>
-    </div>
+    </span>
   )
 }
 

@@ -1,4 +1,5 @@
 import Icon from '@comps/Icon'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
@@ -34,8 +35,9 @@ const AnimalBreedingCardSmall = ({
         <div className="flex justify-between items-center px-2 pt-1 w-full ">
           <span>
             Arete:
-            <span className="ml-4 font-bold">
-              {breedingFemale.earring} {breedingFemale.name}
+            <span className="ml-4 ">
+              <ModalAnimalDetails earring={breedingFemale.earring} />
+              {breedingFemale.name}
             </span>
           </span>
           <span>

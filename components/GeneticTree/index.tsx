@@ -1,17 +1,18 @@
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { AnimalType } from 'types/base/AnimalType.model'
 import { AnimalBreedingType } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 
 interface GeneticTreeElement {
-  id: string
-  label: string
+  id: AnimalType['id']
+  label: AnimalType['earring']
 }
 const LABELS = animalCurrentStatusLabels
 const GeneticTree = ({
-  elements,
-  onClick
-}: {
+  elements
+}: //onClick
+{
   elements: {
     father?: GeneticTreeElement
     mother?: GeneticTreeElement
@@ -28,13 +29,13 @@ const GeneticTree = ({
         <span className="mr-5 self-start">Genetica: </span>
         <div className="flex flex-col ">
           <span>
-            Padre: {father?.label}{' '}
-            <LinkFarmAnimal animalEarringOrId={father?.id} />
+            Padre:
+            <ModalAnimalDetails earring={father?.label || ''} />
           </span>
           {!mothers && (
             <span>
-              Madre: {mother?.label || '-'}{' '}
-              <LinkFarmAnimal animalEarringOrId={mother?.id} />{' '}
+              Madre:
+              <ModalAnimalDetails earring={mother?.label || ''} />
             </span>
           )}
           {mothers && (
@@ -43,9 +44,8 @@ const GeneticTree = ({
               <div className="whitespace-nowrap">
                 {mothers?.map((mom) => (
                   <div key={mom.earring} className="flex">
-                    <div className="w-[120px] text-end pr-4">
-                      {mom.earring}{' '}
-                    </div>
+                    <ModalAnimalDetails earring={mom.earring} />
+
                     <span>
                       {
                         LABELS[
@@ -54,7 +54,6 @@ const GeneticTree = ({
                         ]
                       }
                     </span>
-                    <LinkFarmAnimal animalEarringOrId={mom.earring} />
                   </div>
                 ))}
               </div>

@@ -1,6 +1,7 @@
 import { BreedingCard } from '@comps/BreedingsList/BreedingsByBatches'
 import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import Modal from '@comps/modal'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import GeneticTree from 'components/GeneticTree'
 import { ReactNode, useState } from 'react'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
@@ -192,11 +193,7 @@ const BirthEventRow = ({
           {eventData.calfs?.map((calf, i) => (
             <div key={`${calf.id}-${i}`}>
               <div>
-                {calf.earring}{' '}
-                <LinkFarmAnimal
-                  farmId={event.farm.id}
-                  animalEarringOrId={calf?.earring || ''}
-                />
+                <ModalAnimalDetails earring={calf.earring || ''} />
               </div>
             </div>
           ))}

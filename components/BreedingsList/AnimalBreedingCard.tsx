@@ -1,4 +1,5 @@
 import Icon from '@comps/Icon'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { useState } from 'react'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
@@ -92,7 +93,7 @@ const AnimalBreedingCard = ({
             <span>
               Hembra:{' '}
               <span className="font-bold whitespace-nowrap">
-                {breedingFemale.earring}
+                <ModalAnimalDetails earring={breedingFemale.earring} />
               </span>
             </span>
             <span>
@@ -121,7 +122,9 @@ const AnimalBreedingCard = ({
             <div className="flex flex-col text-center">
               <span>Macho</span>
               <div>
-                <span className="mx-2 font-bold">{breedingMale?.earring}</span>
+                <span className="mx-2 font-bold">
+                  <ModalAnimalDetails earring={breedingMale?.earring} />
+                </span>
 
                 <span>{breedingMale?.name || ''}</span>
               </div>
