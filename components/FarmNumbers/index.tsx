@@ -172,9 +172,11 @@ const AnimalsList = ({
   return (
     <div className="relative">
       <Modal handleOpen={handleOpenPDF} open={openPDF} title="PDF">
-        <PDFViewer height={500} width="100%">
-          <PDFAnimalsList animals={animals} title={title} />
-        </PDFViewer>
+        {openPDF && (
+          <PDFViewer height={500} width="100%">
+            <PDFAnimalsList animals={animals} title={title} />
+          </PDFViewer>
+        )}
       </Modal>
       <div className="flex w-full justify-around">
         <button
@@ -186,13 +188,14 @@ const AnimalsList = ({
         >
           Ver PDF
         </button>
+
         <PDFDownloadLink
           className="btn btn-outline"
           document={<PDFAnimalsList animals={animals} title={title} />}
           fileName={`Lista-de-animales:${title}.pdf`}
         >
           {({ blob, url, loading, error }) =>
-            loading ? 'Descargando ...' : 'Descargar'
+            loading ? 'Descargando ...' : 'Descargar PDF'
           }
         </PDFDownloadLink>
       </div>
