@@ -51,6 +51,16 @@ const FarmNumbers = () => {
           description={`Entre ${OVINE_DAYS.finishWeaning} y ${OVINE_DAYS.canBePregnant} dias`}
         />
         <StatCardWithModalAnimalsList
+          title="Primerisas"
+          animals={farmNumbers.femalesBetween(
+            OVINE_DAYS.canBePregnant,
+            OVINE_DAYS.canBePregnant + 90
+          )}
+          description={`Entre ${OVINE_DAYS.canBePregnant} y ${
+            OVINE_DAYS.canBePregnant + 90
+          } dias`}
+        />
+        <StatCardWithModalAnimalsList
           title="Edad reproductiva"
           animals={farmNumbers.femalesBetween(OVINE_DAYS.canBePregnant, 9999)}
           description={`Mayores de ${OVINE_DAYS.canBePregnant} dias`}

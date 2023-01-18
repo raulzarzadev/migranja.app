@@ -14,7 +14,7 @@ import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.mod
 import ProgressButton from '@comps/ProgressButton'
 import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
 import { addDays } from 'date-fns'
-import FARM_DATES from 'FARM_CONFIG/FARM_DATES'
+import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import Modal from '@comps/modal'
 import { AnimalDetails } from '@comps/AnimalCard'
@@ -134,10 +134,7 @@ const BirthForm = ({
           eventData: {
             status: 'PENDING',
             earring: calf.earring || '',
-            date: addDays(
-              data.date,
-              FARM_DATES.DAYS_UNTIL_WEANING_AFTER_BIRTH
-            ).getTime()
+            date: addDays(data.date, OVINE_DAYS.finishWeaning).getTime()
           },
           farm: {
             id: currentFarm?.id || '',
