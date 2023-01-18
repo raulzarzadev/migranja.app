@@ -1,10 +1,14 @@
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import PDFAnimalsList from '@comps/PDFDocuments/PDFAnimalsList'
+
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import { ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
+import { string } from 'yup'
 import { calculateFarmNumbers } from './farmNumbers.helper'
 
 const FarmNumbers = () => {
@@ -141,27 +145,66 @@ const StatCardWithModalAnimalsList = ({
         handleOpen={handleOpenList}
         title={`Lista de aretes: ${title} `}
       >
-        <AnimalsList animals={animals} />
+        <div className="relative">
+          <AnimalsList animals={animals} title={title} />
+        </div>
       </Modal>
     </>
   )
 }
 
-const AnimalsList = ({ animals }: { animals: AnimalType[] }) => {
+const AnimalsList = ({
+  animals,
+  title
+}: {
+  title: string
+  animals: AnimalType[]
+}) => {
   const sortedByEarring = animals.sort((a, b) => {
     if (a.earring < b.earring) return -1
     if (a.earring > b.earring) return 1
     return 0
   })
+  const [openPDF, setOpenPDF] = useState(false)
+  const handleOpenPDF = () => {
+    setOpenPDF(!openPDF)
+  }
   return (
-    <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
-      {sortedByEarring?.map((animal, i) => (
-        <div key={`${animal.id}-${i}`} className="m-4">
-          <span className="whitespace-nowrap">
-            <ModalAnimalDetails earring={animal.earring} />
-          </span>
-        </div>
-      ))}
+    <div className="relative">
+      <Modal handleOpen={handleOpenPDF} open={openPDF} title="PDF">
+        <PDFViewer height={500} width="100%">
+          <PDFAnimalsList animals={animals} title={title} />
+        </PDFViewer>
+      </Modal>
+      <div className="flex w-full justify-around">
+        <button
+          className="btn btn-outline"
+          onClick={(e) => {
+            e.preventDefault()
+            handleOpenPDF()
+          }}
+        >
+          Ver PDF
+        </button>
+        <PDFDownloadLink
+          className="btn btn-outline"
+          document={<PDFAnimalsList animals={animals} title={title} />}
+          fileName={`Lista-de-animales:${title}.pdf`}
+        >
+          {({ blob, url, loading, error }) =>
+            loading ? 'Descargando ...' : 'Descargar'
+          }
+        </PDFDownloadLink>
+      </div>
+      <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
+        {sortedByEarring?.map((animal, i) => (
+          <div key={`${animal.id}-${i}`} className="m-4">
+            <span className="whitespace-nowrap">
+              <ModalAnimalDetails earring={animal.earring} />
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

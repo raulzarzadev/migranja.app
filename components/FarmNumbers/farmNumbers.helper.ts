@@ -1,8 +1,6 @@
 import { subDays } from 'date-fns'
-import FARM_DATES from 'FARM_CONFIG/FARM_DATES'
 import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
-import { FarmEvent } from 'types/base/FarmEvent.model'
 
 export const animalsByStatus = (
   animals: AnimalType[],
