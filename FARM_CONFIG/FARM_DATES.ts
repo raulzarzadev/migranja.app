@@ -3,5 +3,8 @@ const FARM_DATES = {
   DAYS_UNTIL_REPRODUCTION_AFTER_BIRTH: 210,
   DAYS_UNTIL_SELL_AFTER_BIRTH: 150
 }
-
+export const OVINE_DAYS = {
+  finishWeaning: 70,
+  canBePregnant: 210
+}
 export default FARM_DATES

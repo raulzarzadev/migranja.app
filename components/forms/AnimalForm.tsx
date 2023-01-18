@@ -16,6 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
+import useDebugInformation from '@comps/hooks/useDebugInformation'
 const schema = yup
   .object()
   .shape({
@@ -70,6 +71,7 @@ export const AnimalForm = ({
     message: string
   }
   const [error, setError] = useState<ErrorType | null>()
+
   const onSubmit = (data: any) => {
     setLoading(true)
     if (id) {
@@ -107,6 +109,7 @@ export const AnimalForm = ({
   }
 
   const { handleDelete } = useAnimal()
+  // useDebugInformation('AnimalForm', { animal })
   return (
     <div>
       <FormProvider {...methods}>

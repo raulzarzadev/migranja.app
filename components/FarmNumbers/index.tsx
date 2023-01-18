@@ -1,18 +1,23 @@
-import useSortByField from '@comps/hooks/useSortByField'
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import { ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals } from 'store/slices/farmSlice'
+import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
 import { calculateFarmNumbers } from './farmNumbers.helper'
 
 const FarmNumbers = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
-  const farmNumbers = calculateFarmNumbers(farmAnimals)
+  const farmEvents = useSelector(selectFarmEvents)
+
+  const farmNumbers = calculateFarmNumbers({
+    animals: farmAnimals,
+    events: farmEvents
+  })
   return (
     <div>
-      <h2 className="text-xl font-bold text-center">Numeros y estadistcas</h2>
+      <h2 className="text-xl font-bold text-center">Numeros y estadístcas</h2>
       <StatsRow title="Animales">
         <StatCardWithModalAnimalsList
           title="Total"
@@ -31,71 +36,60 @@ const FarmNumbers = () => {
         />
       </StatsRow>
 
-      <StatsRow title="Por edades">
-        <StatCardWithModalAnimalsList
-          title="- 70 dias"
-          animals={farmNumbers.activeBetween(0, 70)}
-          description="Menores de 70 dias "
-        />
-        <StatCardWithModalAnimalsList
-          title="entre 70 y 120 dias"
-          animals={farmNumbers.activeBetween(70, 120)}
-          description="Entre 70 y 120 dias"
-        />
-        <StatCardWithModalAnimalsList
-          title="Edad reproductiva"
-          animals={farmNumbers.activeBetween(220, 1000)}
-          description="Entre 220 y 1000 dias"
-        />
-        <StatCardWithModalAnimalsList
-          title="Edad avanzada"
-          animals={farmNumbers.activeBetween(900, 9000)}
-          description="Mas de 900 dias"
-        />
-      </StatsRow>
       <StatsRow title="Hembras">
         <StatCardWithModalAnimalsList
-          title="- 70 dias"
-          animals={farmNumbers.femalesBetween(0, 70)}
-          description="Menores de 70 dias "
+          title="Lactantes"
+          animals={farmNumbers.femalesBetween(0, OVINE_DAYS.finishWeaning)}
+          description={`"Menores de ${OVINE_DAYS.finishWeaning} dias "`}
         />
         <StatCardWithModalAnimalsList
-          title="entre 70 y 120 dias"
-          animals={farmNumbers.femalesBetween(70, 120)}
-          description="Entre 70 y 120 dias"
+          title="Corderas"
+          animals={farmNumbers.femalesBetween(
+            OVINE_DAYS.finishWeaning,
+            OVINE_DAYS.canBePregnant
+          )}
+          description={`Entre ${OVINE_DAYS.finishWeaning} y ${OVINE_DAYS.canBePregnant} dias`}
         />
         <StatCardWithModalAnimalsList
           title="Edad reproductiva"
-          animals={farmNumbers.femalesBetween(220, 1000)}
-          description="Entre 220 y 1000 dias"
+          animals={farmNumbers.femalesBetween(OVINE_DAYS.canBePregnant, 9999)}
+          description={`Mayores de ${OVINE_DAYS.canBePregnant} dias`}
         />
         <StatCardWithModalAnimalsList
-          title="Edad avanzada"
-          animals={farmNumbers.femalesBetween(900, 9000)}
-          description="Mas de 900 dias"
+          title="Gestantes"
+          animals={farmNumbers.pregnantAnimals() as AnimalType[]}
+          description="En monta o antes de parir"
+        />
+        <StatCardWithModalAnimalsList
+          title="Lactando"
+          animals={
+            farmNumbers.animalsLactando(
+              OVINE_DAYS.finishWeaning
+            ) as AnimalType[]
+          }
+          description="Aún amamantando "
         />
       </StatsRow>
 
       <StatsRow title="Machos">
         <StatCardWithModalAnimalsList
-          title="- 70 dias"
-          animals={farmNumbers.malesBetween(0, 70)}
-          description="Menores de 70 dias "
+          title="Lactantes"
+          animals={farmNumbers.malesBetween(0, OVINE_DAYS.finishWeaning)}
+          description={`Menores de ${OVINE_DAYS.finishWeaning} dias`}
         />
-        <StatCardWithModalAnimalsList
-          title="entre 70 y 120 dias"
-          animals={farmNumbers.malesBetween(70, 120)}
-          description="Entre 70 y 120 dias"
-        />
+
         <StatCardWithModalAnimalsList
           title="En engorda"
-          animals={farmNumbers.malesBetween(120, 1000)}
-          description="Entre 120 y 220 dias"
+          animals={farmNumbers.malesBetween(
+            OVINE_DAYS.finishWeaning,
+            OVINE_DAYS.canBePregnant
+          )}
+          description={`entre ${OVINE_DAYS.finishWeaning} y ${OVINE_DAYS.canBePregnant}`}
         />
         <StatCardWithModalAnimalsList
-          title="Edad avanzada"
-          animals={farmNumbers.malesBetween(900, 9000)}
-          description="Mas de 900 dias"
+          title="Pasados "
+          animals={farmNumbers.malesBetween(OVINE_DAYS.canBePregnant, 9000)}
+          description={`Mas de ${OVINE_DAYS.canBePregnant} dias`}
         />
       </StatsRow>
     </div>
@@ -125,12 +119,17 @@ const StatCardWithModalAnimalsList = ({
           handleOpenList()
         }}
       >
-        <StatCard {...rest} quantity={animals.length} title={title} />
+        <StatCard
+          {...rest}
+          quantity={animals.length}
+          title={title}
+          description={description}
+        />
       </div>
       <Modal
         open={openList}
         handleOpen={handleOpenList}
-        title={`Aretes: ${title} `}
+        title={`Lista de aretes: ${title} `}
       >
         <AnimalsList animals={animals} />
       </Modal>
@@ -145,9 +144,9 @@ const AnimalsList = ({ animals }: { animals: AnimalType[] }) => {
     return 0
   })
   return (
-    <div className="grid grid-flow-row auto-rows-fr grid-cols-6">
-      {sortedByEarring?.map((animal) => (
-        <div key={animal.id} className="m-4">
+    <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
+      {sortedByEarring?.map((animal, i) => (
+        <div key={`${animal.id}-${i}`} className="m-4">
           <span className="whitespace-nowrap">
             <ModalAnimalDetails earring={animal.earring} />
           </span>
