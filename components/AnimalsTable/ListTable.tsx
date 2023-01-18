@@ -17,8 +17,7 @@ import { rankItem } from '@tanstack/match-sorter-utils'
 
 const AnimalsListTable = ({
   onRowClick,
-  selectedRow,
-  onParentClick
+  selectedRow
 }: {
   onRowClick?: (id: string) => void
   onParentClick?: (id: string | null) => void
@@ -151,14 +150,14 @@ const AnimalsListTable = ({
               key={row.id}
               className={`hover cursor-pointer ${
                 row.original.id === selectedRow &&
-                ' border-4 border-base-content'
+                ' border-4 border-base-content '
               } `}
               onClick={() => {
                 onRowClick?.(row.original.id)
               }}
             >
               {row.getVisibleCells().map((cell) => (
-                <th key={cell.id} className="font-normal">
+                <th key={cell.id} className="font-normal ">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </th>
               ))}

@@ -30,7 +30,7 @@ const HelperText = ({
     <>
       <div
         tabIndex={0}
-        className="collapse flex items-center px-2  rounded-md p-1 group "
+        className="collapse flex items-center px-2  rounded-md p-1 group hidden "
       >
         <div className={`  ${style[type].classes} rounded-full p-0.5`}>
           <Icon name={style[type].icon} size="sm" />

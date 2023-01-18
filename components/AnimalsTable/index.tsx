@@ -274,13 +274,29 @@ const AnimalsTable = ({
         text="Selecciona de uno en uno para ver los detalles. Selecciona varios para editar en grupo. Selecciona todos los que estan filtrados."
         type="info"
       />
-      {showSelectRow && (
-        <div className="text-center">
-          {Object.keys(rowSelection).length} of{' '}
-          {table.getPreFilteredRowModel().rows.length} Seleccionados
-        </div>
-      )}
+
       <div className={`overflow-x-auto  mx-auto`}>
+        <div className="flex w-full  justify-end ">
+          <select
+            className="select select-sm"
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value))
+            }}
+          >
+            {[10, 50, 100, 500].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                mostrar {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+        {showSelectRow && (
+          <div className="text-center">
+            {Object.keys(rowSelection).length} of{' '}
+            {table.getPreFilteredRowModel().rows.length} Seleccionados
+          </div>
+        )}
         <table className="mx-aut table table-compact mx-auto w-full  ">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -349,6 +365,8 @@ const AnimalsTable = ({
                         relationshipGrade === 2 &&
                         'bg-rose-300 bg-opacity-70'
                       }
+                      p-0
+                      px-2
                       `}
                     >
                       {flexRender(
@@ -364,6 +382,21 @@ const AnimalsTable = ({
         </table>
       </div>
       <div className="h-4" />
+      <div className="flex w-full  justify-end ">
+        <select
+          className="select select-sm"
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 50, 100, 500].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              mostrar {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="flex flex-col items-center gap-2 mx-auto justify-center">
         <span className="flex items-center gap-1">
           <div>Página</div>
