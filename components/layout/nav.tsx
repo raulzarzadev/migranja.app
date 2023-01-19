@@ -18,9 +18,9 @@ export const Nav = () => {
             MiRanchito
           </Link>
         </div>
-        <div>
+        {/* <div>
           <InstallButton />
-        </div>
+        </div> */}
 
         {user ? (
           <UserMenu user={user} />
@@ -35,7 +35,7 @@ export const Nav = () => {
                     googleLogin()
                   }}
                 >
-                  Login with google
+                  Ingresa
                 </button>
               </li>
             </ul>

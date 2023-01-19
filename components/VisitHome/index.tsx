@@ -1,5 +1,14 @@
+// import LandingPage from '@comps/LandingPage/LandingPage'
+import Image from 'next/image'
+import LandingPage from './LandingPage'
+
 const VisitHome = () => {
-  return <div>Visit Home</div>
+  return (
+    <>
+      <LandingPage />
+    </>
+  )
 }
+/* <LandingPage /> */
 
 export default VisitHome

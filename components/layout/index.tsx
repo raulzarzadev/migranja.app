@@ -2,13 +2,14 @@ import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
 import Nav from './nav'
+
 export interface LayoutProps {
   children: React.ReactNode
 }
 
 function Layout({ children }: LayoutProps) {
   return (
-    <div className="p-2 prose pb-20">
+    <div className="p-2 prose bg-[url('/assets/images/HomeVisit/waves_pathern.png')] min-h-screen flex flex-col justify-between">
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -47,8 +48,8 @@ function Layout({ children }: LayoutProps) {
       </Head>
 
       <Nav />
-      <main className="">{children}</main>
-      <footer>
+      <main className="flex-1">{children}</main>
+      <footer className="self-end shadow-md rounded-md w-full ">
         <div className="flex w-full h-20 justify-center items-center flex-col">
           <span className="text-xs ">una app de</span>
           <Link href={'https://raulzarza.com'} className="link">
