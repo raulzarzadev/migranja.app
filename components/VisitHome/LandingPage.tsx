@@ -59,7 +59,15 @@ function LandingPage() {
   )
 }
 
-const Card = ({ text, title, image }) => {
+const Card = ({
+  text,
+  title,
+  image
+}: {
+  text: string
+  title: string
+  image: string
+}) => {
   return (
     // <Square className="">
     //   <div className="flex flex-col min-h-32 ">
