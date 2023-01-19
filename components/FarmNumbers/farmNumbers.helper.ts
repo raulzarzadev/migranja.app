@@ -1,4 +1,4 @@
-import { subDays } from 'date-fns'
+import { addDays, subDays } from 'date-fns'
 import { FarmStateAnimalEvent } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
 
@@ -68,6 +68,43 @@ export const calculateFarmNumbers = ({
       )
     )
   }
+
+  /**
+   * Search animals that drop in for any reason
+   * like buy or new acquisition
+   */
+  const dropInAnimals = [...events.filter((event) => event.type === 'DROP_IN')]
+  /**
+   * Search animals that drop out for any reason
+   * like dead or has been stolen , or lost
+   */
+  const dropOutAnimals = [
+    ...events.filter((event) => event.type === 'DROP_OUT')
+  ]
+
+  /**
+   * Search al birhts
+   */
+  const births = [...events.filter((event) => event.type === 'BIRTH')]
+  /**
+   * Search calf that born
+   */
+  const newCalfs = [
+    ...births
+      .filter((event) => event.type === 'BIRTH')
+      .map((event) => event.eventData.calfs)
+  ].flat()
+  /**
+   * Search dead events
+   */
+  const deads = [...events].filter((event) => event.type === 'DROP_OUT')
+  const birthsLastMonth = [...births].filter(
+    (event) => event.eventData.date > addDays(new Date(), -30).getTime()
+  )
+  const newCalfsLastMonth = [
+    ...birthsLastMonth.map((event) => event.eventData.calfs)
+  ].flat()
+
   return {
     activeAnimals,
     activeFemales,
@@ -76,6 +113,13 @@ export const calculateFarmNumbers = ({
     malesBetween,
     femalesBetween,
     pregnantAnimals,
-    animalsLactando
+    animalsLactando,
+    dropOutAnimals,
+    dropInAnimals,
+    births,
+    newCalfs,
+    birthsLastMonth,
+    newCalfsLastMonth,
+    deads
   }
 }

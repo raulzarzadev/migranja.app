@@ -6,9 +6,14 @@ import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import { ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
+import {
+  FarmStateAnimalEvent,
+  selectFarmAnimals,
+  selectFarmEvents
+} from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
-import { string } from 'yup'
+import { myFormatDate } from 'utils/dates/myDateUtils'
+
 import { calculateFarmNumbers } from './farmNumbers.helper'
 
 const FarmNumbers = () => {
@@ -54,7 +59,7 @@ const FarmNumbers = () => {
           )}
           description={`Entre ${OVINE_DAYS.finishWeaning} y ${OVINE_DAYS.canBePregnant} dias`}
         />
-        <StatCardWithModalAnimalsList
+        {/* <StatCardWithModalAnimalsList
           title="Primerisas"
           animals={farmNumbers.femalesBetween(
             OVINE_DAYS.canBePregnant,
@@ -63,7 +68,7 @@ const FarmNumbers = () => {
           description={`Entre ${OVINE_DAYS.canBePregnant} y ${
             OVINE_DAYS.canBePregnant + 90
           } dias`}
-        />
+        /> */}
         <StatCardWithModalAnimalsList
           title="Edad reproductiva"
           animals={farmNumbers.femalesBetween(OVINE_DAYS.canBePregnant, 9999)}
@@ -106,7 +111,137 @@ const FarmNumbers = () => {
           description={`Mas de ${OVINE_DAYS.canBePregnant} dias`}
         />
       </StatsRow>
+
+      <StatsRow title="Últimos 30 días">
+        <StatCardWithModalEventsList
+          title="Partos"
+          events={farmNumbers.birthsLastMonth}
+          description={`Todos del ultimo mes`}
+        />
+        <StatCardWithModalAnimalsList
+          title="Corderitos"
+          animals={farmNumbers.newCalfsLastMonth as AnimalType[]}
+          description={`Corderitos del ultimo mex`}
+        />
+      </StatsRow>
+
+      <StatsRow title="Inventario">
+        <StatCardWithModalEventsList
+          title="Bajas"
+          events={farmNumbers.dropOutAnimals}
+          description={`Por muerte, perdidas o robadas`}
+        />
+        <StatCardWithModalEventsList
+          title="Altas"
+          events={farmNumbers.dropInAnimals}
+          description={`Compras, nuevos lotes , etc.`}
+        />
+        <StatCardWithModalEventsList
+          title="Partos"
+          events={farmNumbers.births}
+          description={`Todos en el historial`}
+        />
+        <StatCardWithModalAnimalsList
+          title="Corderitos"
+          animals={farmNumbers.newCalfs as AnimalType[]}
+          description={`Corderitos nacidos`}
+        />
+      </StatsRow>
+
+      {/* 
+      <StatsRow title="Inventario (Bajas)">
+        <StatCardWithModalEventsList
+          title="Muertes"
+          events={farmNumbers.deads}
+          description={`Mayores de ${OVINE_DAYS.canBePregnant} dias`}
+        />
+        <StatCardWithModalEventsList
+          title="Bajas"
+          events={farmNumbers.dropOutAnimals}
+          description={`Entre ${OVINE_DAYS.finishWeaning} y ${OVINE_DAYS.canBePregnant} dias`}
+        />
+      </StatsRow> */}
     </div>
+  )
+}
+const StatCardWithModalEventsList = ({
+  events,
+  description = 'desc',
+  title,
+  ...rest
+}: {
+  events: FarmStateAnimalEvent[]
+  description: string
+  title: string
+}) => {
+  const [openList, setOpenList] = useState(false)
+  const handleOpenList = () => {
+    setOpenList(!openList)
+  }
+  console.log({ events })
+  return (
+    <>
+      <div
+        className="w-[200px]"
+        onClick={(e) => {
+          e.preventDefault()
+          handleOpenList()
+        }}
+      >
+        <StatCard
+          {...rest}
+          quantity={events?.length}
+          title={title}
+          description={description}
+        />
+      </div>
+      <Modal
+        open={openList}
+        handleOpen={handleOpenList}
+        title={`Lista de eventos: ${title} `}
+      >
+        <div>
+          <div className="grid grid-cols-5 ">
+            <div>Fecha</div>
+            <div>Madre</div>
+            <div>Padre</div>
+            <div className="col-span-2 text-center">Camada</div>
+          </div>
+          {events.map((event) => (
+            <div key={event.id}>
+              {event.type === 'BIRTH' && (
+                <div className="grid grid-cols-5">
+                  <div>{myFormatDate(event.eventData.date, 'dd MM yy')}</div>
+                  <div>
+                    <ModalAnimalDetails
+                      earring={event.eventData.parents.mother?.earring}
+                    />
+                  </div>
+                  <div>
+                    <ModalAnimalDetails
+                      earring={event.eventData.parents.father?.earring}
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <div className="flex w-full justify-between">
+                      <span>({event.eventData.calfs?.length})</span>
+                      {event.eventData.calfs?.map((animal) => (
+                        <div key={animal.earring}>
+                          <ModalAnimalDetails earring={animal.earring} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        {/* <div className="relative">
+          <AnimalsList animals={animals} title={title} />
+        </div> */}
+      </Modal>
+    </>
   )
 }
 
@@ -223,7 +358,7 @@ const StatsRow = ({
     <div>
       <h3 className="text-lg font-bold">{title}</h3>
       <div className="grid">
-        <div className="flex flex-row gap-2 overflow-x-auto overflow-y-hidden  h-[135px] items-top  snap-x">
+        <div className="flex flex-row gap-2 overflow-x-auto overflow-y-hidden  h-[135px] items-top  snap-x ">
           {children}
         </div>
       </div>
@@ -241,7 +376,7 @@ const StatCard = ({
       <div className="stat">
         <div className="stat-title">{title}</div>
         <div className="stat-value">{quantity}</div>
-        <div className="stat-desc">{description}</div>
+        <div className="stat-desc ">{description}</div>
       </div>
     </div>
   )
