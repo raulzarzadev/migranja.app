@@ -103,16 +103,19 @@ const SellForm = () => {
                 animalsSelected={animalsSelected || []}
                 handleAddAnimals={(animals) => setAnimalsSelected(animals)}
               />
-              {/* <EarringsArray /> */}
               <div>
-                <div className="grid grid-cols-3 ">
+                <div className="grid grid-cols-[80px_100px_auto] ">
                   <div>Arete</div>
                   <div>Peso</div>
                   <div>Obs</div>
                 </div>
                 {animalsSelected?.map((earring, i) => (
-                  <div key={`${earring}-${i}`} className="grid grid-cols-3 ">
-                    <div className="flex items-end justify-end">
+                  <div
+                    key={`${earring}-${i}`}
+                    className="grid grid-cols-[80px_100px_auto] "
+                  >
+                    <div className="flex items-end justify-between pl-4">
+                      <span className="text-sm">{i + 1}</span>
                       <span className="whitespace-nowrap truncate">
                         <ModalAnimalDetails earring={earring} size="sm" />
                       </span>
@@ -128,9 +131,7 @@ const SellForm = () => {
                     <div>
                       <input
                         className="input input-bordered input-xs w-full"
-                        {...methods.register(`earrings.${i}.obs`, {
-                          valueAsNumber: true
-                        })}
+                        {...methods.register(`earrings.${i}.obs`)}
                       />
                     </div>
                   </div>
@@ -206,14 +207,6 @@ const SellForm = () => {
                   </label>
                 )}
               />
-              {/* <InputContainer
-                label="Precio"
-                type="number"
-                name="price"
-                placeholder="0.00"
-              />
-              <div>Promedio</div>
-              <div>Total</div> */}
             </div>
           </div>
 
@@ -272,61 +265,6 @@ const SelectAnimals = ({
           setSelectedRows={(rows) => handleAddAnimals(rows)}
         />
       </Modal>
-    </div>
-  )
-}
-
-const EarringsArray = () => {
-  const { append, fields, remove } = useFieldArray({
-    name: 'earrings'
-  })
-
-  const handleAddEarring = ({ earring }: { earring: string }) => {
-    append({ earring, weight: 0, obs: '' })
-  }
-
-  return (
-    <div className="my-4 ">
-      <SearchEarring
-        label="Buscar por arete"
-        className=""
-        onEarringClick={(earring) => {
-          handleAddEarring(earring)
-        }}
-      />
-      <div className="grid grid-cols-3">
-        <div>Arete</div>
-        <div>Peso</div>
-        <div>Ops</div>
-      </div>
-      {fields.map((field: any, i) => (
-        <div key={field.id} className={`grid grid-cols-3 items-center`}>
-          <span className="truncate">
-            <ModalAnimalDetails earring={field?.earring} size="sm" />
-          </span>
-          <InputContainer
-            className="w-[70px]"
-            type="number"
-            name={`earrings.${i}.weight`}
-          />
-          {/* <InputContainer
-            className="w-[80px]"
-            type="text"
-            name={`earrings.${i}.obs`}
-          /> */}
-          <div className="flex w-full justify-center items-center">
-            <button
-              className="btn btn-circle btn-xs btn-error btn-outline "
-              onClick={(e) => {
-                e.preventDefault()
-                remove(i)
-              }}
-            >
-              <Icon name="delete" size="xs" />
-            </button>
-          </div>
-        </div>
-      ))}
     </div>
   )
 }
