@@ -12,6 +12,7 @@ const SearchEarring = ({
   gender = 'all',
   placeholder = 'Buscar arete',
   relativeTo,
+  className,
   label
 }: {
   omitEarrings?: string[]
@@ -20,6 +21,7 @@ const SearchEarring = ({
   placeholder?: string
   relativeTo?: AnimalType['earring']
   label?: string
+  className?: string
 }) => {
   const [search, setSearch] = useState<string | number>('')
   const [matches, setMatches] = useState<AnimalType[]>([])
@@ -56,7 +58,7 @@ const SearchEarring = ({
         <Autocomplete
           inputProps={{
             placeholder,
-            className: 'input input-sm input-outline input-bordered w-full w-36'
+            className: `input input-sm input-outline input-bordered w-full ${className} `
           }}
           getItemValue={(item) => item.label}
           items={matches.map((animal) => {

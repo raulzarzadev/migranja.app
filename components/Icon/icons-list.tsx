@@ -9,6 +9,7 @@ import { VscDesktopDownload } from 'react-icons/vsc'
 import { AiOutlineTeam } from 'react-icons/ai'
 import { FaBirthdayCake, FaSkullCrossbones } from 'react-icons/fa'
 import { MdOutlineNoFood } from 'react-icons/md'
+import { BsCurrencyDollar } from 'react-icons/bs'
 
 import {
   SlActionRedo,
@@ -111,7 +112,8 @@ const ICON_LIST = {
   send: SlActionRedo,
   birth: FaBirthdayCake,
   dead: FaSkullCrossbones,
-  noFood: MdOutlineNoFood
+  noFood: MdOutlineNoFood,
+  dollar: BsCurrencyDollar
   // emergency: MdOutlineEmergency,
   // email: TiMail,
   // whatsapp: SiWhatsapp,

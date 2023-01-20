@@ -1,5 +1,6 @@
 import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
+import SellForm from '@comps/forms/SellForm/indext'
 import WeaningEvents from '@comps/WeaningEvents'
 import { FarmType } from '@firebase/Farm/farm.model'
 import Batch from 'components/Batch'
@@ -33,6 +34,7 @@ type Option =
   | 'birthEvents'
   | 'weaningEvents'
   | 'numbers'
+  | 'sell'
 
 const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
@@ -153,6 +155,12 @@ const FarmMenu = (props: any) => {
                     }
                     selected={menuOptions.column2 === 'weaningEvents'}
                   />
+                  <SquareOption
+                    title="Venta"
+                    iconName="dollar"
+                    onClick={() => handleChangeOption('column2', 'sell')}
+                    selected={menuOptions.column2 === 'sell'}
+                  />
                 </>
               )}
             </div>
@@ -229,15 +237,13 @@ const FarmMenu = (props: any) => {
           {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
           {/* TODO: ADD EVENT FORM ********************************+******+ +++************** ADD ANIMALS */}
           {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
+          {/* ********************************+ SELL ANIMALS EVENTS *************************************** */}
+          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
           {isSheepSelected && !column3 && <OvinesTable />}
           {/* ********************************+******+ +++************** ADD ANIMALS */}
-          {isSheepSelected && column3 === 'add' && (
+          {column2 === 'sell' && !column3 && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
-              <AnimalForm
-                animal={{
-                  type: 'ovine'
-                }}
-              />
+              <SellForm />
             </div>
           )}
           {isSheepSelected && menuOptions.column3 === 'addMany' && (

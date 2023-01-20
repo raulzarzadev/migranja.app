@@ -6,8 +6,10 @@ import { selectFarmAnimals } from 'store/slices/farmSlice'
 import Modal from '..'
 
 const ModalAnimalDetails = ({
-  earring = ''
+  earring = '',
+  size = 'lg'
 }: {
+  size?: 'lg' | 'md' | 'sm'
   earring?: AnimalType['earring']
 }) => {
   const [openAnimalDetails, setOpenAnimalDetails] = useState(false)
@@ -21,17 +23,22 @@ const ModalAnimalDetails = ({
       )
     )
   }
+  const sizing = {
+    sm: 'text-xs',
+    md: 'text-md',
+    lg: 'text-xl'
+  }
   return (
     <span>
-      <button
-        className="link mx-2 font-bold text-xl underline-offset-4"
+      <span
+        className={`link mx-2 font-bold  underline-offset-4 ${sizing[size]}`}
         onClick={(e) => {
           e.preventDefault()
           handleOpenAnimalDetails()
         }}
       >
         {earring}
-      </button>
+      </span>
       <Modal
         open={openAnimalDetails}
         handleOpen={handleOpenAnimalDetails}

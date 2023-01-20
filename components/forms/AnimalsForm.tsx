@@ -58,6 +58,7 @@ export const AnimalsForm = ({
   const [animals, setAnimals] = useState<QuickAnimal[]>([])
   const { register } = methods
   const farmAnimals = useSelector(selectFarmAnimals)
+
   const earringAlreadyExist = (earring: string) => {
     const farmEarrings = farmAnimals.map(({ earring }) => earring)
     console.log({ earring, farmEarrings })

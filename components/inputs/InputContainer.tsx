@@ -8,7 +8,7 @@ export interface SelectOption {
   value?: string | number
 }
 export interface CustomInputTypes
-  extends Partial<Pick<HTMLInputElement, 'max' | 'min' | 'step'>> {
+  extends Partial<Pick<HTMLInputElement, 'max' | 'min' | 'step' | 'disabled'>> {
   name: string
   type:
     | 'date'
