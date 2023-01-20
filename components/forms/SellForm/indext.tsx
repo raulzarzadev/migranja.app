@@ -60,7 +60,7 @@ const SellForm = () => {
 
   useEffect(() => {
     methods.setValue('total', totalMoney)
-  }, [totalMoney])
+  }, [methods, totalMoney])
 
   useEffect(() => {
     methods.setValue('animals', animalsSelected?.length || 0)
@@ -99,7 +99,6 @@ const SellForm = () => {
           </div>
           <div className="sm:flex">
             <div className="sm:w-full text-center ">
-              <h3>Lista de animales</h3>
               <SelectAnimals
                 animalsSelected={animalsSelected || []}
                 handleAddAnimals={(animals) => setAnimalsSelected(animals)}
@@ -250,6 +249,15 @@ const SelectAnimals = ({
   const farmAnimals = useSelector(selectFarmAnimals)
   return (
     <div>
+      <button
+        className="link my-5 underline-offset-4"
+        onClick={(e) => {
+          e.preventDefault()
+          handleOpenSelectAnimals()
+        }}
+      >
+        Lista de animales
+      </button>
       <Modal
         open={openSelectAnimals}
         handleOpen={handleOpenSelectAnimals}
@@ -264,15 +272,6 @@ const SelectAnimals = ({
           setSelectedRows={(rows) => handleAddAnimals(rows)}
         />
       </Modal>
-      <button
-        className="btn btn-sm btn-outline"
-        onClick={(e) => {
-          e.preventDefault()
-          handleOpenSelectAnimals()
-        }}
-      >
-        Modificar lista
-      </button>
     </div>
   )
 }
