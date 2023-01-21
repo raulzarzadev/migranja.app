@@ -296,8 +296,11 @@ const AnimalsList = ({
   animals: AnimalType[]
 }) => {
   const sortedByEarring = animals.sort((a, b) => {
-    if (a.earring < b.earring) return -1
-    if (a.earring > b.earring) return 1
+    const aEarring = parseFloat(a.earring.split('-')[0])
+    const bEarring = parseFloat(b.earring.split('-')[0])
+
+    if (aEarring < bEarring) return -1
+    if (aEarring > bEarring) return 1
     return 0
   })
   const [openPDF, setOpenPDF] = useState(false)
