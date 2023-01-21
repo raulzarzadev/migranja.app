@@ -71,6 +71,10 @@ export const FarmEventCard = ({
     PENDING: {
       label: 'Pendiente ',
       Component: <div>Pendiente</div>
+    },
+    SELL: {
+      label: 'Vendido ',
+      Component: <div>Venta</div>
     }
   }
   return (
