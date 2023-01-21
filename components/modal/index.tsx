@@ -1,5 +1,5 @@
 import Icon from 'components/Icon'
-import React, { useId } from 'react'
+import React, { useEffect, useId } from 'react'
 
 const Modal = ({
   title = 'Modal title',

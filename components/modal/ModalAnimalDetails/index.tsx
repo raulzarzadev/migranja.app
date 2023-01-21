@@ -39,13 +39,15 @@ const ModalAnimalDetails = ({
       >
         {earring}
       </span>
-      <Modal
-        open={openAnimalDetails}
-        handleOpen={handleOpenAnimalDetails}
-        title={`Detalles de arete ${earring}`}
-      >
-        {animal && <AnimalDetails animal={animal} />}
-      </Modal>
+      {openAnimalDetails && (
+        <Modal
+          open={openAnimalDetails}
+          handleOpen={handleOpenAnimalDetails}
+          title={`Detalles de arete ${earring}`}
+        >
+          {animal && <AnimalDetails animal={animal} />}
+        </Modal>
+      )}
     </span>
   )
 }

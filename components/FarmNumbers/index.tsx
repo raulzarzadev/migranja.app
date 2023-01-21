@@ -194,52 +194,54 @@ const StatCardWithModalEventsList = ({
           description={description}
         />
       </div>
-      <Modal
-        open={openList}
-        handleOpen={handleOpenList}
-        title={`Lista de eventos: ${title} `}
-      >
-        <div>
-          <div className="grid grid-cols-5 ">
-            <div>Fecha</div>
-            <div>Madre</div>
-            <div>Padre</div>
-            <div className="col-span-2 text-center">Camada</div>
-          </div>
-          {events.map((event) => (
-            <div key={event.id}>
-              {event.type === 'BIRTH' && (
-                <div className="grid grid-cols-5">
-                  <div>{myFormatDate(event.eventData.date, 'dd MM yy')}</div>
-                  <div>
-                    <ModalAnimalDetails
-                      earring={event.eventData.parents.mother?.earring}
-                    />
-                  </div>
-                  <div>
-                    <ModalAnimalDetails
-                      earring={event.eventData.parents.father?.earring}
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <div className="flex w-full justify-between">
-                      <span>({event.eventData.calfs?.length})</span>
-                      {event.eventData.calfs?.map((animal) => (
-                        <div key={animal?.earring}>
-                          <ModalAnimalDetails earring={animal?.earring} />
-                        </div>
-                      ))}
+      {openList && (
+        <Modal
+          open={openList}
+          handleOpen={handleOpenList}
+          title={`Lista de eventos: ${title} `}
+        >
+          <div>
+            <div className="grid grid-cols-5 ">
+              <div>Fecha</div>
+              <div>Madre</div>
+              <div>Padre</div>
+              <div className="col-span-2 text-center">Camada</div>
+            </div>
+            {events.map((event) => (
+              <div key={event.id}>
+                {event.type === 'BIRTH' && (
+                  <div className="grid grid-cols-5">
+                    <div>{myFormatDate(event.eventData.date, 'dd MM yy')}</div>
+                    <div>
+                      <ModalAnimalDetails
+                        earring={event.eventData.parents.mother?.earring}
+                      />
+                    </div>
+                    <div>
+                      <ModalAnimalDetails
+                        earring={event.eventData.parents.father?.earring}
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <div className="flex w-full justify-between">
+                        <span>({event.eventData.calfs?.length})</span>
+                        {event.eventData.calfs?.map((animal) => (
+                          <div key={animal?.earring}>
+                            <ModalAnimalDetails earring={animal?.earring} />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        {/* <div className="relative">
+                )}
+              </div>
+            ))}
+          </div>
+          {/* <div className="relative">
           <AnimalsList animals={animals} title={title} />
         </div> */}
-      </Modal>
+        </Modal>
+      )}
     </>
   )
 }
@@ -274,15 +276,17 @@ const StatCardWithModalAnimalsList = ({
           description={description}
         />
       </div>
-      <Modal
-        open={openList}
-        handleOpen={handleOpenList}
-        title={`Lista de aretes: ${title} `}
-      >
-        <div className="relative">
-          <AnimalsList animals={animals} title={title} />
-        </div>
-      </Modal>
+      {openList && (
+        <Modal
+          open={openList}
+          handleOpen={handleOpenList}
+          title={`Lista de aretes: ${title} `}
+        >
+          <div className="relative">
+            <AnimalsList animals={animals} title={title} />
+          </div>
+        </Modal>
+      )}
     </>
   )
 }
@@ -313,13 +317,13 @@ const AnimalsList = ({
   }
   return (
     <div className="relative">
-      <Modal handleOpen={handleOpenPDF} open={openPDF} title="PDF">
-        {openPDF && (
+      {openPDF && (
+        <Modal handleOpen={handleOpenPDF} open={openPDF} title="PDF">
           <PDFViewer height={500} width="100%">
             <PDFAnimalsList animals={animals} title={title} />
           </PDFViewer>
-        )}
-      </Modal>
+        </Modal>
+      )}
       <div className="flex w-full justify-around">
         <button
           className="btn btn-outline"

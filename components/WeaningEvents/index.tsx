@@ -23,19 +23,6 @@ const WeaningEvents = () => {
     <div className="w-full p-2">
       <h2 className="text-2xl font-bold text-center">Destetes Programados</h2>
       <div>Pendientes: {weaning.length}</div>
-      {/* <AnimalsTable
-        animalsData={weaning.map((event) =>
-          farmAnimals.find(
-            (animal) => event.eventData.earring === animal.earring
-          )
-        )}
-      /> */}
-      {/* <DebouncedInput
-        value={globalFilter ?? ''}
-        onChange={(value) => setGlobalFilter(String(value))}
-        className=" input input-sm w-full input-bordered"
-        placeholder="Buscar por arete..."
-      /> */}
       <div className="">
         <table className="table w-full table-compact">
           <thead>
@@ -52,7 +39,10 @@ const WeaningEvents = () => {
                 className="bg-base-300 rounded-md my-2 p-1 px-2"
               >
                 <td>
-                  <ModalAnimalDetails earring={event.eventData.earring} />
+                  <ModalAnimalDetails
+                    earring={event.eventData.earring}
+                    size="sm"
+                  />
                 </td>
                 <td>{myFormatDate(event?.eventData?.date, 'dd MMM yy')}</td>
 
