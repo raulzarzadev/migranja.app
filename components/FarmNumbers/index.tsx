@@ -343,9 +343,9 @@ const AnimalsList = ({
       </div>
       <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
         {[...sortedSuffixByEarring, ...sortedByEarring]?.map((animal, i) => (
-          <div key={`${animal?.id}-${i}`} className="m-4">
+          <div key={`${animal?.id}-${i}`} className="m-1">
             <span className="whitespace-nowrap">
-              <ModalAnimalDetails earring={animal?.earring} />
+              <ModalAnimalDetails earring={animal?.earring} size="sm" />
             </span>
           </div>
         ))}
