@@ -226,8 +226,8 @@ const StatCardWithModalEventsList = ({
                     <div className="flex w-full justify-between">
                       <span>({event.eventData.calfs?.length})</span>
                       {event.eventData.calfs?.map((animal) => (
-                        <div key={animal.earring}>
-                          <ModalAnimalDetails earring={animal.earring} />
+                        <div key={animal?.earring}>
+                          <ModalAnimalDetails earring={animal?.earring} />
                         </div>
                       ))}
                     </div>
@@ -296,8 +296,8 @@ const AnimalsList = ({
   animals: AnimalType[]
 }) => {
   const sortedByEarring = animals.sort((a, b) => {
-    const aEarring = parseFloat(a.earring.split('-')[0])
-    const bEarring = parseFloat(b.earring.split('-')[0])
+    const aEarring = parseFloat(a?.earring.split('-')[0] || '0')
+    const bEarring = parseFloat(b?.earring.split('-')[0] || '0')
 
     if (aEarring < bEarring) return -1
     if (aEarring > bEarring) return 1
@@ -339,9 +339,9 @@ const AnimalsList = ({
       </div>
       <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
         {sortedByEarring?.map((animal, i) => (
-          <div key={`${animal.id}-${i}`} className="m-4">
+          <div key={`${animal?.id}-${i}`} className="m-4">
             <span className="whitespace-nowrap">
-              <ModalAnimalDetails earring={animal.earring} />
+              <ModalAnimalDetails earring={animal?.earring} />
             </span>
           </div>
         ))}

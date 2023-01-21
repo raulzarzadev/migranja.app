@@ -1,6 +1,7 @@
 import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
-import SellForm from '@comps/forms/SellForm/indext'
+import SellForm from '@comps/forms/SellForm'
+import PrintComponent from '@comps/PrintComponent'
 import WeaningEvents from '@comps/WeaningEvents'
 import { FarmType } from '@firebase/Farm/farm.model'
 import Batch from 'components/Batch'
@@ -243,7 +244,9 @@ const FarmMenu = (props: any) => {
           {/* ********************************+******+ +++************** ADD ANIMALS */}
           {column2 === 'sell' && !column3 && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
+              {/* <PrintComponent /> */}
               <SellForm />
+              {/* */}
             </div>
           )}
           {isSheepSelected && menuOptions.column3 === 'addMany' && (

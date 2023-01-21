@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
 
-const SellForm = () => {
+const SellForm = ({ ref }: { ref?: any }) => {
   const methods = useForm({
     defaultValues: {
       date: new Date(),
@@ -101,7 +101,7 @@ const SellForm = () => {
   }, [methods, totalWeightFromEarringForm])
 
   return (
-    <div>
+    <div ref={ref}>
       <h2 className="text-xl font-bold">Nueva venta</h2>
       <FormProvider {...methods}>
         <form
