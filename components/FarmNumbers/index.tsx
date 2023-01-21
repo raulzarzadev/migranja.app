@@ -178,7 +178,6 @@ const StatCardWithModalEventsList = ({
   const handleOpenList = () => {
     setOpenList(!openList)
   }
-  console.log({ events })
   return (
     <>
       <div
@@ -295,14 +294,19 @@ const AnimalsList = ({
   title: string
   animals: AnimalType[]
 }) => {
-  const sortedByEarring = animals.sort((a, b) => {
+  const earringsWithOutSuffix = animals.filter((a) => !a.earring.includes('-'))
+  const earringsWithSuffix = animals.filter((a) => a.earring.includes('-'))
+  const sortByNumber = (a: any, b: any) => {
     const aEarring = parseFloat(a?.earring.split('-')[0] || '0')
     const bEarring = parseFloat(b?.earring.split('-')[0] || '0')
 
     if (aEarring < bEarring) return -1
     if (aEarring > bEarring) return 1
     return 0
-  })
+  }
+  const sortedByEarring = earringsWithOutSuffix.sort(sortByNumber)
+  const sortedSuffixByEarring = earringsWithSuffix.sort(sortByNumber)
+
   const [openPDF, setOpenPDF] = useState(false)
   const handleOpenPDF = () => {
     setOpenPDF(!openPDF)
@@ -338,7 +342,7 @@ const AnimalsList = ({
         </PDFDownloadLink>
       </div>
       <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
-        {sortedByEarring?.map((animal, i) => (
+        {[...sortedSuffixByEarring, ...sortedByEarring]?.map((animal, i) => (
           <div key={`${animal?.id}-${i}`} className="m-4">
             <span className="whitespace-nowrap">
               <ModalAnimalDetails earring={animal?.earring} />
