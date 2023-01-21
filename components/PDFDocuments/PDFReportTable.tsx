@@ -8,8 +8,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderTop: '1px solid #EEE',
-    paddingTop: 8,
-    paddingBottom: 8
+    paddingTop: 4,
+    paddingBottom: 4
   },
   header: {
     borderTop: 'none'
@@ -17,12 +17,16 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: 'bold'
   },
+  body: {
+    fontWeight: 'normal',
+    fontSize: '10px'
+  },
   // So Declarative and unDRY 👌
   row1: {
     width: '10%'
   },
   row2: {
-    width: '20%'
+    width: '10%'
   },
   row3: {
     width: '10%'
@@ -31,7 +35,7 @@ const styles = StyleSheet.create({
     width: '30%'
   },
   row5: {
-    width: '27%'
+    width: '37%'
   }
 })
 
@@ -53,7 +57,7 @@ const PDFReportTable = ({
         <Text style={styles.row5}>Comentarios</Text>
       </View>
       {data.map((row, i) => (
-        <View key={i} style={styles.row} wrap={false}>
+        <View key={i} style={[styles.row, styles.body]} wrap={false}>
           <Text style={styles.row1}>
             <Text style={styles.bold}>{i + 1}</Text>
           </Text>

@@ -26,9 +26,6 @@ const PDFAnimalsList = ({ animals, title }: any) => (
             return { earring: animal.earring, name: animal.name }
           })}
         />
-        {/* {animals.map((animal, i) => (
-          <Text key={`${animal.id}-${i}`}>{animal.earring}</Text>
-        ))} */}
       </View>
     </Page>
   </Document>
