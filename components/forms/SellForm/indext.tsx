@@ -1,25 +1,15 @@
 import AnimalsTable from '@comps/AnimalsTable'
-import Icon from '@comps/Icon'
 import InputContainer from '@comps/inputs/InputContainer'
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
-import SearchEarring from '@comps/SearchEarring'
+import ProgressButton from '@comps/ProgressButton'
+import { updateAnimal } from '@firebase/Animal/main'
+import { createSellEvent } from '@firebase/Events/sellEvent.event'
 import { useEffect, useState } from 'react'
-import {
-  Controller,
-  FormProvider,
-  useFieldArray,
-  useForm
-} from 'react-hook-form'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals } from 'store/slices/farmSlice'
+import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
-
-interface AnimalSell {
-  earring: string
-  weight: number
-  obs?: string
-}
 
 const SellForm = () => {
   const methods = useForm({
@@ -30,22 +20,56 @@ const SellForm = () => {
       earrings: [] as any[],
       totalWeight: 0,
       averageWeight: 0,
-      animals: 0,
+      animalsQuantity: 0,
       total: 0
     }
   })
 
-  const handleCreatePDF = () => {
-    console.log('create pdf')
-  }
-
-  const onSubmit = (data: any) => {
+  const currentFarm = useSelector(selectFarmState)
+  const animalsFarm = useSelector(selectFarmAnimals)
+  const [progress, setProgress] = useState(0)
+  const onSubmit = async (data: any) => {
+    setProgress(10)
     console.log(data)
+    try {
+      /** Create sell event */
+      const res = await createSellEvent({
+        status: 'PENDING',
+        eventData: data,
+        farm: { id: currentFarm?.id || '', name: currentFarm?.name || '' },
+        type: 'SELL'
+      })
+      setProgress(50)
+      /** Update animals current status  */
+      const animalsSold = data.earrings
+      debugger
+      for (let i = 0; i < animalsSold.length; i++) {
+        const formAnimal = animalsSold[i]
+        const animalId =
+          animalsFarm.find(
+            (farmAnimal) => farmAnimal.earring === formAnimal.earring
+          )?.id || ''
+
+        if (animalId) {
+          await updateAnimal(animalId, { currentStatus: 'SOLD' })
+          setProgress(50 + (40 * (i + 1)) / animalsSold.length)
+        } else {
+          console.log('not found')
+        }
+      }
+      setProgress(100)
+      methods.reset()
+
+      console.log(res)
+    } catch (error) {
+      setProgress(0)
+      console.log(error)
+    }
   }
 
   const formValues = methods.watch()
   const totalWeight = formValues.totalWeight || 0
-  const earringsQuantity = formValues.animals || 0
+  const earringsQuantity = formValues.animalsQuantity || 0
   const averageWeight = earringsQuantity ? totalWeight / earringsQuantity : 0
   const totalMoney = formValues?.totalWeight * formValues.price || 0
 
@@ -63,7 +87,7 @@ const SellForm = () => {
   }, [methods, totalMoney])
 
   useEffect(() => {
-    methods.setValue('animals', animalsSelected?.length || 0)
+    methods.setValue('animalsQuantity', animalsSelected?.length || 0)
     methods.setValue(
       'earrings',
       animalsSelected?.map((earring: string) => {
@@ -152,7 +176,7 @@ const SellForm = () => {
                 )}
               />
               <Controller
-                name="animals"
+                name="animalsQuantity"
                 render={({ field }) => {
                   return (
                     <label className=" flex items-center justify-end">
@@ -211,16 +235,22 @@ const SellForm = () => {
           </div>
 
           <div className="w-full flex justify-around my-4">
-            <button className="btn btn-outline btn-sm">Guardar</button>
             <button
               className="btn btn-outline btn-sm"
               onClick={(e) => {
                 e.preventDefault()
                 methods.reset()
+                setProgress(0)
+                setAnimalsSelected([])
               }}
             >
               Borrar
             </button>
+            <ProgressButton
+              progress={progress}
+              className="btn-outline btn-sm"
+            />
+            {/* <button className="btn btn-outline btn-sm">Guardar</button> */}
           </div>
         </form>
       </FormProvider>

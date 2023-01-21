@@ -8,6 +8,7 @@ export type TypeOfFarmEvent =
   | 'DROP_IN'
   | 'WEANING'
   | 'PENDING'
+  | 'SELL'
 
 export const labelsOfFarmEventTypes: Record<TypeOfFarmEvent, string> = {
   BREEDING: 'Monta',
@@ -18,7 +19,8 @@ export const labelsOfFarmEventTypes: Record<TypeOfFarmEvent, string> = {
   DROP_OUT: 'Alta',
   DROP_IN: 'Baja',
   WEANING: 'Destete',
-  PENDING: 'Pendiente'
+  PENDING: 'Pendiente',
+  SELL: 'Venta'
 }
 
 export type StatusOfFarmEvent = 'PENDING' | 'DONE' | 'CANCELLED'
