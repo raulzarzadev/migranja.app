@@ -26,7 +26,9 @@ const UserNotifications = () => {
         body: notifBody,
         icon: notifImg
       }
-      new Notification(notifTitle, options)
+      if (notificationPermissions === 'granted') {
+        new Notification(notifTitle, options)
+      }
       // console.log('Notification created')
     })
   }
