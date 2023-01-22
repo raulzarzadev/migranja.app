@@ -1,5 +1,5 @@
 import GeneticTree from '@comps/GeneticTree'
-import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 import { deleteAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
@@ -132,7 +132,9 @@ export const AnimalDetails = ({
           {batch && (
             <div>
               <span>lote:</span>{' '}
-              <span className="text-2xl font-bold">{batch}</span>
+              <span className="text-2xl">
+                <ModalBreedingDetails breedingBatchId={batch} />
+              </span>
             </div>
           )}
           {name && (

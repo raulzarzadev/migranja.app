@@ -39,8 +39,8 @@ export const BreedingCard = ({
 }: {
   breeding: BreedingEventCardDetails
 }) => {
-  const breedingMale = breeding.eventData.breedingMale
-  const breedingDates = breeding.eventData.breedingDates
+  const breedingMale = breeding?.eventData?.breedingMale
+  const breedingDates = breeding.eventData?.breedingDates
 
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
@@ -248,15 +248,15 @@ const BreedingCardBody = ({
               <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
           {view === 'ABORT' &&
-            abortAnimals.map((animal, i) => (
+            abortAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
           {view === 'BIRTH' &&
-            birthAnimals.map((animal, i) => (
+            birthAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
           {view === 'EMPTY' &&
-            emptyAnimals.map((animal, i) => (
+            emptyAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall key={i} animal={animal} />
             ))}
         </div>

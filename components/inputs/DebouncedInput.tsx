@@ -6,7 +6,7 @@ function DebouncedInput({
   debounce = 500,
   ...props
 }: {
-  value: string | number
+  value?: string | number
   onChange: (value: string | number) => void
   debounce?: number
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
@@ -18,7 +18,7 @@ function DebouncedInput({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      onChange(value)
+      value && onChange(value)
     }, debounce)
 
     return () => clearTimeout(timeout)

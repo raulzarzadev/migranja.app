@@ -1,6 +1,3 @@
-import { BreedingCard } from '@comps/BreedingsList/BreedingsByBatches'
-import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
-import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import GeneticTree from 'components/GeneticTree'
 import { ReactNode, useState } from 'react'
@@ -156,7 +153,6 @@ const GenericBreedingInfo = ({
   const eventData = event?.eventData
   const father = eventData?.parents?.father
   const mother = eventData?.parents?.mother
-
   return (
     <div>
       <div className="text-center ">

@@ -6,7 +6,7 @@ import {
   addAnimalToBreedingBatchEvent,
   deleteEvent
 } from '@firebase/Events/main'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { BreedingEventCardDetails } from 'types/base/FarmEvent.model'
@@ -85,7 +85,7 @@ const ModalBreedingOptions = ({
                   )}
                   gender="female"
                   onEarringClick={(earring) => handleAddEarring(earring)}
-                  relativeTo={breeding.eventData.breedingMale?.earring}
+                  relativeTo={breeding?.eventData?.breedingMale?.earring}
                 />
               </div>
             </div>

@@ -22,6 +22,32 @@ interface AnimalFormattedWithBreedingDates extends Partial<AnimalType> {
   // breedingDates: BreedingDatesType
 }
 
+export const formatBreedingBatchesAnimalsWithBreedingData = (
+  breedings: FarmBreedingEvent[]
+) =>
+  breedings.map((batch) => {
+    if (!batch) return null
+    const breedingDates = calculatePossibleBirthStartAndFinish({
+      finishAt: batch?.eventData?.finishAt as number,
+      startAt: batch?.eventData?.startAt as number
+    })
+    const animals = batch?.eventData?.breedingBatch?.map((animal) => {
+      return {
+        ...animal,
+        eventData: { ...batch?.eventData, id: batch.id, breedingDates }
+      }
+    })
+
+    return {
+      ...batch,
+      eventData: {
+        ...batch?.eventData,
+        breedingBatch: animals,
+        breedingDates
+      }
+    }
+  })
+
 const BreedingsList = () => {
   const currentFarm = useSelector(selectFarmState)
   const [farmEvents, setFarmEvents] = useState<
@@ -49,31 +75,6 @@ const BreedingsList = () => {
   const filterField = (field: string = '', search: string = '') => {
     return field?.toLowerCase()?.includes(search?.toLowerCase())
   }
-
-  const formatBreedingBatchesAnimalsWithBreedingData = (
-    breedings: FarmBreedingEvent[]
-  ) =>
-    breedings.map((batch) => {
-      const breedingDates = calculatePossibleBirthStartAndFinish({
-        finishAt: batch?.eventData?.finishAt as number,
-        startAt: batch?.eventData?.startAt as number
-      })
-      const animals = batch?.eventData?.breedingBatch?.map((animal) => {
-        return {
-          ...animal,
-          eventData: { ...batch?.eventData, id: batch.id, breedingDates }
-        }
-      })
-
-      return {
-        ...batch,
-        eventData: {
-          ...batch.eventData,
-          breedingBatch: animals,
-          breedingDates
-        }
-      }
-    })
 
   useEffect(() => {
     const formattedBreeding = formatBreedingBatchesAnimalsWithBreedingData(

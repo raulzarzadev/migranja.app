@@ -201,6 +201,7 @@ const StatCardWithModalEventsList = ({
           title={`Lista de eventos: ${title} `}
         >
           <div>
+            {console.log('rendering...')}
             <div className="grid grid-cols-5 ">
               <div>Fecha</div>
               <div>Madre</div>

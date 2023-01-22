@@ -35,36 +35,38 @@ export const EventModal = ({ event }: { event: FarmStateAnimalEvent }) => {
           <Icon name="settings" />
         </button>
       </div>
-      <Modal
-        open={openEventDetails}
-        handleOpen={handleOpenEventDetails}
-        title="Detalles del Evento"
-      >
-        <div className="flex w-full justify-center flex-col items-center">
-          <div>Tipo:{event?.type}</div>
-          <div>
-            {event.type === 'BIRTH' && eventData && (
-              <div>
-                <div>Nacimiento</div>
-                Fecha:
-                {eventData.date && myFormatDate(eventData.date, 'dd MMM yy')}
-                <div>Crías:{eventData?.calfs?.length}</div>
-                {eventData?.calfs?.map((calf) => (
-                  <div key={calf?.earring}>{calf?.earring}</div>
-                ))}
-              </div>
-            )}
-          </div>
+      {openEventDetails && (
+        <Modal
+          open={openEventDetails}
+          handleOpen={handleOpenEventDetails}
+          title="Detalles del Evento"
+        >
+          <div className="flex w-full justify-center flex-col items-center">
+            <div>Tipo:{event?.type}</div>
+            <div>
+              {event.type === 'BIRTH' && eventData && (
+                <div>
+                  <div>Nacimiento</div>
+                  Fecha:
+                  {eventData.date && myFormatDate(eventData.date, 'dd MMM yy')}
+                  <div>Crías:{eventData?.calfs?.length}</div>
+                  {eventData?.calfs?.map((calf) => (
+                    <div key={calf?.earring}>{calf?.earring}</div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <ModalDelete
-              title="Eliminar evento"
-              buttonLabel={'Eliminar'}
-              handleDelete={() => handleDeleteEvent()}
-            />
+            <div>
+              <ModalDelete
+                title="Eliminar evento"
+                buttonLabel={'Eliminar'}
+                handleDelete={() => handleDeleteEvent()}
+              />
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
     </div>
   )
 }

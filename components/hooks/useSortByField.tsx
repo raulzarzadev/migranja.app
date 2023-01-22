@@ -1,25 +1,36 @@
 import { useEffect, useState } from 'react'
 import { getProperty } from 'dot-prop'
 
-const useSortByField = (array: any[]) => {
+export interface Options {
+  defaultSortField?: string
+  reverse?: boolean
+}
+export const sortByField = (
+  arr: any[],
+  fieldName: string,
+  reverse: boolean
+) => {
+  const auxArr = [...arr]
+
+  return auxArr.sort((a, b) => {
+    if ((getProperty(a, fieldName) || '') < (getProperty(b, fieldName) || ''))
+      return reverse ? -1 : 1
+    if ((getProperty(a, fieldName) || '') > (getProperty(b, fieldName) || ''))
+      return reverse ? 1 : -1
+    return 0
+  })
+}
+
+const useSortByField = (array: any[], ops?: Options) => {
+  const defaultSortField = ops?.defaultSortField || ''
+  const reverse = ops?.reverse || false
+
   const [sortReverse, setSortReverse] = useState<boolean>(false)
   const [arraySorted, setArraySorted] = useState<any[]>([])
-
-  useEffect(() => {
-    setArraySorted(array)
-  }, [array])
-
-  const sortByField = (arr: any[], fieldName: string, reverse: boolean) => {
-    const auxArr = [...arr]
-
-    return auxArr.sort((a, b) => {
-      if ((getProperty(a, fieldName) || '') < (getProperty(b, fieldName) || ''))
-        return reverse ? -1 : 1
-      if ((getProperty(a, fieldName) || '') > (getProperty(b, fieldName) || ''))
-        return reverse ? 1 : -1
-      return 0
-    })
-  }
+  console.log(arraySorted.length)
+  // useEffect(() => {
+  //   setArraySorted(array)
+  // }, [array])
 
   const handleSortBy = (fieldName: string) => {
     setArraySorted(sortByField(array, fieldName, sortReverse))
@@ -27,7 +38,9 @@ const useSortByField = (array: any[]) => {
   }
 
   return {
-    arraySorted: arraySorted?.length ? arraySorted : array,
+    arraySorted: arraySorted?.length
+      ? arraySorted
+      : sortByField(array, defaultSortField, reverse),
     handleSortBy,
     reverse: sortReverse
   }
