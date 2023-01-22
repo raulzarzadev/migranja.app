@@ -1,6 +1,7 @@
 import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
 import SellForm from '@comps/forms/SellForm'
+import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
 import PrintComponent from '@comps/PrintComponent'
 import WeaningEvents from '@comps/WeaningEvents'
 import { FarmType } from '@firebase/Farm/farm.model'
@@ -245,7 +246,7 @@ const FarmMenu = (props: any) => {
           {column2 === 'sell' && !column3 && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               {/* <PrintComponent /> */}
-              <SellForm />
+              <PrintableSellForm />
               {/* */}
             </div>
           )}
