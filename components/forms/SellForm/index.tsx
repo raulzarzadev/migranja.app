@@ -102,7 +102,7 @@ const SellForm = ({ ref }: { ref?: any }) => {
 
   return (
     <div ref={ref}>
-      <h2 className="text-xl font-bold">Nueva venta</h2>
+      <h2 className="text-xl font-bold text-center">Nueva venta</h2>
       <FormProvider {...methods}>
         <form
           autoComplete="off"

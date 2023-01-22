@@ -1,3 +1,4 @@
+import Icon from '@comps/Icon'
 import React, { ForwardedRef, Ref, useRef } from 'react'
 import ReactToPrint from 'react-to-print'
 import SellForm from '.'
@@ -6,14 +7,22 @@ const PrintableSellForm = () => {
   const componentRef = useRef()
 
   return (
-    <div>
+    <div className="">
       <ReactToPrint
-        trigger={() => <button>Imprimir!</button>}
+        documentTitle="Nueva venta"
+        trigger={() => (
+          <div className="flex w-full justify-end">
+            <button className="btn btn-outline btn-sm">
+              <span className="">
+                <Icon name="print" />
+              </span>
+            </button>
+          </div>
+        )}
         content={() => componentRef.current || null}
+        bodyClass="pt-10"
       />
-      <div>
-        <ForwardRefSellForm ref={componentRef} />
-      </div>
+      <ForwardRefSellForm ref={componentRef} />
     </div>
   )
 }
