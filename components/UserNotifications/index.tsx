@@ -67,7 +67,7 @@ const UserNotifications = () => {
     if (newNotifications.length) {
       createNotifications(newNotifications)
     }
-  }, [newNotifications])
+  }, [createNotifications, newNotifications])
 
   return (
     <NotificationsList
