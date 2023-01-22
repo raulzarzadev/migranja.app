@@ -38,7 +38,7 @@ const FarmNavigation = ({
             </span>
             <div className="text-xl font-bold">{farm?.name}</div>
             <div className="flex justify-between  items-center">
-              {showGo && (
+              {showGo && farm?.id && (
                 <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">
                   ir
                 </Link>

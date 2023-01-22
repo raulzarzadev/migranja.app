@@ -1,5 +1,5 @@
 import Icon from '@comps/Icon'
-import React, { ForwardedRef, Ref, useRef } from 'react'
+import React, { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
 import SellForm from '.'
 

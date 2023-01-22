@@ -47,7 +47,7 @@ const FarmForm = ({
               </label>
             </div>
             <button className="btn btn-circle btn-sm btn-success">
-              <Icon name="done" />
+              <Icon name="save" size="sm" />
             </button>
           </div>
         </form>

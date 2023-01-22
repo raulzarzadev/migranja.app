@@ -58,6 +58,7 @@ import {
 import FarmIcon from './FarmIcon'
 import SheepFamilyIcon from './SheepFamilyIcon'
 import SheepIcon from './SheepIcon'
+import { IoSaveOutline } from 'react-icons/io5'
 
 const ICON_LIST = {
   cart: SlBasketLoaded,
@@ -114,7 +115,8 @@ const ICON_LIST = {
   dead: FaSkullCrossbones,
   noFood: MdOutlineNoFood,
   dollar: BsCurrencyDollar,
-  print: BsPrinter
+  print: BsPrinter,
+  save: IoSaveOutline
   // emergency: MdOutlineEmergency,
   // email: TiMail,
   // whatsapp: SiWhatsapp,
