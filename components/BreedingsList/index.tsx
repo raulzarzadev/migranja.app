@@ -82,24 +82,23 @@ const BreedingsList = () => {
     )
 
     const asAnimals = formattedBreeding.map((event) =>
-      event.eventData.breedingBatch.map((animal) => animal)
+      event?.eventData.breedingBatch.map((animal) => animal)
     )
     setBreedingsByAnimals(
-      asAnimals.flat().filter(({ status }) => status === 'PENDING')
+      asAnimals.flat().filter((animal) => animal?.status === 'PENDING')
     )
-
-    setBreedingsByBatch(
-      formattedBreeding.filter((event) =>
-        event.eventData.breedingBatch.find(
-          (animal) => animal.status === 'PENDING'
-        )
+    const pendingBirthsInBreeding = formattedBreeding?.filter((event) =>
+      event?.eventData?.breedingBatch?.find(
+        (animal) => animal?.status === 'PENDING'
       )
     )
+    // @ts-ignore
+    setBreedingsByBatch(pendingBirthsInBreeding)
 
     setFinishedBreedings(
       formattedBreeding.filter(
         (event) =>
-          !event.eventData.breedingBatch.find(
+          !event?.eventData.breedingBatch.find(
             (animal) => animal.status === 'PENDING'
           )
       )
