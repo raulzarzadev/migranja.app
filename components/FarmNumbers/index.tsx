@@ -260,7 +260,7 @@ const StatCardWithModalAnimalsList = ({
   return (
     <>
       <div
-        className="w-[200px]"
+        className=""
         onClick={(e) => {
           e.preventDefault()
           handleOpenList()
@@ -380,11 +380,13 @@ const StatCard = ({
   description = 'description'
 }) => {
   return (
-    <div className="stats shadow bg-base-200 w-full ">
+    <div className="stats shadow bg-base-200 cursor-pointer hover:shadow-none active:shadow-inner  w-[200px]">
       <div className="stat">
         <div className="stat-title">{title}</div>
         <div className="stat-value">{quantity}</div>
-        <div className="stat-desc ">{description}</div>
+        <div className="stat-desc truncate">
+          <span className="">{description}</span>
+        </div>
       </div>
     </div>
   )
