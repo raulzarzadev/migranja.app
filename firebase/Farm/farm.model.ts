@@ -9,6 +9,7 @@ export interface FarmType extends TypeBase {
   team: Record<MemberTeam['id'], MemberTeam>
   images: ImageType[]
   email?: string
+  deleted?: boolean
   //animals?: AnimalType[]
 }
 

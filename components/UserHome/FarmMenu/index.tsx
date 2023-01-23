@@ -58,6 +58,12 @@ const FarmMenu = (props: any) => {
       localStorage.setItem('menuOptions', JSON.stringify(menuOptions))
   }, [menuOptions])
 
+  if (!farm)
+    return (
+      <div className="text-center ">
+        No tienes acceso a esta granja o ha sido eliminada
+      </div>
+    )
   if (!menuOptions) return <></>
   const { column1, column2, column3 } = menuOptions
   // console.log({ column1, column2, column3 })

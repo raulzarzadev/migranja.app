@@ -7,6 +7,7 @@ import NotificationsList from './NotificationsList'
 const UserNotifications = () => {
   const { userNotifications } = useNotifications()
   const [notifications, setNotifications] = useState<NotificationType[]>([])
+
   const [showAskForNotification, setShowAskForNotification] =
     useState<boolean>(false)
   const [notificationPermissions, setNotificationPermissions] = useState<
@@ -61,13 +62,14 @@ const UserNotifications = () => {
   }, [])
 
   useEffect(() => {
-    /* ******************************************** 
-           Create notifications                
- *******************************************rz */
+    /* ********************************************
+             Create notifications
+   *******************************************rz */
     if (newNotifications.length) {
       createNotifications(newNotifications)
     }
-  }, [createNotifications, newNotifications])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <NotificationsList

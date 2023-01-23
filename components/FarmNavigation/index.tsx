@@ -14,7 +14,7 @@ const FarmNavigation = ({
   farm?: {
     id?: FarmType['id']
     name?: FarmType['name']
-  }
+  } | null
   showGo?: boolean
   setEditing?: (bool: boolean) => void
   showInvitationsStatus?: boolean
@@ -22,10 +22,9 @@ const FarmNavigation = ({
   const user = useSelector(selectAuthState)
   return (
     <div>
-      <div className=" w-full bg-base-300 p-2 rounded-md shadow-md  mb-2  grid grid-flow-col grid-cols-4 place-items-center ">
-        {farm ? (
+      <div className=" w-full bg-base-300 p-2 rounded-md shadow-md min-h-12 mb-2  grid grid-flow-col grid-cols-4 place-items-center ">
+        {farm?.id ? (
           <>
-            {/* <div>{farm?.images?.[0]?.url}</div> */}
             <span>
               {setEditing && (
                 <button
@@ -46,7 +45,7 @@ const FarmNavigation = ({
             </div>
           </>
         ) : (
-          <div className="flex w-full items-center justify-center">
+          <div className="col-span-full ">
             <div>No haz configurado una granja aún </div>
             {setEditing && (
               <button
