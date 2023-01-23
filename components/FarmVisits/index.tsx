@@ -1,6 +1,6 @@
-import { FarmState } from 'store/slices/farmSlice'
+import { FarmType } from 'types/base/FarmType.model'
 
-const FarmVisits = ({ farm }: { farm?: FarmState }) => {
+const FarmVisits = ({ farm }: { farm?: FarmType }) => {
   return (
     <div>
       <div className="text-center">
