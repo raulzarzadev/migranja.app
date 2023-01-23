@@ -27,10 +27,6 @@ const useSortByField = (array: any[], ops?: Options) => {
 
   const [sortReverse, setSortReverse] = useState<boolean>(false)
   const [arraySorted, setArraySorted] = useState<any[]>([])
-  console.log(arraySorted.length)
-  // useEffect(() => {
-  //   setArraySorted(array)
-  // }, [array])
 
   const handleSortBy = (fieldName: string) => {
     setArraySorted(sortByField(array, fieldName, sortReverse))
