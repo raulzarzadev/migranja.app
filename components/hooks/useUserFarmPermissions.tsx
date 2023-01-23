@@ -18,13 +18,14 @@ const useUserFarmPermissions = ({ farm }: { farm?: FarmType | null }) => {
       farm?.haveATeam && teamMemberInvitationStatus === 'ACCEPTED'
     const isAdmin = farm?.userId == user?.id
     const haveActiveInvitation = teamMemberInvitationStatus === 'SENT'
-
+    const haveCanceledInvitation = teamMemberInvitationStatus === 'REJECTED'
     setUserPermissions((state) => {
       return {
         ...state,
         isActiveTeamMember: isActiveTeamMember,
         isAdmin,
-        haveActiveInvitation
+        haveActiveInvitation,
+        haveCanceledInvitation
       }
     })
   }, [user, farm])

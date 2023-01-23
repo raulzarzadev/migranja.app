@@ -1,3 +1,4 @@
+import FarmInvitations from '@comps/FarmInvitations'
 import FarmVisits from '@comps/FarmVisits'
 import useFarm from '@comps/hooks/useFarm'
 import useUserFarmPermissions from '@comps/hooks/useUserFarmPermissions'
@@ -50,13 +51,24 @@ const withAuth = (Component: any) => {
         if (userPermissions.haveActiveInvitation)
           return (
             <div>
+              <FarmInvitations />
               <div className="text-center my-16 text-xl">
                 <div>Esta granja no es publica pero tienes una invitacion</div>
               </div>
-              <FarmVisits farm={farm} />
+              {/* <FarmVisits farm={farm} /> */}
             </div>
           )
 
+        if (userPermissions.haveCanceledInvitation)
+          return (
+            <div>
+              {/* <FarmInvitations /> */}
+              <div className="text-center my-16 text-xl">
+                <div>Tu invitación a esta granja fue revocada</div>
+              </div>
+              {/* <FarmVisits farm={farm} /> */}
+            </div>
+          )
         // if user is visiting, and farm is NOT public show warning and the home
         if (farm?.isPublic) return <FarmVisits farm={farm} />
 
