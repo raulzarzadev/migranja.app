@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
 import SellForm from '.'
 
-const PrintableSellForm = () => {
+const PrintableSellForm = ({ sale }: { sale?: any }) => {
   const componentRef = useRef()
 
   return (
@@ -22,18 +22,20 @@ const PrintableSellForm = () => {
         content={() => componentRef.current || null}
         bodyClass="pt-10"
       />
-      <ForwardRefSellForm ref={componentRef} />
+      <ForwardRefSellForm ref={componentRef} sale={sale} />
     </div>
   )
 }
 
-const ForwardRefSellForm = React.forwardRef((props, ref: any) => {
-  return (
-    <div ref={ref} className="bg-base-300 rounded-md p-2 max-w-md  mx-auto ">
-      <SellForm />
-    </div>
-  )
-})
+const ForwardRefSellForm = React.forwardRef(
+  ({ sale }: { sale: any }, ref: any) => {
+    return (
+      <div ref={ref} className="bg-base-300 rounded-md p-2 max-w-md  mx-auto ">
+        <SellForm sale={sale} />
+      </div>
+    )
+  }
+)
 ForwardRefSellForm.displayName = 'ForwardRefSellForm'
 
 export default PrintableSellForm

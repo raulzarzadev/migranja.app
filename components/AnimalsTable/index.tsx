@@ -187,6 +187,16 @@ const AnimalsTable = ({
   const [rowSelection, setRowSelection] = useState({})
 
   useEffect(() => {
+    selectedRows?.forEach(({ earring }: any) => {
+      const i = animalsData.findIndex((animal) => animal.earring === earring)
+      setRowSelection((state) => {
+        return { ...state, [i]: true }
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animalsData])
+
+  useEffect(() => {
     let earrings: string[] = []
     Object.entries(rowSelection).forEach(([i, bool]: any) => {
       const newEarring = animalsData[i]?.earring

@@ -9,25 +9,27 @@ import { useEffect, useState } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
-import { AnimalType } from 'types/base/AnimalType.model'
 
-const SellForm = ({ ref }: { ref?: any }) => {
+const SellForm = ({ sale }: { sale?: any }) => {
+  const defaultValues = sale?.eventData || {
+    date: new Date(),
+    price: 0,
+    type: 'onFoot',
+    earrings: [] as any[],
+    totalWeight: 0,
+    averageWeight: 0,
+    animalsQuantity: 0,
+    total: 0
+  }
+
   const methods = useForm({
-    defaultValues: {
-      date: new Date(),
-      price: 0,
-      type: 'onFoot',
-      earrings: [] as any[],
-      totalWeight: 0,
-      averageWeight: 0,
-      animalsQuantity: 0,
-      total: 0
-    }
+    defaultValues
   })
 
   const currentFarm = useSelector(selectFarmState)
   const animalsFarm = useSelector(selectFarmAnimals)
   const [progress, setProgress] = useState(0)
+
   const onSubmit = async (data: any) => {
     setProgress(10)
     console.log(data)
@@ -70,43 +72,57 @@ const SellForm = ({ ref }: { ref?: any }) => {
   const totalWeight = formValues.totalWeight || 0
   const earringsQuantity = formValues.animalsQuantity || 0
   const averageWeight = earringsQuantity ? totalWeight / earringsQuantity : 0
-  const totalMoney = formValues?.totalWeight * formValues.price || 0
+  const totalMoney = totalWeight * formValues.price || 0
 
   const totalWeightFromEarringForm = formValues?.earrings?.reduce(
-    (prev, curr) => {
+    (prev: number, curr: EarringWeight) => {
       return (prev += curr.weight || 0)
     },
     0
   )
 
-  const [animalsSelected, setAnimalsSelected] = useState<any[] | null>([])
+  interface EarringWeight {
+    earring: string
+    weight: number
+  }
+
+  const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>(
+    formValues?.earrings || []
+  )
+  console.log({ animalsSelected })
 
   useEffect(() => {
-    methods.setValue('total', totalMoney)
-  }, [methods, totalMoney])
+    if (!sale) {
+      methods.setValue('total', totalMoney)
+    }
+  }, [methods, totalMoney, sale])
 
   useEffect(() => {
-    methods.setValue('animalsQuantity', animalsSelected?.length || 0)
-    methods.setValue(
-      'earrings',
-      animalsSelected?.map((earring: string) => {
-        return { earring }
-      }) || []
-    )
-  }, [animalsSelected, methods])
+    if (!sale) {
+      methods.setValue('animalsQuantity', animalsSelected?.length || 0)
+      methods.setValue(
+        'earrings',
+        animalsSelected?.map(({ earring }) => {
+          return { earring }
+        }) || []
+      )
+    }
+  }, [animalsSelected, methods, sale])
 
   useEffect(() => {
-    methods.setValue('totalWeight', totalWeightFromEarringForm)
-  }, [methods, totalWeightFromEarringForm])
+    if (!sale) {
+      methods.setValue('totalWeight', totalWeightFromEarringForm)
+    }
+  }, [methods, totalWeightFromEarringForm, sale])
 
   return (
-    <div ref={ref}>
+    <div>
       <h2 className="text-xl font-bold text-center">Nueva venta</h2>
       <FormProvider {...methods}>
         <form
           autoComplete="off"
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="w-[290px] sm:w-full"
+          className=" sm:w-full"
         >
           <div className="grid gap-2 max-w-sm mx-auto">
             <InputContainer
@@ -124,7 +140,13 @@ const SellForm = ({ ref }: { ref?: any }) => {
             <div className="sm:w-full text-center ">
               <SelectAnimals
                 animalsSelected={animalsSelected || []}
-                handleAddAnimals={(animals) => setAnimalsSelected(animals)}
+                handleAddAnimals={(animals) =>
+                  setAnimalsSelected(
+                    animals?.map((animal) => {
+                      return { earring: animal, weight: 0 }
+                    }) || []
+                  )
+                }
               />
               <div>
                 <div className="grid grid-cols-[80px_100px_auto] ">
@@ -132,7 +154,7 @@ const SellForm = ({ ref }: { ref?: any }) => {
                   <div>Peso</div>
                   <div>Obs</div>
                 </div>
-                {animalsSelected?.map((earring, i) => (
+                {animalsSelected?.map(({ earring }, i) => (
                   <div
                     key={`${earring}-${i}`}
                     className="grid grid-cols-[80px_100px_auto] "

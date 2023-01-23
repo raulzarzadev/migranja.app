@@ -247,7 +247,6 @@ const FarmMenu = (props: any) => {
           {column2 === 'sales' && !column3 && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               {/* <PrintComponent /> */}
-              {/* <PrintableSellForm /> */}
               <SalesList />
               {/* */}
             </div>
