@@ -34,6 +34,7 @@ const withAuth = (Component: any) => {
       )
 
     // if user is logged and
+
     if (user) {
       // user logged and  is in home show FarmsNavigation
       if (pathname === '/') return <Component {...props} />
@@ -41,6 +42,7 @@ const withAuth = (Component: any) => {
       // if user is in pathname /['farmId]
       if (pathname === '/[farmId]') {
         // user have permission as team member or is admin
+
         if (userPermissions.isActiveTeamMember || userPermissions.isAdmin)
           return <Component {...props} />
 

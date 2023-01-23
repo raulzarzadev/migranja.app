@@ -15,7 +15,7 @@ const NotificationsList = ({
   const newNotifications = notifications.filter(({ viewed }) => !viewed)
   return (
     <div className="dropdown dropdown-end" role="notification-bell">
-      <button tabIndex={0} className="btn btn-ghost btn-circle">
+      <label tabIndex={0} className="btn btn-ghost btn-circle">
         <div className="indicator">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,7 @@ const NotificationsList = ({
             </span>
           )}
         </div>
-      </button>
+      </label>
       <ul
         tabIndex={0}
         className=" dropdown-content mt-3 p-1 shadow bg-base-100 rounded-box w-52"

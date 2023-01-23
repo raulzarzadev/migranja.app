@@ -10,7 +10,6 @@ if (devVitestMode === 'development') {
 } else {
   firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG || ''
 }
-//const firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG ?? ''
 const apps = getApps()
 
 export const app = initializeApp(JSON.parse(firebaseConfig))
