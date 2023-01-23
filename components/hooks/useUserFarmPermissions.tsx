@@ -7,6 +7,7 @@ export interface UserPermissions {
   isAdmin?: boolean
   isActiveTeamMember?: boolean
   haveActiveInvitation?: boolean
+  haveCanceledInvitation?: boolean
 }
 const useUserFarmPermissions = ({ farm }: { farm?: FarmType | null }) => {
   const [userPermissions, setUserPermissions] = useState<UserPermissions>({})
