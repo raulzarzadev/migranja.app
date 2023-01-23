@@ -6,7 +6,7 @@ let firebaseConfig = ''
 
 if (devVitestMode === 'development') {
   firebaseConfig = process.env.VITE_NEXT_PUBLIC_FIREBASE_CONFIG || ''
-  console.log('test mode', { firebaseConfig })
+  console.log('test mode', { fbConfig: !!firebaseConfig })
 } else {
   firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG || ''
 }

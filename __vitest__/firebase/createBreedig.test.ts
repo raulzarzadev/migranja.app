@@ -20,31 +20,31 @@ const basicEvent: CreateEventDTO = {
   // @ts-ignore
   userId: 'test'
 }
-describe.skip('create a breeding event with all dependencies', () => {
+describe('create a breeding event with all dependencies', () => {
   it('should create a normal event ', async () => {
     try {
       const res = await createEvent(basicEvent)
       expect(res).toBeDefined()
-      return console.log(res)
+      // return console.log(res)
     } catch (err) {
       expect(err).toBeUndefined()
-      return console.error(err)
+      // return console.error(err)
     }
   })
   it('should find and delete a normal event ', async () => {
     try {
       const bring = await getFarmEvents('test')
-      console.log({ bring })
+      //console.log({ bring })
       expect(bring).toBeDefined()
       const promises = bring.map((event) => deleteEvent(event.id))
       expect(promises).toBeDefined()
       await Promise.all(promises).then((res) => {
-        console.log(res)
+        // console.log(res)
         expect(res).toBeDefined()
       })
     } catch (err) {
       expect(err).toBeUndefined()
-      return console.error(err)
+      //return console.error(err)
     }
   })
 })
