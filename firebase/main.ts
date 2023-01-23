@@ -1,11 +1,12 @@
 import { initializeApp, getApps } from 'firebase/app'
 import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore'
 
+const devVitestMode = process.env.VITE_USER_NODE_ENV
 let firebaseConfig = ''
-if (process.env.VITE_ENV === 'test') {
+
+if (devVitestMode === 'development') {
   firebaseConfig = process.env.VITE_NEXT_PUBLIC_FIREBASE_CONFIG || ''
-} else if (process.env.NEXT_PUBLIC_ENV === 'env') {
-  firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG || ''
+  console.log('test mode', { firebaseConfig })
 } else {
   firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG || ''
 }

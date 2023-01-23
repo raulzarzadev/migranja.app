@@ -22,7 +22,7 @@ I using JSON.stringify to convert the firebase object into a string
 
 If you what use testing you should set test environment variables
 
-// .env.test
+// .env
 
 ```
 
