@@ -19,7 +19,7 @@ const FarmTeamTable = ({ farm }: { farm: FarmType | null }) => {
     }
   }
   return (
-    <div>
+    <div className="w-full overflow-auto">
       <table className="table table-compact mx-auto mt-2 w-full overflow-auto">
         <thead>
           <tr>
@@ -34,7 +34,7 @@ const FarmTeamTable = ({ farm }: { farm: FarmType | null }) => {
             Object?.entries(farm?.team).map(
               ([key, { name, email, id, invitation }]: any, index) => (
                 <tr key={id}>
-                  <td>{name}</td>
+                  <th>{name}</th>
                   <td>{email}</td>
                   <td>
                     <div className="flex">

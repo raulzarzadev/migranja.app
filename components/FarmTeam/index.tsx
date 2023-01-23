@@ -22,7 +22,7 @@ const FarmTeam = () => {
 
   return (
     <div>
-      <h2 className="text-center font-bold">Miembros del equipo</h2>
+      <h2 className="text-center font-bold ">Miembros del equipo</h2>
       <FarmTeamTable farm={farm || null} />
       <SearchUserForm setNewUser={handleSetMember} />
 

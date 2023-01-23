@@ -1,20 +1,13 @@
 import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
-import SellForm from '@comps/forms/SellForm'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
-import PrintComponent from '@comps/PrintComponent'
 import WeaningEvents from '@comps/WeaningEvents'
-import { FarmType } from '@firebase/Farm/farm.model'
 import Batch from 'components/Batch'
-import BatchTable from 'components/BatchTable'
-import BreedingEvent from 'components/BreedingEvent'
 import BreedingsList from 'components/BreedingsList'
 import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
-import AnimalForm from 'components/forms/AnimalForm'
 import AnimalsForm from 'components/forms/AnimalsForm'
 import BreedingForm from 'components/forms/BreedingForm'
-import PermissionsWrapper from 'components/HOCs/withPermissions'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
 import { ReactNode, useEffect, useState } from 'react'
@@ -268,7 +261,7 @@ const FarmMenu = (props: any) => {
           {isSheepSelected && menuOptions.column3 === 'addBatch' && <Batch />}
           {menuOptions?.column1 === 'team' && (
             <>
-              <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 max-w-sm">
+              <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 w-full ">
                 <FarmTeam />
               </div>
             </>
