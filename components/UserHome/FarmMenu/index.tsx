@@ -1,6 +1,7 @@
 import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
+import SalesList from '@comps/Sales/SalesList'
 import WeaningEvents from '@comps/WeaningEvents'
 import Batch from 'components/Batch'
 import BreedingsList from 'components/BreedingsList'
@@ -30,6 +31,7 @@ type Option =
   | 'weaningEvents'
   | 'numbers'
   | 'sell'
+  | 'sales'
 
 const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
@@ -157,10 +159,10 @@ const FarmMenu = (props: any) => {
                     selected={menuOptions.column2 === 'weaningEvents'}
                   />
                   <SquareOption
-                    title="Venta"
+                    title="Ventas"
                     iconName="dollar"
-                    onClick={() => handleChangeOption('column2', 'sell')}
-                    selected={menuOptions.column2 === 'sell'}
+                    onClick={() => handleChangeOption('column2', 'sales')}
+                    selected={menuOptions.column2 === 'sales'}
                   />
                 </>
               )}
@@ -170,22 +172,23 @@ const FarmMenu = (props: any) => {
             <div className="flex flex-col">
               {/* ************************************* *********** BREEDINGS MENU */}
 
-              {column1 === 'events' && column2 === 'breedingEvent' && (
-                <>
-                  {/* <SquareOption
+              {column1 === 'events' &&
+                ['breedingEvent', 'sales'].includes(column2 || '') && (
+                  <>
+                    {/* <SquareOption
                     title="Montas"
                     iconName="list"
                     onClick={() => handleChangeOption('column3', 'list')}
                     selected={column3 === 'list'}
                   /> */}
-                  <SquareOption
-                    title="Nueva"
-                    iconName="plus"
-                    onClick={() => handleChangeOption('column3', 'add')}
-                    selected={column3 === 'add'}
-                  />
-                </>
-              )}
+                    <SquareOption
+                      title="Nueva"
+                      iconName="plus"
+                      onClick={() => handleChangeOption('column3', 'add')}
+                      selected={column3 === 'add'}
+                    />
+                  </>
+                )}
             </div>
             <div className="flex flex-col">
               {/* ************************************* *********** SHEEP MENU */}
@@ -237,18 +240,24 @@ const FarmMenu = (props: any) => {
           {/* ********************************+ WEANING EVENTS *************************************** */}
           {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
           {/* TODO: ADD EVENT FORM ********************************+******+ +++************** ADD ANIMALS */}
-          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
           {/* ********************************+ SELL ANIMALS EVENTS *************************************** */}
           {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
           {isSheepSelected && !column3 && <OvinesTable />}
-          {/* ********************************+******+ +++************** ADD ANIMALS */}
-          {column2 === 'sell' && !column3 && (
+          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
+          {column2 === 'sales' && !column3 && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               {/* <PrintComponent /> */}
-              <PrintableSellForm />
+              {/* <PrintableSellForm /> */}
+              <SalesList />
               {/* */}
             </div>
           )}
+          {column2 === 'sales' && column3 === 'add' && (
+            <div className=" bg-base-300 shadow-md rounded-md p-2">
+              <PrintableSellForm />
+            </div>
+          )}
+          {/* ********************************+******+ +++************** ADD ANIMALS */}
           {isSheepSelected && menuOptions.column3 === 'addMany' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               <AnimalsForm

@@ -44,6 +44,11 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  type: ReactNode
+  total: number
+  animalsQuantity: number
+  totalWeight: number
+  price: number
   status: EventStatus
   earring: string
   animals: any

@@ -42,7 +42,6 @@ const SellForm = ({ ref }: { ref?: any }) => {
       setProgress(50)
       /** Update animals current status  */
       const animalsSold = data.earrings
-      debugger
       for (let i = 0; i < animalsSold.length; i++) {
         const formAnimal = animalsSold[i]
         const animalId =
@@ -146,6 +145,8 @@ const SellForm = ({ ref }: { ref?: any }) => {
                     </div>
                     <div>
                       <input
+                        type={'number'}
+                        step={0.01}
                         className="input input-bordered input-xs w-full"
                         {...methods.register(`earrings.${i}.weight`, {
                           valueAsNumber: true
