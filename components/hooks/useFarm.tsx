@@ -2,7 +2,7 @@ import { getFarm } from '@firebase/Farm/main'
 import { useEffect, useState } from 'react'
 
 const useFarm = ({ farmId }: { farmId?: string }) => {
-  const [farm, setFarm] = useState(null)
+  const [farm, setFarm] = useState<any>(undefined)
   useEffect(() => {
     if (farmId) {
       getFarm(farmId)

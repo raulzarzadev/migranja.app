@@ -6,6 +6,7 @@ import { selectFarmState } from 'store/slices/farmSlice'
 
 const FarmPage = () => {
   const currentFarm = useSelector(selectFarmState)
+
   return (
     <div>
       <FarmNavigation
@@ -17,5 +18,30 @@ const FarmPage = () => {
     </div>
   )
 }
+
+// export const WithPermissions = (Component: any) => {
+//   const Permissions = (props: any) => {
+//     const currentFarm = useSelector(selectFarmState)
+//     const {
+//       userPermissions: { isAdmin, isActiveTeamMember }
+//     } = useUserFarmPermissions({
+//       farm: currentFarm
+//     })
+//     if (!isAdmin && !isActiveTeamMember)
+//       return (
+//         <div className="text-center ">
+//           No tienes permisos suficientes <VisitHome />
+//         </div>
+//       )
+
+//     return <Component {...props} />
+//   }
+
+//   // Copy getInitial props so it will run as well
+//   if (Component.getInitialProps) {
+//     Permissions.getInitialProps = Component.getInitialProps
+//   }
+//   return Permissions
+// }
 
 export default withAuth(FarmPage)

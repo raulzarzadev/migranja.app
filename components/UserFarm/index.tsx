@@ -7,7 +7,7 @@ import { selectUserFarm } from 'store/slices/farmSlice'
 const UserFarm = () => {
   const [editing, setEditing] = useState(false)
   const userFarm = useSelector(selectUserFarm)
-  console.log({ userFarm })
+  // console.log({ userFarm })
   return (
     <div>
       {editing ? (

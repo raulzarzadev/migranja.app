@@ -10,6 +10,7 @@ export interface FarmType extends TypeBase {
   images: ImageType[]
   email?: string
   deleted?: boolean
+  isPublic?: boolean
   //animals?: AnimalType[]
 }
 
