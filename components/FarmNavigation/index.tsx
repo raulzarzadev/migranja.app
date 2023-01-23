@@ -45,8 +45,8 @@ const FarmNavigation = ({
             </div>
           </>
         ) : (
-          <div className="col-span-full ">
-            <div>No haz configurado una granja aún </div>
+          <div className="col-span-full flex justify-center flex-col items-center">
+            <div>No haz configurado una propia granja </div>
             {setEditing && (
               <button
                 className="btn btn-sm btn-secondary"
