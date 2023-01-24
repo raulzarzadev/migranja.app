@@ -9,6 +9,7 @@ import { AnimalCurrentStatusType } from './LABELS_TYPES/AnimalCurrentStatus'
 import { DateType, Merge, TypeBase } from './TypeBase.model'
 
 export interface AnimalType extends TypeBase {
+  isStallion?: boolean
   isDuplicated?: boolean
   name: string
   birthday: DateType

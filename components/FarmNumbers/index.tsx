@@ -92,6 +92,11 @@ const FarmNumbers = () => {
 
       <StatsRow title="Machos">
         <StatCardWithModalAnimalsList
+          title="Sementales"
+          animals={farmAnimals.filter((animal) => animal?.isStallion)}
+          description={`Sementales`}
+        />
+        <StatCardWithModalAnimalsList
           title="Lactantes"
           animals={farmNumbers.malesBetween(0, OVINE_DAYS.finishWeaning)}
           description={`Menores de ${OVINE_DAYS.finishWeaning} dias`}
@@ -105,9 +110,13 @@ const FarmNumbers = () => {
           )}
           description={`entre ${OVINE_DAYS.finishWeaning} y ${OVINE_DAYS.canBePregnant}`}
         />
+
         <StatCardWithModalAnimalsList
           title="Pasados "
-          animals={farmNumbers.malesBetween(OVINE_DAYS.canBePregnant, 9000)}
+          animals={farmNumbers
+            .malesBetween(OVINE_DAYS.canBePregnant, 9000)
+            // * Exclude sementales
+            .filter((animal) => !animal?.isStallion)}
           description={`Mas de ${OVINE_DAYS.canBePregnant} dias`}
         />
       </StatsRow>

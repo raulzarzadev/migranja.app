@@ -17,6 +17,7 @@ import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 import useDebugInformation from '@comps/hooks/useDebugInformation'
+import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 const schema = yup
   .object()
   .shape({
@@ -49,6 +50,7 @@ export const AnimalForm = ({
     breed: '',
     name: '',
     birthType: 1,
+    isStallion: false,
     batch: null,
     ...animal,
     weight: {
@@ -107,6 +109,11 @@ export const AnimalForm = ({
         })
     }
   }
+  const animalStatusOptions = Object.entries(animalCurrentStatusLabels).map(
+    ([key, value]) => {
+      return { label: value, value: key }
+    }
+  )
 
   const { handleDelete } = useAnimal()
   // useDebugInformation('AnimalForm', { animal })
@@ -171,7 +178,7 @@ export const AnimalForm = ({
                   </div>
                 ) : (
                   <>
-                    <Icon size="sm" name="done" />
+                    <Icon size="sm" name="save" />
                   </>
                 )}
               </button>
@@ -201,21 +208,12 @@ export const AnimalForm = ({
                   </div>
                 </div>
                 <div className="flex  justify-end flex-wrap text-end">
-                  <div className="w-[100px]">
-                    <InputContainer
-                      label="Raza"
-                      type="select"
-                      name="breed"
-                      selectOptions={sheep_breeds}
-                    />
-                  </div>
-                  <div className="w-[140px]">
-                    <InputContainer
-                      type="date"
-                      name="joinedAt"
-                      label="Incorporación"
-                    />
-                  </div>
+                  <InputContainer
+                    label="Status"
+                    type="select"
+                    name="currentStatus"
+                    selectOptions={animalStatusOptions}
+                  />
                 </div>
               </div>
             </header>
@@ -224,15 +222,14 @@ export const AnimalForm = ({
                 <div className="w-1/2">
                   Nacimiento
                   <div>
-                    <InputContainer type="date" name="birthday" label="Fecha" />
-
-                    <InputContainer
-                      label="Sexo"
-                      type="select"
-                      name="gender"
-                      selectOptions={[MaleOptions, FemaleOptions]}
-                    />
-
+                    <div className="w-[100px]">
+                      <InputContainer
+                        label="Raza"
+                        type="select"
+                        name="breed"
+                        selectOptions={sheep_breeds}
+                      />
+                    </div>
                     <InputContainer
                       label="Parto"
                       type="select"
@@ -244,6 +241,35 @@ export const AnimalForm = ({
                         { label: '4', value: 4 }
                       ]}
                     />
+                    <InputContainer
+                      type="date"
+                      name="birthday"
+                      label="Nacimiento"
+                    />
+                    <InputContainer
+                      type="date"
+                      name="joinedAt"
+                      label="Incorporación"
+                    />
+
+                    <InputContainer
+                      label="Sexo"
+                      type="select"
+                      name="gender"
+                      selectOptions={[MaleOptions, FemaleOptions]}
+                    />
+
+                    <div className="w-[140px] my-2 flex items-end justify-center">
+                      <label className="flex items-center">
+                        <span className="mr-1">Semental</span>
+                        <input
+                          className="checkbox checkbox-sm"
+                          type="checkbox"
+                          {...methods.register('isStallion')}
+                        />
+                      </label>
+                    </div>
+
                     {/* <span>{part}</span> */}
                   </div>
                 </div>

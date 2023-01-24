@@ -5,6 +5,7 @@ import { DateType, TypeBase } from './TypeBase.model'
 import { AnimalType as AnimalModelType } from 'types/base/AnimalType.model'
 import { AnimalCurrentStatusType } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 export interface AnimalType extends TypeBase {
+  isStallion?: boolean
   isDuplicated?: boolean
   name: string
   birthday: DateType
