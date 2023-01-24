@@ -32,7 +32,7 @@ export const AnimalForm = ({
   animal,
   setEditing
 }: {
-  animal: CreateAnimalDTO
+  animal?: CreateAnimalDTO
   setEditing?: (v: boolean) => void
 }) => {
   const currentFarm = useSelector(selectFarmState)
@@ -51,6 +51,7 @@ export const AnimalForm = ({
     name: '',
     birthType: 1,
     isStallion: false,
+    currentStatus: 'ACTIVE',
     batch: null,
     ...animal,
     weight: {
@@ -58,7 +59,7 @@ export const AnimalForm = ({
       atWeaning: null,
       at6Month: null,
       at12Month: null,
-      ...animal.weight
+      ...animal?.weight
     }
   }
   const methods = useForm({

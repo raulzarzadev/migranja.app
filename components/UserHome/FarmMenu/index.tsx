@@ -1,5 +1,6 @@
 import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
+import AnimalForm from '@comps/forms/AnimalForm'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
 import SalesList from '@comps/Sales/SalesList'
 import WeaningEvents from '@comps/WeaningEvents'
@@ -239,10 +240,7 @@ const FarmMenu = (props: any) => {
           {column2 === 'birthEvents' && !column3 && <BirthEvents />}
           {/* ********************************+ WEANING EVENTS *************************************** */}
           {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
-          {/* TODO: ADD EVENT FORM ********************************+******+ +++************** ADD ANIMALS */}
           {/* ********************************+ SELL ANIMALS EVENTS *************************************** */}
-          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
-          {isSheepSelected && !column3 && <OvinesTable />}
           {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
           {column2 === 'sales' && !column3 && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
@@ -256,6 +254,10 @@ const FarmMenu = (props: any) => {
               <PrintableSellForm />
             </div>
           )}
+          {/* ********************************+******+ +++************** ANIMALS LIST */}
+          {isSheepSelected && !column3 && <OvinesTable />}
+          {/* ********************************+******+ +++************** ADD ONE ANIMAL */}
+          {isSheepSelected && column3 === 'add' && <AnimalForm />}
           {/* ********************************+******+ +++************** ADD ANIMALS */}
           {isSheepSelected && menuOptions.column3 === 'addMany' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
@@ -266,7 +268,9 @@ const FarmMenu = (props: any) => {
               />
             </div>
           )}
+          {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}
           {isSheepSelected && menuOptions.column3 === 'addBatch' && <Batch />}
+          {/* ********************************+******+ +++************** ADMIN FARM TEAM*/}
           {menuOptions?.column1 === 'team' && (
             <>
               <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 w-full ">
