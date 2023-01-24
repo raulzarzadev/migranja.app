@@ -54,7 +54,7 @@ const InputContainer = ({
           {label && <span className="label-text">{label}</span>}
           {['text'].includes(type) && (
             <input
-              className="input input-bordered input-sm"
+              className="input input-bordered input-sm bg-transparent"
               type={type}
               onBlur={onBlur} // notify when input is touched
               onChange={onChange} // send value to hook form
@@ -65,7 +65,7 @@ const InputContainer = ({
           )}
           {type === 'number' && (
             <input
-              className="input input-bordered input-sm"
+              className="input input-bordered input-sm bg-transparent"
               type={type}
               onBlur={onBlur} // notify when input is touched
               onChange={(e) => onChange(parseFloat(e.target.value || ''))} // send value as number
@@ -78,7 +78,7 @@ const InputContainer = ({
             <div className="">
               <DatePicker
                 onBlur={onBlur}
-                className="input input-bordered input-sm w-full "
+                className="input input-bordered input-sm w-full bg-transparent"
                 selected={value ? new Date(value) : new Date()}
                 onChange={(date: Date) => onChange(date)}
                 //onBlur={onBlur}
@@ -95,7 +95,7 @@ const InputContainer = ({
           )}
           {type === 'select' && (
             <select
-              className="input input-bordered input-sm"
+              className="input input-bordered input-sm bg-transparent"
               onChange={onChange}
               onBlur={onBlur}
               name={name}

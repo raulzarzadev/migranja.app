@@ -30,7 +30,7 @@ const PrintableSellForm = ({ sale }: { sale?: any }) => {
 const ForwardRefSellForm = React.forwardRef(
   ({ sale }: { sale: any }, ref: any) => {
     return (
-      <div ref={ref} className="bg-base-300 rounded-md p-2 max-w-md  mx-auto ">
+      <div ref={ref} className=" ">
         <SellForm sale={sale} />
       </div>
     )

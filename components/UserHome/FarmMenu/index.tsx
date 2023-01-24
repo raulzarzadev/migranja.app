@@ -236,12 +236,12 @@ const FarmMenu = (props: any) => {
           {/* ********************************+ FARM EVENTS *************************************** */}
           {/* ********************************+ BREEDINGS *************************************** */}
           {column2 === 'breedingEvent' && !column3 && <BreedingsList />}
+          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
           {/* ********************************+ BIRTH EVENTS *************************************** */}
           {column2 === 'birthEvents' && !column3 && <BirthEvents />}
           {/* ********************************+ WEANING EVENTS *************************************** */}
           {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
           {/* ********************************+ SELL ANIMALS EVENTS *************************************** */}
-          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
           {column2 === 'sales' && !column3 && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               {/* <PrintComponent /> */}
@@ -250,7 +250,7 @@ const FarmMenu = (props: any) => {
             </div>
           )}
           {column2 === 'sales' && column3 === 'add' && (
-            <div className=" bg-base-300 shadow-md rounded-md p-2">
+            <div className=" ">
               <PrintableSellForm />
             </div>
           )}

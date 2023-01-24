@@ -154,35 +154,37 @@ const SellForm = ({ sale }: { sale?: any }) => {
                   <div>Peso</div>
                   <div>Obs</div>
                 </div>
-                {animalsSelected?.map(({ earring }, i) => (
-                  <div
-                    key={`${earring}-${i}`}
-                    className="grid grid-cols-[80px_100px_auto] "
-                  >
-                    <div className="flex items-end justify-between pl-4">
-                      <span className="text-sm">{i + 1}</span>
-                      <span className="whitespace-nowrap truncate">
-                        <ModalAnimalDetails earring={earring} size="sm" />
-                      </span>
+                <div className="grid gap-1">
+                  {animalsSelected?.map(({ earring }, i) => (
+                    <div
+                      key={`${earring}-${i}`}
+                      className="grid grid-cols-[80px_100px_auto] "
+                    >
+                      <div className="flex items-end justify-between pl-4">
+                        <span className="text-sm">{i + 1}</span>
+                        <span className="whitespace-nowrap truncate">
+                          <ModalAnimalDetails earring={earring} size="sm" />
+                        </span>
+                      </div>
+                      <div>
+                        <input
+                          type={'number'}
+                          step={0.01}
+                          className="input input-bordered input-xs w-full bg-transparent"
+                          {...methods.register(`earrings.${i}.weight`, {
+                            valueAsNumber: true
+                          })}
+                        />
+                      </div>
+                      <div>
+                        <input
+                          className="input input-bordered input-xs w-full bg-transparent"
+                          {...methods.register(`earrings.${i}.obs`)}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <input
-                        type={'number'}
-                        step={0.01}
-                        className="input input-bordered input-xs w-full"
-                        {...methods.register(`earrings.${i}.weight`, {
-                          valueAsNumber: true
-                        })}
-                      />
-                    </div>
-                    <div>
-                      <input
-                        className="input input-bordered input-xs w-full"
-                        {...methods.register(`earrings.${i}.obs`)}
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
             <div className="grid sm:w-1/2 gap-2 my-2 text-sm h-min min-w-[200px]">
@@ -193,7 +195,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                     Precio (kg):
                     <input
                       {...field}
-                      className=" text-end input input-outline input-sm w-[80px] "
+                      className=" text-end input input-sm w-[80px] input-bordered  bg-transparent"
                     />
                   </label>
                 )}
@@ -206,7 +208,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       Animales (N°):
                       <input
                         {...field}
-                        className=" text-end input input-outline input-sm w-[80px] "
+                        className=" text-end input input-bordered  bg-transparent input-sm w-[80px] "
                       />
                     </label>
                   )
@@ -219,7 +221,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                     Peso T (kg):
                     <input
                       {...field}
-                      className=" text-end input input-outline input-sm w-[80px]"
+                      className=" text-end input input-bordered  bg-transparent input-sm w-[80px]"
                     />
                   </label>
                 )}
@@ -233,7 +235,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       {...field}
                       value={parseFloat(`${averageWeight}`).toFixed(2)}
                       disabled
-                      className=" text-end input input-outline input-sm w-[80px]"
+                      className=" text-end input input-bordered  bg-transparent disabled:opacity-50 input-sm w-[80px]"
                     />
                   </label>
                 )}
@@ -241,7 +243,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
               <Controller
                 name="total"
                 render={({ field }) => (
-                  <label className="flex items-center justify-end">
+                  <label className="flex items-center justify-end ">
                     Total ($):
                     <input
                       {...field}
@@ -249,7 +251,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                         totalMoney
                       )}`}
                       disabled
-                      className=" text-end input input-outline input-sm  w-[80px]"
+                      className=" text-end input  input-bordered  bg-transparent disabled:opacity-50 input-sm  w-[100px]"
                     />
                   </label>
                 )}
