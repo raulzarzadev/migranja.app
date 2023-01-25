@@ -61,19 +61,6 @@ const AnimalBreedingOptions = ({
       .then((err) => console.log(err))
   }
 
-  const breeding = animal.eventData
-  //console.log({ breeding })
-  const breedingMales: OtherBreedingMale[] = [
-    {
-      earring: breedingMale?.earring || '',
-      finishAt: breeding?.finishAt || '',
-      startAt: breeding?.startAt || '',
-      breed: breedingMale?.breed || '',
-      id: breedingMale?.id || '',
-      name: breedingMale?.name || ''
-    },
-    ...(breeding.otherMales || [])
-  ]
   return (
     <Modal
       handleOpen={handleOpenModal}
@@ -93,9 +80,7 @@ const AnimalBreedingOptions = ({
             </span>
           </div>
         </div>
-        <div>
-          <MalesTable males={breedingMales} />
-        </div>
+
         {animal.status === 'BIRTH' && birthEventData && (
           <div>
             <div>Detalles de parto</div>
@@ -108,8 +93,12 @@ const AnimalBreedingOptions = ({
               <div className="text-center">
                 {birthEventData.newCalfsIds.map((animal, i) => (
                   <div key={animal}>
-                    {farmAnimals.find(({ id }) => id === animal)?.earring ||
-                      animal}
+                    <ModalAnimalDetails
+                      size="md"
+                      earring={
+                        farmAnimals.find(({ id }) => id === animal)?.earring
+                      }
+                    />
                   </div>
                 ))}
               </div>

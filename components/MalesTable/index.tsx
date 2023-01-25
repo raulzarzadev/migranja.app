@@ -1,19 +1,29 @@
 import { OtherBreedingMale } from 'types/base/FarmEvent.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
-export const MalesTable = ({ males }: { males: OtherBreedingMale[] }) => {
+interface OtherMaleTable extends OtherBreedingMale {
+  className?: string
+}
+export const MalesTable = ({ males }: { males: OtherMaleTable[] }) => {
   return (
     <div className="text-xs">
       <h1 className="text-sm text-end font-bold">Macho (s)</h1>
-      <div className="grid grid-cols-4 font-bold text-center">
+      <div className="grid grid-cols-5 font-bold text-center">
+        <div>Color</div>
         <div>Arete</div>
         <div>Raza</div>
         <div>del</div>
         <div>al</div>
       </div>
-      <div className="grid grid-cols-4 text-center ">
+      <div>
         {males.map((male, i) => (
-          <MaleRow key={`${male?.id}-${i}`} male={male} />
+          <div
+            className={`grid grid-cols-5 text-center `}
+            key={`${male?.id}-${i}`}
+          >
+            <div className={`${male.className} w-5 h-5 mx-auto`}></div>
+            <MaleRow male={male} />
+          </div>
         ))}
       </div>
     </div>
@@ -22,7 +32,7 @@ export const MalesTable = ({ males }: { males: OtherBreedingMale[] }) => {
 export const MaleRow = ({
   male: { earring, name, breed, startAt, finishAt }
 }: {
-  male: OtherBreedingMale
+  male: OtherMaleTable
 }) => {
   return (
     <>

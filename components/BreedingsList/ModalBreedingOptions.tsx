@@ -262,8 +262,9 @@ const lastMaleFinishedAt = (
   breeding: BreedingEventCardDetails
 ): number | Date | string => {
   const otherMales = breeding?.eventData?.otherMales || []
+  console.log({ otherMales })
   if (otherMales?.length > 0) {
-    const lastMale = otherMales.sort(
+    const lastMale = otherMales?.sort(
       (a, b) => (b?.finishAt as number) - (a?.finishAt as number)
     )
     //   console.log({ lastDate: myFormatDate(lastMale[0]?.finishAt, 'dd MMM yy') })

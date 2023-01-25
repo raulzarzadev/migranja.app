@@ -3,9 +3,16 @@ import { Controller, ControllerProps } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import React from 'react'
+import { addDays, getDate, subDays } from 'date-fns'
+import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 export interface SelectOption {
   label?: string
   value?: string | number
+}
+export interface ColorizeRangeDates {
+  start: any
+  end: any
+  color: string
 }
 export interface CustomInputTypes
   extends Partial<Pick<HTMLInputElement, 'step' | 'disabled'>> {
@@ -29,7 +36,9 @@ export interface CustomInputTypes
   inputClassName?: string
   defaultChecked?: boolean
   onClickAlreadyExist?: (earring: string) => void
+  datesRangeColor?: ColorizeRangeDates[]
 }
+
 const InputContainer = ({
   name,
   type = 'text',
@@ -41,6 +50,7 @@ const InputContainer = ({
   inputClassName,
   defaultChecked,
   onClickAlreadyExist,
+  datesRangeColor,
   ...rest
 }: CustomInputTypes) => {
   return (
@@ -91,6 +101,20 @@ const InputContainer = ({
                 name={name}
                 minDate={rest?.min as unknown as Date}
                 maxDate={rest?.max as unknown as Date}
+                dayClassName={(date) => {
+                  const plusMinusDays = OVINE_DAYS.gestationTolerance
+                  const res = datesRangeColor
+                    ?.map(({ start, end, color }) => {
+                      if (
+                        subDays(start, plusMinusDays).getTime() <=
+                          date.getTime() &&
+                        date.getTime() <= addDays(end, plusMinusDays).getTime()
+                      )
+                        return color
+                    })
+                    .join(' ')
+                  return res || ' '
+                }}
                 {...rest}
               />
             </div>

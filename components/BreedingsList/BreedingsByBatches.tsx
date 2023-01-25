@@ -37,13 +37,17 @@ const BreedingsByBatches = ({ breedings = [] }: BreedingBatchesListType) => {
 }
 
 export const BreedingCard = ({
+  hiddenConfig,
+  hiddenBirths,
   breeding
 }: {
+  hiddenConfig?: boolean
+  hiddenBirths?: boolean
   breeding: BreedingEventCardDetails
 }) => {
   const breedingMale = breeding?.eventData?.breedingMale
   const breedingDates = breeding.eventData?.breedingDates
-
+  const otherMales = breeding.eventData?.otherMales || []
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
       <header className="flex w-full justify-between p-2">
@@ -71,7 +75,7 @@ export const BreedingCard = ({
           </span>
           <div className="relative">
             <span className="absolute -top-6 -right-2">
-              <ModalBreedingOptions breeding={breeding} />
+              {!hiddenConfig && <ModalBreedingOptions breeding={breeding} />}
             </span>
             <div>
               <MalesTable
@@ -82,14 +86,14 @@ export const BreedingCard = ({
                     startAt: breedingDates?.breedingStartAt || '',
                     finishAt: breedingDates?.breedingFinishAt || ''
                   },
-                  ...(breeding.eventData?.otherMales || [])
+                  ...otherMales
                 ]}
               />
             </div>
           </div>
         </div>
       </header>
-      <BreedingCardBody breeding={breeding} />
+      <BreedingCardBody breeding={breeding} hiddenBirths={hiddenBirths} />
     </div>
   )
 }
@@ -127,9 +131,11 @@ const BreedingDatesInfo = ({
 export interface BreedingCardBody extends BreedingFormatted {}
 
 const BreedingCardBody = ({
-  breeding
+  breeding,
+  hiddenBirths
 }: {
   breeding: BreedingEventCardDetails
+  hiddenBirths: boolean
 }) => {
   type ViewBatchesType = AnimalBreedingStatus | '' | 'ALL'
 
@@ -233,23 +239,43 @@ const BreedingCardBody = ({
         <div className="">
           {view === 'ALL' &&
             animals?.map((animal, i) => (
-              <AnimalBreedingCardSmall key={i} animal={animal} />
+              <AnimalBreedingCardSmall
+                key={i}
+                animal={animal}
+                hiddenEvents={hiddenBirths}
+              />
             ))}
           {view === 'PENDING' &&
             pendingAnimals?.map((animal, i) => (
-              <AnimalBreedingCardSmall key={i} animal={animal} />
+              <AnimalBreedingCardSmall
+                key={i}
+                animal={animal}
+                hiddenEvents={hiddenBirths}
+              />
             ))}
           {view === 'ABORT' &&
             abortAnimals?.map((animal, i) => (
-              <AnimalBreedingCardSmall key={i} animal={animal} />
+              <AnimalBreedingCardSmall
+                key={i}
+                animal={animal}
+                hiddenEvents={hiddenBirths}
+              />
             ))}
           {view === 'BIRTH' &&
             birthAnimals?.map((animal, i) => (
-              <AnimalBreedingCardSmall key={i} animal={animal} />
+              <AnimalBreedingCardSmall
+                key={i}
+                animal={animal}
+                hiddenEvents={hiddenBirths}
+              />
             ))}
           {view === 'EMPTY' &&
             emptyAnimals?.map((animal, i) => (
-              <AnimalBreedingCardSmall key={i} animal={animal} />
+              <AnimalBreedingCardSmall
+                key={i}
+                animal={animal}
+                hiddenEvents={hiddenBirths}
+              />
             ))}
         </div>
       </div>

@@ -7,9 +7,11 @@ import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrent
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 
 const AnimalBreedingCardSmall = ({
-  animal
+  animal,
+  hiddenEvents
 }: {
   animal: AnimalBreedingEventCard
+  hiddenEvents: boolean
 }) => {
   const breedingDates = animal?.eventData?.breedingDates
   const breedingData = animal?.eventData
@@ -49,18 +51,20 @@ const AnimalBreedingCardSmall = ({
             </span>
             {animalCurrentStatusLabels[breedingFemale.status || 'PENDING']}
           </span>
-          <span className="p-1">
-            <button
-              className="text-info"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                handleOpenModal()
-              }}
-            >
-              <Icon name="event" />
-            </button>
-          </span>
+          {!hiddenEvents && (
+            <span className="p-1">
+              <button
+                className="text-info"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  handleOpenModal()
+                }}
+              >
+                <Icon name="event" />
+              </button>
+            </span>
+          )}
           {/* <span>{disableOptionsModal || <EventModal event={{}} />}</span> */}
         </div>
         <div className="text-center"></div>

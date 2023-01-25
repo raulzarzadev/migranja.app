@@ -38,13 +38,15 @@ const ModalBreedingDetails = ({
       >
         {breedingBatchId}
       </button>
-      {breedingFormatted && (
+      {breedingFormatted && openBreeding && (
         <Modal
           open={openBreeding}
           handleOpen={handleOpenBreeding}
           title="Breeding details"
         >
           <BreedingCard
+            hiddenConfig
+            hiddenBirths
             breeding={breedingFormatted as unknown as BreedingEventCardDetails}
           />
         </Modal>

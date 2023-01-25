@@ -3,10 +3,12 @@ import { IconName } from 'components/Icon/icons-list'
 
 const HelperText = ({
   type,
-  text
+  text,
+  show = false
 }: {
   type: 'info' | 'error'
   text: string
+  show?: boolean
 }) => {
   interface Style {
     icon: IconName
@@ -30,7 +32,9 @@ const HelperText = ({
     <>
       <div
         tabIndex={0}
-        className="collapse flex items-center px-2  rounded-md p-1 group hidden "
+        className={`collapse  items-center px-2  rounded-md p-1 group ${
+          show ? 'flex' : 'hidden'
+        }`}
       >
         <div className={`  ${style[type].classes} rounded-full p-0.5`}>
           <Icon name={style[type].icon} size="sm" />

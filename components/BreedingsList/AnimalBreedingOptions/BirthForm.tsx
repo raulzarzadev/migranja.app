@@ -3,7 +3,9 @@ import {
   createGenericBreedingEvent,
   updateEventBreedingBatch
 } from '@firebase/Events/main'
-import InputContainer from 'components/inputs/InputContainer'
+import InputContainer, {
+  ColorizeRangeDates
+} from 'components/inputs/InputContainer'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -13,12 +15,18 @@ import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import ProgressButton from '@comps/ProgressButton'
 import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
-import { addDays } from 'date-fns'
+import { addDays, intervalToDuration, subDays } from 'date-fns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
-import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
+import {
+  AnimalBreedingEventCard,
+  OtherBreedingMale
+} from 'types/base/FarmEvent.model'
 import Modal from '@comps/modal'
 import { AnimalDetails } from '@comps/AnimalCard'
 import { AnimalType } from 'types/base/AnimalType.model'
+import { MalesTable } from '@comps/MalesTable'
+import { calculatePossibleBirth } from '../breeding.helpers'
+import HelperText from '@comps/HelperText'
 
 const BirthForm = ({
   animal,
@@ -58,7 +66,8 @@ const BirthForm = ({
     defaultValues: {
       calfs: [defaultCalf],
       birthType: 1,
-      date: possibleBirth || new Date()
+      date: possibleBirth || new Date(),
+      male: '' //* should be a earring
     }
   })
   const {
@@ -69,7 +78,9 @@ const BirthForm = ({
     reset,
     formState: { errors }
   } = methods
+
   const formValues = watch()
+
   useEffect(() => {
     let calfs = []
     for (let i = 0; i < parseInt(`${formValues?.birthType}`); i++) {
@@ -84,9 +95,12 @@ const BirthForm = ({
   const breedingEventId = animal.eventData?.id
   const breedingBatchId = animal.eventData?.breedingId
   const breedingMale = animal.eventData?.breedingMale
-
+  console.log({ breedingMale })
   const onSubmit = async (data: any) => {
     setProgress(1)
+    const breedingMaleSelected = farmAnimals.find(
+      ({ earring }) => earring === formValues.male
+    )
     const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
       eventType: 'BIRTH',
       animal,
@@ -98,7 +112,7 @@ const BirthForm = ({
         breedingId: breedingBatchId,
         breedingMale: {
           inTheFarm: breedingMale?.inTheFarm || false,
-          ...breedingMale
+          ...breedingMaleSelected
         }
       }
     })
@@ -186,6 +200,90 @@ const BirthForm = ({
     setAlreadyExist(farmAnimals.find((animal) => animal.earring === earring))
     handleOpenAlreadyExist()
   }
+
+  const breeding = animal.eventData
+  //console.log({ breeding })
+  const sortByStartAt = (a: any, b: any) => a.startAt - b.finishAt
+  const breedingMales: OtherBreedingMale[] = [
+    {
+      earring: breedingMale?.earring || '',
+      finishAt: breeding?.finishAt || '',
+      startAt: breeding?.startAt || '',
+      breed: breedingMale?.breed || '',
+      id: breedingMale?.id || '',
+      name: breedingMale?.name || ''
+    },
+    ...(breeding.otherMales || []).sort(sortByStartAt)
+  ]
+
+  const breedingMalesWithPossibleDates = breedingMales.map((male) => {
+    return {
+      ...male,
+      possibleDates: calculatePossibleBirth({
+        breedingFinishAt: male.finishAt as number,
+        breedingStartAt: male.startAt as number
+      })
+    }
+  })
+
+  const possibleMaleDependsOfDate = (date: number | string | Date): string => {
+    const _date = new Date(date).getTime()
+    return (
+      breedingMales.find((animal) => {
+        //* get possible birth dates for each male
+        const possibleBirthDates = calculatePossibleBirth({
+          breedingFinishAt: animal.finishAt as number,
+          breedingStartAt: animal.startAt as number
+        })
+        //* determinate if date is in middle of possibleBirthDates
+        if (
+          _date > possibleBirthDates.startAt &&
+          _date < possibleBirthDates.finishAt
+        ) {
+          return animal.earring
+        }
+      })?.earring || ''
+    )
+  }
+  useEffect(() => {
+    setValue('male', possibleMaleDependsOfDate(formValues?.date))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formValues?.date, setValue])
+  console.log(formValues.male)
+  interface MaleStyle {
+    table: string
+    calendar: string
+  }
+  const MALE_COLORS_STYLE: Record<number, MaleStyle> = {
+    0: {
+      table: 'border-green-300',
+      calendar: ' bg-green-300 '
+    },
+    1: {
+      table: ' border-red-300 ',
+      calendar: ' bg-red-300 '
+    },
+    2: {
+      table: ' border-blue-300 ',
+      calendar: ' bg-blue-300 '
+    },
+    3: {
+      table: 'border-yellow-300',
+      calendar: 'bg-yellow-300'
+    },
+    4: {
+      table: 'border-gray-300',
+      calendar: 'bg-gray-300'
+    }
+  }
+  const datesRangeColor: ColorizeRangeDates[] =
+    breedingMalesWithPossibleDates.map((male, i) => {
+      return {
+        color: MALE_COLORS_STYLE[i]?.calendar || '',
+        start: male.possibleDates.startAt,
+        end: male.possibleDates.finishAt
+      }
+    })
   return (
     <div>
       <Modal
@@ -196,6 +294,19 @@ const BirthForm = ({
         {alreadyExist && <AnimalDetails animal={alreadyExist} />}
       </Modal>
 
+      <div>
+        <MalesTable
+          males={[
+            ...breedingMales.map((male, i) => {
+              return {
+                ...male,
+                className: MALE_COLORS_STYLE[i]?.calendar
+              }
+            })
+          ]}
+        />
+      </div>
+
       <FormProvider {...methods}>
         <h4 className="text-center text-xl ">Crear parto </h4>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -205,8 +316,28 @@ const BirthForm = ({
               name="date"
               label="Fecha"
               className="w-[150px]"
+              datesRangeColor={datesRangeColor}
             />
           </div>
+          <HelperText
+            text="Verifica si las crias nacidas se parecen al macho seleccionado para garantizar que son desendecia"
+            type="info"
+            show
+          />
+          <InputContainer
+            className="w-[150px] mx-auto my-4"
+            label="Macho"
+            name="male"
+            type="select"
+            selectOptions={[
+              ...breedingMales.map((male, i) => {
+                return {
+                  label: `${male?.earring} ${male?.name || ''}-${i}`,
+                  value: male.earring
+                }
+              })
+            ]}
+          />
 
           {!!formValues?.date && (
             <>
