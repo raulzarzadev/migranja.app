@@ -200,3 +200,16 @@ export const addAnimalToBreedingBatchEvent = async (
     'eventData.breedingBatch': arrayUnion({ ...animal, status: 'PENDING' })
   })
 }
+export const addMaleToBreedingEvent = async (
+  eventId: string,
+  male: {
+    earring: AnimalType['earring']
+    id: AnimalType['id']
+    startAt: number | Date | string
+    finishAt: number | Date | string
+  }
+) => {
+  return await eventsCRUD.updateItem(eventId, {
+    'eventData.otherMales': arrayUnion({ ...male })
+  })
+}

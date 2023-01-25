@@ -1,3 +1,4 @@
+import { MalesTable } from '@comps/MalesTable'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { listenEvent } from '@firebase/Events/main'
 import { BreedingFormatted } from 'components/BreedingsList/breeding.helpers'
@@ -6,7 +7,8 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {
   AnimalBreedingEventCard,
-  BreedingEventCardDetails
+  BreedingEventCardDetails,
+  OtherBreedingMale
 } from 'types/base/FarmEvent.model'
 import { AnimalBreedingStatus } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
@@ -57,17 +59,7 @@ export const BreedingCard = ({
               startAt={breedingDates?.birthStartAt as number}
               finishAt={breedingDates?.birthFinishAt as number}
             />
-            <div className="text-xs">
-              <span>Realizada: </span>
-              <span> del </span>
-              <span className="font-semibold">
-                {myFormatDate(breedingDates?.breedingStartAt, 'dd-MMM')}
-              </span>
-              <span> al </span>
-              <span className="font-semibold">
-                {myFormatDate(breedingDates?.breedingFinishAt, 'dd-MMM-yy')}
-              </span>
-            </div>
+
             <div className="text-xs">
               <span>Creado: </span>
               <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
@@ -82,18 +74,18 @@ export const BreedingCard = ({
               <ModalBreedingOptions breeding={breeding} />
             </span>
             <div>
-              <span>
-                Macho:{' '}
-                <span className="font-bold text-xl">
-                  <ModalAnimalDetails earring={breedingMale?.earring} />
-                </span>{' '}
-                <span>{breedingMale?.name}</span>
-              </span>
+              <MalesTable
+                males={[
+                  {
+                    earring: breedingMale?.earring || '',
+                    name: breedingMale?.name || '',
+                    startAt: breedingDates?.breedingStartAt || '',
+                    finishAt: breedingDates?.breedingFinishAt || ''
+                  },
+                  ...(breeding.eventData?.otherMales || [])
+                ]}
+              />
             </div>
-            <span>
-              Raza:
-              <span>{breedingMale?.breed}</span>
-            </span>
           </div>
         </div>
       </header>

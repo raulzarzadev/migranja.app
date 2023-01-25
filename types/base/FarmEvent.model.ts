@@ -94,10 +94,19 @@ export interface EventData
     AbortDetailsEvent,
     BirthDetailsEvent,
     AnimalWeaningEventData {
+  otherMales?: OtherBreedingMale[]
   breedingDates?: BreedingDatesType
   earring: string
   status: EventStatus
   // animals?: any[]
+}
+export interface OtherBreedingMale {
+  name?: string
+  earring: string
+  breed?: string
+  id?: string
+  startAt: string | Date | number
+  finishAt: string | Date | number
 }
 
 export interface EventDataStoreDetails extends SetGenericEventType<EventData> {}

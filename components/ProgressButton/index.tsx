@@ -6,12 +6,14 @@ export const ProgressButton = ({
   buttonLabel = 'Guardar',
   onClick,
   className,
+  disabled,
   ...rest
 }: {
   label?: string
   progress: number
   buttonLabel?: string
   className?: string
+  disabled?: boolean
   onClick?: () => void
 }) => {
   return (
@@ -32,7 +34,7 @@ export const ProgressButton = ({
         <button
           onClick={onClick}
           className={`btn btn-info ${className}`}
-          disabled={progress > 0}
+          disabled={progress > 0 || disabled}
         >
           {buttonLabel}
         </button>

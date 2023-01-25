@@ -13,7 +13,8 @@ const SearchEarring = ({
   placeholder = 'Buscar arete',
   relativeTo,
   className,
-  label
+  label,
+  filterBy = (animal) => []
 }: {
   omitEarrings?: string[]
   onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
@@ -22,27 +23,34 @@ const SearchEarring = ({
   relativeTo?: AnimalType['earring']
   label?: string
   className?: string
+  filterBy?: (animal: AnimalType) => any
 }) => {
   const [search, setSearch] = useState<string | number>('')
   const [matches, setMatches] = useState<AnimalType[]>([])
   const farmAnimals = useSelector(selectFarmAnimals)
-
   useEffect(() => {
     if (!search) {
       setMatches([])
     } else {
       const animals = farmAnimals
+        //* Aply a custom filter i exist. Elseware retur all animals
+        .filter((animal) => filterBy?.(animal))
+        //* Aplay gender filter in animls
         .filter((animal) =>
           gender === 'all' ? true : animal.gender === gender
         )
+        //* Aplay search filters
         .filter(
           (animal) =>
             animal?.earring?.includes(`${search}`) ||
             animal?.name?.includes(`${search}`)
         )
+
         .sort((a: any, b: any) => a.earring - b.earring)
+      console.log(animals)
       setMatches(animals)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [farmAnimals, gender, search])
 
   const alreadyIn = (earring: string) => {
