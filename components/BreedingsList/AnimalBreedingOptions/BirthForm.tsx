@@ -237,8 +237,16 @@ const BirthForm = ({
         })
         //* determinate if date is in middle of possibleBirthDates
         if (
-          _date > possibleBirthDates.startAt &&
-          _date < possibleBirthDates.finishAt
+          _date >
+            subDays(
+              possibleBirthDates.startAt,
+              OVINE_DAYS.gestationTolerance
+            ).getTime() &&
+          _date <
+            addDays(
+              possibleBirthDates.finishAt,
+              OVINE_DAYS.gestationTolerance
+            ).getTime()
         ) {
           return animal.earring
         }
