@@ -47,7 +47,7 @@ const SearchEarring = ({
         )
 
         .sort((a: any, b: any) => a.earring - b.earring)
-      console.log(animals)
+      //console.log(animals)
       setMatches(animals)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
