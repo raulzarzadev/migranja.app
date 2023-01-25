@@ -77,7 +77,7 @@ export const BreedingCard = ({
             <span className="absolute -top-6 -right-2">
               {!hiddenConfig && <ModalBreedingOptions breeding={breeding} />}
             </span>
-            <div>
+            <div className="max-w-[250px]">
               <MalesTable
                 males={[
                   {
@@ -135,7 +135,7 @@ const BreedingCardBody = ({
   hiddenBirths
 }: {
   breeding: BreedingEventCardDetails
-  hiddenBirths: boolean
+  hiddenBirths?: boolean
 }) => {
   type ViewBatchesType = AnimalBreedingStatus | '' | 'ALL'
 

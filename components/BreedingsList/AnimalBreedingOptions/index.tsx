@@ -1,6 +1,5 @@
 import RevertBirthForm from '@comps/forms/RevertBirthForm'
 import { SelectOption } from '@comps/inputs/InputContainer'
-import { MalesTable } from '@comps/MalesTable'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { removeAnimalFromBreeding } from '@firebase/Events/main'
 import Modal from 'components/modal'
@@ -9,10 +8,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
-import {
-  AnimalBreedingEventCard,
-  OtherBreedingMale
-} from 'types/base/FarmEvent.model'
+import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
 import EmptyPregnantForm from './EmptyPregnantForm'

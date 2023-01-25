@@ -304,6 +304,7 @@ const BirthForm = ({
 
       <div>
         <MalesTable
+          showColor
           males={[
             ...breedingMales.map((male, i) => {
               return {
@@ -340,7 +341,7 @@ const BirthForm = ({
             selectOptions={[
               ...breedingMales.map((male, i) => {
                 return {
-                  label: `${male?.earring} ${male?.name || ''}-${i}`,
+                  label: `${i + 1}.- ${male?.earring} ${male?.name || ''}`,
                   value: male.earring
                 }
               })
