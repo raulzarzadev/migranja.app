@@ -11,11 +11,9 @@ const AnimalBreedingCardSmall = ({
   hiddenEvents
 }: {
   animal: AnimalBreedingEventCard
-  hiddenEvents: boolean
+  hiddenEvents?: boolean
 }) => {
   const breedingDates = animal?.eventData?.breedingDates
-  const breedingData = animal?.eventData
-  const breedingMale = animal.eventData?.breedingMale
   const breedingFemale = animal
 
   const [openModal, setOpenModal] = useState(false)
@@ -65,7 +63,6 @@ const AnimalBreedingCardSmall = ({
               </button>
             </span>
           )}
-          {/* <span>{disableOptionsModal || <EventModal event={{}} />}</span> */}
         </div>
         <div className="text-center"></div>
       </div>
