@@ -1,5 +1,7 @@
 import RevertBirthForm from '@comps/forms/RevertBirthForm'
 import { SelectOption } from '@comps/inputs/InputContainer'
+import { MalesTable } from '@comps/MalesTable'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { removeAnimalFromBreeding } from '@firebase/Events/main'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
@@ -7,7 +9,10 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
-import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
+import {
+  AnimalBreedingEventCard,
+  OtherBreedingMale
+} from 'types/base/FarmEvent.model'
 import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
 import EmptyPregnantForm from './EmptyPregnantForm'
@@ -23,6 +28,7 @@ const AnimalBreedingOptions = ({
 }) => {
   const farmEvents = useSelector(selectFarmEvents)
   const farmAnimals = useSelector(selectFarmAnimals)
+
   const breedingAnimal = farmEvents
     .find(({ id }) => animal?.eventData?.id === id)
     ?.eventData.breedingBatch?.find(
@@ -54,32 +60,41 @@ const AnimalBreedingOptions = ({
       })
       .then((err) => console.log(err))
   }
+
+  const breeding = animal.eventData
+  //console.log({ breeding })
+  const breedingMales: OtherBreedingMale[] = [
+    {
+      earring: breedingMale?.earring || '',
+      finishAt: breeding?.finishAt || '',
+      startAt: breeding?.startAt || '',
+      breed: breedingMale?.breed || '',
+      id: breedingMale?.id || '',
+      name: breedingMale?.name || ''
+    },
+    ...(breeding.otherMales || [])
+  ]
   return (
     <Modal
       handleOpen={handleOpenModal}
       open={openModal}
-      title="Opciones de monta "
+      title="Opciones de monta individual "
     >
       <div>
-        <div className="text-xs text-center">
-          Monta:
-          <span className="font-bold"> {animal?.eventData?.breedingId}</span>
-        </div>
         <div className="text-xs flex justify-evenly w-full">
-          <div>
-            Macho:{' '}
-            <span className="font-bold">
-              {breedingMale?.earring}
-              <span> {breedingMale?.name} </span>
-            </span>
+          <div className="text-xs text-center">
+            Monta:
+            <span className="font-bold"> {animal?.eventData?.breedingId}</span>
           </div>
           <div>
             Hembra:{' '}
             <span className="font-bold">
-              {animal?.earring}
-              <span> {animal?.name} </span>
+              <ModalAnimalDetails earring={animal.earring} size="md" />
             </span>
           </div>
+        </div>
+        <div>
+          <MalesTable males={breedingMales} />
         </div>
         {animal.status === 'BIRTH' && birthEventData && (
           <div>
