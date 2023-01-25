@@ -228,11 +228,16 @@ const BirthForm = ({
 
           {formValues?.birthType && (
             <div>
-              <div className="grid justify-center text-sm">
-                <span>ultimo macho: {lastMaleCalfEarring?.earring}</span>
-                <span>ultima hembra: {lastFemaleCalfEarring?.earring}</span>
+              <div className="flex justify-end mt-6 text-sm italic">
+                <span className="mr-1">
+                  ultimo macho:<strong>{lastMaleCalfEarring?.earring}</strong>{' '}
+                </span>
+                <span>
+                  ultima hembra:{' '}
+                  <strong>{lastFemaleCalfEarring?.earring}</strong>
+                </span>
               </div>
-              <div className="grid grid-cols-4 place-items-center my-3 mt-8 font-bold  ">
+              <div className="grid grid-cols-4 place-items-center mb-3  font-bold  ">
                 <span>Vivo</span>
                 <span className="w-[120px] text-center">Sexo</span>
                 <span className="w-[100px] text-center">Arete</span>
