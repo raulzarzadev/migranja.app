@@ -55,7 +55,7 @@ const BirthForm = ({
     .shift()
   const defaultCalf = {
     isAlive: true,
-    gender: 'male',
+    gender: '',
     earring: '',
     weight: {
       atBirth: 0
@@ -292,6 +292,7 @@ const BirthForm = ({
         end: male.possibleDates.finishAt
       }
     })
+  console.log({ errors })
   return (
     <div>
       <Modal
@@ -395,28 +396,36 @@ const BirthForm = ({
                 inputClassName="checkbox-success"
                 defaultChecked
               />
-              <div className="flex justify-center">
-                <label className="flex flex-col">
-                  <span>Macho</span>
-                  <input
-                    {...register(`calfs.${i}.gender`, {
-                      required: 'Selecciona el sexo'
-                    })}
-                    type={'radio'}
-                    value="male"
-                  />
-                </label>
-                <label className="flex flex-col">
-                  <span>Hembra</span>
-                  <input
-                    {...register(`calfs.${i}.gender`, {
-                      required: true
-                    })}
-                    type={'radio'}
-                    value="female"
-                  />
-                </label>
+              <div>
+                <div className="flex justify-center">
+                  <label className="flex flex-col">
+                    <span>Macho</span>
+                    <input
+                      {...register(`calfs.${i}.gender`, {
+                        required: 'Selecciona el sexo'
+                      })}
+                      type={'radio'}
+                      value="male"
+                    />
+                  </label>
+                  <label className="flex flex-col">
+                    <span>Hembra</span>
+                    <input
+                      {...register(`calfs.${i}.gender`, {
+                        required: 'Selecciona el sexo'
+                      })}
+                      type={'radio'}
+                      value="female"
+                    />
+                  </label>
+                </div>
+                {errors.calfs?.[i]?.gender?.type === 'required' && (
+                  <span className="text-error label-text ">
+                    Selecciona el sexo
+                  </span>
+                )}
               </div>
+
               <InputContainer
                 rules={{
                   // required: 'Este campo es necesario',
@@ -450,15 +459,7 @@ const BirthForm = ({
                 max="10"
                 step="0.01"
               />
-              <div>
-                <div>
-                  {errors?.calfs?.[i]?.gender && (
-                    <span className="label-text text-error">
-                      {errors?.calfs[i]?.gender?.message}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <div></div>
             </div>
           ))}
           <div className="mt-10">
