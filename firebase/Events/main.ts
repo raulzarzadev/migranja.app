@@ -10,8 +10,14 @@ import { CreateGenericEventType } from 'components/FarmEvents/FarmEvent/FarmEven
 import { BaseFarmEvent, BirthDetailsEvent } from 'types/base/FarmEvent.model'
 import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
 const storage = getStorage(app)
+const TARGET_FORMAT_DATE = 'number'
 
-export const eventsCRUD = new FirebaseCRUD('events', db, storage)
+export const eventsCRUD = new FirebaseCRUD(
+  'events',
+  db,
+  storage,
+  TARGET_FORMAT_DATE
+)
 
 /** ************** CREATE ********** */
 export const createEvent = async (newItem: CreateEventDTO) =>
@@ -200,6 +206,7 @@ export const addAnimalToBreedingBatchEvent = async (
     'eventData.breedingBatch': arrayUnion({ ...animal, status: 'PENDING' })
   })
 }
+
 export const addMaleToBreedingEvent = async (
   eventId: string,
   male: {
@@ -209,7 +216,23 @@ export const addMaleToBreedingEvent = async (
     finishAt: number | Date | string
   }
 ) => {
+  const maleFormatted = eventsCRUD.deepFormatFirebaseDates(
+    male,
+    TARGET_FORMAT_DATE
+  )
   return await eventsCRUD.updateItem(eventId, {
-    'eventData.otherMales': arrayUnion({ ...male })
+    'eventData.otherMales': arrayUnion({ ...maleFormatted })
+  })
+}
+
+export const removeMaleFromBreedingEvent = async (
+  eventId: string,
+  maleIndex: number
+) => {
+  const breedingEvent = await eventsCRUD.getItem(eventId)
+  const male = breedingEvent?.eventData?.otherMales[maleIndex]
+  //console.log({ male })
+  return await eventsCRUD.updateItem(eventId, {
+    'eventData.otherMales': arrayRemove(male)
   })
 }

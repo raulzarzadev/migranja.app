@@ -1,48 +1,67 @@
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import ModalDelete from '@comps/modal/ModalDelete'
 import { OtherBreedingMale } from 'types/base/FarmEvent.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
 interface OtherMaleTable extends OtherBreedingMale {
   className?: string
 }
+
 export const MalesTable = ({
   males,
-  showColor
+  showColor,
+  showOps,
+  handleRemoveMale
 }: {
   males: OtherMaleTable[]
   showColor?: boolean
+  showOps?: boolean
+  handleRemoveMale?: (index: number) => void
 }) => {
   return (
     <div className="text-xs w-full mx-auto">
       <h1 className="text-sm text-end font-bold ">Macho (s)</h1>
-      <div className="grid grid-cols-5 font-bold text-center  ">
-        {showColor && (
-          <div>
-            Color <span className="text-xs font-normal">(calendario)</span>
-          </div>
-        )}
-        <div>Arete</div>
-        <div>Raza</div>
-        <div>del</div>
-        <div>al</div>
-      </div>
-      <div>
-        {males.map((male, i) => (
-          <div
-            className={`grid grid-cols-5 text-center `}
-            key={`${male?.id}-${i}`}
-          >
+      <table className="mx-auto w-full text-center">
+        <thead className="  ">
+          <tr>
             {showColor && (
-              <div
-                className={`${male.className} w-5 h-5 mx-auto flex justify-center items-center text-[10px]`}
-              >
-                {i + 1}
-              </div>
+              <th>
+                Color <span className="text-xs font-normal">(calendario)</span>
+              </th>
             )}
-            <MaleRow male={male} />
-          </div>
-        ))}
-      </div>
+            <th>Arete</th>
+            <th>Raza</th>
+            <th>del</th>
+            <th>al</th>
+            {showOps && <th>Ops</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {males.map((male, i) => (
+            <tr className={` `} key={`${male?.id}-${i}`}>
+              {showColor && (
+                <td
+                  className={`${male.className} w-5 h-5 mx-auto flex justify-center items-center text-[10px]`}
+                >
+                  {i + 1}
+                </td>
+              )}
+              <MaleRow male={male} />
+              {showOps && i != 0 && (
+                <td>
+                  <ModalDelete
+                    smallIcon
+                    title="Remover macho"
+                    //* should be i + 1 becouse you dont want to delete the firstOne
+                    handleDelete={() => handleRemoveMale?.(i - 1)}
+                    text="Descarta este macho (y fechas) de la monta.  "
+                  />
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -53,12 +72,12 @@ export const MaleRow = ({
 }) => {
   return (
     <>
-      <div className="truncate">
+      <td className="truncate">
         <ModalAnimalDetails earring={earring} size="sm" /> {name}{' '}
-      </div>
-      <div className="truncate">{breed}</div>
-      <div className="truncate">{myFormatDate(startAt, 'dd-MMM')}</div>
-      <div className="truncate">{myFormatDate(finishAt, 'dd-MMM-yy')}</div>
+      </td>
+      <td className="truncate">{breed}</td>
+      <td className="truncate">{myFormatDate(startAt, 'dd-MMM')}</td>
+      <td className="truncate">{myFormatDate(finishAt, 'dd-MMM-yy')}</td>
     </>
   )
 }

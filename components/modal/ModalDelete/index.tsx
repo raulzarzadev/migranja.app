@@ -10,10 +10,11 @@ interface ModalDeleteType {
   title: string
   handleDelete: () => Promise<any> | void
   openButtonProps?: OpenButtonProps
-  buttonLabel: string | null
+  buttonLabel?: string | null
   openModalItem?: (props: any) => ReactNode | null
   text?: string
   children?: ReactNode
+  smallIcon?: boolean
 }
 
 const ModalDelete = ({
@@ -23,7 +24,8 @@ const ModalDelete = ({
   openModalItem,
   buttonLabel = 'Delete',
   text = 'Delete element',
-  children
+  children,
+  smallIcon
 }: ModalDeleteType) => {
   const [status, setStatus] = useState<StatusModalDelete>('DELETE')
   const [open, setOpen] = useState(false)
@@ -51,15 +53,15 @@ const ModalDelete = ({
             handleOpen()
           }}
           {...openButtonProps}
-          className={` ${
+          className={` ${smallIcon && 'btn btn-circle btn-xs'} ${
             openButtonProps?.className ??
             ' flex justify-evenly btn btn-outline border-error  text-error'
           }`}
         >
           <span className="">
-            <Icon name="delete" />{' '}
+            <Icon name="delete" size={smallIcon ? 'xs' : 'md'} />{' '}
           </span>
-          {buttonLabel ?? <span>{buttonLabel}</span>}
+          {(!smallIcon && buttonLabel) ?? <span>{buttonLabel}</span>}
         </button>
       )}
       <Modal title={title} open={open} handleOpen={handleOpen}>

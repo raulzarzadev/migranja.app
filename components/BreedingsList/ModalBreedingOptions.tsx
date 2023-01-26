@@ -8,7 +8,8 @@ import SearchEarring from '@comps/SearchEarring'
 import {
   addAnimalToBreedingBatchEvent,
   addMaleToBreedingEvent,
-  deleteEvent
+  deleteEvent,
+  removeMaleFromBreedingEvent
 } from '@firebase/Events/main'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -134,6 +135,15 @@ const AddBreedingMaleTo = ({
 
   const [progress, setProgress] = useState(0)
   const disabled = !formValues.earring || !!progress
+  const handleRemoveMale = async (index: number) => {
+    try {
+      const res = await removeMaleFromBreedingEvent(breeding.id, index)
+      //console.log({ res })
+      return res
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <div>
       <button
@@ -164,8 +174,13 @@ const AddBreedingMaleTo = ({
             menos una semana de descanso para que sean mas predecibles los
             partos y poder identificar a las crias con mas certeza
           </p>
-          <MalesTable males={[principalMale, ...otherMales]} />
+
           {/* TODO: Verificar confictos familiares */}
+          <MalesTable
+            males={[principalMale, ...otherMales]}
+            showOps
+            handleRemoveMale={handleRemoveMale}
+          />
 
           <div className="">
             <div className="my-8">
@@ -262,7 +277,6 @@ const lastMaleFinishedAt = (
   breeding: BreedingEventCardDetails
 ): number | Date | string => {
   const otherMales = breeding?.eventData?.otherMales || []
-  console.log({ otherMales })
   if (otherMales?.length > 0) {
     const lastMale = otherMales?.sort(
       (a, b) => (b?.finishAt as number) - (a?.finishAt as number)
