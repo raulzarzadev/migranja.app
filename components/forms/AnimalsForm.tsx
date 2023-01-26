@@ -13,6 +13,7 @@ import Loading from 'components/Loading'
 import useAnimal from 'components/hooks/useAnimal'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import AnimalParentsForm from './AnimalParentsForm'
 
 const schema = yup
   .object()
@@ -57,7 +58,6 @@ export const AnimalsForm = ({
   const {
     handleSubmit,
     reset,
-    setValue,
     setError,
     register,
     formState: { errors }
@@ -141,6 +141,7 @@ export const AnimalsForm = ({
             type="date"
             label="Incorporación (aprox)"
           />
+          <AnimalParentsForm />
           <h5 className="text-lg font-bold">Aretes</h5>
           <main className="">
             <table className="table table-compact mx-auto  ">
@@ -174,7 +175,7 @@ export const AnimalsForm = ({
                   <td>
                     <InputContainer
                       name="earring"
-                      type="text"
+                      type="number"
                       className="w-24"
                     />
                   </td>
