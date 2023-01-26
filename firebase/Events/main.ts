@@ -230,6 +230,7 @@ export const removeMaleFromBreedingEvent = async (
   maleIndex: number
 ) => {
   const breedingEvent = await eventsCRUD.getItem(eventId)
+  // @ts-ignore
   const male = breedingEvent?.eventData?.otherMales[maleIndex]
   //console.log({ male })
   return await eventsCRUD.updateItem(eventId, {
