@@ -225,7 +225,7 @@ export const AnimalsForm = ({
               >
                 Guardar todos{' '}
                 <span className="ml-1">
-                  {loading ? <Loading /> : <Icon name="close" />}
+                  {loading ? <Loading /> : <Icon name="save" />}
                 </span>
               </button>
             </div>
