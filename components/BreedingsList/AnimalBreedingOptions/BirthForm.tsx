@@ -292,7 +292,6 @@ const BirthForm = ({
         end: male.possibleDates.finishAt
       }
     })
-  console.log({ errors })
   return (
     <div>
       <Modal

@@ -18,9 +18,10 @@ const schema = yup
   .object()
   .shape({
     batch: yup.string().required('Este campo es necesario'),
+    gender: yup.string().required('Este campo es necesario'),
     earring: yup
       .string()
-      .required('Este campo es necesario*')
+      .required('Es necesario*')
       .min(3, 'Al menos 3 letras')
       .max(3, 'Maximo 3 letras')
   })
@@ -45,7 +46,7 @@ export const AnimalsForm = ({
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      gender: 'female',
+      gender: '',
       birthday: new Date(),
       joinedAt: new Date(),
       batch: '',
@@ -53,10 +54,16 @@ export const AnimalsForm = ({
       ...animal
     }
   })
-  const { handleSubmit, reset, setValue, setError } = methods
+  const {
+    handleSubmit,
+    reset,
+    setValue,
+    setError,
+    register,
+    formState: { errors }
+  } = methods
 
   const [animals, setAnimals] = useState<QuickAnimal[]>([])
-  const { register } = methods
   const farmAnimals = useSelector(selectFarmAnimals)
 
   const earringAlreadyExist = (earring: string) => {
@@ -114,6 +121,7 @@ export const AnimalsForm = ({
       setLoading(false)
     }
   }
+  // console.log({ errors })
   return (
     <div>
       <FormProvider {...methods}>
@@ -181,7 +189,6 @@ export const AnimalsForm = ({
                           type="radio"
                           {...register('gender')}
                           value="female"
-                          checked
                         />
                       </span>
                       <span className="flex flex-col p-0.5">
@@ -193,6 +200,11 @@ export const AnimalsForm = ({
                         />
                       </span>
                     </div>
+                    {errors.gender && (
+                      <span className="text-error label-text">
+                        Selecciona el sexo
+                      </span>
+                    )}
                   </td>
                   <td>
                     <button>
