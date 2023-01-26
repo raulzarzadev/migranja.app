@@ -231,11 +231,16 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
   const handleAddEarring = ({ earring }: { earring: string }) => {
     // console.log({ earring })
     const animal = farmAnimals.find((animal) => animal.earring === earring)
-    animal
-      ? addAnimalToBreedingBatchEvent(breeding.id, animal)
-      : console.log('error finding animal')
-  }
+    if (animal) {
+      setAnimalsAdded((state) => {
+        return [...state, animal]
+      })
 
+      addAnimalToBreedingBatchEvent(breeding.id, animal)
+    }
+    console.log('error finding animal')
+  }
+  const [animalsAdded, setAnimalsAdded] = useState<any[]>([])
   return (
     <div>
       <button
@@ -257,6 +262,22 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
             Busca aretes que ya esten registrados para agregarlos a esta monta.
             (solo apareceran hembras)
           </h2>
+          <div>
+            {!!animalsAdded.length && (
+              <div>
+                <h3>Hembras agregadas</h3>
+
+                {animalsAdded.map(({ id, name, earring }, i) => (
+                  <div key={id}>
+                    <span>{i + 1}.- </span>
+                    <span>
+                      {earring} {name || ''}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="">
             <SearchEarring
               placeholder="Buscar hembras"
