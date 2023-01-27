@@ -1,5 +1,7 @@
 import useFilterByField from '@comps/hooks/useFilterByField'
+import Icon from '@comps/Icon'
 import { subMonths } from 'date-fns'
+import { useEffect, useState } from 'react'
 
 const TableFilters = ({
   array,
@@ -8,7 +10,13 @@ const TableFilters = ({
   array: unknown[]
   setArray: (array: any) => any
 }) => {
-  const { handleFilterBy } = useFilterByField(array)
+  const { handleFilterBy, filtersSelected, reset, arrayFiltered } =
+    useFilterByField(array)
+
+  useEffect(() => {
+    setArray(arrayFiltered)
+  }, [arrayFiltered, setArray])
+
   const filters = {
     Activos: { field: 'currentStatus', symbol: '==', value: 'ACTIVE' },
     Machos: { field: 'gender', symbol: '==', value: 'male' },
@@ -43,14 +51,26 @@ const TableFilters = ({
     <div>
       <span className="text-sm">Filtrar por :</span>
       <div>
+        {!!filtersSelected.length && (
+          <button
+            className={`btn btn-circle m-1 btn-xs btn-outline btn-error`}
+            onClick={() => {
+              reset()
+            }}
+          >
+            <Icon name="close" size="xs" />
+          </button>
+        )}
         {Object.entries(filters).map(([label, { field, symbol, value }]) => (
           <button
             key={label}
-            className="btn rounded-full btn-xs m-1 btn-outline"
+            disabled={filtersSelected.includes(label)}
+            className={`btn rounded-full btn-xs m-1 btn-outline ${
+              filtersSelected.includes(label) && 'btn-active'
+            }`}
             onClick={() => {
               // @ts-ignore
-              const res = handleFilterBy(field, symbol, value)
-              setArray(res)
+              handleFilterBy(field, symbol, value, { label })
             }}
           >
             {label}

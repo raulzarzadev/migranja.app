@@ -1,12 +1,11 @@
 import useSortByField from '@comps/hooks/useSortByField'
-import Icon from '@comps/Icon'
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import HeaderTable from '@comps/MyTables/HeaderTable'
+import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
 import PDFAnimalsList from '@comps/PDFDocuments/PDFAnimalsList'
 
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
-import { reverse } from 'dns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import { ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -134,7 +133,7 @@ const FarmNumbers = () => {
         <StatCardWithModalAnimalsList
           title="Corderitos"
           animals={farmNumbers.newCalfsLastMonth as AnimalType[]}
-          description={`Corderitos del ultimo mex`}
+          description={`Corderitos del ultimo mes`}
         />
       </StatsRow>
 
@@ -247,20 +246,25 @@ const StatCardWithModalEventsList = ({
                     <div>{myFormatDate(event.eventData.date, 'dd MM yy')}</div>
                     <div>
                       <ModalAnimalDetails
+                        size="md"
                         earring={event.eventData.parents.mother?.earring}
                       />
                     </div>
                     <div>
                       <ModalAnimalDetails
+                        size="md"
                         earring={event.eventData.parents.father?.earring}
                       />
                     </div>
                     <div className="col-span-2">
-                      <div className="flex w-full justify-between">
+                      <div className="flex w-full justify-start">
                         <span>({event.eventData.calfs?.length})</span>
                         {event.eventData.calfs?.map((animal: any) => (
                           <div key={animal?.earring}>
-                            <ModalAnimalDetails earring={animal?.earring} />
+                            <ModalAnimalDetails
+                              size="md"
+                              earring={animal?.earring}
+                            />
                           </div>
                         ))}
                       </div>
@@ -385,6 +389,7 @@ const AnimalsList = ({
         ))}
       </div>
       <div className="text-end">Total: {animals.length}</div>
+      <AnimalsOptions animalsEarrings={animals.map(({ earring }) => earring)} />
     </div>
   )
 }
