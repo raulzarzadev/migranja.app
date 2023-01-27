@@ -1,3 +1,4 @@
+import useSortByField from '@comps/hooks/useSortByField'
 import { EventsList } from 'components/FarmEvents/EventsList'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -70,7 +71,7 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
       ...weanings
     ])
   }, [animalEarring, farmEvents])
-
+  const { arraySorted } = useSortByField(events)
   return <EventsList events={events} />
 }
 

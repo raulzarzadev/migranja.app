@@ -1,4 +1,4 @@
-import useSortByField, { sortByField } from '@comps/hooks/useSortByField'
+import useSortByField from '@comps/hooks/useSortByField'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { FarmState } from 'store/slices/farmSlice'
@@ -21,7 +21,7 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
           animalCurrentStatusLabels[event?.type as AnimalCurrentStatusType]
             ?.toLowerCase()
             ?.includes(filterBy?.toLowerCase()) ||
-          event?.eventData.breedingBatch?.find(({ earring }: any) =>
+          event?.eventData?.breedingBatch?.find(({ earring }: any) =>
             earring?.includes(filterBy)
           ) ||
           event?.eventData.calfs?.find(({ earring }: any) =>
