@@ -1,4 +1,3 @@
-import useFilterByField from '@comps/hooks/useFilterByField'
 import useSortByField, { sortByField } from '@comps/hooks/useSortByField'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'

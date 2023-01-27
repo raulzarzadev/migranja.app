@@ -1,71 +1,62 @@
 import useFilterByField from '@comps/hooks/useFilterByField'
-import { formatDistance } from 'date-fns'
-import { useState } from 'react'
+import { subMonths } from 'date-fns'
 
 const TableFilters = ({
   array,
   setArray
 }: {
   array: unknown[]
-  setArray: (array: unknown[]) => unknown[]
+  setArray: (array: any) => any
 }) => {
-  //const { arrayFiltered, handleFilterBy } = useFilterByField(array)
-  const handleSortBy = (filterFn: Filters) => {
-    console.log(fnsFilters[filterFn])
-    //setArray(fnsFilters[filterFn])
-  }
-  const [showRange, setShowRange] = useState(false)
-
-  const fnsFilters = {
-    males: array.filter((a) => a?.gender === 'male'),
-    female: array.filter((a) => a?.gender === 'female'),
-    actives: array.filter((a) => a?.currentStatus === 'ACTIVE'),
-    age: () => {
-      setShowRange(true)
-      return array.sort((a, b) => b?.birthday - a?.birthday)
+  const { handleFilterBy } = useFilterByField(array)
+  const filters = {
+    Activos: { field: 'currentStatus', symbol: '==', value: 'ACTIVE' },
+    Machos: { field: 'gender', symbol: '==', value: 'male' },
+    Hembras: { field: 'gender', symbol: '==', value: 'female' },
+    Muertos: {
+      field: 'currentStatus',
+      symbol: '==',
+      value: 'DEAD'
+    },
+    Sementales: {
+      field: 'isStallion',
+      symbol: '==',
+      value: true
+    },
+    '-3meses': {
+      field: 'birthday',
+      symbol: '>=',
+      value: subMonths(new Date(), 3).getTime()
+    },
+    '+3meses': {
+      field: 'birthday',
+      symbol: '<=',
+      value: subMonths(new Date(), 3).getTime()
+    },
+    '+7meses': {
+      field: 'birthday',
+      symbol: '<=',
+      value: subMonths(new Date(), 7).getTime()
     }
-  } as const
-  const handleSetAge = (e) => {
-    const { value, name } = e.target
-    const res = array.filter((a) => {
-      const distance = formatDistance(a?.birthday, new Date())
-      a?.birthday > desde && b < hasta
-    })
   }
-  type Filters = keyof typeof fnsFilters
   return (
     <div>
-      <span>Filtrar por :</span>
+      <span className="text-sm">Filtrar por :</span>
       <div>
-        <button onClick={() => handleSortBy('males')}>Machos</button>
-        <button onClick={() => handleSortBy('female')}>Hembras</button>
-        <button onClick={() => handleSortBy('actives')}>Activos</button>
-        <button onClick={() => handleSortBy('age')}>Edad</button>
+        {Object.entries(filters).map(([label, { field, symbol, value }]) => (
+          <button
+            key={label}
+            className="btn rounded-full btn-xs m-1 btn-outline"
+            onClick={() => {
+              // @ts-ignore
+              const res = handleFilterBy(field, symbol, value)
+              setArray(res)
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </div>
-      {showRange && (
-        <div>
-          <div className="form-control ">
-            <label>
-              Desde
-              <input
-                onChange={(e) => handleSetAge(e)}
-                type={'number'}
-                name="from"
-              />
-            </label>
-          </div>
-          <div className="form-control ">
-            <label>
-              Hasta
-              <input
-                onChange={(e) => handleSetAge(e)}
-                type={'number'}
-                name="to"
-              />
-            </label>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

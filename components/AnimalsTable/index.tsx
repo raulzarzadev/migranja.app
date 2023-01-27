@@ -24,6 +24,7 @@ import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import TableFilters from '@comps/TableFilters'
+import useFilterByField from '@comps/hooks/useFilterByField'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -57,17 +58,7 @@ const AnimalsTable = ({
   showSelectRow
 }: AnimalTableType) => {
   const [animals, setAnimals] = useState(animalsData || [])
-  const [filterBy, setFilterBy] = useState('')
-  useEffect(() => {
-    if (filterBy) {
-      const filteredAnimal = animalsData.filter(
-        ({ currentStatus }) => currentStatus === filterBy
-      )
-      setAnimals(filteredAnimal)
-    } else {
-      setAnimals(animalsData)
-    }
-  }, [animalsData, filterBy])
+  // const [filterBy, setFilterBy] = useState('')
 
   const filterByStatusOptions = Object.entries(animalCurrentStatusLabels).map(
     ([key, value]) => {
@@ -249,15 +240,17 @@ const AnimalsTable = ({
 
   return (
     <div className="p-2">
-      <Modal
-        title="Detalles del animal"
-        open={openDetailsModal}
-        handleOpen={() => handleOpenDetailsModal('')}
-      >
-        <div>
+      {openDetailsModal && (
+        <Modal
+          title="Detalles del animal"
+          open={openDetailsModal}
+          handleOpen={() => handleOpenDetailsModal('')}
+        >
           <AnimalCard animalId={animaId} />
-        </div>
-      </Modal>
+        </Modal>
+      )}
+      <TableFilters array={animalsData} setArray={setAnimals} />
+
       <div className=" justify-center flex my-2 items-center w-full">
         <DebouncedInput
           value={globalFilter ?? ''}
@@ -265,17 +258,6 @@ const AnimalsTable = ({
           className=" input input-sm w-full input-bordered"
           placeholder="Buscar por arete..."
         />
-        <select
-          className="select select-sm ml-2 "
-          onChange={(e) => setFilterBy(e?.target?.value)}
-        >
-          <option value="">Todas </option>
-          {filterByStatusOptions.map(({ label, value }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
       </div>
 
       <div className="text-center">
@@ -285,8 +267,6 @@ const AnimalsTable = ({
         text="Selecciona de uno en uno para ver los detalles. Selecciona varios para editar en grupo. Selecciona todos los que estan filtrados."
         type="info"
       />
-      <TableFilters array={animalsData} setArray={setAnimals} />
-
       <div className={`overflow-x-auto  mx-auto`}>
         <div className="flex w-full  justify-end ">
           <select
