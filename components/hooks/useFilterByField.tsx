@@ -3,13 +3,14 @@ import { getProperty } from 'dot-prop'
 export interface Options {
   searchInFields: string[]
 }
-const useFilterByField = (array: any[], ops: Options) => {
+const useFilterByField = (array: any[] = [], ops?: Options) => {
+  const searchInFields = ops?.searchInFields || []
   const [arrayFiltered, setArrayFiltered] = useState([...array])
   const handleFilterBy = (filterBy: string) => {
     const res = array.filter((item) => {
-      for (let i = 0; i < ops.searchInFields.length; i++) {
-        const fieldName = ops.searchInFields[i]
-        const value = getProperty(item, fieldName) || ''
+      for (let i = 0; i < searchInFields?.length; i++) {
+        const fieldName = searchInFields[i]
+        const value = getProperty(item, fieldName || '') || ''
         if (Array.isArray(value)) {
           let includes = false
           value.forEach(({ earring }) => {

@@ -1,8 +1,12 @@
+import useSortByField from '@comps/hooks/useSortByField'
+import Icon from '@comps/Icon'
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import HeaderTable from '@comps/MyTables/HeaderTable'
 import PDFAnimalsList from '@comps/PDFDocuments/PDFAnimalsList'
 
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
+import { reverse } from 'dns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import { ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -187,6 +191,8 @@ const StatCardWithModalEventsList = ({
   const handleOpenList = () => {
     setOpenList(!openList)
   }
+  const { handleSortBy, arraySorted, field, reverse } = useSortByField(events)
+  console.log({ events, field })
   return (
     <>
       <div
@@ -203,6 +209,7 @@ const StatCardWithModalEventsList = ({
           description={description}
         />
       </div>
+
       {openList && (
         <Modal
           open={openList}
@@ -210,16 +217,48 @@ const StatCardWithModalEventsList = ({
           title={`Lista de eventos: ${title} `}
         >
           <div>
-            <div className="grid grid-cols-5 ">
-              <div>Fecha</div>
-              <div>Madre</div>
-              <div>Padre</div>
-              <div className="col-span-2 text-center">Camada</div>
+            <div className="grid grid-cols-5 justify-items-center">
+              <div>
+                <HeaderTable
+                  fieldName={'eventData.date'}
+                  label={'Fecha'}
+                  fieldSelected={field}
+                  handleSortBy={handleSortBy}
+                  reverse={reverse}
+                />
+              </div>
+              <div>
+                <HeaderTable
+                  fieldName={'eventData.parents.mother.earring'}
+                  label={'Madre'}
+                  fieldSelected={field}
+                  handleSortBy={handleSortBy}
+                  reverse={reverse}
+                />
+              </div>
+              <div className="">
+                <HeaderTable
+                  fieldName={'eventData.parents.father.earring'}
+                  label={'Padre'}
+                  fieldSelected={field}
+                  handleSortBy={handleSortBy}
+                  reverse={reverse}
+                />
+              </div>
+              <div className="col-span-2  ">
+                <HeaderTable
+                  fieldName={'eventData.calfs.length'}
+                  label={'Camada'}
+                  fieldSelected={field}
+                  handleSortBy={handleSortBy}
+                  reverse={reverse}
+                />
+              </div>
             </div>
-            {events.map((event) => (
+            {arraySorted.map((event) => (
               <div key={event.id}>
                 {event.type === 'BIRTH' && (
-                  <div className="grid grid-cols-5">
+                  <div className="grid grid-cols-5 text-center">
                     <div>{myFormatDate(event.eventData.date, 'dd MM yy')}</div>
                     <div>
                       <ModalAnimalDetails
@@ -234,7 +273,7 @@ const StatCardWithModalEventsList = ({
                     <div className="col-span-2">
                       <div className="flex w-full justify-between">
                         <span>({event.eventData.calfs?.length})</span>
-                        {event.eventData.calfs?.map((animal) => (
+                        {event.eventData.calfs?.map((animal: any) => (
                           <div key={animal?.earring}>
                             <ModalAnimalDetails earring={animal?.earring} />
                           </div>

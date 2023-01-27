@@ -23,6 +23,7 @@ import IndeterminateCheckbox from './IndeterminableCheckbox'
 import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
+import TableFilters from '@comps/TableFilters'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -284,6 +285,7 @@ const AnimalsTable = ({
         text="Selecciona de uno en uno para ver los detalles. Selecciona varios para editar en grupo. Selecciona todos los que estan filtrados."
         type="info"
       />
+      <TableFilters array={animalsData} setArray={setAnimals} />
 
       <div className={`overflow-x-auto  mx-auto`}>
         <div className="flex w-full  justify-end ">
