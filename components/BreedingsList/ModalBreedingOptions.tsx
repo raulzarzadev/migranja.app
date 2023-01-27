@@ -166,13 +166,13 @@ const AddBreedingMaleTo = ({
             <span className="font-bold">Importante! </span>
             No podra haber dos machos al mismo tiempo. Esto para evitar peleas
             dentro del corral y problemas a la hora de los partos tener bien
-            definidas las fechas
+            definidas las fechas.
           </p>
           <p className="text-xs">
             <span className="font-bold">Recomendación! </span>
             Es buena idea colocar machos muy diferentes o dar un periodo de al
             menos una semana de descanso para que sean mas predecibles los
-            partos y poder identificar a las crias con mas certeza
+            partos y poder identificar a las crías con mas certeza.
           </p>
 
           {/* TODO: Verificar confictos familiares */}

@@ -13,7 +13,7 @@ function LandingPage() {
         <p className="my-1">Con herramientas utiles y faciles de usar.</p>
         <p className="my-1">
           <strong className="font-bold">Grátis</strong> y sin instalar nada (si
-          no quires)
+          no quieres)
         </p>
         <p className="my-1">
           En cualquier dispositivo con internet y desde tu{' '}
@@ -36,13 +36,13 @@ function LandingPage() {
       <Card
         title={'Reproducción'}
         text={
-          'Monitorea el estado de tus animales, sus crias y ciclos fertilez.  \n Maximiza tus ganancias'
+          'Monitorea el estado de tus animales, sus crías y ciclos fertilez.  \n Maximiza tus ganancias'
         }
         image={'/assets/images/HomeVisit/corderitos.webp'}
       />
       <Card
         title={'Sanidad'}
-        text={'Manten sano a tu ganado. Ganado feliz, grangero feliz'}
+        text={'Manten sano a tu ganado. Ganado feliz, granjero feliz'}
         image={'/assets/images/HomeVisit/oveja_veterinario.webp'}
       />
       <Card

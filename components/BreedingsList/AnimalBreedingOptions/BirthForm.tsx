@@ -329,7 +329,7 @@ const BirthForm = ({
             />
           </div>
           <HelperText
-            text="Verifica si las crias nacidas se parecen al macho seleccionado para garantizar que son desendecia"
+            text="Verifica si las crías nacidas se parecen al macho seleccionado para garantizar que son desendecia"
             type="info"
             show
           />
