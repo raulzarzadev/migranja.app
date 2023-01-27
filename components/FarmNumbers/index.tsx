@@ -160,20 +160,6 @@ const FarmNumbers = () => {
           description={`Corderitos nacidos`}
         />
       </StatsRow>
-
-      {/* 
-      <StatsRow title="Inventario (Bajas)">
-        <StatCardWithModalEventsList
-          title="Muertes"
-          events={farmNumbers.deads}
-          description={`Mayores de ${OVINE_DAYS.canBePregnant} dias`}
-        />
-        <StatCardWithModalEventsList
-          title="Bajas"
-          events={farmNumbers.dropOutAnimals}
-          description={`Entre ${OVINE_DAYS.finishWeaning} y ${OVINE_DAYS.canBePregnant} dias`}
-        />
-      </StatsRow> */}
     </div>
   )
 }
@@ -192,7 +178,6 @@ const StatCardWithModalEventsList = ({
     setOpenList(!openList)
   }
   const { handleSortBy, arraySorted, field, reverse } = useSortByField(events)
-  console.log({ events, field })
   return (
     <>
       <div
@@ -399,6 +384,7 @@ const AnimalsList = ({
           </div>
         ))}
       </div>
+      <div className="text-end">Total: {animals.length}</div>
     </div>
   )
 }
