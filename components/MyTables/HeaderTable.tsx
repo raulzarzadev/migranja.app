@@ -26,9 +26,9 @@ const HeaderTable = ({
       <span className="mr-1">{label}</span>
       {fieldName === fieldSelected &&
         (reverse === false ? (
-          <Icon name="down" size="xs" />
+          <Icon name="arrowDown" size="xs" />
         ) : (
-          <Icon name="up" size="xs" />
+          <Icon name="arrowUp" size="xs" />
         ))}
     </button>
   )

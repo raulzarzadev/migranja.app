@@ -303,16 +303,18 @@ const AnimalsTable = ({
                       onClick: header.column.getToggleSortingHandler()
                     }}
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    {{
-                      asc: ' 🔼',
-                      desc: ' 🔽'
-                    }[header.column.getIsSorted() as string] ?? null}
+                    <div className="flex">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                      {{
+                        asc: <Icon name="arrowUp" size="sm" />,
+                        desc: <Icon name="arrowDown" size="sm" />
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </div>
                   </th>
                 ))}
               </tr>

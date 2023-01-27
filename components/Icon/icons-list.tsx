@@ -59,8 +59,11 @@ import FarmIcon from './FarmIcon'
 import SheepFamilyIcon from './SheepFamilyIcon'
 import SheepIcon from './SheepIcon'
 import { IoSaveOutline } from 'react-icons/io5'
+import { HiArrowSmDown, HiArrowSmUp } from 'react-icons/hi'
 
 const ICON_LIST = {
+  arrowDown: HiArrowSmDown,
+  arrowUp: HiArrowSmUp,
   cart: SlBasketLoaded,
   login: SlLogin,
   logout: SlLogout,
