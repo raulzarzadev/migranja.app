@@ -72,9 +72,9 @@ const FarmMenu = (props: any) => {
     setMenuOptions({ ...menuOptions, [column]: option })
   }
 
-  const isSheepSelected = column1 === 'animals' && column2 === 'sheep'
+  const isSheepSelected = column1 === 'sheep'
   const farmIncludeTeam = farm?.haveATeam
-
+  const isEventsSelected = menuOptions?.column1 === 'events'
   return (
     <div className=" sm:flex">
       {/* ********************************* FARM MENU ************************************* */}
@@ -93,10 +93,10 @@ const FarmMenu = (props: any) => {
               />
 
               <SquareOption
-                title="Animals"
-                iconName="herd"
-                onClick={() => handleChangeOption('column1', 'animals')}
-                selected={menuOptions.column1 === 'animals'}
+                title="Borregas"
+                iconName="sheep"
+                onClick={() => handleChangeOption('column1', 'sheep')}
+                selected={menuOptions.column1 === 'sheep'}
               />
 
               <SquareOption
@@ -119,24 +119,10 @@ const FarmMenu = (props: any) => {
             {/****************  column 2 *********************/}
 
             <div className="flex flex-col ">
-              {menuOptions?.column1 === 'animals' && (
-                <SquareOption
-                  title="Borregas"
-                  iconName="sheep"
-                  onClick={() => handleChangeOption('column2', 'sheep')}
-                  selected={menuOptions.column2 === 'sheep'}
-                />
-              )}
               {/* ************************************* *********** EVENTS MENU */}
 
-              {menuOptions?.column1 === 'events' && (
+              {isEventsSelected && (
                 <>
-                  {/* <SquareOption
-                    title="Todos"
-                    iconName="list"
-                    onClick={() => handleChangeOption('column2', 'list')}
-                    selected={menuOptions.column2 === 'list'}
-                  /> */}
                   <SquareOption
                     title="Montas"
                     iconName="cart"
@@ -193,7 +179,7 @@ const FarmMenu = (props: any) => {
             </div>
             <div className="flex flex-col">
               {/* ************************************* *********** SHEEP MENU */}
-              {column2 === 'sheep' && (
+              {isSheepSelected && (
                 <>
                   {/* <SquareOption
                     title="Todos"
@@ -204,19 +190,19 @@ const FarmMenu = (props: any) => {
                   <SquareOption
                     title="Nuevo"
                     iconName="plus"
-                    onClick={() => handleChangeOption('column3', 'add')}
+                    onClick={() => handleChangeOption('column2', 'add')}
                     selected={column3 === 'add'}
                   />
                   <SquareOption
                     title="Varios"
                     iconName="plus"
-                    onClick={() => handleChangeOption('column3', 'addMany')}
+                    onClick={() => handleChangeOption('column2', 'addMany')}
                     selected={column3 === 'addMany'}
                   />
                   <SquareOption
                     title="Lote"
                     iconName="plus"
-                    onClick={() => handleChangeOption('column3', 'addBatch')}
+                    onClick={() => handleChangeOption('column2', 'addBatch')}
                     selected={column3 === 'addBatch'}
                   />
                 </>
@@ -255,11 +241,11 @@ const FarmMenu = (props: any) => {
             </div>
           )}
           {/* ********************************+******+ +++************** ANIMALS LIST */}
-          {isSheepSelected && !column3 && <OvinesTable />}
+          {isSheepSelected && !column2 && <OvinesTable />}
           {/* ********************************+******+ +++************** ADD ONE ANIMAL */}
-          {isSheepSelected && column3 === 'add' && <AnimalForm />}
+          {isSheepSelected && column2 === 'add' && <AnimalForm />}
           {/* ********************************+******+ +++************** ADD ANIMALS */}
-          {isSheepSelected && menuOptions.column3 === 'addMany' && (
+          {isSheepSelected && menuOptions.column2 === 'addMany' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               <AnimalsForm
                 animal={{
@@ -269,7 +255,7 @@ const FarmMenu = (props: any) => {
             </div>
           )}
           {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}
-          {isSheepSelected && menuOptions.column3 === 'addBatch' && <Batch />}
+          {isSheepSelected && menuOptions.column2 === 'addBatch' && <Batch />}
           {/* ********************************+******+ +++************** ADMIN FARM TEAM*/}
           {menuOptions?.column1 === 'team' && (
             <>
