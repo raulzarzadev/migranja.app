@@ -11,11 +11,12 @@ export const animalCurrentStatusLabels: Record<
   STOLEN: 'Robada',
   SICK: 'Enferma',
   LOST: 'Perdida',
-  SOLD: 'Vendia',
+  SOLD: 'Vendida',
   ABORT: 'Aborto',
   BIRTH: 'Parto',
   EMPTY: 'Vacia',
-  DONE: 'Hecho'
+  DONE: 'Hecho',
+  MISSED: 'No Encontrada'
 }
 
 export type AnimalCurrentStatusType =
@@ -31,3 +32,4 @@ export type AnimalCurrentStatusType =
   | 'BIRTH'
   | 'EMPTY'
   | 'DONE'
+  | 'MISSED'

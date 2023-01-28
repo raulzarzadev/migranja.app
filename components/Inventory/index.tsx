@@ -3,7 +3,6 @@ import Icon from '@comps/Icon'
 import InputContainer from '@comps/inputs/InputContainer'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import HeaderTable from '@comps/MyTables/HeaderTable'
-import { current } from '@reduxjs/toolkit'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
@@ -46,7 +45,7 @@ const Inventory = () => {
   }
 
   const {
-    arraySorted,
+    arraySorted: animalsInReal,
     field: fieldSelected,
     ...sortMethods
   } = useSortByField(inventory)
@@ -57,17 +56,46 @@ const Inventory = () => {
     currentStatus: any
   }
   const [compareList, setCompareList] = useState<CompareList[]>([])
+  const [missAnimals, setMissAnimals] = useState<CompareList[]>([])
   const handleCompare = () => {
     let comparative: any[] = []
-    arraySorted.forEach(({ earring }) => {
+    let missAnimals: any[] = []
+    const activeAnimals = farmAnimals.filter(
+      ({ currentStatus }) => currentStatus === 'ACTIVE'
+    )
+    activeAnimals.forEach(({ earring, currentStatus }) => {
+      const animalExist = animalsInReal.find(
+        (animalInventory) => animalInventory.earring === earring
+      )
+      if (!animalExist)
+        missAnimals.push({
+          earring,
+          comments: animalCurrentStatusLabels[currentStatus || 'MISSED']
+        })
+    })
+
+    animalsInReal.forEach(({ earring }) => {
       const animal = farmAnimals.find((animal) => animal.earring === earring)
       if (animal) {
-        comparative.push({ earring, currentStatus: animal.currentStatus })
+        comparative.push({
+          earring,
+          comments: animalCurrentStatusLabels[animal?.currentStatus || 'MISSED']
+        })
       } else {
-        comparative.push({ earring, currentStatus: false })
+        comparative.push({ earring, comments: 'MISSED' })
       }
     })
+    setMissAnimals(missAnimals)
     setCompareList(comparative)
+  }
+  const handleClean = () => {
+    setInventory([])
+    setCompareList([])
+    setMissAnimals([])
+    localStorage.setItem(INVENTORY_LOCAL_STORAGE, JSON.stringify([]))
+  }
+  const handleSave = () => {
+    console.log({ missAnimals, animalsInReal, compareList })
   }
   return (
     <div>
@@ -76,125 +104,157 @@ const Inventory = () => {
       </div>
       <div className="">
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <div className="flex justify-center items-end">
+          <div className="flex justify-center  flex-col ">
             <FormProvider {...methods}>
-              <InputContainer
-                label="Arete"
-                className="w-[80px]"
-                name="earring"
-                type="text"
-              />
-              <InputContainer
-                label="Comentarios"
-                className="w-[200px]"
-                name="comments"
-                type="text"
-              />
-              <button className="mx-4 btn btn-sm btn-circle">
-                <Icon name="plus" />
-              </button>
+              <div className="flex justify-center sm:flex-row flex-col my-10 gap-2">
+                <InputContainer
+                  label="Arete"
+                  className="w-[80px]"
+                  name="earring"
+                  type="text"
+                />
+                <div className="flex items-end ">
+                  <InputContainer
+                    label="Comentarios"
+                    className="w-[200px]"
+                    name="comments"
+                    type="text"
+                  />
+                  <button className="mx-4 btn btn-sm btn-circle ">
+                    <Icon name="plus" />
+                  </button>
+                </div>
+              </div>
             </FormProvider>
+            <div className="flex w-full justify-evenly my-8">
+              <button
+                className="btn btn-sm btn-info"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleSave()
+                }}
+                disabled
+              >
+                Guardar <Icon name="save" />
+              </button>
+              <button
+                className="btn btn-sm btn-success"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleCompare()
+                }}
+              >
+                Comparar
+              </button>
+              <button
+                className="btn btn-sm btn-outline"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleClean()
+                }}
+              >
+                Limpiar
+              </button>
+            </div>
+            <div className="flex max-h-[80vh] overflow-y-auto">
+              <AnimalColTable
+                title="Existencia"
+                commentTitle="Comentarios"
+                animals={animalsInReal}
+                onDelete={handleRemoveEarring}
+              />
+              <AnimalColTable
+                title="Coincidencias"
+                commentTitle="Status"
+                animals={compareList}
+              />
+              <AnimalColTable
+                title="Faltantes"
+                commentTitle="Status"
+                animals={missAnimals}
+              />
+            </div>
           </div>
         </form>
-
-        <div className="mt-2">
-          <div className="flex items-center ">
-            Ordenar:
-            <HeaderTable
-              fieldSelected={fieldSelected}
-              label="Arete"
-              fieldName="earring"
-              {...sortMethods}
-            />
-            <HeaderTable
-              fieldSelected={fieldSelected}
-              label="Comentarios"
-              fieldName="comments"
-              {...sortMethods}
-            />
-          </div>
-          <div className="flex justify-center">
-            <div>
-              {arraySorted.map(({ earring, comments }, i) => (
-                <div key={i} className="flex  items-center my-1 w-[200px]">
-                  <span>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handleRemoveEarring(i)
-                      }}
-                    >
-                      <Icon name="close" size="xs" />
-                    </button>
-                  </span>
-                  <span className="mx-2"> {earring} </span>
-                  <span className="truncate"> {comments} </span>
-                </div>
-              ))}
-            </div>
-            <div>
-              {compareList.map(({ earring, currentStatus }, i) => {
-                return (
-                  <div key={i} className="flex w-full items-center my-1 ">
-                    <span className="mx-2">
-                      <ModalAnimalDetails size="sm" earring={earring} />{' '}
-                    </span>
-                    <InventoryAnimalStatus currentStatus={currentStatus} />
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-        <div className="flex w-full justify-between">
-          <button
-            className="btn btn-sm btn-info"
-            onClick={(e) => {
-              e.preventDefault()
-              handleCompare()
-            }}
-          >
-            Guardar inventario
-          </button>
-          <button
-            className="btn btn-sm btn-success"
-            onClick={(e) => {
-              e.preventDefault()
-              handleCompare()
-            }}
-          >
-            Comparar
-          </button>
-        </div>
       </div>
     </div>
   )
 }
-const InventoryAnimalStatus = ({
-  currentStatus
+
+const AnimalColTable = ({
+  animals = [],
+  commentTitle = '',
+  title = '',
+  onDelete
 }: {
-  currentStatus: string
+  animals: any[]
+  commentTitle: string
+  title: string
+  onDelete?: (index: number) => void
 }) => {
-  if (!currentStatus)
-    return (
-      <span className="text-error flex items-center font-bold">
-        <Icon name="info" size="xs" /> <span className="ml-1"></span>
-      </span>
-    )
+  const { arraySorted, ...sortMethods } = useSortByField(animals)
   return (
-    <div>
-      {currentStatus === 'ACTIVE' ? (
-        <span className="font-bold text-green-700">
-          {animalCurrentStatusLabels[currentStatus]}
-        </span>
+    <div className=" overflow-auto ">
+      <table className="bg-base-100 text-center">
+        <thead className="sticky top-0  ">
+          <tr className=" w-full bg-base-100 ">
+            <th className="p-2" colSpan={2}>
+              {title}
+            </th>
+          </tr>
+          <tr className="bg-base-100">
+            <th className="p-2">
+              <HeaderTable label="Arete" fieldName="earring" {...sortMethods} />
+            </th>
+            <th className="p-2">
+              <HeaderTable
+                label={commentTitle}
+                fieldName="comments"
+                {...sortMethods}
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody className="">
+          {arraySorted.map(({ earring, comments }, i) => (
+            <tr className="h-8" key={i}>
+              <td className="text-start px-2">
+                <span>
+                  {onDelete && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        onDelete?.(i)
+                      }}
+                    >
+                      <Icon name="close" size="xs" />
+                    </button>
+                  )}
+                </span>
+                <ModalAnimalDetails earring={earring} size="normal" />
+              </td>
+              <td className="">
+                <InventoryAnimalStatus comment={comments} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+const InventoryAnimalStatus = ({ comment }: { comment: string }) => {
+  if (!comment)
+    return <span className="text-error flex items-center font-bold"></span>
+  return (
+    <div className="max-w-[100px] truncate">
+      {comment === 'MISSED' ? (
+        <div className="flex w-full justify-center">
+          <Icon name="info" size="xs" />
+        </div>
       ) : (
-        <span className="font-bold text-warning">
-          {
-            animalCurrentStatusLabels[
-              (currentStatus as AnimalType['currentStatus']) || 'LOST'
-            ]
-          }
-        </span>
+        <span className="font-bold text-green-700 ">{comment}</span>
       )}
     </div>
   )

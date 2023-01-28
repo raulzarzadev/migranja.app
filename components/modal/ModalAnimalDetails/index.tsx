@@ -9,7 +9,7 @@ const ModalAnimalDetails = ({
   earring = '',
   size = 'lg'
 }: {
-  size?: 'lg' | 'md' | 'sm'
+  size?: 'lg' | 'md' | 'sm' | 'normal'
   earring?: AnimalType['earring']
 }) => {
   const [openAnimalDetails, setOpenAnimalDetails] = useState(false)
@@ -26,7 +26,8 @@ const ModalAnimalDetails = ({
   const sizing = {
     sm: 'text-xs',
     md: 'text-md',
-    lg: 'text-xl'
+    lg: 'text-xl',
+    normal: 'font-normal text-md'
   }
   return (
     <span>

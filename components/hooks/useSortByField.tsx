@@ -48,7 +48,8 @@ const useSortByField = (array: any[], ops?: Options) => {
       : sortByField(array, defaultSortField, reverse),
     handleSortBy,
     reverse: sortReverse,
-    field
+    field,
+    fieldSelected: field
   }
 }
 

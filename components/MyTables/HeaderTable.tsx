@@ -19,7 +19,7 @@ const HeaderTable = ({
         e.preventDefault()
         handleSortBy(fieldName)
       }}
-      className={`btn btn-sm btn-ghost mx-auto ${
+      className={`btn btn-sm btn-ghost ${
         fieldName === fieldSelected && 'underline'
       } `}
     >
