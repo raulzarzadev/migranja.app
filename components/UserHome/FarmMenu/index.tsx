@@ -2,6 +2,7 @@ import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
 import AnimalForm from '@comps/forms/AnimalForm'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
+import Inventory from '@comps/Inventory'
 import SalesList from '@comps/Sales/SalesList'
 import WeaningEvents from '@comps/WeaningEvents'
 import Batch from 'components/Batch'
@@ -33,6 +34,7 @@ type Option =
   | 'numbers'
   | 'sell'
   | 'sales'
+  | 'inventory'
 
 const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
@@ -181,12 +183,6 @@ const FarmMenu = (props: any) => {
               {/* ************************************* *********** SHEEP MENU */}
               {isSheepSelected && (
                 <>
-                  {/* <SquareOption
-                    title="Todos"
-                    iconName="list"
-                    onClick={() => handleChangeOption('column3', 'list')}
-                    selected={column3 === 'list'}
-                  /> */}
                   <SquareOption
                     title="Nuevo"
                     iconName="plus"
@@ -204,6 +200,12 @@ const FarmMenu = (props: any) => {
                     iconName="plus"
                     onClick={() => handleChangeOption('column2', 'addBatch')}
                     selected={column3 === 'addBatch'}
+                  />
+                  <SquareOption
+                    title="Inventario"
+                    iconName="list"
+                    onClick={() => handleChangeOption('column2', 'inventory')}
+                    selected={column2 === 'inventory'}
                   />
                 </>
               )}
@@ -256,6 +258,9 @@ const FarmMenu = (props: any) => {
           )}
           {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}
           {isSheepSelected && menuOptions.column2 === 'addBatch' && <Batch />}
+          {isSheepSelected && menuOptions.column2 === 'inventory' && (
+            <Inventory />
+          )}
           {/* ********************************+******+ +++************** ADMIN FARM TEAM*/}
           {menuOptions?.column1 === 'team' && (
             <>
