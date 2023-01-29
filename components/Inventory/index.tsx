@@ -1,6 +1,10 @@
+import Box from '@comps/Basics/Box'
+import P from '@comps/Basics/Paragraph'
+import H4 from '@comps/Basics/SubTitle'
 import useSortByField from '@comps/hooks/useSortByField'
 import Icon from '@comps/Icon'
 import InputContainer from '@comps/inputs/InputContainer'
+import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import HeaderTable from '@comps/MyTables/HeaderTable'
 import { useEffect, useState } from 'react'
@@ -53,7 +57,7 @@ const Inventory = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
   interface CompareList {
     earring: string
-    currentStatus: any
+    comments: any
   }
   const [compareList, setCompareList] = useState<CompareList[]>([])
   const [missAnimals, setMissAnimals] = useState<CompareList[]>([])
@@ -97,6 +101,19 @@ const Inventory = () => {
   const handleSave = () => {
     console.log({ missAnimals, animalsInReal, compareList })
   }
+  const [openInventory, setOpenInventory] = useState(false)
+  const handleOpenInventory = () => {
+    setOpenInventory(!openInventory)
+  }
+  const [openCoincidence, setOpenCoincidence] = useState(false)
+  const handleOpenCoincidence = () => {
+    setOpenCoincidence(!openCoincidence)
+  }
+  const [openMissed, setOpenMissed] = useState(false)
+  const handleOpenMissed = () => {
+    setOpenMissed(!openMissed)
+  }
+
   return (
     <div>
       <div>
@@ -106,27 +123,25 @@ const Inventory = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="flex justify-center  flex-col ">
             <FormProvider {...methods}>
-              <div className="flex justify-center sm:flex-row flex-col my-10 gap-2">
+              <div className="grid gap-2 my-2 mb-10 sm:grid-cols-3 items-end">
                 <InputContainer
                   label="Arete"
-                  className="w-[80px]"
+                  className="w-full"
                   name="earring"
                   type="text"
                 />
-                <div className="flex items-end ">
-                  <InputContainer
-                    label="Comentarios"
-                    className="w-[200px]"
-                    name="comments"
-                    type="text"
-                  />
-                  <button className="mx-4 btn btn-sm btn-circle ">
-                    <Icon name="plus" />
-                  </button>
-                </div>
+                <InputContainer
+                  label="Comentarios"
+                  className=""
+                  name="comments"
+                  type="text"
+                />
+                <button className="btn btn-sm    ">
+                  <span className="">Agregar</span> <Icon name="plus" />
+                </button>
               </div>
             </FormProvider>
-            <div className="flex w-full justify-evenly my-8">
+            <div className="grid gap-2 my-2  sm:grid-cols-3">
               <button
                 className="btn btn-sm btn-info"
                 onClick={(e) => {
@@ -156,23 +171,95 @@ const Inventory = () => {
                 Limpiar
               </button>
             </div>
-            <div className="flex max-h-[80vh] overflow-y-auto">
-              <AnimalColTable
-                title="Existencia"
-                commentTitle="Comentarios"
-                animals={animalsInReal}
-                onDelete={handleRemoveEarring}
-              />
-              <AnimalColTable
-                title="Coincidencias"
-                commentTitle="Status"
-                animals={compareList}
-              />
-              <AnimalColTable
-                title="Faltantes"
-                commentTitle="Status"
-                animals={missAnimals}
-              />
+            <div className="grid gap-4 my-4 text-center sm:grid-cols-3 items-stretch">
+              <button
+                className=""
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleOpenInventory()
+                }}
+              >
+                <Box>
+                  <H4>Existencia</H4>
+                  <P>{animalsInReal.length || 0}</P>
+                </Box>
+                <Modal
+                  title="Existencias "
+                  handleOpen={handleOpenInventory}
+                  open={openInventory}
+                >
+                  <div>
+                    <AnimalColTable
+                      title="Existencia"
+                      commentTitle="Comentarios"
+                      animals={animalsInReal}
+                      onDelete={handleRemoveEarring}
+                    />
+                  </div>
+                </Modal>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleOpenCoincidence()
+                }}
+              >
+                <Box>
+                  <H4>Coincidencias</H4>
+                  <P>
+                    {
+                      compareList.filter(
+                        ({ comments }) => comments !== 'MISSED'
+                      ).length
+                    }
+                  </P>
+                  <H4>Sobrantes</H4>
+                  <P>
+                    {
+                      compareList.filter(
+                        ({ comments }) => comments === 'MISSED'
+                      ).length
+                    }
+                  </P>
+                </Box>
+                <Modal
+                  title="Coincidecias"
+                  open={openCoincidence}
+                  handleOpen={handleOpenCoincidence}
+                >
+                  <>
+                    <AnimalColTable
+                      title="Coincidencias"
+                      commentTitle="Status"
+                      animals={compareList}
+                    />
+                  </>
+                </Modal>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleOpenMissed()
+                }}
+              >
+                <Box>
+                  <H4>Faltantes</H4>
+                  <P>{missAnimals.length || 0}</P>
+                </Box>
+                <Modal
+                  title="Faltantes"
+                  open={openMissed}
+                  handleOpen={handleOpenMissed}
+                >
+                  <>
+                    <AnimalColTable
+                      title="Faltantes"
+                      commentTitle="Status"
+                      animals={missAnimals}
+                    />
+                  </>
+                </Modal>
+              </button>
             </div>
           </div>
         </form>
@@ -194,8 +281,8 @@ const AnimalColTable = ({
 }) => {
   const { arraySorted, ...sortMethods } = useSortByField(animals)
   return (
-    <div className=" overflow-auto ">
-      <table className="bg-base-100 text-center">
+    <div className=" overflow-auto justify-center flex w-full ">
+      <table className="bg-base-100 text-center ">
         <thead className="sticky top-0  ">
           <tr className=" w-full bg-base-100 ">
             <th className="p-2" colSpan={2}>
