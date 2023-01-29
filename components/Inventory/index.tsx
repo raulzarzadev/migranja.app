@@ -123,7 +123,7 @@ const Inventory = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="flex justify-center  flex-col ">
             <FormProvider {...methods}>
-              <div className="grid gap-2 my-2 mb-10 sm:grid-cols-3 items-end">
+              <div className="grid gap-4 my-2 mb-10 sm:grid-cols-3 items-end">
                 <InputContainer
                   label="Arete"
                   className="w-full"
@@ -141,7 +141,7 @@ const Inventory = () => {
                 </button>
               </div>
             </FormProvider>
-            <div className="grid gap-2 my-2  sm:grid-cols-3">
+            <div className="grid gap-4 my-2  sm:grid-cols-3">
               <button
                 className="btn btn-sm btn-info"
                 onClick={(e) => {
