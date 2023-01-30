@@ -37,7 +37,10 @@ const InventoryForm = ({
 
   const onSubmit = (data: any) => {
     setSaveDisabled(true)
-    addItemToLocalStorage(data, INVENTORY_LOCAL_STORAGE)
+    addItemToLocalStorage(
+      { earring: data?.earring, comments: data?.comments || '' },
+      INVENTORY_LOCAL_STORAGE
+    )
     methods.reset()
   }
 
@@ -71,7 +74,7 @@ const InventoryForm = ({
         .map(({ earring, currentStatus }) => {
           return { earring, comments: currentStatus || '' }
         })
-      console.log({ predefinedAnimals })
+      // console.log({ predefinedAnimals })
       setFullStock(predefinedAnimals)
       setAppStock(predefinedAnimals)
     } else {
@@ -161,6 +164,7 @@ const InventoryForm = ({
         stockCoincidences,
         stockMissed
       }
+
       const res = await createInventory(newInventory)
       console.log({ res })
     } catch (error) {
