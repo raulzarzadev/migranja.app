@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
-import { AnimalType } from 'types/base/AnimalType.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 
 const INVENTORY_LOCAL_STORAGE = 'sheep-inventory'
