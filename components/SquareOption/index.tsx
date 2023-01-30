@@ -1,7 +1,6 @@
-import { useOutsideClick } from 'components/hooks/useOutsideClick'
 import Icon from 'components/Icon'
 import { IconName } from 'components/Icon/icons-list'
-import { ReactNode, useRef, useState } from 'react'
+import { ReactNode } from 'react'
 
 interface SquareOptionType {
   title: string
@@ -27,7 +26,7 @@ const SquareOption = ({
       onClick={onClick}
       {...props}
     >
-      <div className=" flex w-16 flex-col aspect-square rounded-lg bg-base-300 justify-center items-center shadow-md cursor-pointer">
+      <div className=" text-xs flex w-[4rem] flex-col aspect-square rounded-lg bg-base-300 justify-center items-center shadow-md cursor-pointer">
         <span>{title}</span>
         {iconName && (
           <span>

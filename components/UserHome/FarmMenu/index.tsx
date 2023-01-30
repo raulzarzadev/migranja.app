@@ -2,7 +2,8 @@ import BirthEvents from '@comps/BirthEvents'
 import FarmNumbers from '@comps/FarmNumbers'
 import AnimalForm from '@comps/forms/AnimalForm'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
-import Inventory from '@comps/Inventory'
+import InventoryForm from '@comps/InventoryForm'
+import InventoryHistory from '@comps/InventoryHistory'
 import SalesList from '@comps/Sales/SalesList'
 import WeaningEvents from '@comps/WeaningEvents'
 import Batch from 'components/Batch'
@@ -74,9 +75,14 @@ const FarmMenu = (props: any) => {
     setMenuOptions({ ...menuOptions, [column]: option })
   }
 
+  const isAddSelected = [column1, column2, column3].includes('add')
   const isSheepSelected = column1 === 'sheep'
   const farmIncludeTeam = farm?.haveATeam
   const isEventsSelected = menuOptions?.column1 === 'events'
+  const sheepInventory =
+    isSheepSelected && column2 === 'inventory' && !isAddSelected
+  const newSheepInventory =
+    isSheepSelected && column2 === 'inventory' && isAddSelected
   return (
     <div className=" sm:flex">
       {/* ********************************* FARM MENU ************************************* */}
@@ -187,7 +193,7 @@ const FarmMenu = (props: any) => {
                     title="Nuevo"
                     iconName="plus"
                     onClick={() => handleChangeOption('column2', 'add')}
-                    selected={column3 === 'add'}
+                    selected={column2 !== 'inventory' && column3 === 'add'}
                   />
                   <SquareOption
                     title="Varios"
@@ -201,13 +207,25 @@ const FarmMenu = (props: any) => {
                     onClick={() => handleChangeOption('column2', 'addBatch')}
                     selected={column3 === 'addBatch'}
                   />
+                  {/* ************************************* *********** INVENTORY MENU */}
+
                   <SquareOption
-                    title="Inventario"
+                    title="Inventarios"
                     iconName="list"
                     onClick={() => handleChangeOption('column2', 'inventory')}
                     selected={column2 === 'inventory'}
                   />
                 </>
+              )}
+            </div>
+            <div className="flex flex-col">
+              {isSheepSelected && column2 === 'inventory' && (
+                <SquareOption
+                  title="Nuevo"
+                  iconName="plus"
+                  onClick={() => handleChangeOption('column3', 'add')}
+                  selected={column3 === 'add'}
+                />
               )}
             </div>
           </div>
@@ -258,9 +276,8 @@ const FarmMenu = (props: any) => {
           )}
           {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}
           {isSheepSelected && menuOptions.column2 === 'addBatch' && <Batch />}
-          {isSheepSelected && menuOptions.column2 === 'inventory' && (
-            <Inventory />
-          )}
+          {newSheepInventory && <InventoryForm />}
+          {sheepInventory && <InventoryHistory />}
           {/* ********************************+******+ +++************** ADMIN FARM TEAM*/}
           {menuOptions?.column1 === 'team' && (
             <>

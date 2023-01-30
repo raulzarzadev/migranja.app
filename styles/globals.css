@@ -7,3 +7,8 @@
     height: calc(100vh - 30vh);
   }
 }
+
+.temporary-bounce {
+  -webkit-animation-iteration-count: 5;
+  animation-iteration-count: 5;
+}
