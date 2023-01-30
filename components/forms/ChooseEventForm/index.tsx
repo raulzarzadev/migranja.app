@@ -1,17 +1,26 @@
+import InventoryForm from '@comps/InventoryForm'
 import { useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
 import DropInForm from '../DropInForm'
 import DropOutForm from '../DropOutForm'
 
 const ChooseEventForm = ({
-  animalsIds
+  animalsIds,
+  title
 }: {
+  title?: string
   animalsIds: AnimalType['id'][]
 }) => {
   const EVENTS_FORMS = {
     default: <DefaultFormInfo />,
     dropOut: <DropOutForm animalsIds={animalsIds} />,
-    dropIn: <DropInForm animalsIds={animalsIds} />
+    dropIn: <DropInForm animalsIds={animalsIds} />,
+    inventory: (
+      <InventoryForm
+        animalsIds={animalsIds}
+        inventoryType={`partial/${title}`}
+      />
+    )
   } as const
   type EventName = keyof typeof EVENTS_FORMS
 
@@ -24,6 +33,7 @@ const ChooseEventForm = ({
         onChange={({ target: { value } }: any) => setOptionSelected(value)}
       >
         <option value={'default'}> Selecciona el tipo de evento</option>
+        <option value={'inventory'}> Inventario</option>
         <option value={'dropOut'}> Dar de baja</option>
         <option value={'dropIn'}> Dar de alta</option>
       </select>

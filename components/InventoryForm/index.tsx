@@ -20,7 +20,13 @@ import {
 } from 'types/base/Inventory.model'
 
 const INVENTORY_LOCAL_STORAGE = 'sheep-inventory'
-const InventoryForm = () => {
+const InventoryForm = ({
+  animalsIds,
+  inventoryType
+}: {
+  animalsIds?: string[]
+  inventoryType?: string
+}) => {
   const methods = useForm()
   const [inventory, setInventory] = useState<any[]>([])
   useEffect(() => {
@@ -59,14 +65,26 @@ const InventoryForm = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
 
   useEffect(() => {
-    const allAnimals = farmAnimals
-      //.filter(({ currentStatus }) => currentStatus === 'ACTIVE')
-      .map(({ earring, currentStatus }) => {
-        return { earring, comments: currentStatus || '' }
-      })
-    setFullStock(allAnimals)
-    setAppStock(allAnimals.filter(({ comments }) => comments === 'ACTIVE'))
-  }, [farmAnimals])
+    if (animalsIds) {
+      const predefinedAnimals = farmAnimals
+        .filter(({ id }) => animalsIds.includes(id))
+        .map(({ earring, currentStatus }) => {
+          return { earring, comments: currentStatus || '' }
+        })
+      console.log({ predefinedAnimals })
+      setFullStock(predefinedAnimals)
+      setAppStock(predefinedAnimals)
+    } else {
+      const allAnimals = farmAnimals
+        //.filter(({ currentStatus }) => currentStatus === 'ACTIVE')
+        .map(({ earring, currentStatus }) => {
+          return { earring, comments: currentStatus || '' }
+        })
+
+      setFullStock(allAnimals)
+      setAppStock(allAnimals.filter(({ comments }) => comments === 'ACTIVE'))
+    }
+  }, [animalsIds, farmAnimals])
 
   const [fullStock, setFullStock] = useState<InventoryStock[]>([])
   const [appStock, setAppStock] = useState<InventoryStock[]>([])
@@ -131,7 +149,7 @@ const InventoryForm = () => {
           userId: user?.id || '',
           name: user?.name || user?.displayName || ''
         },
-        type: 'full',
+        type: inventoryType || 'full',
         description: '',
         farm: {
           id: farm?.id || '',

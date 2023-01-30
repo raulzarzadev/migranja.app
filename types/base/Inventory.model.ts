@@ -1,7 +1,7 @@
 import { UserType } from '@firebase/Users/user.model'
 import { BaseFarmEvent } from './FarmEvent.model'
 import { TypeBase } from './TypeBase.model'
-export type TypeOfInventory = 'full' | 'partial'
+export type TypeOfInventory = 'full' | 'partial' | string
 export interface Inventory {
   type: TypeOfInventory
   description: string

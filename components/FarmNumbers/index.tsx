@@ -389,7 +389,10 @@ const AnimalsList = ({
         ))}
       </div>
       <div className="text-end">Total: {animals.length}</div>
-      <AnimalsOptions animalsEarrings={animals.map(({ earring }) => earring)} />
+      <AnimalsOptions
+        animalsEarrings={animals.map(({ earring }) => earring)}
+        title={title}
+      />
     </div>
   )
 }

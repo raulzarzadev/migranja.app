@@ -9,9 +9,11 @@ import { selectFarmAnimals } from 'store/slices/farmSlice'
 
 const AnimalsOptions = ({
   animalsEarrings,
+  title,
   setAnimalsEarrings
 }: {
   animalsEarrings: string[]
+  title?: string
   setAnimalsEarrings?: ([]) => void
 }) => {
   const [_earrings, _setEarrings] = useState<string[]>([])
@@ -58,7 +60,7 @@ const AnimalsOptions = ({
         handleOpen={handleOpenEvent}
         open={openEvent}
       >
-        <ChooseEventForm animalsIds={animalsIds} />
+        <ChooseEventForm animalsIds={animalsIds} title={title} />
       </Modal>
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
         <span>
