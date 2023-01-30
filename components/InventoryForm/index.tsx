@@ -195,7 +195,9 @@ const InventoryForm = () => {
             </button>
             <button
               className={`btn btn-sm btn-success  ${
-                saveDisabled && ' animate-bounce temporary-bounce'
+                saveDisabled &&
+                !!inventory.length &&
+                ' animate-bounce temporary-bounce'
               } `}
               onClick={(e) => {
                 e.preventDefault()
