@@ -28,7 +28,7 @@ export const Nav = () => {
                 router.reload()
               }, 300)
             }}
-            className="flex items-center font-bold"
+            className="flex items-center font-bold btn btn-sm btn-ghost"
           >
             <Icon name="home" size="xs" />
             <span className="ml-1">MiRanchito</span>

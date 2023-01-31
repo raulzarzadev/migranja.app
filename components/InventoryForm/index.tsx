@@ -307,16 +307,15 @@ const SquareResult = ({
     setOpenModal(!openModal)
   }
   return (
-    <button
+    <div
+      className="cursor-pointer hover:shadow-none active:shadow-inner bg-base-300 shadow-md rounded-md"
       onClick={(e) => {
         e.preventDefault()
         handleOpenModal()
       }}
     >
-      <Box>
-        <H4>{title}</H4>
-        <P>{animals.length || 0}</P>
-      </Box>
+      <H4>{title}</H4>
+      <P>{animals.length || 0}</P>
       <Modal title={title} open={openModal} handleOpen={handleOpenModal}>
         <>
           <H4>{title}</H4>
@@ -328,7 +327,7 @@ const SquareResult = ({
           />
         </>
       </Modal>
-    </button>
+    </div>
   )
 }
 
