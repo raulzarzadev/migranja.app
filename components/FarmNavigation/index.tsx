@@ -61,7 +61,11 @@ const FarmNavigation = ({
           {setEditing && (
             <button
               className="btn btn-sm btn-secondary"
-              onClick={() => setEditing?.(true)}
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                setEditing?.(true)
+              }}
             >
               Configurar
             </button>
@@ -108,7 +112,11 @@ const FarmRow = ({
           {setEditing && (
             <button
               className="btn  btn-sm btn-ghost text-info"
-              onClick={() => setEditing?.(true)}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setEditing?.(true)
+              }}
             >
               <Icon name="edit" />
             </button>
