@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 const MyDocument = () => (
-  <Document author="ranchito.digital" title="Elemento de prueba">
+  <Document author="migranja.app" title="Elemento de prueba">
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
         <Text>Section #1</Text>

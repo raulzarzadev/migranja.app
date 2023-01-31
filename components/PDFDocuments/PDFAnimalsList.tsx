@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 const PDFAnimalsList = ({ animals, title }: any) => (
-  <Document author="ranchito.digital" title={`lista-de-animales_${title}`}>
+  <Document author="migranja.app" title={`lista-de-animales_${title}`}>
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
         <Text>Lista de animles {title}</Text>

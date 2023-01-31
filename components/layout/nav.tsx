@@ -31,7 +31,7 @@ export const Nav = () => {
             className="flex items-center font-bold btn btn-sm btn-ghost"
           >
             <Icon name="home" size="xs" />
-            <span className="ml-1">MiRanchito</span>
+            <span className="ml-1">Mi Granja</span>
           </button>
         </div>
 

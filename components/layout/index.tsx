@@ -23,10 +23,9 @@ function Layout({ children }: LayoutProps) {
         />
         <meta
           name="keywords"
-          content="farm, ranchito, granja, crianza de animales, borregos"
+          content="farm, ranchito, miRanchito, migranja granja, crianza de animales, borregos"
         />
-        <title>Mi Ranchito</title>
-
+        ,<title>Mi Granja</title>
         <link rel="manifest" href="/manifest.json" />
         <link
           href="/assets/icons/icon-48x48.png"
