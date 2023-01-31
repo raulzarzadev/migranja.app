@@ -1,7 +1,10 @@
+import H2 from '@comps/Basics/Title2'
 import { FarmType } from '@firebase/Farm/farm.model'
+import { UserType } from '@firebase/Users/user.model'
 import Icon from 'components/Icon'
 import InvitationStatus from 'components/InvitationStatus'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 
@@ -20,48 +23,97 @@ const FarmNavigation = ({
   showInvitationsStatus?: boolean
 }) => {
   const user = useSelector(selectAuthState)
+  if (farm?.id && showGo)
+    return (
+      <Link href={`/${farm?.id}`}>
+        <div className=" bg-base-300 rounded-md shadow-md   cursor-pointer active:shadow-inner hover:shadow-none">
+          <FarmRow
+            farm={{
+              name: farm?.name || '',
+              id: farm?.id || ''
+            }}
+            setEditing={setEditing}
+            showInvitationsStatus={showInvitationsStatus}
+            user={user}
+          />
+        </div>
+      </Link>
+    )
+  if (farm?.id)
+    return (
+      <div className=" bg-base-300 rounded-md shadow-md   ">
+        <FarmRow
+          farm={{
+            name: farm.name || '',
+            id: farm?.id || ''
+          }}
+          setEditing={setEditing}
+          showInvitationsStatus={showInvitationsStatus}
+          user={user}
+        />
+      </div>
+    )
   return (
-    <div>
-      <div className=" w-full bg-base-300 p-2 rounded-md shadow-md min-h-12 mb-2  grid grid-flow-col grid-cols-4 place-items-center ">
-        {farm?.id ? (
-          <>
-            <span>
-              {setEditing && (
-                <button
-                  className="btn btn-circle btn-sm btn-info"
-                  onClick={() => setEditing?.(true)}
-                >
-                  <Icon name="edit" size="xs" />
-                </button>
-              )}
-            </span>
-            <div className="text-xl font-bold">{farm?.name}</div>
-            <div className="flex justify-between  items-center">
-              {showGo && farm?.id && (
-                <Link href={`/${farm.id}`} className="btn btn-sm  mr-1">
-                  ir
-                </Link>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="col-span-full flex justify-center flex-col items-center">
-            <div>No haz configurado una propia granja </div>
-            {setEditing && (
-              <button
-                className="btn btn-sm btn-secondary"
-                onClick={() => setEditing?.(true)}
-              >
-                Configurar
-              </button>
-            )}
-          </div>
-        )}
-        <span>
+    <>
+      <div className=" bg-base-300 rounded-md shadow-md  min-h-12 py-2 ">
+        <div className="col-span-full flex justify-center flex-col items-center">
+          <div>No haz configurado una propia granja </div>
+          {setEditing && (
+            <button
+              className="btn btn-sm btn-secondary"
+              onClick={() => setEditing?.(true)}
+            >
+              Configurar
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  )
+}
+const FarmRow = ({
+  farm,
+  setEditing,
+  showInvitationsStatus,
+  user
+}: {
+  farm: { name: string; id: string }
+  setEditing?: (bool: boolean) => void
+  showInvitationsStatus?: boolean
+  user?: UserType | null
+}) => {
+  const router = useRouter()
+  const atHome = router.pathname === '/'
+  return (
+    <div className=" w-full  p-2  min-h-12 mb-2 ">
+      <div className=" grid grid-flow-col grid-cols-3 place-items-center items-center">
+        <span className=" flex ">
+          <button
+            disabled={atHome}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              router.back()
+            }}
+            className={'btn btn-sm btn-circle btn-ghost'}
+          >
+            <Icon name="left" size="sm" />
+          </button>
+        </span>
+        <H2>{farm.name}</H2>
+        <div className="flex justify-between">
           {showInvitationsStatus && (
             <InvitationStatus farmId={farm?.id} userId={user?.id} />
           )}
-        </span>
+          {setEditing && (
+            <button
+              className="btn  btn-sm btn-ghost text-info"
+              onClick={() => setEditing?.(true)}
+            >
+              <Icon name="edit" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

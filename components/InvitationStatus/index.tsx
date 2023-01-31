@@ -242,7 +242,12 @@ const InvitationStatus = ({
       </button>
     )
   }
-  return <div>{STATUSES?.[invitationStatus]}</div>
+  return (
+    <div className="flex items-center">
+      <span className="mr-2">Invitación: </span>
+      {STATUSES?.[invitationStatus]}
+    </div>
+  )
 }
 
 export default InvitationStatus

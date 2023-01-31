@@ -1,8 +1,9 @@
-import InstallButton from 'components/InstallButton'
+import Icon from '@comps/Icon'
 import UserNotifications from 'components/UserNotifications'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { Component } from 'react'
+import { useRouter } from 'next/router'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 import { googleLogin, logout } from '../../firebase/Users/main'
@@ -10,17 +11,29 @@ import { UserType } from '../../firebase/Users/user.model'
 
 export const Nav = () => {
   const user = useSelector(selectAuthState)
+  const router = useRouter()
   return (
     <nav className="mb-2">
       <div className="navbar bg-base-300 rounded-lg shadow-md ">
         <div className="flex-1">
-          <Link className="btn btn-ghost normal-case text-xl btn-sm" href={'/'}>
-            MiRanchito
-          </Link>
+          {/* <Link
+            className="btn btn-ghost normal-case text-xl btn-sm"
+            
+          > */}
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              router.replace('/')
+              setTimeout(() => {
+                router.reload()
+              }, 300)
+            }}
+            className="flex items-center font-bold"
+          >
+            <Icon name="home" size="xs" />
+            <span className="ml-1">MiRanchito</span>
+          </button>
         </div>
-        {/* <div>
-          <InstallButton />
-        </div> */}
 
         {user ? (
           <UserMenu user={user} />

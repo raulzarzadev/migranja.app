@@ -1,9 +1,8 @@
+import H2 from '@comps/Basics/Title2'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { getInvitationsFarm } from '@firebase/Farm/main'
 import FarmNavigation from 'components/FarmNavigation'
 
-import InvitationStatus from 'components/InvitationStatus'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
@@ -22,6 +21,7 @@ const FarmInvitations = () => {
 
   return (
     <div>
+      {!!farmInvitations.length && <H2>Colaboraciones</H2>}
       {farmInvitations.map((invitation, i) => (
         <FarmInvitation
           key={i}
