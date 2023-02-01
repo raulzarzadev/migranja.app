@@ -1,9 +1,16 @@
 import { useState } from 'react'
 import { getProperty } from 'dot-prop'
+import filterByArrayOfFilters from 'utils/filterByArrayOfFilters'
 
+interface FilterType {
+  field: string
+  symbol: '==' | '<' | '>' | '<=' | '>='
+  value: any
+}
 const useFilterByField = <T,>(array: T[]) => {
   const [_array, _setArray] = useState([...array])
   const [filtersSelected, setFiltersSelected] = useState<string[]>([])
+
   const handleFilterBy = (
     field = '',
     symbol: '==' | '<' | '>' | '<=' | '>=',
@@ -21,7 +28,7 @@ const useFilterByField = <T,>(array: T[]) => {
         const fieldValue = getProperty(item, field)
         if (symbol === '==') return fieldValue === value
         if (symbol === '<') return fieldValue < value
-        if (symbol === '>') return fieldValue < value
+        if (symbol === '>') return fieldValue > value
         if (symbol === '>=') return fieldValue >= value
         if (symbol === '<=') return fieldValue <= value
       })
@@ -33,9 +40,23 @@ const useFilterByField = <T,>(array: T[]) => {
     _setArray(array)
     setFiltersSelected([])
   }
+
+  const handleFilterByArray = (
+    filters: FilterType[],
+    ops?: { label: string }
+  ) => {
+    const label = ops?.label
+
+    if (label) {
+      setFiltersSelected([...filtersSelected, label])
+    }
+    const res = filterByArrayOfFilters<any>(filters, _array)
+    _setArray(res)
+  }
   return {
     arrayFiltered: _array,
     handleFilterBy,
+    handleFilterByArray,
     filtersSelected,
     reset
   }

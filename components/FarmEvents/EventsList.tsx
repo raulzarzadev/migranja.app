@@ -1,41 +1,38 @@
+import EventsFilters from '@comps/EventsFilters'
 import useSortByField from '@comps/hooks/useSortByField'
 import HeaderTable from '@comps/MyTables/HeaderTable'
-import DebouncedInput from 'components/inputs/DebouncedInput'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FarmState } from 'store/slices/farmSlice'
-import {
-  animalCurrentStatusLabels,
-  AnimalCurrentStatusType
-} from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
+
 import FarmEventCard from './FarmEvent/FarmEventCard'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   const [filteredEvents, setFilteredEvents] = useState(events || [])
-  const [filterBy, setFilterBy] = useState<string>('')
+  //const [filterBy, setFilterBy] = useState<string>('')
 
-  useEffect(() => {
-    if (!filterBy) {
-      setFilteredEvents([...events])
-    } else {
-      const filtered = [...events].filter((event) => {
-        return (
-          animalCurrentStatusLabels[event?.type as AnimalCurrentStatusType]
-            ?.toLowerCase()
-            ?.includes(filterBy?.toLowerCase()) ||
-          event?.eventData?.breedingBatch?.find(({ earring }: any) =>
-            earring?.includes(filterBy)
-          ) ||
-          event?.eventData.calfs?.find(({ earring }: any) =>
-            earring?.includes(filterBy)
-          ) ||
-          event?.eventData?.parents?.father?.earring?.includes(filterBy) ||
-          event?.eventData?.parents?.mother?.earring?.includes(filterBy) ||
-          event?.eventData?.earring?.includes(filterBy)
-        )
-      })
-      setFilteredEvents(filtered)
-    }
-  }, [events, filterBy])
+  // useEffect(() => {
+  //   if (!filterBy) {
+  //     setFilteredEvents([...events])
+  //   } else {
+  //     const filtered = [...events].filter((event) => {
+  //       return (
+  //         animalCurrentStatusLabels[event?.type as AnimalCurrentStatusType]
+  //           ?.toLowerCase()
+  //           ?.includes(filterBy?.toLowerCase()) ||
+  //         event?.eventData?.breedingBatch?.find(({ earring }: any) =>
+  //           earring?.includes(filterBy)
+  //         ) ||
+  //         event?.eventData.calfs?.find(({ earring }: any) =>
+  //           earring?.includes(filterBy)
+  //         ) ||
+  //         event?.eventData?.parents?.father?.earring?.includes(filterBy) ||
+  //         event?.eventData?.parents?.mother?.earring?.includes(filterBy) ||
+  //         event?.eventData?.earring?.includes(filterBy)
+  //       )
+  //     })
+  //     setFilteredEvents(filtered)
+  //   }
+  // }, [events, filterBy])
 
   const { arraySorted, ...sortMethods } = useSortByField(filteredEvents, {
     defaultSortField: 'createdAt',
@@ -44,12 +41,13 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
 
   return (
     <div role="events-list">
-      <DebouncedInput
+      {/* <DebouncedInput
         onChange={(value) => setFilterBy(`${value}`)}
         value={''}
         className="input input-bordered w-full placeholder:font-bold mb-2 "
         placeholder="Buscar ... "
-      />
+      /> */}
+      <EventsFilters array={events} setArray={setFilteredEvents} />
       <div className="text-center">
         <span>
           Coincidencias {filteredEvents?.length || 0} de {events?.length}
@@ -57,8 +55,8 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
       </div>
       <div className="flex w-full justify-around my-4">
         <HeaderTable
-          label={'Fecha'}
-          fieldName={'eventData.date'}
+          label={'Tipo de evento'}
+          fieldName={'type'}
           {...sortMethods}
         />
         <HeaderTable
@@ -67,8 +65,8 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
           {...sortMethods}
         />
         <HeaderTable
-          label={'Tipo de evento'}
-          fieldName={'type'}
+          label={'Programado'}
+          fieldName={'eventData.date'}
           {...sortMethods}
         />
       </div>

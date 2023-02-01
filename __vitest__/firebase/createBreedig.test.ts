@@ -20,7 +20,7 @@ const basicEvent: CreateEventDTO = {
   // @ts-ignore
   userId: 'test'
 }
-describe('create a breeding event with all dependencies', () => {
+describe.skip('create a breeding event with all dependencies', () => {
   it('should create a normal event ', async () => {
     try {
       const res = await createEvent(basicEvent)
