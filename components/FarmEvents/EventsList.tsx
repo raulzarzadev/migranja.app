@@ -1,4 +1,5 @@
 import useSortByField from '@comps/hooks/useSortByField'
+import HeaderTable from '@comps/MyTables/HeaderTable'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
 import { FarmState } from 'store/slices/farmSlice'
@@ -36,7 +37,7 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
     }
   }, [events, filterBy])
 
-  const { arraySorted } = useSortByField(filteredEvents, {
+  const { arraySorted, ...sortMethods } = useSortByField(filteredEvents, {
     defaultSortField: 'createdAt',
     reverse: false
   })
@@ -51,32 +52,30 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
       />
       <div className="text-center">
         <span>
-          Coincidencias {filteredEvents.length || 0} de {events.length}
+          Coincidencias {filteredEvents?.length || 0} de {events?.length}
         </span>
       </div>
-      {/* <div className="flex w-full justify-around my-4">
-        <button
-          className="btn btn-outline btn-sm "
-          onClick={(e) => {
-            e.preventDefault()
-            // handleSortBy('eventData.date')
-          }}
-        >
-          Por fecha
-        </button>
-        <button
-          className="btn btn-outline btn-sm "
-          onClick={(e) => {
-            e.preventDefault()
-            //handleSortBy('updatedAt')
-          }}
-        >
-          actualizado
-        </button>
-      </div> */}
+      <div className="flex w-full justify-around my-4">
+        <HeaderTable
+          label={'Fecha'}
+          fieldName={'eventData.date'}
+          {...sortMethods}
+        />
+        <HeaderTable
+          label={'Creado'}
+          fieldName={'updatedAt'}
+          {...sortMethods}
+        />
+        <HeaderTable
+          label={'Tipo de evento'}
+          fieldName={'type'}
+          {...sortMethods}
+        />
+      </div>
+
       <div className="event-list overflow-auto shadow-inner">
-        {[...arraySorted].map((event) => (
-          <div key={event?.id} className="my-2">
+        {[...arraySorted].map((event, i) => (
+          <div key={`${event?.id}-${i}`} className="my-2">
             <FarmEventCard event={event} />
           </div>
         ))}

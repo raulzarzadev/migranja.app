@@ -71,7 +71,7 @@ const AnimalEvents = ({ animalEarring }: { animalEarring: string }) => {
       ...weanings
     ])
   }, [animalEarring, farmEvents])
-  const { arraySorted } = useSortByField(events)
+
   return <EventsList events={events} />
 }
 

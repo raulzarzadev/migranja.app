@@ -38,6 +38,7 @@ const useSortByField = (array: any[], ops?: Options) => {
       setField(fieldName)
       return
     }
+    setField(fieldName)
     setArraySorted(sortByField(array, fieldName, sortReverse))
     setSortReverse(!sortReverse)
   }

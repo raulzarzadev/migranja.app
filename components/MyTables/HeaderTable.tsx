@@ -13,6 +13,7 @@ const HeaderTable = ({
   fieldSelected: string
   reverse: boolean
 }) => {
+  console.log({ fieldName, fieldSelected })
   return (
     <button
       onClick={(e) => {
