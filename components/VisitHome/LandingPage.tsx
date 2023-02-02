@@ -21,7 +21,7 @@ function LandingPage() {
         </p>
         <p className="my-1">Registrate con tu cuenta de google</p>
         <button
-          className="btn btn-xl mt-2"
+          className="btn btn-xl mt-2 text-white"
           onClick={(e) => {
             e.preventDefault()
             googleLogin()
@@ -88,7 +88,7 @@ const Card = ({
     <Square className="">
       <div className="flex h-32">
         <div className="w-1/2 p-2 ">
-          <h3 className="font-bold">{title}</h3>
+          <h2 className="font-bold">{title}</h2>
           <p className="text-sm ">{text}</p>
         </div>
         <div className="relative w-1/2 h-full rounded-md">

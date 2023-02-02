@@ -25,7 +25,7 @@ function Layout({ children }: LayoutProps) {
           name="keywords"
           content="farm, ranchito, miRanchito, migranja granja, crianza de animales, borregos"
         />
-        ,<title>Mi Granja</title>
+        <title>Mi Granja</title>
         <link rel="manifest" href="/manifest.json" />
         <link
           href="/assets/icons/icon-48x48.png"

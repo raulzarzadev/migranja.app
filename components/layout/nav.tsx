@@ -42,7 +42,7 @@ export const Nav = () => {
             <ul>
               <li>
                 <button
-                  className="btn"
+                  className="btn btn-sm text-white"
                   onClick={(e) => {
                     e.preventDefault()
                     googleLogin()

@@ -53,7 +53,7 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
           Coincidencias {filteredEvents?.length || 0} de {events?.length}
         </span>
       </div>
-      <div className="flex w-full justify-around my-4">
+      <div className="flex w-full justify-around my-4 flex-col sm:flex-row">
         <HeaderTable
           label={'Tipo de evento'}
           fieldName={'type'}
