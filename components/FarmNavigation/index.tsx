@@ -93,6 +93,7 @@ const FarmRow = ({
       <div className=" grid grid-flow-col grid-cols-3 place-items-center items-center">
         <span className=" flex ">
           <button
+            aria-label="go-back-button"
             disabled={atHome}
             onClick={(e) => {
               e.preventDefault()
