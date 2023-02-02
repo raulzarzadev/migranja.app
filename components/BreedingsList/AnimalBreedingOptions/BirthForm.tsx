@@ -15,7 +15,7 @@ import { formatNewGenericFarmEvent } from './birth.helper'
 import { BirthDetailsEvent } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
 import ProgressButton from '@comps/ProgressButton'
 import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
-import { addDays, intervalToDuration, subDays } from 'date-fns'
+import { addDays, subDays } from 'date-fns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import {
   AnimalBreedingEventCard,

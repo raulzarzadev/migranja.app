@@ -3,7 +3,6 @@ import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { DateType, Merge } from '@firebase/types.model.ts/TypeBase.model'
 import { addDays } from 'date-fns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
-import { ParentsType } from 'types/base/AnimalType.model'
 import {
   AnimalBreedingType,
   BreedingDetailsEvent,

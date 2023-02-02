@@ -1,8 +1,5 @@
 import AnimalCard from '@comps/AnimalCard'
-import Loading from '@comps/Loading'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
-import { selectFarmAnimals } from 'store/slices/farmSlice'
 
 const Animal = () => {
   const {
@@ -11,7 +8,7 @@ const Animal = () => {
   return (
     <div className="flex justify-center w-full items-center my-4">
       <div className="max-w-md bg-base-300 rounded-lg shadow-md p-4">
-        <AnimalCard animalId={animalId as string} />
+        {/* <AnimalCard animalId={animalId as string} /> */}
       </div>
     </div>
   )

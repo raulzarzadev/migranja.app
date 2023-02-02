@@ -3,7 +3,7 @@ import { Controller, ControllerProps } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import React from 'react'
-import { addDays, getDate, subDays } from 'date-fns'
+import { addDays, subDays } from 'date-fns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 export interface SelectOption {
   label?: string

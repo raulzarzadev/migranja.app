@@ -1,8 +1,7 @@
 import useFilterByField from '@comps/hooks/useFilterByField'
 import Icon from '@comps/Icon'
-import { addDays, subDays } from 'date-fns/esm'
+import { addDays, subDays } from 'date-fns'
 import { useEffect } from 'react'
-import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const EventsFilters = ({
   array,

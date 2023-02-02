@@ -132,9 +132,7 @@ const DefineBatchForm = ({
   })
   const { watch, handleSubmit, setValue, reset } = methods
   const formValues = watch()
-  const {
-    query: { farmId }
-  } = useRouter()
+
   const { father, earrings } = formValues
   const [earringsTotal, setEarringsTotal] = useState(0)
   useEffect(() => {
@@ -177,7 +175,6 @@ const DefineBatchForm = ({
                 <span className="font-bold text-lg">{father?.earring}</span>
               </div>
               <ParentForm
-                // farmId={farmId}
                 gender="male"
                 setValue={(value) => methods.setValue(`father`, value)}
                 value={father}
