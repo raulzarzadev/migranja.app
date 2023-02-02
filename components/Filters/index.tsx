@@ -21,6 +21,7 @@ const Filters = ({
     handleFilterByArray
   } = useFilterByField(array, {
     labelDefaultFilter: defaultFilter,
+    //@ts-ignore
     defaultFilter: Array.isArray(filters?.[defaultFilter])
       ? filters?.[defaultFilter]
       : [filters?.[defaultFilter]]

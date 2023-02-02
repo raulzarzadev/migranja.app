@@ -22,8 +22,6 @@ import HelperText from 'components/HelperText'
 import IndeterminateCheckbox from './IndeterminableCheckbox'
 import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
-import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
-import TableFilters from '@comps/TableFilters'
 import AnimalsTableFilter from '@comps/Filters/AnimalsTableFilter'
 export interface RowSelectedType {
   id?: string
