@@ -1,16 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getProperty } from 'dot-prop'
 import filterByArrayOfFilters from 'utils/filterByArrayOfFilters'
 
-interface FilterType {
+export interface FilterType {
   field: string
   symbol: '==' | '<' | '>' | '<=' | '>='
   value: any
 }
-const useFilterByField = <T,>(array: T[]) => {
+const useFilterByField = <T,>(
+  array: T[],
+  ops?: { defaultFilter?: any[]; labelDefaultFilter: string }
+) => {
+  const defaultFilters = ops?.defaultFilter
+  const labelDefaultFilter = ops?.labelDefaultFilter
+
   const [_array, _setArray] = useState([...array])
   const [filtersSelected, setFiltersSelected] = useState<string[]>([])
 
+  useEffect(() => {
+    if (defaultFilters?.length) {
+      handleFilterByArray(defaultFilters, { label: labelDefaultFilter || '' })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const handleFilterBy = (
     field = '',
     symbol: '==' | '<' | '>' | '<=' | '>=',
@@ -53,6 +65,7 @@ const useFilterByField = <T,>(array: T[]) => {
     const res = filterByArrayOfFilters<any>(filters, _array)
     _setArray(res)
   }
+
   return {
     arrayFiltered: _array,
     handleFilterBy,

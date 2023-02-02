@@ -24,7 +24,7 @@ import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import TableFilters from '@comps/TableFilters'
-import useFilterByField from '@comps/hooks/useFilterByField'
+import AnimalsTableFilter from '@comps/Filters/AnimalsTableFilter'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -58,13 +58,6 @@ const AnimalsTable = ({
   showSelectRow
 }: AnimalTableType) => {
   const [animals, setAnimals] = useState(animalsData || [])
-  // const [filterBy, setFilterBy] = useState('')
-
-  const filterByStatusOptions = Object.entries(animalCurrentStatusLabels).map(
-    ([key, value]) => {
-      return { label: value, value: key }
-    }
-  )
 
   const [sorting, setSorting] = useState<SortingState>([])
 
@@ -249,7 +242,7 @@ const AnimalsTable = ({
           <AnimalCard animalId={animaId} />
         </Modal>
       )}
-      <TableFilters array={animalsData} setArray={setAnimals} />
+      <AnimalsTableFilter array={animalsData} setArray={setAnimals} />
 
       <div className=" justify-center flex my-2 items-center w-full">
         <DebouncedInput
