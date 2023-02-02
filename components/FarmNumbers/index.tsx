@@ -1,23 +1,12 @@
-import useSortByField from '@comps/hooks/useSortByField'
-import Modal from '@comps/modal'
-import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
-import HeaderTable from '@comps/MyTables/HeaderTable'
-import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
-import PDFAnimalsList from '@comps/PDFDocuments/PDFAnimalsList'
-
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
-import { ReactNode, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  FarmStateAnimalEvent,
-  selectFarmAnimals,
-  selectFarmEvents
-} from 'store/slices/farmSlice'
+import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
-import { myFormatDate } from 'utils/dates/myDateUtils'
 
 import { calculateFarmNumbers } from './farmNumbers.helper'
+import StatCardWithModalAnimalsList from './StatCardWithModalAnimalsList'
+import StatCardWithModalEventsList from './StatCardWithModalEventsList'
 
 const FarmNumbers = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
@@ -162,242 +151,8 @@ const FarmNumbers = () => {
     </div>
   )
 }
-const StatCardWithModalEventsList = ({
-  events,
-  description = 'desc',
-  title,
-  ...rest
-}: {
-  events: FarmStateAnimalEvent[]
-  description: string
-  title: string
-}) => {
-  const [openList, setOpenList] = useState(false)
-  const handleOpenList = () => {
-    setOpenList(!openList)
-  }
-  const { handleSortBy, arraySorted, field, reverse } = useSortByField(events)
-  return (
-    <>
-      <div
-        className="w-[200px]"
-        onClick={(e) => {
-          e.preventDefault()
-          handleOpenList()
-        }}
-      >
-        <StatCard
-          {...rest}
-          quantity={events?.length}
-          title={title}
-          description={description}
-        />
-      </div>
 
-      {openList && (
-        <Modal
-          open={openList}
-          handleOpen={handleOpenList}
-          title={`Lista de eventos: ${title} `}
-        >
-          <div>
-            <div className="grid grid-cols-5 justify-items-center">
-              <div>
-                <HeaderTable
-                  fieldName={'eventData.date'}
-                  label={'Fecha'}
-                  fieldSelected={field}
-                  handleSortBy={handleSortBy}
-                  reverse={reverse}
-                />
-              </div>
-              <div>
-                <HeaderTable
-                  fieldName={'eventData.parents.mother.earring'}
-                  label={'Madre'}
-                  fieldSelected={field}
-                  handleSortBy={handleSortBy}
-                  reverse={reverse}
-                />
-              </div>
-              <div className="">
-                <HeaderTable
-                  fieldName={'eventData.parents.father.earring'}
-                  label={'Padre'}
-                  fieldSelected={field}
-                  handleSortBy={handleSortBy}
-                  reverse={reverse}
-                />
-              </div>
-              <div className="col-span-2  ">
-                <HeaderTable
-                  fieldName={'eventData.calfs.length'}
-                  label={'Camada'}
-                  fieldSelected={field}
-                  handleSortBy={handleSortBy}
-                  reverse={reverse}
-                />
-              </div>
-            </div>
-            {arraySorted.map((event) => (
-              <div key={event.id}>
-                {event.type === 'BIRTH' && (
-                  <div className="grid grid-cols-5 text-center">
-                    <div>{myFormatDate(event.eventData.date, 'dd MM yy')}</div>
-                    <div>
-                      <ModalAnimalDetails
-                        size="md"
-                        earring={event.eventData.parents.mother?.earring}
-                      />
-                    </div>
-                    <div>
-                      <ModalAnimalDetails
-                        size="md"
-                        earring={event.eventData.parents.father?.earring}
-                      />
-                    </div>
-                    <div className="col-span-2">
-                      <div className="flex w-full justify-start">
-                        <span>({event.eventData.calfs?.length})</span>
-                        {event.eventData.calfs?.map((animal: any) => (
-                          <div key={animal?.earring}>
-                            <ModalAnimalDetails
-                              size="md"
-                              earring={animal?.earring}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </Modal>
-      )}
-    </>
-  )
-}
-
-const StatCardWithModalAnimalsList = ({
-  animals,
-  description = 'desc',
-  title,
-  ...rest
-}: {
-  animals: AnimalType[]
-  description: string
-  title: string
-}) => {
-  const [openList, setOpenList] = useState(false)
-  const handleOpenList = () => {
-    setOpenList(!openList)
-  }
-  return (
-    <>
-      <div
-        className=""
-        onClick={(e) => {
-          e.preventDefault()
-          handleOpenList()
-        }}
-      >
-        <StatCard
-          {...rest}
-          quantity={animals.length}
-          title={title}
-          description={description}
-        />
-      </div>
-      {openList && (
-        <Modal
-          open={openList}
-          handleOpen={handleOpenList}
-          title={`Lista de aretes: ${title} `}
-        >
-          <div className="relative">
-            <AnimalsList animals={animals} title={title} />
-          </div>
-        </Modal>
-      )}
-    </>
-  )
-}
-
-const AnimalsList = ({
-  animals,
-  title
-}: {
-  title: string
-  animals: AnimalType[]
-}) => {
-  const earringsWithOutSuffix = animals.filter((a) => !a.earring.includes('-'))
-  const earringsWithSuffix = animals.filter((a) => a.earring.includes('-'))
-  const sortByNumber = (a: any, b: any) => {
-    const aEarring = parseFloat(a?.earring.split('-')[0] || '0')
-    const bEarring = parseFloat(b?.earring.split('-')[0] || '0')
-
-    if (aEarring < bEarring) return -1
-    if (aEarring > bEarring) return 1
-    return 0
-  }
-  const sortedByEarring = earringsWithOutSuffix.sort(sortByNumber)
-  const sortedSuffixByEarring = earringsWithSuffix.sort(sortByNumber)
-
-  const [openPDF, setOpenPDF] = useState(false)
-  const handleOpenPDF = () => {
-    setOpenPDF(!openPDF)
-  }
-  return (
-    <div className="relative">
-      {openPDF && (
-        <Modal handleOpen={handleOpenPDF} open={openPDF} title="PDF">
-          <PDFViewer height={500} width="100%">
-            <PDFAnimalsList animals={animals} title={title} />
-          </PDFViewer>
-        </Modal>
-      )}
-      <div className="flex w-full justify-around">
-        <button
-          className="btn btn-outline"
-          onClick={(e) => {
-            e.preventDefault()
-            handleOpenPDF()
-          }}
-        >
-          Ver PDF
-        </button>
-
-        <PDFDownloadLink
-          className="btn btn-outline"
-          document={<PDFAnimalsList animals={animals} title={title} />}
-          fileName={`Lista-de-animales:${title}.pdf`}
-        >
-          {({ blob, url, loading, error }) =>
-            loading ? 'Descargando ...' : 'Descargar PDF'
-          }
-        </PDFDownloadLink>
-      </div>
-      <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
-        {[...sortedSuffixByEarring, ...sortedByEarring]?.map((animal, i) => (
-          <div key={`${animal?.id}-${i}`} className="m-1">
-            <span className="whitespace-nowrap">
-              <ModalAnimalDetails earring={animal?.earring} size="sm" />
-            </span>
-          </div>
-        ))}
-      </div>
-      <div className="text-end">Total: {animals.length}</div>
-      <AnimalsOptions
-        animalsEarrings={animals.map(({ earring }) => earring)}
-        title={title}
-      />
-    </div>
-  )
-}
-
-const StatsRow = ({
+export const StatsRow = ({
   title = 'Title',
   children
 }: {
@@ -416,7 +171,7 @@ const StatsRow = ({
   )
 }
 
-const StatCard = ({
+export const StatCard = ({
   title = 'title',
   quantity = 0,
   description = 'description'
