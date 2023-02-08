@@ -65,7 +65,7 @@ const EventFilters = ({
         filters={filters}
         array={array}
         setArray={setArray}
-        defaultFilter={'+- 7 dias'}
+        // defaultFilter={'+- 7 dias'}
       />
     </div>
   )

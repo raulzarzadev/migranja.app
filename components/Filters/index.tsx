@@ -6,12 +6,12 @@ const Filters = ({
   array,
   setArray,
   filters,
-  defaultFilter
+  defaultFilter = ''
 }: {
   array: unknown[]
   setArray: (array: any) => void
   filters: Record<string, FilterType | FilterType[]>
-  defaultFilter: string
+  defaultFilter?: string
 }) => {
   const {
     handleFilterBy,
@@ -21,9 +21,9 @@ const Filters = ({
     handleFilterByArray
   } = useFilterByField(array, {
     labelDefaultFilter: defaultFilter,
-    //@ts-ignore
+
     defaultFilter: Array.isArray(filters?.[defaultFilter])
-      ? filters?.[defaultFilter]
+      ? (filters?.[defaultFilter] as any[])
       : [filters?.[defaultFilter]]
   })
 

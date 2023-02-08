@@ -9,7 +9,7 @@ export interface FilterType {
 }
 const useFilterByField = <T,>(
   array: T[],
-  ops?: { defaultFilter?: any[]; labelDefaultFilter: string }
+  ops?: { defaultFilter?: any[]; labelDefaultFilter?: string }
 ) => {
   const defaultFilters = ops?.defaultFilter
   const labelDefaultFilter = ops?.labelDefaultFilter
