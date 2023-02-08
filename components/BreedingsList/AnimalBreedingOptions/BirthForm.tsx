@@ -27,6 +27,7 @@ import { AnimalType } from 'types/base/AnimalType.model'
 import { MalesTable } from '@comps/MalesTable'
 import { calculatePossibleBirth } from '../breeding.helpers'
 import HelperText from '@comps/HelperText'
+import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const BirthForm = ({
   animal,
@@ -319,12 +320,12 @@ const BirthForm = ({
       <FormProvider {...methods}>
         <h4 className="text-center text-xl ">Crear parto </h4>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="w-full flex justify-center">
+          <div className="w-full flex justify-center ">
             <InputContainer
               type="date"
               name="date"
               label="Fecha"
-              className="w-[150px]"
+              className=""
               datesRangeColor={datesRangeColor}
             />
           </div>

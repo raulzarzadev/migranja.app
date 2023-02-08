@@ -1,4 +1,4 @@
-import { getFarmBreedings } from '@firebase/Events/main'
+import { getFarmBreedings, listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { useEffect, useState } from 'react'
@@ -55,10 +55,12 @@ const BreedingsList = () => {
   >([])
 
   useEffect(() => {
-    currentFarm?.id &&
-      getFarmBreedings(currentFarm?.id).then((res) => {
-        setFarmEvents(res)
-      })
+    if (currentFarm?.id) {
+      // getFarmBreedings(currentFarm?.id).then((res) => {
+      //   setFarmEvents(res)
+      // })
+      listenFarmBreedings(currentFarm.id, (res) => setFarmEvents(res))
+    }
   }, [currentFarm?.id])
 
   const [search, setSearch] = useState<SearchField>({ value: '', matches: [] })

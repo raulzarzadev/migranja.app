@@ -28,6 +28,7 @@ export interface CustomInputTypes
     | 'textarea'
     //| 'radio'
     | 'number'
+    | 'date-inline'
   label?: string
   selectOptions?: SelectOption[]
   placeholder?: string
@@ -118,6 +119,37 @@ const InputContainer = ({
                 {...rest}
               />
             </div>
+          )}
+          {type === 'date-inline' && (
+            <DatePicker
+              //onBlur={onBlur}
+              //className="input input-bordered input-sm w-full bg-transparent"
+              selected={value ? new Date(value) : new Date()}
+              onChange={(date: Date) => onChange(date)}
+              locale={es}
+              //dateFormat="dd-MM-yy"
+              //ref={ref}
+              inline
+              name={name}
+              focusSelectedMonth
+              // minDate={rest?.min as unknown as Date}
+              // maxDate={rest?.max as unknown as Date}
+              // dayClassName={(date) => {
+              //   const plusMinusDays = OVINE_DAYS.gestationTolerance
+              //   const res = datesRangeColor
+              //     ?.map(({ start, end, color }) => {
+              //       if (
+              //         subDays(start, plusMinusDays).getTime() <=
+              //           date.getTime() &&
+              //         date.getTime() <= addDays(end, plusMinusDays).getTime()
+              //       )
+              //         return color
+              //     })
+              //     .join(' ')
+              //   return res || ' '
+              // }}
+              //{...rest}
+            />
           )}
           {type === 'select' && (
             <select

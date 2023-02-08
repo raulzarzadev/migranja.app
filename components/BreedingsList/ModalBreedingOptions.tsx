@@ -20,6 +20,7 @@ import {
   OtherBreedingMale
 } from 'types/base/FarmEvent.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
+import AnimalBreedingCardSmall from './AnimalBreedingCardSmall'
 
 const ModalBreedingOptions = ({
   breeding
@@ -111,6 +112,7 @@ const AddBreedingMaleTo = ({
         startAt: data.startAt
       })
       setProgress(100)
+
       console.log(res)
     } catch (error) {
       setProgress(0)
@@ -127,6 +129,7 @@ const AddBreedingMaleTo = ({
   }
   const otherMales = breeding.eventData.otherMales || []
   const formValues = methods.watch()
+
   useEffect(() => {
     if (formValues?.startAt) {
       methods.setValue('finishAt', formValues?.startAt)
@@ -153,10 +156,13 @@ const AddBreedingMaleTo = ({
           handleOpenModalToAddMale()
         }}
       >
-        Agregar macho
+        Machos{' '}
+        <span className="ml-2">
+          <Icon name="edit" size="xs" />
+        </span>
       </button>
       <Modal
-        title="Agregar Macho"
+        title=" Editar machos"
         open={openModalToAddMale}
         handleOpen={handleOpenModalToAddMale}
       >
@@ -250,7 +256,10 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
           handleOpenModalToAddEarring()
         }}
       >
-        agregar arete
+        Hembras{' '}
+        <span className="ml-2">
+          <Icon name="edit" size="xs" />
+        </span>
       </button>
       <Modal
         title="Agregar arete"
@@ -288,6 +297,15 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
               onEarringClick={(earring) => handleAddEarring(earring)}
               relativeTo={breeding?.eventData?.breedingMale?.earring}
             />
+          </div>
+          <div>
+            {breeding?.eventData?.breedingBatch.map((animal, i) => (
+              <AnimalBreedingCardSmall
+                key={i}
+                animal={{ ...animal, eventData: breeding.eventData }}
+                //hiddenEvents={hiddenBirths}
+              />
+            ))}
           </div>
         </div>
       </Modal>

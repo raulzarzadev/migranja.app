@@ -36,12 +36,12 @@ export const MalesTable = ({
             {showOps && <th>Ops</th>}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="">
           {males.map((male, i) => (
-            <tr className={` `} key={`${male?.id}-${i}`}>
+            <tr className={`even:bg-base-200  `} key={`${male?.id}-${i} `}>
               {showColor && (
                 <td
-                  className={`${male.className} w-5 h-5 mx-auto flex justify-center items-center text-[10px]`}
+                  className={`${male.className} w-5 h-5 mx-auto flex justify-center items-center text-[10px] `}
                 >
                   {i + 1}
                 </td>

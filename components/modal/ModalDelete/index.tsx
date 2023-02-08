@@ -22,8 +22,8 @@ const ModalDelete = ({
   handleDelete,
   openButtonProps,
   openModalItem,
-  buttonLabel = 'Delete',
-  text = 'Delete element',
+  buttonLabel = 'Eliminar',
+  text = 'Eliminar elemento',
   children,
   smallIcon
 }: ModalDeleteType) => {
@@ -34,10 +34,10 @@ const ModalDelete = ({
   }
 
   const LABELS: Record<StatusModalDelete, string> = {
-    DELETE: 'Delete',
-    LOADING: 'Deleting',
+    DELETE: 'Eliminar',
+    LOADING: 'Eliminando',
     ERROR: 'Error',
-    DELETED: 'Deleted successfully'
+    DELETED: 'Eliminado'
   }
   return (
     <>
@@ -77,7 +77,7 @@ const ModalDelete = ({
                 setOpen(false)
               }}
             >
-              Cancel
+              Cancelar
             </button>
             <button
               disabled={['LOADING', 'ERROR', 'DELETED'].includes(status)}
