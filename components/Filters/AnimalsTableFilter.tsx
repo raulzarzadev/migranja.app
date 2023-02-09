@@ -10,6 +10,11 @@ const filters: Record<string, FilterType> = {
     symbol: '==',
     value: 'DEAD'
   },
+  Vendidos: {
+    field: 'currentStatus',
+    symbol: '==',
+    value: 'SOLD'
+  },
   Sementales: {
     field: 'isStallion',
     symbol: '==',

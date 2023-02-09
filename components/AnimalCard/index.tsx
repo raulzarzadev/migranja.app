@@ -18,7 +18,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
-import { myFormatDate } from 'utils/dates/myDateUtils'
+import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const [editing, setEditing] = useState<boolean>(false)
@@ -110,16 +110,24 @@ export const AnimalDetails = ({
       </div>
       <header className="flex w-full justify-between">
         <div>
-          Detalles de animal
           <div>
             <div className="text-xs flex flex-col whitespace-nowrap">
-              <span>
-                id: <span className="">{id}</span>
-              </span>
               <span className="flex flex-col">
                 <span>
-                  Acutal:{animalCurrentStatusLabels[currentStatus || 'ACTIVE']}
+                  Estado Acutal:
+                  <span className="font-bold">
+                    {animalCurrentStatusLabels[currentStatus || 'ACTIVE']}
+                  </span>
                 </span>
+              </span>
+              <span>
+                Actualizado:{' '}
+                <span className="">
+                  {fromNow(animal.updatedAt, { addSuffix: true })}
+                </span>
+              </span>
+              <span>
+                id: <span className="">{id}</span>
               </span>
             </div>
           </div>
