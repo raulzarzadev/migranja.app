@@ -1,7 +1,7 @@
 import { getFarmBreedings, listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import DebouncedInput from 'components/inputs/DebouncedInput'
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { FarmStateAnimalEvent, selectFarmState } from 'store/slices/farmSlice'
 import {
@@ -59,7 +59,11 @@ const BreedingsList = () => {
       // getFarmBreedings(currentFarm?.id).then((res) => {
       //   setFarmEvents(res)
       // })
-      listenFarmBreedings(currentFarm.id, (res) => setFarmEvents(res))
+      listenFarmBreedings(
+        currentFarm.id,
+        (res: SetStateAction<AnimalFormattedWithBreedingDates[]>) =>
+          setFarmEvents(res)
+      )
     }
   }, [currentFarm?.id])
 
