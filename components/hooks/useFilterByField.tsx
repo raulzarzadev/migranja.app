@@ -17,12 +17,12 @@ const useFilterByField = <T,>(
   const [_array, _setArray] = useState([...array])
   const [filtersSelected, setFiltersSelected] = useState<string[]>([])
 
-  useEffect(() => {
-    if (defaultFilters?.length) {
-      handleFilterByArray(defaultFilters, { label: labelDefaultFilter || '' })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   if (defaultFilters?.length) {
+  //     handleFilterByArray(defaultFilters, { label: labelDefaultFilter || '' })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
   const handleFilterBy = (
     field = '',
     symbol: '==' | '<' | '>' | '<=' | '>=',
