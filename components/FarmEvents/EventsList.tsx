@@ -27,20 +27,21 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
           Coincidencias {filteredEvents?.length || 0} de {events?.length}
         </span>
       </div>
-      <div className="flex w-full justify-around my-4 flex-col sm:flex-row gap-2 ">
-        <HeaderTable
-          label={'Tipo de evento'}
-          fieldName={'type'}
-          {...sortMethods}
-        />
+      <div className="flex w-full items-center justify-around my-4 flex-col sm:flex-row gap-2 ">
+        <div>Ordenar por:</div>
         <HeaderTable
           label={'Creado'}
-          fieldName={'updatedAt'}
+          fieldName={'createdAt'}
           {...sortMethods}
         />
         <HeaderTable
           label={'Programado'}
           fieldName={'eventData.date'}
+          {...sortMethods}
+        />
+        <HeaderTable
+          label={'Tipo de evento'}
+          fieldName={'type'}
           {...sortMethods}
         />
       </div>
