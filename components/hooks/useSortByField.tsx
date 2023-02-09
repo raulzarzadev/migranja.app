@@ -46,6 +46,7 @@ const useSortByField = (array: any[], ops?: Options) => {
 
   useEffect(() => {
     if (defaultSortField) handleSortBy(defaultSortField)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
