@@ -182,12 +182,12 @@ const AnimalsTable = ({
   useEffect(() => {
     let earrings: string[] = []
     Object.entries(rowSelection).forEach(([i, bool]: any) => {
-      const newEarring = animalsData[i]?.earring
+      const newEarring = animals[i]?.earring
       earrings.push(newEarring || '')
     })
     setSelectedRows?.(earrings)
     if (earrings.length === 1) {
-      const animal = animalsData.find(({ earring }) => earring === earrings[0])
+      const animal = animals.find(({ earring }) => earring === earrings[0])
       setSelectedRow?.({ id: animal?.id, earring: animal?.earring })
     } else {
       setSelectedRow?.(null)
