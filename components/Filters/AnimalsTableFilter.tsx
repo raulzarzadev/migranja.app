@@ -1,7 +1,7 @@
 import { FilterType } from '@comps/hooks/useFilterByField'
 import { subMonths } from 'date-fns'
 import Filters from '.'
-const filters: Record<string, FilterType> = {
+const animalsFilters: Record<string, FilterType> = {
   Activos: { field: 'currentStatus', symbol: '==', value: 'ACTIVE' },
   Machos: { field: 'gender', symbol: '==', value: 'male' },
   Hembras: { field: 'gender', symbol: '==', value: 'female' },
@@ -20,6 +20,11 @@ const filters: Record<string, FilterType> = {
     symbol: '==',
     value: true
   },
+  '-5meses': {
+    field: 'birthday',
+    symbol: '>=',
+    value: subMonths(new Date(), 5).getTime()
+  },
   '-3meses': {
     field: 'birthday',
     symbol: '>=',
@@ -30,6 +35,7 @@ const filters: Record<string, FilterType> = {
     symbol: '<=',
     value: subMonths(new Date(), 3).getTime()
   },
+
   '+7meses': {
     field: 'birthday',
     symbol: '<=',
@@ -46,7 +52,7 @@ const AnimalsTableFilter = ({
   return (
     <div>
       <Filters
-        filters={filters}
+        filters={animalsFilters}
         array={array}
         setArray={setArray}
         defaultFilter={'Activos'}

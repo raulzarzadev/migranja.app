@@ -21,11 +21,11 @@ const Filters = ({
     handleFilterByArray
   } = useFilterByField(array, {
     labelDefaultFilter: defaultFilter,
-
     defaultFilter: Array.isArray(filters?.[defaultFilter])
       ? (filters?.[defaultFilter] as any[])
       : [filters?.[defaultFilter]]
   })
+  console.log({ arrayFiltered })
 
   useEffect(() => {
     setArray(arrayFiltered)
@@ -81,6 +81,9 @@ const Filters = ({
             </button>
           )
         })}
+      </div>
+      <div className="text-center">
+        <span>Coincidencias {arrayFiltered.length}</span>
       </div>
     </div>
   )

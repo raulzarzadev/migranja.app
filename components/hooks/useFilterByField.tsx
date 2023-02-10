@@ -14,9 +14,12 @@ const useFilterByField = <T,>(
   const defaultFilters = ops?.defaultFilter
   const labelDefaultFilter = ops?.labelDefaultFilter
 
-  const [_array, _setArray] = useState([...array])
+  const [_array, _setArray] = useState<T[]>([])
   const [filtersSelected, setFiltersSelected] = useState<string[]>([])
 
+  useEffect(() => {
+    _setArray(array)
+  }, [array])
   // useEffect(() => {
   //   if (defaultFilters?.length) {
   //     handleFilterByArray(defaultFilters, { label: labelDefaultFilter || '' })

@@ -8,7 +8,7 @@ const currentMonth = now.getMonth() + 1
 const thisMonthStartAt = new Date(currentYear, currentMonth - 1, 1).getTime()
 const thisMonthFinishAt = new Date(currentYear, currentMonth, 0).getTime()
 const lastMonthStartAt = new Date(currentYear, currentMonth - 2, 1).getTime()
-const filters: Record<string, FilterType | FilterType[]> = {
+const eventsFilters: Record<string, FilterType | FilterType[]> = {
   '+- 7 dias': [
     {
       field: 'eventData.date',
@@ -62,7 +62,7 @@ const EventFilters = ({
   return (
     <div>
       <Filters
-        filters={filters}
+        filters={eventsFilters}
         array={array}
         setArray={setArray}
         // defaultFilter={'+- 7 dias'}
