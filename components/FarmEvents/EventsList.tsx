@@ -11,7 +11,7 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
 
   const { arraySorted, ...sortMethods } = useSortByField(filteredEvents, {
     defaultSortField: 'createdAt',
-    reverse: true
+    reverse: false
   })
 
   return (
@@ -23,11 +23,7 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
         placeholder="Buscar ... "
       /> */}
       <EventFilters array={events} setArray={setFilteredEvents} />
-      {/* <div className="text-center">
-        <span>
-          Coincidencias {filteredEvents?.length || 0} de {events?.length}
-        </span>
-      </div> */}
+
       <div className="flex w-full items-center justify-around my-4 flex-col sm:flex-row gap-2 ">
         <div>Ordenar por:</div>
         <HeaderTable

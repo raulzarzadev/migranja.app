@@ -59,11 +59,10 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
     try {
       for (let i = 0; i < animals.length; i++) {
         const element = animals[i]
-        const resup = await updateAnimal(element.id, {
+        await updateAnimal(element.id, {
           currentStatus:
             defineCurrentStatus[data?.reason as DorpInOutReasonsType]
         })
-        console.log({ resup })
       }
       setProgress(50)
 

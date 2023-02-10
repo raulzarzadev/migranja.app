@@ -25,6 +25,7 @@ const useSortByField = (array: any[], ops?: Options) => {
   useEffect(() => {
     setArraySorted(array)
   }, [array])
+
   useEffect(() => {
     if (defaultSortField) {
       handleSortBy(defaultSortField)
@@ -33,7 +34,7 @@ const useSortByField = (array: any[], ops?: Options) => {
   }, [array])
 
   const defaultSortField = ops?.defaultSortField || ''
-  const reverse = ops?.reverse || false
+  const reverse = ops?.reverse ?? false
 
   const [field, setField] = useState('')
   const [sortReverse, setSortReverse] = useState<boolean>(reverse)

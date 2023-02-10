@@ -35,7 +35,7 @@ const AnimalsOptions = ({
 
     try {
       const deletePromises = animalsIds.map((animal, i) => {
-        setProgress((i * 100) / animalsIds.length)
+        setProgress(50 * (i / animalsIds.length))
         if (animal) return deleteAnimal(animal)
       })
       setProgress(50)

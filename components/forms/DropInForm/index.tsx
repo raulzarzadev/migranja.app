@@ -56,12 +56,11 @@ const DropInForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
       for (let i = 0; i < animals.length; i++) {
         const element = animals[i]
 
-        const resup = await updateAnimal(element.id, {
+        await updateAnimal(element.id, {
           currentStatus:
             defineCurrentStatus[data?.reason as DorpInOutReasonsType]
         })
         setProgress((i * 80) / animals.length)
-        console.log({ resup })
       }
       setProgress(50)
 
