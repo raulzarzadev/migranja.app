@@ -22,6 +22,8 @@ const SellForm = ({ sale }: { sale?: any }) => {
     total: 0
   }
 
+  console.log(sale)
+
   const methods = useForm({
     defaultValues
   })
@@ -117,7 +119,9 @@ const SellForm = ({ sale }: { sale?: any }) => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-center">Nueva venta</h2>
+      <h2 className="text-xl font-bold text-center">
+        {!!sale ? 'Detalles de venta' : 'Nueva venta'}
+      </h2>
       <FormProvider {...methods}>
         <form
           autoComplete="off"

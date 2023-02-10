@@ -11,7 +11,7 @@ const SalesList = () => {
   useEffect(() => {
     setSales(farmEvents.filter((event) => event.type === 'SELL'))
   }, [farmEvents])
-  // console.log({ sales })
+  console.log({ sales })
 
   return (
     <div className="">

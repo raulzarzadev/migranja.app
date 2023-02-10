@@ -29,7 +29,7 @@ const ModalSaleDetails = ({
         <Modal
           open={open}
           handleOpen={handleOpenBreeding}
-          title="Breeding details"
+          title="Detalle de venta"
         >
           <PrintableSellForm sale={sale} />
         </Modal>
