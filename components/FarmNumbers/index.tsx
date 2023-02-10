@@ -75,7 +75,7 @@ const FarmNumbers = () => {
           title="Lactando"
           animals={
             farmNumbers.animalsLactando(
-              OVINE_DAYS.finishWeaning
+              OVINE_DAYS?.finishWeaning
             ) as AnimalType[]
           }
           description="Aún amamantando "

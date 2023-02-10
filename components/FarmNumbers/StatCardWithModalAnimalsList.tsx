@@ -71,8 +71,12 @@ export const AnimalsList = ({
   setEarringsSelected,
   earringsSelected
 }: NumbersAnimalListType) => {
-  const earringsWithOutSuffix = animals.filter((a) => !a.earring.includes('-'))
-  const earringsWithSuffix = animals.filter((a) => a.earring.includes('-'))
+  const earringsWithOutSuffix = animals?.filter(
+    //* Verify if exist and if have suffix
+    (a) => a && !a?.earring?.includes('-')
+  )
+  const earringsWithSuffix = animals?.filter((a) => a?.earring?.includes('-'))
+
   const sortByNumber = (a: any, b: any) => {
     const aEarring = parseFloat(a?.earring.split('-')[0] || '0')
     const bEarring = parseFloat(b?.earring.split('-')[0] || '0')
@@ -118,6 +122,7 @@ export const AnimalsList = ({
       setEarringsSelected?.([])
     }
   }
+  console.log({ sortedSuffixByEarring, sortedByEarring })
 
   return (
     <div className="relative">
