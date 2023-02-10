@@ -25,6 +25,12 @@ const useSortByField = (array: any[], ops?: Options) => {
   useEffect(() => {
     setArraySorted(array)
   }, [array])
+  useEffect(() => {
+    if (defaultSortField) {
+      handleSortBy(defaultSortField)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [array])
 
   const defaultSortField = ops?.defaultSortField || ''
   const reverse = ops?.reverse || false
@@ -43,11 +49,6 @@ const useSortByField = (array: any[], ops?: Options) => {
     setArraySorted(sortByField(array, fieldName, sortReverse))
     setSortReverse(!sortReverse)
   }
-
-  useEffect(() => {
-    if (defaultSortField) handleSortBy(defaultSortField)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return {
     arraySorted: arraySorted,

@@ -8,9 +8,10 @@ import FarmEventCard from './FarmEvent/FarmEventCard'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   const [filteredEvents, setFilteredEvents] = useState(events || [])
+
   const { arraySorted, ...sortMethods } = useSortByField(filteredEvents, {
     defaultSortField: 'createdAt',
-    reverse: false
+    reverse: true
   })
 
   return (

@@ -25,7 +25,6 @@ const Filters = ({
       ? (filters?.[defaultFilter] as any[])
       : [filters?.[defaultFilter]]
   })
-  console.log({ arrayFiltered })
 
   useEffect(() => {
     setArray(arrayFiltered)
