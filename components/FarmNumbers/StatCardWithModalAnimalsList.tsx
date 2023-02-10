@@ -22,7 +22,6 @@ const StatCardWithModalAnimalsList = ({
     setOpenList(!openList)
   }
   const [selectedAnimals, setSelectedAnimals] = useState<string[]>([])
-  console.log({ selectedAnimals })
   return (
     <>
       <div
