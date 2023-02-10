@@ -122,7 +122,6 @@ export const AnimalsList = ({
       setEarringsSelected?.([])
     }
   }
-  console.log({ sortedSuffixByEarring, sortedByEarring })
 
   return (
     <div className="relative">
