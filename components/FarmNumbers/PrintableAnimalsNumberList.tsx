@@ -1,17 +1,17 @@
-import AnimalsListTable from '@comps/AnimalsTable/ListTable'
 import Icon from '@comps/Icon'
 import React, { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
-import { AnimalType } from 'types/base/AnimalType.model'
-import { AnimalsList } from './StatCardWithModalAnimalsList'
+import {
+  AnimalsList,
+  NumbersAnimalListType
+} from './StatCardWithModalAnimalsList'
 
 const PrintableAnimalsNumberList = ({
   animals,
-  title
-}: {
-  animals: AnimalType[]
-  title: string
-}) => {
+  title,
+  earringsSelected,
+  setEarringsSelected
+}: NumbersAnimalListType) => {
   const componentRef = useRef()
 
   return (
@@ -30,20 +30,39 @@ const PrintableAnimalsNumberList = ({
         content={() => componentRef.current || null}
         bodyClass="pt-10 px-10"
       />
-      <ForwardPrintArea ref={componentRef} animals={animals} title={title} />
+      <ForwardPrintArea
+        ref={componentRef}
+        animals={animals}
+        title={title}
+        earringsSelected={earringsSelected}
+        setEarringsSelected={setEarringsSelected}
+      />
     </div>
   )
 }
 
 const ForwardPrintArea = React.forwardRef(
-  ({ animals, title }: { animals: AnimalType[]; title: string }, ref: any) => {
+  (
+    {
+      animals,
+      title,
+      earringsSelected,
+      setEarringsSelected
+    }: NumbersAnimalListType,
+    ref: any
+  ) => {
     return (
       <div ref={ref} className=" p-4">
         <h3 className="text-lg mb-10">
           <span>Lista de: </span>
           <strong className="font-bold">{title}</strong>
         </h3>
-        <AnimalsList animals={animals} title={title} />
+        <AnimalsList
+          animals={animals}
+          title={title}
+          earringsSelected={earringsSelected}
+          setEarringsSelected={setEarringsSelected}
+        />
       </div>
     )
   }
