@@ -15,7 +15,7 @@ const ModalSaleDetails = ({
   const handleOpenBreeding = () => {
     setOpen(!open)
   }
-  const handleDeleteSale = async (id) => {
+  const handleDeleteSale = async (id: string) => {
     try {
       const res = await deleteEvent(id)
       console.log({ res })
@@ -45,7 +45,7 @@ const ModalSaleDetails = ({
           <div className="flex w-full justify-center">
             <ModalDelete
               handleDelete={() => {
-                handleDeleteSale(sale.id)
+                handleDeleteSale(sale?.id || '')
               }}
               title={'Eliminar venta'}
               text='Se eliminara esta venta pero no se acutalizara el estado de los animales y quedará como "Vendido"'
