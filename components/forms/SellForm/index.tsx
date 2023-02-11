@@ -22,8 +22,6 @@ const SellForm = ({ sale }: { sale?: any }) => {
     total: 0
   }
 
-  console.log(sale)
-
   const methods = useForm({
     defaultValues
   })
@@ -91,7 +89,6 @@ const SellForm = ({ sale }: { sale?: any }) => {
   const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>(
     formValues?.earrings || []
   )
-  console.log({ animalsSelected })
 
   useEffect(() => {
     if (!sale) {
@@ -262,25 +259,26 @@ const SellForm = ({ sale }: { sale?: any }) => {
               />
             </div>
           </div>
-
-          <div className="w-full flex justify-around my-4">
-            <button
-              className="btn btn-outline btn-sm"
-              onClick={(e) => {
-                e.preventDefault()
-                methods.reset()
-                setProgress(0)
-                setAnimalsSelected([])
-              }}
-            >
-              Borrar
-            </button>
-            <ProgressButton
-              progress={progress}
-              className="btn-outline btn-sm"
-            />
-            {/* <button className="btn btn-outline btn-sm">Guardar</button> */}
-          </div>
+          {!sale && (
+            <div className="w-full flex justify-around my-4">
+              <button
+                className="btn btn-outline btn-sm"
+                onClick={(e) => {
+                  e.preventDefault()
+                  methods.reset()
+                  setProgress(0)
+                  setAnimalsSelected([])
+                }}
+              >
+                Limpiar
+              </button>
+              <ProgressButton
+                progress={progress}
+                className="btn-outline btn-sm"
+              />
+              {/* <button className="btn btn-outline btn-sm">Guardar</button> */}
+            </div>
+          )}
         </form>
       </FormProvider>
     </div>
