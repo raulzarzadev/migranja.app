@@ -6,6 +6,7 @@ import ModalDelete from 'components/modal/ModalDelete'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
+import FormEarringsSelected from './FormEarringsSelected'
 
 const AnimalsOptions = ({
   animalsEarrings,
@@ -17,12 +18,14 @@ const AnimalsOptions = ({
   setAnimalsEarrings?: ([]) => void
 }) => {
   const [_earrings, _setEarrings] = useState<string[]>([])
+
   useEffect(() => {
     _setEarrings(animalsEarrings)
     return () => {
       setProgress(0)
     }
   }, [animalsEarrings])
+
   const farmAnimals = useSelector(selectFarmAnimals)
   const [progress, setProgress] = useState(0)
 
@@ -30,6 +33,7 @@ const AnimalsOptions = ({
     (earring) =>
       farmAnimals?.find((animal) => animal.earring === earring)?.id || ''
   )
+
   const handleDeleteAll = async () => {
     setProgress(1)
 
@@ -53,6 +57,14 @@ const AnimalsOptions = ({
   const handleOpenEvent = () => {
     setOpenEvent(!openEvent)
   }
+  const [openEditSelection, setOpenEditSelection] = useState(false)
+  const handleOpenEditSelection = () => {
+    setOpenEditSelection(!openEditSelection)
+  }
+  const handleEditSelection = () => {
+    console.log('Edit section')
+  }
+
   return (
     <div className="p-2">
       <Modal
@@ -61,6 +73,26 @@ const AnimalsOptions = ({
         open={openEvent}
       >
         <ChooseEventForm animalsIds={animalsIds} title={title} />
+      </Modal>
+      <Modal
+        title={`Editar aretes`}
+        handleOpen={handleOpenEditSelection}
+        open={openEditSelection}
+      >
+        <FormEarringsSelected earringsIds={animalsIds} />
+
+        <button
+          className="btn btn-info"
+          onClick={(e) => {
+            e.preventDefault()
+            handleEditSelection()
+          }}
+        >
+          Editar
+          <span className="ml-2">
+            <Icon name="edit" />
+          </span>
+        </button>
       </Modal>
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
         <span>
@@ -95,8 +127,16 @@ const AnimalsOptions = ({
               <Icon name="event" />
             </span>
           </button>
-          <button className="btn btn-info btn-outline" disabled>
+          <button
+            className="btn btn-info btn-outline"
+            onClick={() => {
+              handleOpenEditSelection()
+            }}
+          >
             Editar
+            <span className="ml-2">
+              <Icon name="edit" />
+            </span>
           </button>
         </div>
       </div>

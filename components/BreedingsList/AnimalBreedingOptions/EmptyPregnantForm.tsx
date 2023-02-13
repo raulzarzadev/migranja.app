@@ -42,7 +42,6 @@ const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
               id: animal.id,
               name: animal.name,
               earring: animal.earring
-              // inTheFarm: animal.status === 'ACTIVE'
             }
           },
           date: data.date,
