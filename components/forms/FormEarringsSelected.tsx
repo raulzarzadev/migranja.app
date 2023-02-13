@@ -1,11 +1,20 @@
 import Icon from '@comps/Icon'
 import InputContainer, { SelectOption } from '@comps/inputs/InputContainer'
 import AsyncModal from '@comps/modal/AsyncModal'
-import { useState } from 'react'
+import { updateAnimal } from '@firebase/Animal/main'
 import { FormProvider, useForm } from 'react-hook-form'
 import { AnimalState } from 'types/base/AnimalState.model'
-export interface AnimalStatuses {}
-const FormEarringsSelected = ({ earringsIds }: { earringsIds: string[] }) => {
+export interface EarringsSelected {
+  id: string
+  earring: string
+  name?: string
+}
+const FormEarringsSelected = ({
+  earringsSelected
+}: {
+  earringsSelected: EarringsSelected[]
+}) => {
+  console.log({ earringsSelected })
   const methods = useForm()
 
   const animalStates: SelectOption[] = Object.entries(AnimalState).map(
@@ -17,11 +26,22 @@ const FormEarringsSelected = ({ earringsIds }: { earringsIds: string[] }) => {
     console.log('submit', data)
   }
   const handleSave = async (): Promise<boolean | number> => {
-    return new Promise<boolean | number>((resolve, reject) => {
-      setTimeout(() => {
-        console.log('pro')
+    console.log('start')
+    const formData = methods.getValues()
+    return new Promise(async (resolve, reject) => {
+      try {
+        for (let i = 0; i < earringsSelected.length; i++) {
+          const { id, earring, name } = earringsSelected[i]
+          console.log({ id })
+          // await updateAnimal(id, { ...formData }).then((res) =>
+          //   console.log({ res })
+          // )
+        }
         resolve(true)
-      }, 1000)
+      } catch (error) {
+        console.log({ error })
+        reject(error)
+      }
     })
   }
   const formHasSomeErrors = Object.keys(methods.formState.errors).length

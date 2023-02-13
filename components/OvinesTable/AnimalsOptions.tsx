@@ -27,12 +27,18 @@ const AnimalsOptions = ({
   }, [animalsEarrings])
 
   const farmAnimals = useSelector(selectFarmAnimals)
+  const earringsSelected = animalsEarrings.map((earring) => {
+    const animal = farmAnimals?.find((animal) => animal.earring === earring)
+    return {
+      earring: animal?.earring || '',
+      id: animal?.id || '',
+      name: animal?.name || ''
+    }
+  })
+
   const [progress, setProgress] = useState(0)
 
-  const animalsIds = _earrings.map(
-    (earring) =>
-      farmAnimals?.find((animal) => animal.earring === earring)?.id || ''
-  )
+  const animalsIds = earringsSelected.map((animal) => animal.id)
 
   const handleDeleteAll = async () => {
     setProgress(1)
@@ -76,11 +82,11 @@ const AnimalsOptions = ({
         handleOpen={handleOpenEditSelection}
         open={openEditSelection}
       >
-        <FormEarringsSelected earringsIds={animalsIds} />
+        <FormEarringsSelected earringsSelected={earringsSelected} />
       </Modal>
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
         <span>
-          Estos cambios se aplicaran a todos los animales seleccionados{' '}
+          Estos cambios se aplicaran a todos los animales seleccionados
           <span className="font-bold">{animalsEarrings.length || 0}</span>
         </span>
         <div className="flex w-full justify-evenly ">

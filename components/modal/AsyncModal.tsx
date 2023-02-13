@@ -2,13 +2,7 @@ import Icon from '@comps/Icon'
 import { IconName } from '@comps/Icon/icons-list'
 import { useState } from 'react'
 import Modal from '.'
-const executing = async () => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(true)
-    }, 1000)
-  })
-}
+
 const AsyncModal = ({
   btnLabel = 'label button',
   children = <></>,
