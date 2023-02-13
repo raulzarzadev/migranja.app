@@ -1,6 +1,5 @@
 import InputContainer, { SelectOption } from '@comps/inputs/InputContainer'
 import { FormProvider, useForm } from 'react-hook-form'
-import { AnimalStatusLabels } from 'types/base/AnimalStatus.model'
 export interface AnimalStatuses {}
 const FormEarringsSelected = ({ earringsIds }: { earringsIds: string[] }) => {
   const methods = useForm()

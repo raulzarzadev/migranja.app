@@ -1,4 +1,4 @@
-export enum AnimalStatus {
+export enum AnimalState {
   FREE = 'libre',
   BREEDING = 'monta',
   SUCKLE = 'lactando',
@@ -6,5 +6,3 @@ export enum AnimalStatus {
   FOR_BELLY = 'vientre',
   FOR_SALE = 'venta'
 }
-
-const animalStatuses = {}

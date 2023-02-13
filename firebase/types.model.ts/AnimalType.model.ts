@@ -4,35 +4,36 @@ import { ImageType } from './ImageType.model'
 import { DateType, TypeBase } from './TypeBase.model'
 import { AnimalType as AnimalModelType } from 'types/base/AnimalType.model'
 import { AnimalCurrentStatusType } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
-export interface AnimalType extends TypeBase {
-  isStallion?: boolean
-  isDuplicated?: boolean
-  name: string
-  birthday: DateType
-  earring: string
-  images: ImageType[]
-  gender: 'male' | 'female'
-  breed: string
-  type: 'ovine' | 'bovine'
-  status?: AnimalCurrentStatusType
-  parents?: ParentsType
-  weight?: AnimalWeight
-  batch: string | null
-  birthType: number | string
-  joinedAt: DateType
-  farm?: {
-    id?: FarmType['id']
-    name?: FarmType['name']
-  }
-  batchData?: any
-  breeding?: any
-  statuses?: {
-    isAlive?: boolean
-    isInTheFarm?: boolean
-    isPregnant?: boolean
-    isSold?: boolean
-  }
-  currentStatus?: AnimalModelType['currentStatus']
+import { AnimalType as AnimalMainType } from 'types/base/AnimalType.model'
+export interface AnimalType extends AnimalMainType {
+  // isStallion?: boolean
+  // isDuplicated?: boolean
+  // name: string
+  // birthday: DateType
+  // earring: string
+  // images: ImageType[]
+  // gender: 'male' | 'female'
+  // breed: string
+  // type: 'ovine' | 'bovine'
+  // status?: AnimalCurrentStatusType
+  // parents?: ParentsType
+  // weight?: AnimalWeight
+  // batch: string | null
+  // birthType: number | string
+  // joinedAt: DateType
+  // farm?: {
+  //   id?: FarmType['id']
+  //   name?: FarmType['name']
+  // }
+  // batchData?: any
+  // breeding?: any
+  // statuses?: {
+  //   isAlive?: boolean
+  //   isInTheFarm?: boolean
+  //   isPregnant?: boolean
+  //   isSold?: boolean
+  // }
+  // currentStatus?: AnimalModelType['currentStatus']
 }
 
 export interface GenderOptions {
