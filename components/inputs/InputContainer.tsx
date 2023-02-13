@@ -153,7 +153,7 @@ const InputContainer = ({
           )}
           {type === 'select' && (
             <select
-              className="input input-bordered input-sm bg-transparent"
+              className="input input-bordered input-sm bg-transparent capitalize"
               onChange={onChange}
               onBlur={onBlur}
               name={name}

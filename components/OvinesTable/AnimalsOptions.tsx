@@ -6,7 +6,7 @@ import ModalDelete from 'components/modal/ModalDelete'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
-import FormEarringsSelected from './FormEarringsSelected'
+import FormEarringsSelected from '../forms/FormEarringsSelected'
 
 const AnimalsOptions = ({
   animalsEarrings,
@@ -61,9 +61,6 @@ const AnimalsOptions = ({
   const handleOpenEditSelection = () => {
     setOpenEditSelection(!openEditSelection)
   }
-  const handleEditSelection = () => {
-    console.log('Edit section')
-  }
 
   return (
     <div className="p-2">
@@ -80,19 +77,6 @@ const AnimalsOptions = ({
         open={openEditSelection}
       >
         <FormEarringsSelected earringsIds={animalsIds} />
-
-        <button
-          className="btn btn-info"
-          onClick={(e) => {
-            e.preventDefault()
-            handleEditSelection()
-          }}
-        >
-          Editar
-          <span className="ml-2">
-            <Icon name="edit" />
-          </span>
-        </button>
       </Modal>
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
         <span>
