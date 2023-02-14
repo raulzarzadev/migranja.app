@@ -32,12 +32,16 @@ const AsyncModal = ({
   //* should execute tha functions and return a progress or a boolean about the state of 0 , 100 , or -1
 
   //* when you click in save button, acctions like loaders of modal should show it
-  const onStartActions = () => {}
+  const onStartActions = () => {
+    setProgress(1)
+  }
 
   //* when executing finctins finished should show succesfull  labels and close modal
   const onFinishAction = () => {
+    setProgress(100)
     setTimeout(() => {
       handleOpen()
+      setProgress(0)
     }, 1000)
   }
 
@@ -45,8 +49,10 @@ const AsyncModal = ({
 
   const handleCancel = () => {
     console.log('canceling')
+    setProgress(1)
     setTimeout(() => {
       handleOpen()
+      setProgress(0)
       console.log('canceled')
     }, 500)
   }
@@ -58,6 +64,8 @@ const AsyncModal = ({
     await handleAccept()
     onFinishAction()
   }
+
+  const [progress, setProgress] = useState(0)
 
   return (
     <div>
@@ -82,6 +90,7 @@ const AsyncModal = ({
           <div>{children}</div>
           <div className="flex w-full justify-around ">
             <button
+              disabled={progress > 0}
               onClick={(e) => {
                 e.preventDefault()
                 isActionConfirmed(false)
@@ -91,6 +100,7 @@ const AsyncModal = ({
               Cancelar <Icon name="close" />
             </button>
             <button
+              disabled={progress > 0}
               onClick={(e) => {
                 e.preventDefault()
                 isActionConfirmed(true)

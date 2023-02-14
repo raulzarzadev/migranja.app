@@ -1,5 +1,5 @@
 import BirthEvents from '@comps/BirthEvents'
-import FarmNumbers from '@comps/FarmNumbers'
+import FarmNumbers from '@comps/FarmNumbers_v2'
 import AnimalForm from '@comps/forms/AnimalForm'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
 import InventoryForm from '@comps/InventoryForm'

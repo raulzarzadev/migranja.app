@@ -171,6 +171,10 @@ export const AnimalDetails = ({
             Nacimiento
             <div className="pl-2">
               <div>
+                <span>Edad: </span>
+                <span>{birthday ? fromNow(birthday) : ''}</span>
+              </div>
+              <div>
                 <span>Fecha: </span>
                 <span>
                   {birthday ? myFormatDate(birthday, 'dd-MMM-yy') : ''}
