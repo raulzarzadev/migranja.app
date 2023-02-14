@@ -1,5 +1,6 @@
 import Icon from '@comps/Icon'
 import { IconName } from '@comps/Icon/icons-list'
+import Loading from '@comps/Loading'
 import { useState } from 'react'
 import Modal from '.'
 
@@ -31,12 +32,12 @@ const AsyncModal = ({
 
   //* should execute tha functions and return a progress or a boolean about the state of 0 , 100 , or -1
 
-  //* when you click in save button, acctions like loaders of modal should show it
+  //* when you click in save button, actions like loaders of modal should show it
   const onStartActions = () => {
     setProgress(1)
   }
 
-  //* when executing finctins finished should show succesfull  labels and close modal
+  //* when executing functions finished should show successfully  labels and close modal
   const onFinishAction = () => {
     setProgress(100)
     setTimeout(() => {
@@ -107,7 +108,7 @@ const AsyncModal = ({
               }}
               className="btn btn-info btn-outline"
             >
-              Guardar <Icon name="save" />
+              Guardar {progress > 0 ? <Loading /> : <Icon name="save" />}
             </button>
           </div>
         </div>

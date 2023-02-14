@@ -23,6 +23,7 @@ import IndeterminateCheckbox from './IndeterminableCheckbox'
 import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
 import AnimalsTableFilter from '@comps/Filters/AnimalsTableFilter'
+import { AnimalState } from 'types/base/AnimalState.model'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -107,6 +108,15 @@ const AnimalsTable = ({
     columnHelper.accessor('currentStatus', {
       header: 'Status',
       cell: (props) => <span>{props.getValue() ? props.getValue() : '-'}</span>
+    }),
+    columnHelper.accessor('state', {
+      header: 'Estado',
+      cell: (props) => (
+        <span className="capitalize">
+          {/* @ts-ignore */}
+          {!!props.getValue() ? AnimalState[props.getValue()] : '-'}
+        </span>
+      )
     })
   ]
 
@@ -168,16 +178,16 @@ const AnimalsTable = ({
   }
 
   const [rowSelection, setRowSelection] = useState({})
-
-  useEffect(() => {
-    selectedRows?.forEach(({ earring }: any) => {
-      const i = animalsData.findIndex((animal) => animal.earring === earring)
-      setRowSelection((state) => {
-        return { ...state, [i]: true }
-      })
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animalsData])
+  console.log({ rowSelection })
+  // useEffect(() => {
+  //   selectedRows?.forEach(({ earring }: any) => {
+  //     const i = animalsData.findIndex((animal) => animal.earring === earring)
+  //     setRowSelection((state) => {
+  //       return { ...state, [i]: true }
+  //     })
+  //   })
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [animalsData])
 
   useEffect(() => {
     let earrings: string[] = []

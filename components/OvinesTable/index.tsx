@@ -7,12 +7,13 @@ import AnimalsOptions from './AnimalsOptions'
 const OvinesTable = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
   const [selectedRows, setSelectedRows] = useState<string[] | null>(null)
+  console.log({ selectedRows })
   return (
     <>
       <div className="w-full bg-base-300 shadow-md rounded-md m-2  h-min ">
         <AnimalsTable
           animalsData={farmAnimals}
-          selectedRows={selectedRows}
+          //selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
           settings={{ selectMany: true }}
           showSelectRow

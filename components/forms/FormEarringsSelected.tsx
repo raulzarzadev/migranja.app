@@ -33,7 +33,7 @@ const FormEarringsSelected = ({
       try {
         for (let i = 0; i < earringsSelected.length; i++) {
           const { id, earring, name } = earringsSelected[i]
-          await updateAnimal(id, { ...formData }).then((res) =>
+          await updateAnimal(id, { state: formData?.state }).then((res) =>
             console.log({ res })
           )
         }
@@ -45,7 +45,6 @@ const FormEarringsSelected = ({
     })
   }
   const formHasSomeErrors = Object.keys(methods.formState.errors).length
-
   return (
     <div>
       <div>Los cambios se realizaran a los siguientes animales</div>
