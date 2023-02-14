@@ -183,7 +183,7 @@ const AnimalsTable = ({
 
   useEffect(() => {
     const earringsSelected: string[] = Object.keys(rowSelection).map((key) => {
-      return animalsData[key].earring
+      return animals[key].earring
     })
     setSelectedRows?.(earringsSelected)
   }, [rowSelection])

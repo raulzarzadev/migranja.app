@@ -18,9 +18,8 @@ function DebouncedInput({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      value && onChange(value)
+      typeof value === 'string' && onChange(value)
     }, debounce)
-
     return () => clearTimeout(timeout)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
