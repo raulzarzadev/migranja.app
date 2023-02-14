@@ -91,7 +91,7 @@ const InputContainer = ({
             <div className="">
               <DatePicker
                 onBlur={onBlur}
-                className="input input-bordered input-sm w-full bg-transparent"
+                className={`input input-bordered input-sm w-full bg-transparent ${inputClassName}`}
                 selected={value ? new Date(value) : new Date()}
                 onChange={(date: Date) => onChange(date)}
                 //onBlur={onBlur}
@@ -153,12 +153,13 @@ const InputContainer = ({
           )}
           {type === 'select' && (
             <select
-              className="input input-bordered input-sm bg-transparent capitalize"
+              className={`input input-bordered input-sm bg-transparent capitalize ${inputClassName}`}
               onChange={onChange}
               onBlur={onBlur}
               name={name}
               ref={ref}
               value={value}
+              {...rest}
             >
               <option value="">{placeholder ?? 'Select'}</option>
               {selectOptions?.map(({ value, label }: SelectOption) => (

@@ -11,16 +11,21 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 
 const SellForm = ({ sale }: { sale?: any }) => {
-  const defaultValues = sale?.eventData || {
-    date: new Date(),
-    price: 0,
-    type: 'onFoot',
-    earrings: [] as any[],
-    totalWeight: 0,
-    averageWeight: 0,
-    animalsQuantity: 0,
-    total: 0
-  }
+  //* will determinate text and inputs statuses
+  const isDetailsView = !!sale
+
+  const defaultValues = isDetailsView
+    ? sale?.eventData
+    : {
+        date: new Date(),
+        price: 0,
+        type: 'onFoot',
+        earrings: [] as any[],
+        totalWeight: 0,
+        averageWeight: 0,
+        animalsQuantity: 0,
+        total: 0
+      }
 
   const methods = useForm({
     defaultValues
@@ -81,43 +86,56 @@ const SellForm = ({ sale }: { sale?: any }) => {
     0
   )
 
+  console.log({ totalWeightFromEarringForm })
+  console.log(formValues)
+
+  useEffect(() => {
+    methods.setValue('totalWeight', totalWeightFromEarringForm)
+    methods.setValue('total', totalMoney)
+  }, [methods, totalWeightFromEarringForm, totalMoney])
+
   interface EarringWeight {
     earring: string
     weight: number
   }
 
-  const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>(
-    formValues?.earrings || []
-  )
+  const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>([])
 
   useEffect(() => {
-    if (!sale) {
-      methods.setValue('total', totalMoney)
+    if (sale) {
+      setAnimalsSelected(sale.eventData.earrings)
     }
-  }, [methods, totalMoney, sale])
+  }, [sale])
 
-  useEffect(() => {
-    if (!sale) {
-      methods.setValue('animalsQuantity', animalsSelected?.length || 0)
-      methods.setValue(
-        'earrings',
-        animalsSelected?.map(({ earring }) => {
-          return { earring }
-        }) || []
-      )
-    }
-  }, [animalsSelected, methods, sale])
+  // useEffect(() => {
+  //   if (!sale) {
+  //     methods.setValue('total', totalMoney)
+  //   }
+  // }, [methods, totalMoney, sale])
 
-  useEffect(() => {
-    if (!sale) {
-      methods.setValue('totalWeight', totalWeightFromEarringForm)
-    }
-  }, [methods, totalWeightFromEarringForm, sale])
+  // useEffect(() => {
+  //   if (!sale) {
+  //     methods.setValue('animalsQuantity', animalsSelected?.length || 0)
+  //     methods.setValue(
+  //       'earrings',
+  //       animalsSelected?.map(({ earring }) => {
+  //         return { earring }
+  //       }) || []
+  //     )
+  //   }
+  // }, [animalsSelected, methods, sale])
+
+  // useEffect(() => {
+  //   if (!sale) {
+  //     methods.setValue('totalWeight', totalWeightFromEarringForm)
+  //   }
+  // }, [methods, totalWeightFromEarringForm, sale])
+  // console.log({ sale })
 
   return (
     <div>
       <h2 className="text-xl font-bold text-center">
-        {!!sale ? 'Detalles de venta' : 'Nueva venta'}
+        {isDetailsView ? 'Detalles de venta' : 'Nueva venta'}
       </h2>
       <FormProvider {...methods}>
         <form
@@ -127,6 +145,8 @@ const SellForm = ({ sale }: { sale?: any }) => {
         >
           <div className="grid gap-2 max-w-sm mx-auto">
             <InputContainer
+              inputClassName="disabled:bg-transparent"
+              disabled={isDetailsView}
               label="Tipo"
               type="select"
               name="type"
@@ -135,7 +155,13 @@ const SellForm = ({ sale }: { sale?: any }) => {
                 { label: 'En canal', value: 'onCarcass' }
               ]}
             />
-            <InputContainer label="Fecha" type="date" name="date" />
+            <InputContainer
+              inputClassName="disabled:bg-transparent"
+              disabled={isDetailsView}
+              label="Fecha"
+              type="date"
+              name="date"
+            />
           </div>
           <div className="sm:flex">
             <div className="sm:w-full text-center ">
@@ -169,9 +195,10 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       </div>
                       <div>
                         <input
+                          disabled={isDetailsView}
                           type={'number'}
                           step={0.01}
-                          className="input input-bordered input-xs w-full bg-transparent"
+                          className="input input-bordered input-xs w-full bg-transparent disabled:bg-transparent"
                           {...methods.register(`earrings.${i}.weight`, {
                             valueAsNumber: true
                           })}
@@ -179,7 +206,8 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       </div>
                       <div>
                         <input
-                          className="input input-bordered input-xs w-full bg-transparent"
+                          disabled={isDetailsView}
+                          className="input input-bordered input-xs w-full bg-transparent disabled:bg-transparent"
                           {...methods.register(`earrings.${i}.obs`)}
                         />
                       </div>
@@ -196,7 +224,8 @@ const SellForm = ({ sale }: { sale?: any }) => {
                     Precio (kg):
                     <input
                       {...field}
-                      className=" text-end input input-sm w-[80px] input-bordered  bg-transparent"
+                      disabled={isDetailsView}
+                      className=" text-end input input-sm w-[80px] input-bordered  bg-transparent disabled:bg-transparent"
                     />
                   </label>
                 )}
@@ -209,7 +238,8 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       Animales (N°):
                       <input
                         {...field}
-                        className=" text-end input input-bordered  bg-transparent input-sm w-[80px] "
+                        disabled={isDetailsView}
+                        className=" text-end input input-bordered  bg-transparent input-sm w-[80px] disabled:bg-transparent "
                       />
                     </label>
                   )
@@ -218,11 +248,12 @@ const SellForm = ({ sale }: { sale?: any }) => {
               <Controller
                 name="totalWeight"
                 render={({ field }) => (
-                  <label className=" text-end  flex items-center justify-end">
+                  <label className=" text-end  flex items-center justify-end disabled:bg-transparent">
                     Peso T (kg):
                     <input
                       {...field}
-                      className=" text-end input input-bordered  bg-transparent input-sm w-[80px]"
+                      disabled={isDetailsView}
+                      className=" text-end input input-bordered  bg-transparent input-sm w-[80px] disabled:bg-transparent"
                     />
                   </label>
                 )}
@@ -236,7 +267,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       {...field}
                       value={parseFloat(`${averageWeight}`).toFixed(2)}
                       disabled
-                      className=" text-end input input-bordered  bg-transparent disabled:opacity-50 input-sm w-[80px]"
+                      className=" text-end input input-bordered  bg-transparent disabled:opacity-50 input-sm w-[80px] disabled:bg-opacity-30"
                     />
                   </label>
                 )}
@@ -252,7 +283,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                         totalMoney
                       )}`}
                       disabled
-                      className=" text-end input  input-bordered  bg-transparent disabled:opacity-50 input-sm  w-[100px]"
+                      className=" text-end input  input-bordered  bg-transparent disabled:opacity-50 input-sm  w-[100px] disabled:bg-opacity-30"
                     />
                   </label>
                 )}
