@@ -38,7 +38,7 @@ export interface AnimalsDataType extends Partial<AnimalType> {
 export interface AnimalTableType {
   animalsData: AnimalsDataType[]
   setSelectedRows?: (rows: string[] | null) => void
-  setSelectedRow?: (row: RowSelectedType | null) => void
+  //setSelectedRow?: (row: RowSelectedType | null) => void
   settings?: {
     selectMany?: boolean
   }
@@ -50,7 +50,7 @@ export interface AnimalTableType {
 const AnimalsTable = ({
   animalsData,
   settings,
-  setSelectedRow,
+  //setSelectedRow,
   setSelectedRows,
   selectedRows,
   showRelationshipCol,
@@ -179,14 +179,33 @@ const AnimalsTable = ({
 
   const [rowSelection, setRowSelection] = useState({})
 
-  // console.log({ rowSelection, selectedRows })
-
   useEffect(() => {
-    const earringsSelected: string[] = Object.keys(rowSelection).map((key) => {
-      return animals[key].earring
-    })
-    setSelectedRows?.(earringsSelected)
-  }, [rowSelection])
+    const earringsSelected = () => {
+      let res: string[] = []
+      Object.entries(rowSelection).forEach(([key, value]) => {
+        const earring = animals[key].earring
+        if (value) {
+          res.push(earring)
+        }
+      })
+      return res
+    }
+
+    const earringSelected = earringsSelected()
+    setSelectedRows?.(earringSelected)
+  }, [rowSelection, animals, setSelectedRows])
+
+  // useEffect(() => {
+  //   const rowIndexSelected = () => {
+  //     let res = {}
+  //     Object.entries(earringSelection).forEach(([key, value]) => {
+  //       const index = animals.findIndex(({ earring }) => earring === key)
+  //       res[index] = value
+  //     })
+  //     return res
+  //   }
+  //   const rowSelected = rowIndexSelected()
+  // }, [earringSelection])
 
   //console.log({ rowSelection })
   // useEffect(() => {

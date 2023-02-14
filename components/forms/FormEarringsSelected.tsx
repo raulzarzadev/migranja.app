@@ -15,7 +15,6 @@ const FormEarringsSelected = ({
 }: {
   earringsSelected: EarringsSelected[]
 }) => {
-  console.log({ earringsSelected })
   const methods = useForm()
 
   const animalStates: SelectOption[] = Object.entries(AnimalState).map(
