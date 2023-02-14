@@ -37,7 +37,8 @@ const SellForm = ({ sale }: { sale?: any }) => {
 
   const onSubmit = async (data: any) => {
     setProgress(10)
-    console.log(data)
+    console.log({ data })
+    return
     try {
       /** Create sell event */
       const res = await createSellEvent({
@@ -74,38 +75,40 @@ const SellForm = ({ sale }: { sale?: any }) => {
   }
 
   const formValues = methods.watch()
-  const totalWeight = formValues.totalWeight || 0
-  const earringsQuantity = formValues.animalsQuantity || 0
-  const averageWeight = earringsQuantity ? totalWeight / earringsQuantity : 0
-  const totalMoney = totalWeight * formValues.price || 0
+  // const totalWeight = formValues.totalWeight || 0
+  // const earringsQuantity = formValues.animalsQuantity || 0
+  // const averageWeight = earringsQuantity ? totalWeight / earringsQuantity : 0
+  // const totalMoney = totalWeight * formValues.price || 0
 
-  const totalWeightFromEarringForm = formValues?.earrings?.reduce(
-    (prev: number, curr: EarringWeight) => {
-      return (prev += curr.weight || 0)
-    },
-    0
-  )
+  // const totalWeightFromEarringForm = formValues?.earrings?.reduce(
+  //   (prev: number, curr: EarringWeight) => {
+  //     return (prev += curr.weight || 0)
+  //   },
+  //   0
+  // )
 
-  console.log({ totalWeightFromEarringForm })
-  console.log(formValues)
+  // console.log({ totalWeightFromEarringForm })
+  // console.log(formValues)
+  const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>([])
 
-  useEffect(() => {
-    methods.setValue('totalWeight', totalWeightFromEarringForm)
-    methods.setValue('total', totalMoney)
-  }, [methods, totalWeightFromEarringForm, totalMoney])
+  // useEffect(() => {
+  //   methods.setValue('totalWeight', totalWeightFromEarringForm)
+  //   methods.setValue('total', totalMoney)
+  //   methods.setValue('animalsQuantity', animalsSelected?.length || 0)
+  //   methods.setValue('earrings', animalsSelected)
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [methods, animalsSelected, totalWeightFromEarringForm])
 
   interface EarringWeight {
     earring: string
     weight: number
   }
 
-  const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>([])
-
   useEffect(() => {
     if (sale) {
       setAnimalsSelected(sale.eventData.earrings)
     }
-  }, [sale])
+  }, [])
 
   // useEffect(() => {
   //   if (!sale) {
@@ -265,7 +268,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                     Peso % (kg):
                     <input
                       {...field}
-                      value={parseFloat(`${averageWeight}`).toFixed(2)}
+                      value={parseFloat(`${field.value}`).toFixed(2)}
                       disabled
                       className=" text-end input input-bordered  bg-transparent disabled:opacity-50 input-sm w-[80px] disabled:bg-opacity-30"
                     />
@@ -280,7 +283,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                     <input
                       {...field}
                       value={`${new Intl.NumberFormat('es-Mx').format(
-                        totalMoney
+                        field.value
                       )}`}
                       disabled
                       className=" text-end input  input-bordered  bg-transparent disabled:opacity-50 input-sm  w-[100px] disabled:bg-opacity-30"

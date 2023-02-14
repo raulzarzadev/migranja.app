@@ -178,7 +178,17 @@ const AnimalsTable = ({
   }
 
   const [rowSelection, setRowSelection] = useState({})
-  console.log({ rowSelection })
+
+  // console.log({ rowSelection, selectedRows })
+
+  useEffect(() => {
+    const earringsSelected: string[] = Object.keys(rowSelection).map((key) => {
+      return animalsData[key].earring
+    })
+    setSelectedRows?.(earringsSelected)
+  }, [rowSelection])
+
+  //console.log({ rowSelection })
   // useEffect(() => {
   //   selectedRows?.forEach(({ earring }: any) => {
   //     const i = animalsData.findIndex((animal) => animal.earring === earring)
@@ -188,22 +198,30 @@ const AnimalsTable = ({
   //   })
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [animalsData])
+  // useEffect(() => {
+  //   selectedRows?.forEach(({ earring }: any) => {
+  //     const i = animalsData.findIndex((animal) => animal.earring === earring)
+  //     setRowSelection((state) => {
+  //       return { ...state, [i]: true }
+  //     })
+  //   })
+  // }, [])
 
-  useEffect(() => {
-    let earrings: string[] = []
-    Object.entries(rowSelection).forEach(([i, bool]: any) => {
-      const newEarring = animals[i]?.earring
-      earrings.push(newEarring || '')
-    })
-    setSelectedRows?.(earrings)
-    if (earrings.length === 1) {
-      const animal = animals.find(({ earring }) => earring === earrings[0])
-      setSelectedRow?.({ id: animal?.id, earring: animal?.earring })
-    } else {
-      setSelectedRow?.(null)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rowSelection])
+  // useEffect(() => {
+  //   let earrings: string[] = []
+  //   Object.entries(rowSelection).forEach(([i, bool]: any) => {
+  //     const newEarring = animals[i]?.earring
+  //     earrings.push(newEarring || '')
+  //   })
+  //   setSelectedRows?.(earrings)
+  //   if (earrings.length === 1) {
+  //     const animal = animals.find(({ earring }) => earring === earrings[0])
+  //     setSelectedRow?.({ id: animal?.id, earring: animal?.earring })
+  //   } else {
+  //     setSelectedRow?.(null)
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [rowSelection])
 
   const [globalFilter, setGlobalFilter] = useState('')
 
