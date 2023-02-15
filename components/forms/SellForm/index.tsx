@@ -9,11 +9,14 @@ import { useEffect, useState } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
-
+import { AnimalState } from 'types/base/AnimalState.model'
+interface EarringWeight {
+  earring: string
+  weight: number
+}
 const SellForm = ({ sale }: { sale?: any }) => {
   //* will determinate text and inputs statuses
   const isDetailsView = !!sale
-
   const defaultValues = isDetailsView
     ? sale?.eventData
     : {
@@ -30,6 +33,13 @@ const SellForm = ({ sale }: { sale?: any }) => {
   const methods = useForm({
     defaultValues
   })
+  const formValues = methods.watch()
+  const totalWeightFromEarringForm = formValues?.earrings?.reduce(
+    (prev: number, curr: EarringWeight) => {
+      return (prev += curr.weight || 0)
+    },
+    0
+  )
 
   const currentFarm = useSelector(selectFarmState)
   const animalsFarm = useSelector(selectFarmAnimals)
@@ -37,8 +47,8 @@ const SellForm = ({ sale }: { sale?: any }) => {
 
   const onSubmit = async (data: any) => {
     setProgress(10)
-    console.log({ data })
-    return
+    // console.log({ data })
+    // return
     try {
       /** Create sell event */
       const res = await createSellEvent({
@@ -48,7 +58,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
         type: 'SELL'
       })
       setProgress(50)
-      /** Update animals current status  */
+      /** Update animals current status  and state */
       const animalsSold = data.earrings
       for (let i = 0; i < animalsSold.length; i++) {
         const formAnimal = animalsSold[i]
@@ -58,7 +68,10 @@ const SellForm = ({ sale }: { sale?: any }) => {
           )?.id || ''
 
         if (animalId) {
-          await updateAnimal(animalId, { currentStatus: 'SOLD' })
+          await updateAnimal(animalId, {
+            currentStatus: 'SOLD',
+            state: 'SOLD'
+          })
           setProgress(50 + (40 * (i + 1)) / animalsSold.length)
         } else {
           console.log('not found')
@@ -74,66 +87,53 @@ const SellForm = ({ sale }: { sale?: any }) => {
     }
   }
 
-  const formValues = methods.watch()
-  // const totalWeight = formValues.totalWeight || 0
-  // const earringsQuantity = formValues.animalsQuantity || 0
-  // const averageWeight = earringsQuantity ? totalWeight / earringsQuantity : 0
-  // const totalMoney = totalWeight * formValues.price || 0
-
-  // const totalWeightFromEarringForm = formValues?.earrings?.reduce(
-  //   (prev: number, curr: EarringWeight) => {
-  //     return (prev += curr.weight || 0)
-  //   },
-  //   0
-  // )
-
-  // console.log({ totalWeightFromEarringForm })
-  // console.log(formValues)
   const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>([])
 
-  // useEffect(() => {
-  //   methods.setValue('totalWeight', totalWeightFromEarringForm)
-  //   methods.setValue('total', totalMoney)
-  //   methods.setValue('animalsQuantity', animalsSelected?.length || 0)
-  //   methods.setValue('earrings', animalsSelected)
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [methods, animalsSelected, totalWeightFromEarringForm])
+  useEffect(() => {
+    //* Just render the first time if has default selected animals
+    setAnimalsSelected(formValues.earrings)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  interface EarringWeight {
-    earring: string
-    weight: number
+  useEffect(() => {
+    if (animalsSelected.length) {
+      methods.setValue('totalWeight', totalWeightFromEarringForm)
+    }
+    methods.setValue('animalsQuantity', animalsSelected.length)
+  }, [animalsSelected.length, methods, totalWeightFromEarringForm])
+
+  const areAnimalsSelected = !!animalsSelected.length
+  useEffect(() => {
+    const totalPrice = formValues.price * formValues.totalWeight
+    const averageWeight =
+      parseInt(formValues.animalsQuantity) === 0
+        ? 0
+        : formValues.totalWeight / formValues.animalsQuantity
+    methods.setValue('total', totalPrice)
+    methods.setValue('averageWeight', averageWeight)
+  }, [
+    formValues.animalsQuantity,
+    formValues.totalWeight,
+    formValues.price,
+    methods,
+    totalWeightFromEarringForm,
+    areAnimalsSelected,
+    animalsSelected
+  ])
+  const handleSetAnimalsSelected = (animals: string[] | null) => {
+    setAnimalsSelected(
+      animals?.map((animal) => {
+        return { earring: animal, weight: 0 }
+      }) || []
+    )
   }
 
   useEffect(() => {
-    if (sale) {
-      setAnimalsSelected(sale.eventData.earrings)
-    }
-  }, [])
+    methods.setValue('earrings', animalsSelected)
+  }, [animalsSelected, methods])
 
-  // useEffect(() => {
-  //   if (!sale) {
-  //     methods.setValue('total', totalMoney)
-  //   }
-  // }, [methods, totalMoney, sale])
-
-  // useEffect(() => {
-  //   if (!sale) {
-  //     methods.setValue('animalsQuantity', animalsSelected?.length || 0)
-  //     methods.setValue(
-  //       'earrings',
-  //       animalsSelected?.map(({ earring }) => {
-  //         return { earring }
-  //       }) || []
-  //     )
-  //   }
-  // }, [animalsSelected, methods, sale])
-
-  // useEffect(() => {
-  //   if (!sale) {
-  //     methods.setValue('totalWeight', totalWeightFromEarringForm)
-  //   }
-  // }, [methods, totalWeightFromEarringForm, sale])
-  // console.log({ sale })
+  // console.log({ animalsSelected })
+  // console.log(formValues.earrings)
 
   return (
     <div>
@@ -170,13 +170,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
             <div className="sm:w-full text-center ">
               <SelectAnimals
                 animalsSelected={animalsSelected || []}
-                handleAddAnimals={(animals) =>
-                  setAnimalsSelected(
-                    animals?.map((animal) => {
-                      return { earring: animal, weight: 0 }
-                    }) || []
-                  )
-                }
+                handleAddAnimals={handleSetAnimalsSelected}
               />
               <div>
                 <div className="grid grid-cols-[80px_100px_auto] ">
@@ -201,6 +195,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                           disabled={isDetailsView}
                           type={'number'}
                           step={0.01}
+                          defaultValue={0}
                           className="input input-bordered input-xs w-full bg-transparent disabled:bg-transparent"
                           {...methods.register(`earrings.${i}.weight`, {
                             valueAsNumber: true
@@ -209,6 +204,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       </div>
                       <div>
                         <input
+                          defaultValue={''}
                           disabled={isDetailsView}
                           className="input input-bordered input-xs w-full bg-transparent disabled:bg-transparent"
                           {...methods.register(`earrings.${i}.obs`)}
@@ -226,6 +222,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                   <label className=" flex items-center justify-end">
                     Precio (kg):
                     <input
+                      type={'number'}
                       {...field}
                       disabled={isDetailsView}
                       className=" text-end input input-sm w-[80px] input-bordered  bg-transparent disabled:bg-transparent"
@@ -240,9 +237,10 @@ const SellForm = ({ sale }: { sale?: any }) => {
                     <label className=" flex items-center justify-end">
                       Animales (N°):
                       <input
+                        type={'number'}
                         {...field}
-                        disabled={isDetailsView}
-                        className=" text-end input input-bordered  bg-transparent input-sm w-[80px] disabled:bg-transparent "
+                        disabled={isDetailsView || areAnimalsSelected}
+                        className=" text-end input input-bordered  bg-transparent input-sm w-[80px] disabled:bg-transparent disabled:border-transparent "
                       />
                     </label>
                   )
@@ -251,12 +249,13 @@ const SellForm = ({ sale }: { sale?: any }) => {
               <Controller
                 name="totalWeight"
                 render={({ field }) => (
-                  <label className=" text-end  flex items-center justify-end disabled:bg-transparent">
+                  <label className=" text-end  flex items-center justify-end disabled:bg-transparent ">
                     Peso T (kg):
                     <input
                       {...field}
-                      disabled={isDetailsView}
-                      className=" text-end input input-bordered  bg-transparent input-sm w-[80px] disabled:bg-transparent"
+                      type="number"
+                      disabled={isDetailsView || areAnimalsSelected}
+                      className=" text-end input input-bordered  bg-transparent input-sm w-[80px] disabled:bg-transparent disabled:border-transparent"
                     />
                   </label>
                 )}
@@ -270,7 +269,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                       {...field}
                       value={parseFloat(`${field.value}`).toFixed(2)}
                       disabled
-                      className=" text-end input input-bordered  bg-transparent disabled:opacity-50 input-sm w-[80px] disabled:bg-opacity-30"
+                      className=" text-end input input-bordered   input-sm w-[80px]  disabled:border-transparent disabled:bg-transparent "
                     />
                   </label>
                 )}
@@ -286,7 +285,7 @@ const SellForm = ({ sale }: { sale?: any }) => {
                         field.value
                       )}`}
                       disabled
-                      className=" text-end input  input-bordered  bg-transparent disabled:opacity-50 input-sm  w-[100px] disabled:bg-opacity-30"
+                      className=" text-end input  input-bordered font-bold  input-sm  w-[100px] disabled:border-transparent disabled:bg-transparent "
                     />
                   </label>
                 )}

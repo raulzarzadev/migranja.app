@@ -49,7 +49,7 @@ export interface AnimalTableType {
 
 const AnimalsTable = ({
   animalsData,
-  settings,
+  // settings,
   //setSelectedRow,
   setSelectedRows,
   selectedRows,
@@ -177,70 +177,38 @@ const AnimalsTable = ({
     )
   }
 
-  const [rowSelection, setRowSelection] = useState({})
+  // useEffect(() => {
+  //   let rows: Record<number, boolean> = {}
+  //   selectedRows?.forEach((earring) => {
+  //     const index = animalsData.findIndex(
+  //       (animal) => animal.earring === earring
+  //     )
+  //     rows[index] = true
+  //   })
+  //   setRowSelection(rows)
+  //   return () => {
+  //     setRowSelection([])
+  //   }
+  // }, [animalsData, selectedRows])
 
   useEffect(() => {
-    const earringsSelected = () => {
-      let res: string[] = []
-      Object.entries(rowSelection).forEach(([key, value]) => {
-        const earring = animals[key].earring
-        if (value) {
-          res.push(earring)
-        }
-      })
-      return res
-    }
+    let rows: string[] = []
+    setSelectedRows?.(rows)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    const earringSelected = earringsSelected()
-    setSelectedRows?.(earringSelected)
-  }, [rowSelection, animals, setSelectedRows])
-
-  // useEffect(() => {
-  //   const rowIndexSelected = () => {
-  //     let res = {}
-  //     Object.entries(earringSelection).forEach(([key, value]) => {
-  //       const index = animals.findIndex(({ earring }) => earring === key)
-  //       res[index] = value
-  //     })
-  //     return res
-  //   }
-  //   const rowSelected = rowIndexSelected()
-  // }, [earringSelection])
-
-  //console.log({ rowSelection })
-  // useEffect(() => {
-  //   selectedRows?.forEach(({ earring }: any) => {
-  //     const i = animalsData.findIndex((animal) => animal.earring === earring)
-  //     setRowSelection((state) => {
-  //       return { ...state, [i]: true }
-  //     })
-  //   })
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [animalsData])
-  // useEffect(() => {
-  //   selectedRows?.forEach(({ earring }: any) => {
-  //     const i = animalsData.findIndex((animal) => animal.earring === earring)
-  //     setRowSelection((state) => {
-  //       return { ...state, [i]: true }
-  //     })
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   let earrings: string[] = []
-  //   Object.entries(rowSelection).forEach(([i, bool]: any) => {
-  //     const newEarring = animals[i]?.earring
-  //     earrings.push(newEarring || '')
-  //   })
-  //   setSelectedRows?.(earrings)
-  //   if (earrings.length === 1) {
-  //     const animal = animals.find(({ earring }) => earring === earrings[0])
-  //     setSelectedRow?.({ id: animal?.id, earring: animal?.earring })
-  //   } else {
-  //     setSelectedRow?.(null)
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [rowSelection])
+  const [rowSelection, setRowSelection] = useState({})
+  //console.log({ rowSelection, selectedRows })
+  //! FIXME: when user use filter the selection change becouse of the index change
+  useEffect(() => {
+    let earrings: string[] = []
+    Object.keys(rowSelection).forEach((key) => {
+      const animal = animals[parseInt(key)]
+      if (animal) earrings.push(animal?.earring || '')
+    })
+    setSelectedRows?.(earrings)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rowSelection])
 
   const [globalFilter, setGlobalFilter] = useState('')
 
@@ -287,6 +255,7 @@ const AnimalsTable = ({
           <AnimalCard animalId={animaId} />
         </Modal>
       )}
+
       <AnimalsTableFilter array={animalsData} setArray={setAnimals} />
 
       <div className=" justify-center flex my-2 items-center w-full">

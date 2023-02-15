@@ -1,5 +1,5 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import { AnimalState } from './AnimalState.model'
+import { AnimalState, AnimalStateType } from './AnimalState.model'
 import {
   AnimalBreedingType,
   BreedingDetailsEvent,
@@ -38,7 +38,7 @@ export interface AnimalType extends TypeBase {
     isSold?: boolean
   }
   currentStatus?: AnimalCurrentStatusType
-  state?: AnimalState //* This should be the main state of animal
+  state?: AnimalStateType //* This should be the main state of animal
 }
 
 export interface GenderOptions {

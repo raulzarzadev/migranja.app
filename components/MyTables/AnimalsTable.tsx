@@ -16,7 +16,6 @@ const AnimalsTable = () => {
     <div>
       <MyTable
         rowsSelected={rowsSelected}
-        setRowsSelected={setRowsSelected}
         columns={[
           { id: 'earring', label: 'Arete' },
           { id: 'birthday', label: 'Fec.Nac' },
@@ -25,6 +24,7 @@ const AnimalsTable = () => {
         rows={{
           data: tableData
         }}
+        selectByField={''}
       />
     </div>
   )

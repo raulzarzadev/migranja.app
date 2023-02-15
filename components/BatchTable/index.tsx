@@ -153,7 +153,8 @@ const BatchTable = ({
 
       <AnimalsTable
         animalsData={[...animalsData] || []}
-        setSelectedRow={handleOpenAnimal}
+        //! FIXME: if the spelling change this will make some unexpected changes
+        // setSelectedRow={handleOpenAnimal}
         // onRowClick={handleOpenAnimal}
       />
     </div>

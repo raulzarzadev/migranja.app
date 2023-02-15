@@ -9,3 +9,4 @@ export enum AnimalState {
   DEAD = 'muerto',
   LOST = 'perdido'
 }
+export type AnimalStateType = keyof typeof AnimalState
