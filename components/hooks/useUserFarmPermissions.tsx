@@ -13,7 +13,7 @@ const useUserFarmPermissions = ({ farm }: { farm?: FarmType | null }) => {
   const [userPermissions, setUserPermissions] = useState<UserPermissions>({})
   const user = useSelector(selectAuthState)
   useEffect(() => {
-    const teamMember = farm?.team[user?.id || '']
+    const teamMember = farm?.team?.[user?.id || '']
     const teamMemberInvitationStatus = teamMember?.invitation?.status
     const isActiveTeamMember =
       farm?.haveATeam && teamMemberInvitationStatus === 'ACCEPTED'
