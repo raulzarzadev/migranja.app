@@ -3,6 +3,7 @@ import InputContainer, { SelectOption } from '@comps/inputs/InputContainer'
 import AsyncModal from '@comps/modal/AsyncModal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { updateAnimal } from '@firebase/Animal/main'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { AnimalState } from 'types/base/AnimalState.model'
 export interface EarringsSelected {
@@ -25,9 +26,12 @@ const FormEarringsSelected = ({
     //* just evaluate the form content and set errors
     console.log('submit', data)
   }
+  console.log(methods.formState.touchedFields)
   const handleSave = async (): Promise<boolean | number> => {
     console.log('start')
     const formData = methods.getValues()
+    console.log({ formData })
+    return
     return new Promise(async (resolve, reject) => {
       try {
         for (let i = 0; i < earringsSelected.length; i++) {
@@ -44,6 +48,7 @@ const FormEarringsSelected = ({
     })
   }
   const formHasSomeErrors = Object.keys(methods.formState.errors).length
+
   return (
     <div>
       <div>Los cambios se realizaran a los siguientes animales</div>
@@ -58,15 +63,50 @@ const FormEarringsSelected = ({
         ))}
       </div>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <InputContainer
+        <form className="grid gap-2" onSubmit={methods.handleSubmit(onSubmit)}>
+          <ShowHiddenInput
+            input={
+              <InputContainer
+                name="birthday"
+                type="date"
+                rules={{ required: 'Este campo es necesario' }}
+                selectOptions={animalStates}
+                label="Fecha de nacimiento"
+              />
+            }
+            showText="Editar fecha de nacimiento"
+            handleDiscard={() => {
+              methods.unregister('birthday')
+            }}
+          />
+          <ShowHiddenInput
+            input={
+              <InputContainer
+                name="state"
+                type="select"
+                selectOptions={animalStates}
+                label="Estado actual"
+              />
+            }
+            showText="Editar estado actual"
+            handleDiscard={() => {
+              methods.unregister('state')
+            }}
+          />
+          {/* <InputContainer
+            name="birthday"
+            type="date"
+            selectOptions={animalStates}
+            label="Fecha de nacimiento"
+          /> */}
+          {/* <InputContainer
             name="state"
             type="select"
             selectOptions={animalStates}
             label="Estado actual"
-          />
+          /> */}
           {/* <InputContainer name="batch" type="text" label="Lote" /> */}
-          <div className="flex w-full justify-center mt-4">
+          <div className="flex w-full justify-evenly mt-4">
             <AsyncModal
               openButtonClassName="btn btn-info"
               openIcon="save"
@@ -94,6 +134,55 @@ const FormEarringsSelected = ({
           </div>
         </form>
       </FormProvider>
+    </div>
+  )
+}
+
+const ShowHiddenInput = ({
+  input,
+  showText = '',
+  handleDiscard
+}: {
+  input: React.ReactNode
+  showText: string
+  handleDiscard: () => void
+}) => {
+  const [showInput, setShowInput] = useState(false)
+  return (
+    <div className="flex items-end w-full mx-auto justify-center gap-2">
+      {showInput ? (
+        <>
+          {input}
+          <span>
+            <button
+              className="btn btn-outline btn-sm"
+              onClick={(e) => {
+                e.preventDefault()
+                handleDiscard()
+                setShowInput(false)
+              }}
+            >
+              Descartar
+              <span>
+                <Icon name="delete" />
+              </span>
+            </button>
+          </span>
+        </>
+      ) : (
+        <>
+          {/* <span>{showText}</span> */}
+          <button
+            className="btn btn-outline btn-sm"
+            onClick={(e) => {
+              e.preventDefault()
+              setShowInput(true)
+            }}
+          >
+            {showText} <Icon name="edit" />
+          </button>
+        </>
+      )}
     </div>
   )
 }

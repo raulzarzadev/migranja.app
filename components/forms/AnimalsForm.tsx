@@ -92,6 +92,7 @@ export const AnimalsForm = ({
     animalCopy.splice(index, 1)
     setAnimals(animalCopy)
   }
+  console.log({ animals })
 
   const handleSave = async () => {
     setLoading(true)
@@ -103,6 +104,7 @@ export const AnimalsForm = ({
     // return
     try {
       const savingAnimals = animals.map(async (animal) => {
+        console.log({ animal })
         return await createAnimal({ ...animal, farm: farmData }).then(
           ({ res }: any) => {
             //console.log(res)
@@ -175,7 +177,8 @@ export const AnimalsForm = ({
                   <td>
                     <InputContainer
                       name="earring"
-                      type="number"
+                      type="text"
+                      // type="number"
                       className="w-24"
                     />
                   </td>
