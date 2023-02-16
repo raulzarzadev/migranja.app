@@ -31,7 +31,6 @@ const FormEarringsSelected = ({
     console.log('start')
     const formData = methods.getValues()
     console.log({ formData })
-    return
     return new Promise(async (resolve, reject) => {
       try {
         for (let i = 0; i < earringsSelected.length; i++) {
