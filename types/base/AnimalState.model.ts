@@ -9,4 +9,24 @@ export enum AnimalState {
   DEAD = 'muerto',
   LOST = 'perdido'
 }
+export enum AnimalStates {
+  FREE,
+  BREEDING,
+  SUCKLE,
+  FATTEN,
+  FOR_BELLY,
+  FOR_SALE,
+  SOLD,
+  DEAD,
+  LOST
+}
+export const inactiveAnimalsStates: AnimalStateType[] = ['SOLD', 'LOST', 'DEAD']
+export const activeAnimalsStates: AnimalStateType[] = [
+  'BREEDING',
+  'SUCKLE',
+  'FATTEN',
+  'FOR_BELLY',
+  'FOR_SALE',
+  'FREE'
+]
 export type AnimalStateType = keyof typeof AnimalState

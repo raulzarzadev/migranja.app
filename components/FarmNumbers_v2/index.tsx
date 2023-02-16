@@ -1,19 +1,18 @@
-import { addDays, subDays } from 'date-fns'
-import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
-import React, { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
-import { AnimalState } from 'types/base/AnimalState.model'
+import { activeAnimalsStates } from 'types/base/AnimalState.model'
 import { AnimalType } from 'types/base/AnimalType.model'
-
 import { animalsBetweenDays } from './farmNumbers.helper'
 import StatCardWithModalAnimalsList from './StatCardWithModalAnimalsList'
-import StatCardWithModalEventsList from './StatCardWithModalEventsList'
 
 const FarmNumbers = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
-  const farmEvents = useSelector(selectFarmEvents)
-  const activeAnimals = farmAnimals
+  // const farmEvents = useSelector(selectFarmEvents)
+  const activeAnimals = farmAnimals.filter((animal) => {
+    if (animal.state === undefined) return true
+    return activeAnimalsStates.includes(animal?.state)
+  })
 
   const femaleAnimals = activeAnimals.filter(
     ({ gender }) => gender === 'female'
@@ -89,6 +88,7 @@ const FarmNumbers = () => {
           description="Mayores de 3 años"
         />
       </StatsRow>
+
       <StatsRow title="Machos">
         <StatCardWithModalAnimalsList
           title="Machos"

@@ -6,6 +6,7 @@ import { updateAnimal } from '@firebase/Animal/main'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { AnimalState } from 'types/base/AnimalState.model'
+import { myFormatDate } from 'utils/dates/myDateUtils'
 export interface EarringsSelected {
   id: string
   earring: string
@@ -24,18 +25,27 @@ const FormEarringsSelected = ({
 
   const onSubmit = (data: any) => {
     //* just evaluate the form content and set errors
-    console.log('submit', data)
   }
-  console.log(methods.formState.touchedFields)
+  const [updates, setUpdates] = useState({})
+  const formValues = methods.getValues()
+
+  useEffect(() => {
+    const _updates: Record<string, any> = {}
+    Object.entries(formValues).forEach(([key, value]) => {
+      if (value !== undefined) {
+        _updates[key] = value
+      }
+    })
+    setUpdates(_updates)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formValues.birthday, formValues.state])
+
   const handleSave = async (): Promise<boolean | number> => {
-    console.log('start')
-    const formData = methods.getValues()
-    console.log({ formData })
     return new Promise(async (resolve, reject) => {
       try {
         for (let i = 0; i < earringsSelected.length; i++) {
-          const { id, earring, name } = earringsSelected[i]
-          await updateAnimal(id, { state: formData?.state }).then((res) =>
+          const { id } = earringsSelected[i]
+          await updateAnimal(id, { ...updates }).then((res) =>
             console.log({ res })
           )
         }
@@ -47,7 +57,12 @@ const FormEarringsSelected = ({
     })
   }
   const formHasSomeErrors = Object.keys(methods.formState.errors).length
-
+  const isDate = (value: any): boolean => {
+    if (!value) return false
+    const d = new Date(value)
+    if (d.getTime()) return true
+    return false
+  }
   return (
     <div>
       <div>Los cambios se realizaran a los siguientes animales</div>
@@ -92,19 +107,6 @@ const FormEarringsSelected = ({
               methods.unregister('state')
             }}
           />
-          {/* <InputContainer
-            name="birthday"
-            type="date"
-            selectOptions={animalStates}
-            label="Fecha de nacimiento"
-          /> */}
-          {/* <InputContainer
-            name="state"
-            type="select"
-            selectOptions={animalStates}
-            label="Estado actual"
-          /> */}
-          {/* <InputContainer name="batch" type="text" label="Lote" /> */}
           <div className="flex w-full justify-evenly mt-4">
             <AsyncModal
               openButtonClassName="btn btn-info"
@@ -115,9 +117,21 @@ const FormEarringsSelected = ({
               canOpen={!formHasSomeErrors}
             >
               Estos cambios se aplicaran a todos los animales seleccionados:
-              <div>Lista de animales:</div>
+              <div className="grid place-content-center">
+                {Object.entries(updates).map(([key, value]) => (
+                  <div key={key} className="text-center">
+                    <span>
+                      {key}:
+                      {isDate(value)
+                        ? myFormatDate(value as any, 'dd MMM yy')
+                        : `${value}`}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div>Animales selecciondos:</div>
               <div
-                className="flex w-full justify-around flex-wrap my-4
+                className="flex w-full justify-evenly flex-wrap mb-4
       "
               >
                 {earringsSelected.map((animal) => (
