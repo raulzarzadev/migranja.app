@@ -1,5 +1,5 @@
 import { FarmType } from '@firebase/Farm/farm.model'
-import { AnimalState, AnimalStateType } from './AnimalState.model'
+import { AnimalStateType } from './AnimalState.model'
 import {
   AnimalBreedingType,
   BreedingDetailsEvent,

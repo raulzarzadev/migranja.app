@@ -2,16 +2,16 @@ import { FilterType } from '@comps/hooks/useFilterByField'
 import { subMonths } from 'date-fns'
 import Filters from '.'
 const animalsFilters: Record<string, FilterType> = {
-  Activos: { field: 'currentStatus', symbol: '==', value: 'ACTIVE' },
+  // Activos: { field: 'state', symbol: '!=', value: 'ACTIVE' },
   Machos: { field: 'gender', symbol: '==', value: 'male' },
   Hembras: { field: 'gender', symbol: '==', value: 'female' },
   Muertos: {
-    field: 'currentStatus',
+    field: 'state',
     symbol: '==',
     value: 'DEAD'
   },
   Vendidos: {
-    field: 'currentStatus',
+    field: 'state',
     symbol: '==',
     value: 'SOLD'
   },

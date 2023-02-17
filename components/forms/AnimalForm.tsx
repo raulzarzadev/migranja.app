@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 import useDebugInformation from '@comps/hooks/useDebugInformation'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
+import { AnimalState } from 'types/base/AnimalState.model'
 const schema = yup
   .object()
   .shape({
@@ -110,11 +111,9 @@ export const AnimalForm = ({
         })
     }
   }
-  const animalStatusOptions = Object.entries(animalCurrentStatusLabels).map(
-    ([key, value]) => {
-      return { label: value, value: key }
-    }
-  )
+  const animalStateOptions = Object.entries(AnimalState).map(([key, value]) => {
+    return { label: value, value: key }
+  })
 
   const { handleDelete } = useAnimal()
   // useDebugInformation('AnimalForm', { animal })
@@ -212,8 +211,8 @@ export const AnimalForm = ({
                   <InputContainer
                     label="Status"
                     type="select"
-                    name="currentStatus"
-                    selectOptions={animalStatusOptions}
+                    name="state"
+                    selectOptions={animalStateOptions}
                   />
                 </div>
               </div>

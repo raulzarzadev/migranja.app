@@ -49,8 +49,10 @@ const SellForm = ({ sale }: { sale?: any }) => {
     setProgress(10)
     // console.log({ data })
     // return
+
     try {
       /** Create sell event */
+
       const res = await createSellEvent({
         status: 'PENDING',
         eventData: data,
@@ -58,7 +60,9 @@ const SellForm = ({ sale }: { sale?: any }) => {
         type: 'SELL'
       })
       setProgress(50)
-      /** Update animals current status  and state */
+
+      /*** Update animals current status  and state */
+
       const animalsSold = data.earrings
       for (let i = 0; i < animalsSold.length; i++) {
         const formAnimal = animalsSold[i]
@@ -69,7 +73,6 @@ const SellForm = ({ sale }: { sale?: any }) => {
 
         if (animalId) {
           await updateAnimal(animalId, {
-            currentStatus: 'SOLD',
             state: 'SOLD'
           })
           setProgress(50 + (40 * (i + 1)) / animalsSold.length)
