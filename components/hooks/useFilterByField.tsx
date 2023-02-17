@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getProperty } from 'dot-prop'
 import filterByArrayOfFilters from 'utils/filterByArrayOfFilters'
+import { filterArrayByFiledValueCoincidences } from 'utils/filterArrayByFiledValueCoincidences'
 
 export interface FilterType {
   field: string
@@ -20,12 +21,7 @@ const useFilterByField = <T,>(
   useEffect(() => {
     _setArray(array)
   }, [array])
-  // useEffect(() => {
-  //   if (defaultFilters?.length) {
-  //     handleFilterByArray(defaultFilters, { label: labelDefaultFilter || '' })
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+
   const handleFilterBy = (
     field = '',
     symbol: '==' | '<' | '>' | '<=' | '>=',
@@ -38,18 +34,13 @@ const useFilterByField = <T,>(
       setFiltersSelected([...filtersSelected, label])
     }
 
-    if (Array.isArray(_array)) {
-      const res = _array?.filter((item) => {
-        const fieldValue = getProperty(item, field)
-        if (symbol === '==') return fieldValue === value
-        if (symbol === '<') return fieldValue < value
-        if (symbol === '>') return fieldValue > value
-        if (symbol === '>=') return fieldValue >= value
-        if (symbol === '<=') return fieldValue <= value
-      })
-      _setArray(res)
-      return res
-    }
+    const res = filterArrayByFiledValueCoincidences(
+      field,
+      symbol,
+      value,
+      _array
+    )
+    _setArray(res)
   }
   const reset = () => {
     _setArray(array)
