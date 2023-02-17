@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
-import { activeAnimalsStates } from 'types/base/AnimalState.model'
+import { activeAnimalsStates, AnimalState } from 'types/base/AnimalState.model'
 import { AnimalType } from 'types/base/AnimalType.model'
 import { animalsBetweenDays } from './farmNumbers.helper'
 import StatCardWithModalAnimalsList from './StatCardWithModalAnimalsList'
@@ -14,15 +14,113 @@ const FarmNumbers = () => {
     return activeAnimalsStates.includes(animal?.state)
   })
 
-  const femaleAnimals = activeAnimals.filter(
-    ({ gender }) => gender === 'female'
-  )
-  const maleAnimals = activeAnimals.filter(({ gender }) => gender === 'male')
+  const femaleAnimals = farmAnimals.filter(({ gender }) => gender === 'female')
+  const maleAnimals = farmAnimals.filter(({ gender }) => gender === 'male')
 
+  //* Animals by state
+
+  interface NumberRow {
+    title: string
+    subTitle: string
+    animals: any[]
+  }
+  console.log({ maleAnimals })
+  const animalsByStates: Record<string, NumberRow[]> = {
+    Total: [
+      {
+        title: 'Activos ',
+        subTitle: 'Todos los animales activos',
+        animals: activeAnimals
+      },
+      {
+        title: 'En egorda ',
+        subTitle: 'Todos los animales en engorda',
+        animals: activeAnimals.filter(({ state }) => state === 'FATTEN')
+      },
+      {
+        title: 'Muertos ',
+        subTitle: 'Todos los animales muertos',
+        animals: farmAnimals.filter(({ state }) => state === 'DEAD')
+      },
+      {
+        title: 'Vendidos ',
+        subTitle: 'Todos los animales vendidos',
+        animals: farmAnimals.filter(({ state }) => state === 'SOLD')
+      }
+    ],
+    Hembras: [
+      {
+        title: 'Libres',
+        subTitle: 'Sin montas ni amamando',
+        animals: femaleAnimals.filter(({ state }) => state === 'FREE')
+      },
+      {
+        title: 'En Monta',
+        subTitle: 'En Monta',
+        animals: femaleAnimals.filter(({ state }) => state === 'BREEDING')
+      },
+      {
+        title: 'Para vientre ',
+        subTitle: 'Para vientre',
+        animals: femaleAnimals.filter(({ state }) => state === 'FOR_BELLY')
+      },
+      {
+        title: 'Muertas',
+        subTitle: 'Hembras muertas',
+        animals: femaleAnimals.filter(({ state }) => state === 'DEAD')
+      },
+      {
+        title: 'Vendidas',
+        subTitle: 'Hembras vendidas',
+        animals: femaleAnimals.filter(({ state }) => state === 'SOLD')
+      }
+    ],
+    Machos: [
+      {
+        title: 'Engorda',
+        subTitle: 'En engorda',
+        animals: maleAnimals.filter(({ state }) => state === 'FATTEN')
+      },
+      {
+        title: 'En venta',
+        subTitle: 'Listos para venta',
+        animals: maleAnimals.filter(({ state }) => state === 'FOR_SALE')
+      },
+
+      {
+        title: 'Vendidas',
+        subTitle: 'Vendidas',
+        animals: maleAnimals.filter(({ state }) => state === 'SOLD')
+      },
+
+      {
+        title: 'Muertas',
+        subTitle: 'Muertas ',
+        animals: maleAnimals.filter(({ state }) => state === 'DEAD')
+      }
+    ]
+  }
   return (
     <div className="w-full">
-      <h2 className="text-xl font-bold text-center ">Numeros y estadístcas</h2>
-      <StatsRow title="Animales">
+      <h2 className="text-xl font-bold text-center ">
+        Animales por estado actual
+      </h2>
+
+      {Object.entries(animalsByStates).map(([key, cardStats]) => (
+        <StatsRow title={key} key={key}>
+          {cardStats.map((stat) => (
+            <StatCardWithModalAnimalsList
+              key={stat.title}
+              title={stat.title}
+              animals={stat.animals}
+              description={stat.subTitle}
+            />
+          ))}
+        </StatsRow>
+      ))}
+
+      <h2 className="text-xl font-bold text-center ">Animales por edad</h2>
+      <StatsRow title="Total">
         <StatCardWithModalAnimalsList
           title="Activos"
           animals={activeAnimals}
