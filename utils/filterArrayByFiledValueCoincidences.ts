@@ -25,8 +25,10 @@ export const filterArrayByFiledValueCoincidences = <T>(
       if (symbol === '>=') return fieldValue >= value
       if (symbol === '<=') return fieldValue <= value
       if (symbol === '!=') return fieldValue != value
-      if (symbol === 'inArray') return value.includes(fieldValue)
-      if (symbol === 'notInArray') return !value.includes(fieldValue)
+      if (Array.isArray(value) || typeof value === 'string') {
+        if (symbol === 'inArray') return value.includes(`${fieldValue}`)
+        if (symbol === 'notInArray') return !value.includes(`${fieldValue}`)
+      }
     })
     return res
   }
