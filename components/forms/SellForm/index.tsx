@@ -28,11 +28,13 @@ interface Sale {
 const SellForm = ({
   sale,
   preSelectedAnimals,
-  hiddenSearchAnimals
+  hiddenSearchAnimals,
+  onFinishSale
 }: {
   sale?: any
   preSelectedAnimals: EarringWeight[]
   hiddenSearchAnimals?: boolean
+  onFinishSale?: () => void
 }) => {
   //* will determinate text and inputs statuses
   const isDetailsView = !!sale
@@ -101,7 +103,7 @@ const SellForm = ({
       }
       setProgress(100)
       methods.reset()
-
+      onFinishSale?.()
       console.log(res)
     } catch (error) {
       setProgress(0)

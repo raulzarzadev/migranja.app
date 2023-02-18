@@ -30,6 +30,7 @@ const ChooseEventForm = ({
           earring,
           weight: 0
         }))}
+        onFinishSale={() => setAnimalsSelected?.([])}
       />
     ),
     inventory: (
