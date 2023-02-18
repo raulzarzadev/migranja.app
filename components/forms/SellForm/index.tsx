@@ -32,7 +32,7 @@ const SellForm = ({
   onFinishSale
 }: {
   sale?: any
-  preSelectedAnimals: EarringWeight[]
+  preSelectedAnimals?: EarringWeight[]
   hiddenSearchAnimals?: boolean
   onFinishSale?: () => void
 }) => {
