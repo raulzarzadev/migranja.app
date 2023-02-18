@@ -108,52 +108,54 @@ const AnimalsOptions = ({
           setAnimalsEarrings={setAnimalsEarrings}
         />
       </Modal>
-      <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
-        <span>
-          Estos cambios se aplicaran a todos los animales seleccionados
-          <span className="font-bold">{animalsEarrings.length || 0}</span>
-        </span>
-        <div className="flex w-full justify-evenly ">
-          <ModalDelete
-            title="Eliminar"
-            handleDelete={() => handleDeleteAll()}
-            buttonLabel={null}
-            text={`Eliminaras todos los animales seleccionados total: ${animalsIds.length}`}
-          >
-            {progress > 0 && (
-              <div>
-                Eliminando
+      {!!animalsEarrings.length && (
+        <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
+          <span>
+            Estos cambios se aplicaran a todos los animales seleccionados
+            <span className="font-bold">{animalsEarrings.length || 0}</span>
+          </span>
+          <div className="flex w-full justify-evenly ">
+            <ModalDelete
+              title="Eliminar"
+              handleDelete={() => handleDeleteAll()}
+              buttonLabel={null}
+              text={`Eliminaras todos los animales seleccionados total: ${animalsIds.length}`}
+            >
+              {progress > 0 && (
                 <div>
-                  <progress value={progress} max={100}></progress>
+                  Eliminando
+                  <div>
+                    <progress value={progress} max={100}></progress>
+                  </div>
                 </div>
-              </div>
-            )}
-          </ModalDelete>
-          <button
-            className="btn btn-info btn-outline"
-            onClick={(e) => {
-              e.preventDefault()
-              handleOpenEvent()
-            }}
-          >
-            Evento
-            <span className="ml-2">
-              <Icon name="event" />
-            </span>
-          </button>
-          <button
-            className="btn btn-info btn-outline"
-            onClick={() => {
-              handleOpenEditSelection()
-            }}
-          >
-            Editar
-            <span className="ml-2">
-              <Icon name="edit" />
-            </span>
-          </button>
+              )}
+            </ModalDelete>
+            <button
+              className="btn btn-info btn-outline"
+              onClick={(e) => {
+                e.preventDefault()
+                handleOpenEvent()
+              }}
+            >
+              Evento
+              <span className="ml-2">
+                <Icon name="event" />
+              </span>
+            </button>
+            <button
+              className="btn btn-info btn-outline"
+              onClick={() => {
+                handleOpenEditSelection()
+              }}
+            >
+              Editar
+              <span className="ml-2">
+                <Icon name="edit" />
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

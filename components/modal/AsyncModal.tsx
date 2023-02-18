@@ -15,7 +15,8 @@ const AsyncModal = ({
   canOpen = true,
   openButtonClassName = '',
   openIcon,
-  hiddenButtons = false
+  hiddenButtons = false,
+  openButtonDisabled
 }: {
   btnLabel: string | React.ReactNode
   handleAccept: () => Promise<boolean | number>
@@ -25,6 +26,7 @@ const AsyncModal = ({
   openButtonClassName?: string
   openIcon?: IconName
   hiddenButtons?: boolean
+  openButtonDisabled?: boolean
 }) => {
   //* Modal handlers
   const [open, setOpen] = useState(false)
@@ -73,6 +75,7 @@ const AsyncModal = ({
   return (
     <div>
       <button
+        disabled={openButtonDisabled}
         className={`${openButtonClassName}`}
         onClick={(e) => {
           //* this is should be comment because some times works as submit button
