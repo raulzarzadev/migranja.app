@@ -1,5 +1,7 @@
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { deleteAnimal } from '@firebase/Animal/main'
-import ChooseEventForm from 'components/forms/ChooseEventForm'
+//import ChooseEventForm from 'components/forms/ChooseEventForm'
+import ChooseEventForm from 'components/forms/ChooseEventForm_v2'
 import Icon from 'components/Icon'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
@@ -75,7 +77,22 @@ const AnimalsOptions = ({
         handleOpen={handleOpenEvent}
         open={openEvent}
       >
-        <ChooseEventForm animalsIds={animalsIds} title={title} />
+        <p className="my-4 text-center">
+          El siguiente evento solo afectara a los siguientes animales pre
+          seleccionados:
+        </p>
+        <div className="flex w-full justify-evenly flex-wrap my-4">
+          {earringsSelected.map(({ earring, name }) => (
+            <div key={earring}>
+              <ModalAnimalDetails earring={earring} size={'md'} />
+            </div>
+          ))}
+        </div>
+        <ChooseEventForm
+          //animalsIds={animalsIds}
+          animalsSelected={earringsSelected}
+          title={title}
+        />
       </Modal>
       <Modal
         title={`Editar aretes`}

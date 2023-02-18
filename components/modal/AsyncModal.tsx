@@ -14,7 +14,8 @@ const AsyncModal = ({
     }),
   canOpen = true,
   openButtonClassName = '',
-  openIcon
+  openIcon,
+  hiddenButtons = false
 }: {
   btnLabel: string | React.ReactNode
   handleAccept: () => Promise<boolean | number>
@@ -23,6 +24,7 @@ const AsyncModal = ({
   canOpen?: boolean
   openButtonClassName?: string
   openIcon?: IconName
+  hiddenButtons?: boolean
 }) => {
   //* Modal handlers
   const [open, setOpen] = useState(false)
@@ -89,28 +91,30 @@ const AsyncModal = ({
       <Modal open={open} handleOpen={handleOpen} title={modalTitle}>
         <div>
           <div>{children}</div>
-          <div className="flex w-full justify-around ">
-            <button
-              disabled={progress > 0}
-              onClick={(e) => {
-                e.preventDefault()
-                isActionConfirmed(false)
-              }}
-              className="btn btn-error btn-outline"
-            >
-              Cancelar <Icon name="close" />
-            </button>
-            <button
-              disabled={progress > 0}
-              onClick={(e) => {
-                e.preventDefault()
-                isActionConfirmed(true)
-              }}
-              className="btn btn-info btn-outline"
-            >
-              Guardar {progress > 0 ? <Loading /> : <Icon name="save" />}
-            </button>
-          </div>
+          {hiddenButtons && (
+            <div className="flex w-full justify-around ">
+              <button
+                disabled={progress > 0}
+                onClick={(e) => {
+                  e.preventDefault()
+                  isActionConfirmed(false)
+                }}
+                className="btn btn-error btn-outline"
+              >
+                Cancelar <Icon name="close" />
+              </button>
+              <button
+                disabled={progress > 0}
+                onClick={(e) => {
+                  e.preventDefault()
+                  isActionConfirmed(true)
+                }}
+                className="btn btn-info btn-outline"
+              >
+                Guardar {progress > 0 ? <Loading /> : <Icon name="save" />}
+              </button>
+            </div>
+          )}
         </div>
       </Modal>
     </div>

@@ -9,12 +9,31 @@ import { useEffect, useState } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
-import { AnimalState } from 'types/base/AnimalState.model'
 interface EarringWeight {
   earring: string
   weight: number
 }
-const SellForm = ({ sale }: { sale?: any }) => {
+interface Sale {
+  eventData: {
+    date: any
+    price: number
+    type: 'onFoot'
+    earrings: EarringWeight[]
+    totalWeight: 0
+    averageWeight: 0
+    animalsQuantity: 0
+    total: 0
+  }
+}
+const SellForm = ({
+  sale,
+  preSelectedAnimals,
+  hiddenSearchAnimals
+}: {
+  sale?: any
+  preSelectedAnimals: EarringWeight[]
+  hiddenSearchAnimals?: boolean
+}) => {
   //* will determinate text and inputs statuses
   const isDetailsView = !!sale
   const defaultValues = isDetailsView
@@ -90,6 +109,12 @@ const SellForm = ({ sale }: { sale?: any }) => {
     }
   }
 
+  useEffect(() => {
+    if (preSelectedAnimals) {
+      setAnimalsSelected(preSelectedAnimals)
+    }
+  }, [preSelectedAnimals])
+
   const [animalsSelected, setAnimalsSelected] = useState<EarringWeight[]>([])
 
   useEffect(() => {
@@ -99,13 +124,13 @@ const SellForm = ({ sale }: { sale?: any }) => {
   }, [])
 
   useEffect(() => {
-    if (animalsSelected.length) {
+    if (animalsSelected?.length) {
       methods.setValue('totalWeight', totalWeightFromEarringForm)
     }
-    methods.setValue('animalsQuantity', animalsSelected.length)
-  }, [animalsSelected.length, methods, totalWeightFromEarringForm])
+    methods.setValue('animalsQuantity', animalsSelected?.length)
+  }, [animalsSelected?.length, methods, totalWeightFromEarringForm])
 
-  const areAnimalsSelected = !!animalsSelected.length
+  const areAnimalsSelected = !!animalsSelected?.length
   useEffect(() => {
     const totalPrice = formValues.price * formValues.totalWeight
     const averageWeight =
@@ -171,10 +196,12 @@ const SellForm = ({ sale }: { sale?: any }) => {
           </div>
           <div className="sm:flex">
             <div className="sm:w-full text-center ">
-              <SelectAnimals
-                animalsSelected={animalsSelected || []}
-                handleAddAnimals={handleSetAnimalsSelected}
-              />
+              {!hiddenSearchAnimals && (
+                <SelectAnimals
+                  animalsSelected={animalsSelected || []}
+                  handleAddAnimals={handleSetAnimalsSelected}
+                />
+              )}
               <div>
                 <div className="grid grid-cols-[80px_100px_auto] ">
                   <div>Arete</div>

@@ -13,11 +13,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
-import {
-  Inventory,
-  InventoryDetails,
-  InventoryStock
-} from 'types/base/Inventory.model'
+import { Inventory, InventoryStock } from 'types/base/Inventory.model'
 
 const INVENTORY_LOCAL_STORAGE = 'sheep-inventory'
 const InventoryForm = ({
