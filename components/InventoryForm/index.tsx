@@ -67,18 +67,16 @@ const InventoryForm = ({
     if (animalsIds) {
       const predefinedAnimals = farmAnimals
         .filter(({ id }) => animalsIds.includes(id))
-        .map(({ earring, currentStatus }) => {
-          return { earring, comments: currentStatus || '' }
+        .map(({ earring }) => {
+          return { earring, comments: '' }
         })
       // console.log({ predefinedAnimals })
       setFullStock(predefinedAnimals)
       setAppStock(predefinedAnimals)
     } else {
-      const allAnimals = farmAnimals
-        //.filter(({ currentStatus }) => currentStatus === 'ACTIVE')
-        .map(({ earring, currentStatus }) => {
-          return { earring, comments: currentStatus || '' }
-        })
+      const allAnimals = farmAnimals.map(({ earring }) => {
+        return { earring, comments: '' }
+      })
 
       setFullStock(allAnimals)
       setAppStock(allAnimals.filter(({ comments }) => comments === 'ACTIVE'))
