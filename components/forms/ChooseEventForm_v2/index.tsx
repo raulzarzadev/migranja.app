@@ -1,25 +1,28 @@
 import InventoryForm from '@comps/InventoryForm'
 import AsyncModal from '@comps/modal/AsyncModal'
-import { useState } from 'react'
-import { AnimalType } from 'types/base/AnimalType.model'
 import DropInForm from '../DropInForm'
 import DropOutForm from '../DropOutForm'
 import SellForm from '../SellForm'
 
 const ChooseEventForm = ({
-  // animalsIds,
   title,
-  animalsSelected
+  animalsSelected,
+  setAnimalsSelected
 }: {
   title?: string
   animalsSelected: any[]
-  //animalsIds: AnimalType['id'][]
+  setAnimalsSelected?: (animals: any[]) => void
 }) => {
   const animalsIds = animalsSelected.map((animal) => animal.id)
   const EVENTS_FORMS = {
     // default: <DefaultFormInfo />,
-    dropOut: <DropOutForm animalsIds={animalsIds} />,
-    dropIn: <DropInForm animalsIds={animalsIds} />,
+    dropOut: (
+      <DropOutForm
+        animalsIds={animalsIds}
+        setAnimals={() => setAnimalsSelected?.([])}
+      />
+    ),
+    // dropIn: <DropInForm animalsIds={animalsIds} />,
     sell: (
       <SellForm
         hiddenSearchAnimals
@@ -41,12 +44,12 @@ const ChooseEventForm = ({
   //const [optionSelected, setOptionSelected] = useState<EventName>('default')
   const eventsNames: Record<EventName, string> = {
     dropOut: 'Dar de baja',
-    dropIn: 'Dar de alta',
+    //dropIn: 'Dar de alta',
     sell: 'Vender',
     inventory: 'Inventario'
   }
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-3 gap-4">
       {Object.entries(EVENTS_FORMS).map(([key, value]) => {
         return (
           <div key={key}>
@@ -63,20 +66,6 @@ const ChooseEventForm = ({
           </div>
         )
       })}
-    </div>
-  )
-}
-
-const DefaultFormInfo = () => {
-  return (
-    <div className="h-32 w-full max-w-2/3 flex justify-center items-center flex-col max-w-xs mx-auto text-center">
-      <p className="my-4">
-        Segun el evento, habra diferentes campos que llenar.
-      </p>
-      <p>
-        Se cuidadoso, este evento afectara a todos los animales previamente
-        seleccionados.
-      </p>
     </div>
   )
 }

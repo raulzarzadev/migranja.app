@@ -1,6 +1,5 @@
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
-import HeaderTable from '@comps/MyTables/HeaderTable'
 import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
 import { useEffect, useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
@@ -51,7 +50,11 @@ const StatCardWithModalAnimalsList = ({
               earringsSelected={selectedAnimals}
               setEarringsSelected={setSelectedAnimals}
             />
-            <AnimalsOptions animalsEarrings={selectedAnimals} title={title} />
+            <AnimalsOptions
+              animalsEarrings={selectedAnimals}
+              title={title}
+              setAnimalsEarrings={setSelectedAnimals}
+            />
           </div>
         </Modal>
       )}

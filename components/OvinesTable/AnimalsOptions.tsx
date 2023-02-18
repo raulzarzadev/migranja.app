@@ -17,7 +17,7 @@ const AnimalsOptions = ({
 }: {
   animalsEarrings: string[]
   title?: string
-  setAnimalsEarrings?: ([]) => void
+  setAnimalsEarrings?: (animals: any[]) => void
 }) => {
   //const [_earrings, _setEarrings] = useState<string[]>([])
 
@@ -92,6 +92,10 @@ const AnimalsOptions = ({
           //animalsIds={animalsIds}
           animalsSelected={earringsSelected}
           title={title}
+          setAnimalsSelected={(e) => {
+            console.log({ e })
+            setAnimalsEarrings?.(e)
+          }}
         />
       </Modal>
       <Modal

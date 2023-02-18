@@ -50,6 +50,7 @@ const FormEarringsSelected = ({
           )
         }
         resolve(true)
+        setAnimalsEarrings([])
       } catch (error) {
         console.log({ error })
         reject(error)

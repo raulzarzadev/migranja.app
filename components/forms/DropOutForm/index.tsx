@@ -9,12 +9,15 @@ import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
-import {
-  DTO_CreateFarmEventDropOut,
-  FarmEventDropOut
-} from 'types/base/FarmEventDropOut.model'
+import { DTO_CreateFarmEventDropOut } from 'types/base/FarmEventDropOut.model'
 
-const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
+const DropOutForm = ({
+  animalsIds,
+  setAnimals
+}: {
+  animalsIds: AnimalType['id'][]
+  setAnimals?: (animals: any[]) => void
+}) => {
   const methods = useForm({
     defaultValues: {
       reason: '',
@@ -35,35 +38,27 @@ const DropOutForm = ({ animalsIds }: { animalsIds: AnimalType['id'][] }) => {
   const farmAnimals = useSelector(selectFarmAnimals)
   const farmData = useSelector(selectFarmState)
   const user = useSelector(selectAuthState)
+
   const animals = farmAnimals
     .filter(({ id }) => animalsIds.includes(id))
     .map(({ id, earring, name }) => {
       return { id, name, earring }
     })
-  //console.log(user)
+
   const [progress, setProgress] = useState(0)
   const onSubmit = async (data: any) => {
     setProgress(1)
-    // actualizar animales
-    const defineCurrentStatus: Record<
-      DorpInOutReasonsType,
-      AnimalType['currentStatus']
-    > = {
-      DEAD: 'DEAD',
-      SOLD: 'SOLD',
-      STOLEN: 'STOLEN',
-      LOST: 'LOST',
-      BUY: 'ACTIVE',
-      BIRTH: 'ACTIVE'
-    }
+
+    //* update animals
+
     try {
       for (let i = 0; i < animals.length; i++) {
         const element = animals[i]
         await updateAnimal(element.id, {
-          currentStatus:
-            defineCurrentStatus[data?.reason as DorpInOutReasonsType]
+          state: 'DEAD'
         })
       }
+      setAnimals?.([])
       setProgress(50)
 
       const event: DTO_CreateFarmEventDropOut = {

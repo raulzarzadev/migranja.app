@@ -1,6 +1,5 @@
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
-import HeaderTable from '@comps/MyTables/HeaderTable'
 import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
 import { useEffect, useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
@@ -96,11 +95,7 @@ export const AnimalsList = ({
 
   const [_earringsSelected, _setEarringsSelected] = useState<string[]>([])
 
-  const onSelectEarring = (
-    earring: string,
-    checked: boolean
-    //index: number
-  ) => {
+  const onSelectEarring = (earring: string, checked: boolean) => {
     if (checked) {
       _setEarringsSelected([..._earringsSelected, earring])
       setEarringsSelected?.([..._earringsSelected, earring])
