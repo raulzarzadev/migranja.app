@@ -13,9 +13,11 @@ export interface EarringsSelected {
   name?: string
 }
 const FormEarringsSelected = ({
-  earringsSelected
+  earringsSelected,
+  setAnimalsEarrings
 }: {
   earringsSelected: EarringsSelected[]
+  setAnimalsEarrings?: (animals: any[]) => void
 }) => {
   const methods = useForm()
 
@@ -50,7 +52,7 @@ const FormEarringsSelected = ({
           )
         }
         resolve(true)
-        setAnimalsEarrings([])
+        setAnimalsEarrings?.([])
       } catch (error) {
         console.log({ error })
         reject(error)

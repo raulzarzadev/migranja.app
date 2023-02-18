@@ -91,7 +91,7 @@ const AsyncModal = ({
       <Modal open={open} handleOpen={handleOpen} title={modalTitle}>
         <div>
           <div>{children}</div>
-          {hiddenButtons && (
+          {!hiddenButtons && (
             <div className="flex w-full justify-around ">
               <button
                 disabled={progress > 0}

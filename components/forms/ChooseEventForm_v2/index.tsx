@@ -61,6 +61,7 @@ const ChooseEventForm = ({
               }}
               openButtonClassName={'btn btn-outline w-full'}
               modalTitle={eventsNames[key as EventName]}
+              hiddenButtons
             >
               <>{value}</>
             </AsyncModal>

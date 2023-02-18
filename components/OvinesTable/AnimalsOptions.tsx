@@ -103,7 +103,10 @@ const AnimalsOptions = ({
         handleOpen={handleOpenEditSelection}
         open={openEditSelection}
       >
-        <FormEarringsSelected earringsSelected={earringsSelected} />
+        <FormEarringsSelected
+          earringsSelected={earringsSelected}
+          setAnimalsEarrings={setAnimalsEarrings}
+        />
       </Modal>
       <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
         <span>
