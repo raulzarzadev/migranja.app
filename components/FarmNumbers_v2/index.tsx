@@ -88,15 +88,14 @@ const FarmNumbers = () => {
       },
 
       {
-        title: 'Vendidas',
-        subTitle: 'Vendidas',
-        animals: maleAnimals.filter(({ state }) => state === 'SOLD')
-      },
-
-      {
         title: 'Muertas',
         subTitle: 'Muertas ',
         animals: maleAnimals.filter(({ state }) => state === 'DEAD')
+      },
+      {
+        title: 'Vendidas',
+        subTitle: 'Vendidas',
+        animals: maleAnimals.filter(({ state }) => state === 'SOLD')
       }
     ]
   }

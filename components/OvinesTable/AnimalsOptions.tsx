@@ -19,15 +19,6 @@ const AnimalsOptions = ({
   title?: string
   setAnimalsEarrings?: (animals: any[]) => void
 }) => {
-  //const [_earrings, _setEarrings] = useState<string[]>([])
-
-  // useEffect(() => {
-  //   _setEarrings(animalsEarrings)
-  //   return () => {
-  //     setProgress(0)
-  //   }
-  // }, [animalsEarrings])
-
   const farmAnimals = useSelector(selectFarmAnimals)
   const earringsSelected = animalsEarrings.map((earring) => {
     const animal = farmAnimals?.find((animal) => animal.earring === earring)
@@ -52,12 +43,9 @@ const AnimalsOptions = ({
       })
       setProgress(50)
       const res = await Promise.all(deletePromises)
-      // console.log(res)
       setProgress(100)
-      // _setEarrings([])
-      // setAnimalsEarrings?.([])
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       setProgress(0)
     }
   }

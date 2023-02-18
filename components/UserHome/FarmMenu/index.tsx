@@ -193,19 +193,19 @@ const FarmMenu = (props: any) => {
                     title="Nuevo"
                     iconName="plus"
                     onClick={() => handleChangeOption('column2', 'add')}
-                    selected={column2 !== 'inventory' && column3 === 'add'}
+                    selected={column2 === 'add'}
                   />
                   <SquareOption
                     title="Varios"
                     iconName="plus"
                     onClick={() => handleChangeOption('column2', 'addMany')}
-                    selected={column3 === 'addMany'}
+                    selected={column2 === 'addMany'}
                   />
                   <SquareOption
                     title="Lote"
                     iconName="plus"
                     onClick={() => handleChangeOption('column2', 'addBatch')}
-                    selected={column3 === 'addBatch'}
+                    selected={column2 === 'addBatch'}
                   />
                   {/* ************************************* *********** INVENTORY MENU */}
 
