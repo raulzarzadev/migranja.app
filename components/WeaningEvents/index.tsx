@@ -56,7 +56,10 @@ const WeaningEvents = () => {
                     />{' '}
                   </span>
                   <span>{WEANING_STATUS_LABELS[event?.eventData?.status]}</span>
-                  <ModalEditWeaning eventId={event.id || ''} />
+                  <ModalEditWeaning
+                    eventId={event.id || ''}
+                    animalEarring={event.eventData.earring}
+                  />
                 </td>
               </tr>
             ))}

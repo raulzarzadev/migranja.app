@@ -4,7 +4,7 @@ export enum AnimalState {
   SUCKLE = 'lactando',
   FATTEN = 'engorda',
   FOR_BELLY = 'vientre',
-  FOR_SALE = 'venta',
+  FOR_SALE = 'en venta',
   SOLD = 'vendido',
   DEAD = 'muerto',
   LOST = 'perdido'

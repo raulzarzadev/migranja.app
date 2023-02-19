@@ -1,6 +1,7 @@
 import { FarmType } from '@firebase/Farm/farm.model'
 import { where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
+import { AnimalType } from 'types/base/AnimalType.model'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
 import { CreateAnimalDTO } from './animal.model'
@@ -40,6 +41,13 @@ export const listenFarmAnimals = (
   farmId: FarmType['id'],
   cb: CallableFunction
 ) => AnimalsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
+
+export const updateAnimalState = (
+  animalId: AnimalType['earring'],
+  newState: AnimalType['state']
+) => {
+  updateAnimal(animalId, { state: newState })
+}
 
 export const getMaleOvines = async () =>
   await AnimalsCRUD.getUserItems([

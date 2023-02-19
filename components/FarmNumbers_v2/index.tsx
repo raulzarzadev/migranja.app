@@ -65,6 +65,11 @@ const FarmNumbers = () => {
         animals: femaleAnimals.filter(({ state }) => state === 'FOR_BELLY')
       },
       {
+        title: 'Para venta ',
+        subTitle: 'Para venta',
+        animals: femaleAnimals.filter(({ state }) => state === 'FOR_SALE')
+      },
+      {
         title: 'Muertas',
         subTitle: 'Hembras muertas',
         animals: femaleAnimals.filter(({ state }) => state === 'DEAD')

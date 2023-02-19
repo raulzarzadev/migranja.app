@@ -27,7 +27,6 @@ import { AnimalType } from 'types/base/AnimalType.model'
 import { MalesTable } from '@comps/MalesTable'
 import { calculatePossibleBirth } from '../breeding.helpers'
 import HelperText from '@comps/HelperText'
-import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const BirthForm = ({
   animal,
@@ -134,7 +133,7 @@ const BirthForm = ({
       setProgress(30)
 
       const newAnimalsPromises = newCalfs.map((calf) => {
-        return createAnimal({ ...calf, status: 'ACTIVE' })
+        return createAnimal({ ...calf, state: 'SUCKLE' })
       })
 
       const newAnimals = await Promise.all(newAnimalsPromises)
