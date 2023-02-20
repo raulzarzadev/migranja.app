@@ -1,8 +1,8 @@
 export enum AnimalState {
   FREE = 'libre',
   BREEDING = 'monta',
-  SUCKLE = 'lactando',
-  LACTATING = 'lactante',
+  LACTATING = 'lactante', //* lactante recien nacidas
+  SUCKLE = 'lactando', //* amamantando lactando recien paridas
   FATTEN = 'engorda',
   FOR_BELLY = 'vientre',
   FOR_SALE = 'en venta',
@@ -13,8 +13,9 @@ export enum AnimalState {
 export enum AnimalStates {
   FREE,
   BREEDING,
-  SUCKLE, //* amamantando lactando recien paridas
+
   LACTATING, //* lactante recien nacidas
+  SUCKLE, //* amamantando lactando recien paridas
   FATTEN,
   FOR_BELLY,
   FOR_SALE,
@@ -25,11 +26,16 @@ export enum AnimalStates {
 export const inactiveAnimalsStates: AnimalStateType[] = ['SOLD', 'LOST', 'DEAD']
 export const activeAnimalsStates: AnimalStateType[] = [
   'BREEDING',
-  'SUCKLE',
   'FATTEN',
   'LACTATING',
+  'SUCKLE',
   'FOR_BELLY',
   'FOR_SALE',
   'FREE'
 ]
+/**
+ * @remarks
+ * LACTATING is a method for newborn calfs
+ * SUCKLE is a method for ewes that have just given birth
+ */
 export type AnimalStateType = keyof typeof AnimalState

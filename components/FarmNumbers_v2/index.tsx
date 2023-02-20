@@ -10,6 +10,7 @@ const FarmNumbers = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
   // const farmEvents = useSelector(selectFarmEvents)
   const activeAnimals = farmAnimals.filter((animal) => {
+    animal.state
     if (animal.state === undefined) return true
     return activeAnimalsStates.includes(animal?.state)
   })
@@ -54,6 +55,7 @@ const FarmNumbers = () => {
         subTitle: 'Sin montas ni amamando',
         animals: femaleAnimals.filter(({ state }) => state === 'FREE')
       },
+
       {
         title: 'Amamantando',
         subTitle: 'Recien paridas',
@@ -70,8 +72,8 @@ const FarmNumbers = () => {
         animals: femaleAnimals.filter(({ state }) => state === 'BREEDING')
       },
       {
-        title: 'Para vientre ',
-        subTitle: 'Para vientre',
+        title: 'Corderas ',
+        subTitle: 'Para vientre. Destetadas y antes de monta',
         animals: femaleAnimals.filter(({ state }) => state === 'FOR_BELLY')
       },
       {
@@ -108,13 +110,13 @@ const FarmNumbers = () => {
       },
 
       {
-        title: 'Muertas',
-        subTitle: 'Muertas ',
+        title: 'Muertos',
+        subTitle: 'Muertos ',
         animals: maleAnimals.filter(({ state }) => state === 'DEAD')
       },
       {
-        title: 'Vendidas',
-        subTitle: 'Vendidas',
+        title: 'Vendidos',
+        subTitle: 'Vendidos',
         animals: maleAnimals.filter(({ state }) => state === 'SOLD')
       }
     ]
