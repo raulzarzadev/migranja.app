@@ -13,8 +13,8 @@ export enum AnimalState {
 export enum AnimalStates {
   FREE,
   BREEDING,
-  SUCKLE, //* amamantando lactando
-  LACTATING, //* lactante
+  SUCKLE, //* amamantando lactando recien paridas
+  LACTATING, //* lactante recien nacidas
   FATTEN,
   FOR_BELLY,
   FOR_SALE,

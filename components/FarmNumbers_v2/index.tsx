@@ -55,6 +55,16 @@ const FarmNumbers = () => {
         animals: femaleAnimals.filter(({ state }) => state === 'FREE')
       },
       {
+        title: 'Amamantando',
+        subTitle: 'Recien paridas',
+        animals: femaleAnimals.filter(({ state }) => state === 'SUCKLE')
+      },
+      {
+        title: 'Lactando',
+        subTitle: 'Aun mamando',
+        animals: femaleAnimals.filter(({ state }) => state === 'LACTATING')
+      },
+      {
         title: 'En Monta',
         subTitle: 'En Monta',
         animals: femaleAnimals.filter(({ state }) => state === 'BREEDING')
@@ -85,6 +95,11 @@ const FarmNumbers = () => {
         title: 'Engorda',
         subTitle: 'En engorda',
         animals: maleAnimals.filter(({ state }) => state === 'FATTEN')
+      },
+      {
+        title: 'Lactando',
+        subTitle: 'Aun mamando',
+        animals: maleAnimals.filter(({ state }) => state === 'LACTATING')
       },
       {
         title: 'En venta',
