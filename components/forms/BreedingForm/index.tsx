@@ -74,6 +74,7 @@ const BreedingForm = () => {
       males?.find(({ earring }) => earring === data.breedingMale) || null
     // console.log({ ...data, breedingMale: male, breedingBatch })
     try {
+      // TODO: edit animal state as BREADING
       const res = await createGenericBreedingEvent<BreedingDetailsEvent>({
         eventData: {
           breedingBatch: breedingBatch,

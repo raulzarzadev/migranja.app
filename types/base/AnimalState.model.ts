@@ -2,6 +2,7 @@ export enum AnimalState {
   FREE = 'libre',
   BREEDING = 'monta',
   SUCKLE = 'lactando',
+  LACTATING = 'lactante',
   FATTEN = 'engorda',
   FOR_BELLY = 'vientre',
   FOR_SALE = 'en venta',
@@ -12,7 +13,8 @@ export enum AnimalState {
 export enum AnimalStates {
   FREE,
   BREEDING,
-  SUCKLE,
+  SUCKLE, //* amamantando lactando
+  LACTATING, //* lactante
   FATTEN,
   FOR_BELLY,
   FOR_SALE,
@@ -25,6 +27,7 @@ export const activeAnimalsStates: AnimalStateType[] = [
   'BREEDING',
   'SUCKLE',
   'FATTEN',
+  'LACTATING',
   'FOR_BELLY',
   'FOR_SALE',
   'FREE'
