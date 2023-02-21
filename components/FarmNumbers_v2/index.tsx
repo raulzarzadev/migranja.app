@@ -55,7 +55,11 @@ const FarmNumbers = () => {
         subTitle: 'Sin montas ni amamando',
         animals: femaleAnimals.filter(({ state }) => state === 'FREE')
       },
-
+      {
+        title: 'En monta',
+        subTitle: 'Preñadas o no',
+        animals: femaleAnimals.filter(({ state }) => state === 'BREEDING')
+      },
       {
         title: 'Amamantando',
         subTitle: 'Recien paridas',

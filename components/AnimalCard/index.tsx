@@ -17,7 +17,11 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
-import { AnimalStates, AnimalStateType } from 'types/base/AnimalState.model'
+import {
+  AnimalState,
+  AnimalStates,
+  AnimalStateType
+} from 'types/base/AnimalState.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -116,9 +120,10 @@ export const AnimalDetails = ({
             <div className="text-xs flex flex-col whitespace-nowrap">
               <span className="flex flex-col">
                 <span>
-                  Estado Acutal:
-                  <span className="font-bold">
-                    {AnimalStates[state as AnimalStateType] || 'Sin estado '}
+                  Estado actual:
+                  <span className="font-bold capitalize">
+                    {' '}
+                    {AnimalState[state as AnimalStateType] || 'Sin estado '}
                   </span>
                 </span>
               </span>

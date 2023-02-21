@@ -13,6 +13,7 @@ import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 import { ParentsType } from 'types/base/AnimalType.model'
 import SearchEarring from '@comps/SearchEarring'
 import determinateDeepRelationship from 'utils/determinateDeepRelationship'
+import { updateAnimal } from '@firebase/Animal/main'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -63,9 +64,10 @@ const BreedingForm = () => {
   // }
 
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
+
   const onSubmit = async (data: any) => {
     setLoading(true)
-    const breedingBatch: Partial<AnimalType>[] = femalesFiltered
+    const breedingBatch = femalesFiltered
       ?.filter(({ earring }) => sheepSelected?.includes(earring))
       .map((animal: any) => {
         return { ...animal, status: 'PENDING' }
@@ -74,7 +76,14 @@ const BreedingForm = () => {
       males?.find(({ earring }) => earring === data.breedingMale) || null
     // console.log({ ...data, breedingMale: male, breedingBatch })
     try {
-      // TODO: edit animal state as BREADING
+      // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * Edit breadingBatch animals state
+      for (let i = 0; i < breedingBatch.length; i++) {
+        const { id } = breedingBatch[i]
+        if (id) {
+          await updateAnimal(id, { state: 'BREEDING' })
+        }
+      }
+
       const res = await createGenericBreedingEvent<BreedingDetailsEvent>({
         eventData: {
           breedingBatch: breedingBatch,

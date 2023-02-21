@@ -1,5 +1,6 @@
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import ProgressButton from '@comps/ProgressButton'
-import { deleteAnimal } from '@firebase/Animal/main'
+import { deleteAnimal, updateAnimal } from '@firebase/Animal/main'
 import {
   deleteEvent,
   updateAnimalStatusInBreedingBatch
@@ -68,6 +69,9 @@ const RevertBirthForm = ({
       eventType: 'PENDING',
       animalId: animal.id
     })
+    // ************************* update mom to breeding
+    await updateAnimal(animal.id, { state: 'FREE' })
+
     setProgress(100)
   }
 
@@ -81,6 +85,10 @@ const RevertBirthForm = ({
       <p className="text-center">3. Parto</p>
       <p>Al revertir un parto se actualizaran los siguientes elementos </p>
       <p className="text-center">1. Monta</p>
+      <div className="text-center">
+        2. Estado de <ModalAnimalDetails earring={animal?.earring} size="md" />{' '}
+        a libre{' '}
+      </div>
       <div className="text-center">
         <ProgressButton
           progress={progress}
