@@ -126,6 +126,7 @@ const FarmNumbers = () => {
       }
     ]
   }
+
   const animalsByAge: Record<string, NumberRow[]> = {
     Total: [
       {
@@ -149,6 +150,7 @@ const FarmNumbers = () => {
         animals: animalsBetweenDays(activeAnimals, 210, 245)
       }
     ],
+
     Hembras: [
       {
         title: 'Todas ',
