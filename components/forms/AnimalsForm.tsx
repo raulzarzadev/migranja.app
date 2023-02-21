@@ -92,7 +92,6 @@ export const AnimalsForm = ({
     animalCopy.splice(index, 1)
     setAnimals(animalCopy)
   }
-  console.log({ animals })
 
   const handleSave = async () => {
     setLoading(true)

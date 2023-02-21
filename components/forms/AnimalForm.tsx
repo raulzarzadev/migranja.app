@@ -16,8 +16,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
-import useDebugInformation from '@comps/hooks/useDebugInformation'
-import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { AnimalState } from 'types/base/AnimalState.model'
 const schema = yup
   .object()

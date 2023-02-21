@@ -9,15 +9,12 @@ const FarmNumbers = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
   // const farmEvents = useSelector(selectFarmEvents)
   const activeAnimals = farmAnimals.filter((animal) => {
-    animal.state
     if (animal.state === undefined) return true
     return activeAnimalsStates.includes(animal?.state)
   })
 
-  const femaleAnimals = activeAnimals.filter(
-    ({ gender }) => gender === 'female'
-  )
-  const maleAnimals = activeAnimals.filter(({ gender }) => gender === 'male')
+  const femaleAnimals = farmAnimals.filter(({ gender }) => gender === 'female')
+  const maleAnimals = farmAnimals.filter(({ gender }) => gender === 'male')
 
   //* Animals by state
 
@@ -26,7 +23,6 @@ const FarmNumbers = () => {
     subTitle: string
     animals: any[]
   }
-  console.log({ maleAnimals })
   const animalsByStates: Record<string, NumberRow[]> = {
     Total: [
       {
@@ -57,34 +53,14 @@ const FarmNumbers = () => {
         animals: femaleAnimals.filter(({ state }) => state === 'FREE')
       },
       {
-        title: 'En monta',
-        subTitle: 'Preñadas o no',
-        animals: femaleAnimals.filter(({ state }) => state === 'BREEDING')
-      },
-      {
-        title: 'Amamantando',
-        subTitle: 'Recien paridas',
-        animals: femaleAnimals.filter(({ state }) => state === 'SUCKLE')
-      },
-      {
-        title: 'Lactando',
-        subTitle: 'Aun mamando',
-        animals: femaleAnimals.filter(({ state }) => state === 'LACTATING')
-      },
-      {
         title: 'En Monta',
         subTitle: 'En Monta',
         animals: femaleAnimals.filter(({ state }) => state === 'BREEDING')
       },
       {
-        title: 'Corderas ',
-        subTitle: 'Para vientre. Destetadas y antes de monta',
+        title: 'Para vientre ',
+        subTitle: 'Para vientre',
         animals: femaleAnimals.filter(({ state }) => state === 'FOR_BELLY')
-      },
-      {
-        title: 'Para venta ',
-        subTitle: 'Para venta',
-        animals: femaleAnimals.filter(({ state }) => state === 'FOR_SALE')
       },
       {
         title: 'Muertas',
@@ -104,110 +80,21 @@ const FarmNumbers = () => {
         animals: maleAnimals.filter(({ state }) => state === 'FATTEN')
       },
       {
-        title: 'Lactando',
-        subTitle: 'Aun mamando',
-        animals: maleAnimals.filter(({ state }) => state === 'LACTATING')
-      },
-      {
         title: 'En venta',
         subTitle: 'Listos para venta',
         animals: maleAnimals.filter(({ state }) => state === 'FOR_SALE')
       },
 
       {
-        title: 'Muertos',
-        subTitle: 'Muertos ',
-        animals: maleAnimals.filter(({ state }) => state === 'DEAD')
-      },
-      {
-        title: 'Vendidos',
-        subTitle: 'Vendidos',
+        title: 'Vendidas',
+        subTitle: 'Vendidas',
         animals: maleAnimals.filter(({ state }) => state === 'SOLD')
-      }
-    ]
-  }
-  const animalsByAge: Record<string, NumberRow[]> = {
-    Total: [
-      {
-        title: 'Todos ',
-        subTitle: '',
-        animals: activeAnimals
-      },
-      {
-        title: '0-70 días',
-        subTitle: '',
-        animals: animalsBetweenDays(activeAnimals, 0, 70)
-      },
-      {
-        title: '71-210 días',
-        subTitle: '',
-        animals: animalsBetweenDays(activeAnimals, 71, 210)
-      },
-      {
-        title: '210-245 días',
-        subTitle: '',
-        animals: animalsBetweenDays(activeAnimals, 210, 245)
-      }
-    ],
-    Hembras: [
-      {
-        title: 'Todas ',
-        subTitle: 'Hembras activas',
-        animals: femaleAnimals
-      },
-      {
-        title: '0-70 días',
-        subTitle: 'Hembras entre 0 y 70 días',
-        animals: animalsBetweenDays(femaleAnimals, 0, 70)
-      },
-      {
-        title: '71-210 días',
-        subTitle: 'Hembras entre 71 y 210 días',
-        animals: animalsBetweenDays(femaleAnimals, 71, 210)
-      },
-      {
-        title: '210-245 días',
-        subTitle: 'Hembras entre 210 y 245 días',
-        animals: animalsBetweenDays(femaleAnimals, 210, 245)
       },
 
       {
-        title: '+245',
-        subTitle: 'Mayores de 254 dias',
-        animals: animalsBetweenDays(femaleAnimals, 245, 9999)
-      }
-    ],
-    Machos: [
-      {
-        title: 'Todos ',
-        subTitle: 'Machos activos ',
-        animals: maleAnimals
-      },
-      {
-        title: 'Sementales',
-        subTitle: 'Sementales activos',
-        animals: maleAnimals.filter((animal) => animal.isStallion)
-      },
-      {
-        title: '0-70 días',
-        subTitle: 'Machos activos entre 0-70 días',
-        animals: animalsBetweenDays(maleAnimals, 0, 70)
-      },
-      {
-        title: '71-210 días',
-        subTitle: 'Machos activos entre 71-210 días',
-        animals: animalsBetweenDays(maleAnimals, 71, 210)
-      },
-      {
-        title: '210-245 días',
-        subTitle: 'Machos activos entre 210 y 245 días',
-        animals: animalsBetweenDays(maleAnimals, 210, 245)
-      },
-
-      {
-        title: '+245',
-        subTitle: 'Machos mayores de 254 dias',
-        animals: animalsBetweenDays(maleAnimals, 245, 9999)
+        title: 'Muertas',
+        subTitle: 'Muertas ',
+        animals: maleAnimals.filter(({ state }) => state === 'DEAD')
       }
     ]
   }
@@ -231,19 +118,105 @@ const FarmNumbers = () => {
       ))}
 
       <h2 className="text-xl font-bold text-center ">Animales por edad</h2>
+      <StatsRow title="Total">
+        <StatCardWithModalAnimalsList
+          title="Activos"
+          animals={activeAnimals}
+          description="Todos los animals "
+        />
 
-      {Object.entries(animalsByAge).map(([key, cardStats]) => (
-        <StatsRow title={key} key={key}>
-          {cardStats.map((stat) => (
-            <StatCardWithModalAnimalsList
-              key={stat.title}
-              title={stat.title}
-              animals={stat.animals}
-              description={stat.subTitle}
-            />
-          ))}
-        </StatsRow>
-      ))}
+        <StatCardWithModalAnimalsList
+          title="0-3 meses"
+          animals={animalsBetweenDays(activeAnimals, 0, 90)}
+          description="menores de 3 meses"
+        />
+        <StatCardWithModalAnimalsList
+          title="3-5 meses"
+          animals={animalsBetweenDays(activeAnimals, 90, 150)}
+          description="entre 3 y 5 meses"
+        />
+        <StatCardWithModalAnimalsList
+          title="5-12 meses"
+          animals={animalsBetweenDays(activeAnimals, 150, 365)}
+          description="Entre 5 meses y 1 año"
+        />
+        <StatCardWithModalAnimalsList
+          title="1 y 3 años"
+          animals={animalsBetweenDays(activeAnimals, 365, 365 * 3)}
+          description="Entre 1 y 3 años"
+        />
+        <StatCardWithModalAnimalsList
+          title="Mas de 3 años"
+          animals={animalsBetweenDays(activeAnimals, 3 * 365, 99999999)}
+          description="Mayores de 3 años"
+        />
+      </StatsRow>
+
+      <StatsRow title="Hembras">
+        <StatCardWithModalAnimalsList
+          title="Hembras"
+          animals={femaleAnimals}
+          description="Hembras"
+        />
+        <StatCardWithModalAnimalsList
+          title="0-3 meses"
+          animals={animalsBetweenDays(femaleAnimals, 0, 90)}
+          description="menores de 3 meses"
+        />
+        <StatCardWithModalAnimalsList
+          title="3-5 meses"
+          animals={animalsBetweenDays(femaleAnimals, 90, 150)}
+          description="entre 3 y 5 meses"
+        />
+        <StatCardWithModalAnimalsList
+          title="5-12 meses"
+          animals={animalsBetweenDays(femaleAnimals, 150, 365)}
+          description="Entre 5 meses y 1 año"
+        />
+        <StatCardWithModalAnimalsList
+          title="1 y 3 años"
+          animals={animalsBetweenDays(femaleAnimals, 365, 365 * 3)}
+          description="Entre 1 y 3 años"
+        />
+        <StatCardWithModalAnimalsList
+          title="Mas de 3 años"
+          animals={animalsBetweenDays(femaleAnimals, 3 * 365, 99999999)}
+          description="Mayores de 3 años"
+        />
+      </StatsRow>
+
+      <StatsRow title="Machos">
+        <StatCardWithModalAnimalsList
+          title="Machos"
+          animals={maleAnimals}
+          description="Machos"
+        />
+        <StatCardWithModalAnimalsList
+          title="0-3 meses"
+          animals={animalsBetweenDays(maleAnimals, 0, 89)}
+          description="menores de 3 meses"
+        />
+        <StatCardWithModalAnimalsList
+          title="3-5 meses"
+          animals={animalsBetweenDays(maleAnimals, 90, 149)}
+          description="entre 3 y 5 meses"
+        />
+        <StatCardWithModalAnimalsList
+          title="5-12 meses"
+          animals={animalsBetweenDays(maleAnimals, 150, 364)}
+          description="Entre 5 meses y 1 año"
+        />
+        <StatCardWithModalAnimalsList
+          title="1 y 3 años"
+          animals={animalsBetweenDays(maleAnimals, 365, 365 * 3)}
+          description="Entre 1 y 3 años"
+        />
+        <StatCardWithModalAnimalsList
+          title="+3 años"
+          animals={animalsBetweenDays(maleAnimals, 3 * 365, 99999999)}
+          description="Mayores de 3 años"
+        />
+      </StatsRow>
     </div>
   )
 }
