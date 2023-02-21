@@ -26,7 +26,6 @@ const FarmNumbers = () => {
     subTitle: string
     animals: any[]
   }
-  console.log({ maleAnimals })
   const animalsByStates: Record<string, NumberRow[]> = {
     Total: [
       {
@@ -211,6 +210,7 @@ const FarmNumbers = () => {
       }
     ]
   }
+
   return (
     <div className="w-full">
       <h2 className="text-xl font-bold text-center ">
