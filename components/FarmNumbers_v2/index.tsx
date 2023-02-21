@@ -49,17 +49,17 @@ const FarmNumbers = () => {
     Hembras: [
       {
         title: 'Libres',
-        subTitle: 'Sin montas ni amamando',
+        subTitle: 'En edad pero sin compromiso',
         animals: femaleAnimals.filter(({ state }) => state === 'FREE')
       },
       {
         title: 'En Monta',
-        subTitle: 'En Monta',
+        subTitle: 'Agregada en alguna monta o preñada',
         animals: femaleAnimals.filter(({ state }) => state === 'BREEDING')
       },
       {
         title: 'Para vientre ',
-        subTitle: 'Para vientre',
+        subTitle: 'Muy jovenes aún',
         animals: femaleAnimals.filter(({ state }) => state === 'FOR_BELLY')
       },
       {
@@ -86,14 +86,14 @@ const FarmNumbers = () => {
       },
 
       {
-        title: 'Vendidas',
-        subTitle: 'Vendidas',
+        title: 'Vendidos',
+        subTitle: 'Vendidos',
         animals: maleAnimals.filter(({ state }) => state === 'SOLD')
       },
 
       {
-        title: 'Muertas',
-        subTitle: 'Muertas ',
+        title: 'Muertos',
+        subTitle: 'Muertos ',
         animals: maleAnimals.filter(({ state }) => state === 'DEAD')
       }
     ]
