@@ -75,6 +75,8 @@ const BreedingForm = () => {
     const breedingMale: AnimalType | null =
       males?.find(({ earring }) => earring === data.breedingMale) || null
     // console.log({ ...data, breedingMale: male, breedingBatch })
+    console.log({ data })
+    // return
     try {
       // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * Edit breadingBatch animals state
       for (let i = 0; i < breedingBatch.length; i++) {
@@ -150,6 +152,7 @@ const BreedingForm = () => {
   }, [farmAnimals, formValues.breedingMale, sheepSelected])
 
   useEffect(() => {
+    //* Update finish at from the startAt value. It cannot before
     if (formValues?.startAt) {
       setValue('finishAt', formValues?.startAt)
     }

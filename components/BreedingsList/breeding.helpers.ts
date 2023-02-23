@@ -68,8 +68,8 @@ export const calculatePossibleBirthStartAndFinish = ({
 }): BreedingDatesType => {
   const possibleBirth = calculatePossibleBirth(
     {
-      breedingFinishAt: startAt,
-      breedingStartAt: finishAt
+      breedingFinishAt: finishAt,
+      breedingStartAt: startAt
     },
     { asNumber: true }
   )

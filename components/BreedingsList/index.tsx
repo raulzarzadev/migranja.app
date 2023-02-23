@@ -9,6 +9,7 @@ import {
   FarmBreedingEvent,
   SetGenericEventType
 } from 'types/base/FarmEvent.model'
+import { myFormatDate } from 'utils/dates/myDateUtils'
 import { calculatePossibleBirthStartAndFinish } from './breeding.helpers'
 import BreedingsByAnimals from './BreedingsByAnimals'
 import BreedingsByBatches from './BreedingsByBatches'

@@ -1,14 +1,11 @@
 import { MalesTable } from '@comps/MalesTable'
-import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { listenEvent } from '@firebase/Events/main'
 import { BreedingFormatted } from 'components/BreedingsList/breeding.helpers'
 import IconBreedingStatus from 'components/IconBreedingStatus'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {
   AnimalBreedingEventCard,
-  BreedingEventCardDetails,
-  OtherBreedingMale
+  BreedingEventCardDetails
 } from 'types/base/FarmEvent.model'
 import { AnimalBreedingStatus } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
@@ -105,23 +102,18 @@ const BreedingDatesInfo = ({
   startAt?: number
   finishAt?: number
 }) => {
-  const start = startAt && myFormatDate(startAt, 'dd-MMMM')
-  const finish = finishAt && myFormatDate(finishAt, 'dd-MMMM')
+  const start = startAt && myFormatDate(startAt, 'dd-MMM')
+  const finish = finishAt && myFormatDate(finishAt, 'dd-MMM')
   return (
-    <div className="font-lg flex flex-col">
-      <span>Partos:</span>
+    <div className="font-lg flex ">
+      <span>Partos: </span>
       {start === finish ? (
         start
       ) : (
         <>
-          <span className="font-bold">
-            <span className="text-sm font-normal"> del </span>
-            {start}
-          </span>
-          <span className="font-bold">
-            <span className="text-sm font-normal"> al </span>
-            {finish}
-          </span>
+          <span className="">{start}</span>
+          <span className="mx-2">al</span>
+          <span className="">{finish}</span>
         </>
       )}
     </div>
