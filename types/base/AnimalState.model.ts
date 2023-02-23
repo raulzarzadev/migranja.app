@@ -1,10 +1,10 @@
 export enum AnimalState {
   FREE = 'libre',
-  BREEDING = 'monta',
+  BREEDING = 'en monta',
+  FOR_BELLY = 'cordera', //* Para vientre
+  FATTEN = 'engorda',
   LACTATING = 'lactante', //* lactante recien nacidas
   SUCKLE = 'lactando', //* amamantando lactando recien paridas
-  FATTEN = 'engorda',
-  FOR_BELLY = 'vientre',
   FOR_SALE = 'en venta',
   SOLD = 'vendido',
   DEAD = 'muerto',
