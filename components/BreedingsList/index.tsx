@@ -1,4 +1,4 @@
-import { getFarmBreedings, listenFarmBreedings } from '@firebase/Events/main'
+import { listenFarmBreedings } from '@firebase/Events/main'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import DebouncedInput from 'components/inputs/DebouncedInput'
 import { SetStateAction, useEffect, useState } from 'react'
@@ -30,7 +30,8 @@ export const formatBreedingBatchesAnimalsWithBreedingData = (
     if (!batch) return null
     const breedingDates = calculatePossibleBirthStartAndFinish({
       finishAt: batch?.eventData?.finishAt as number,
-      startAt: batch?.eventData?.startAt as number
+      startAt: batch?.eventData?.startAt as number,
+      otherMales: batch?.eventData?.otherMales
     })
     const animals = batch?.eventData?.breedingBatch?.map((animal) => {
       return {

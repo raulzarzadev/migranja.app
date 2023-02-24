@@ -19,10 +19,10 @@ export const MalesTable = ({
   handleRemoveMale?: (index: number) => void
 }) => {
   return (
-    <div className="text-xs w-full mx-auto">
-      <h1 className="text-sm text-end font-bold ">Macho (s)</h1>
+    <div className="text-xs w-full mx-auto my-4">
+      <h1 className="text-sm text-center font-bold ">Macho (s)</h1>
       <table className="mx-auto w-full text-center">
-        <thead className="  ">
+        {/* <thead className="  ">
           <tr>
             {showColor && (
               <th>
@@ -30,12 +30,11 @@ export const MalesTable = ({
               </th>
             )}
             <th>Arete</th>
-            <th>Raza</th>
             <th>del</th>
             <th>al</th>
             {showOps && <th>Ops</th>}
           </tr>
-        </thead>
+        </thead> */}
         <tbody className="">
           {males.map((male, i) => (
             <tr className={`even:bg-base-200  `} key={`${male?.id}-${i} `}>
@@ -73,9 +72,8 @@ export const MaleRow = ({
   return (
     <>
       <td className="truncate">
-        <ModalAnimalDetails earring={earring} size="sm" /> {name}{' '}
+        <ModalAnimalDetails earring={earring} size="sm" /> {name} {breed}
       </td>
-      <td className="truncate">{breed}</td>
       <td className="truncate">{myFormatDate(startAt, 'dd-MMM')}</td>
       <td className="truncate">{myFormatDate(finishAt, 'dd-MMM-yy')}</td>
     </>

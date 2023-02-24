@@ -61,14 +61,24 @@ export const getPlusMinusDays = (date?: Date | number) => {
 
 export const calculatePossibleBirthStartAndFinish = ({
   startAt,
-  finishAt
+  finishAt,
+  otherMales
 }: {
   startAt: number | Date
   finishAt: number | Date
+  otherMales?: any[]
 }): BreedingDatesType => {
+  let _finishAt = finishAt
+
+  //* Determinate if other males exist in breeding and define possible birth dates in that
+  if (!!otherMales?.length) {
+    const otherMalesFinishBreedingFinishAt = otherMales?.at(-1)?.finishAt
+    _finishAt = otherMalesFinishBreedingFinishAt
+  }
+
   const possibleBirth = calculatePossibleBirth(
     {
-      breedingFinishAt: finishAt,
+      breedingFinishAt: _finishAt,
       breedingStartAt: startAt
     },
     { asNumber: true }
@@ -81,7 +91,7 @@ export const calculatePossibleBirthStartAndFinish = ({
 
   return {
     breedingStartAt: startAt,
-    breedingFinishAt: finishAt,
+    breedingFinishAt: _finishAt,
     birthStartAt: possibleBirth.startAt,
     birthFinishAt: possibleBirth.finishAt,
     birthStartInDays: possibleBirthStartIn,

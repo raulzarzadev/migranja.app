@@ -47,12 +47,48 @@ export const BreedingCard = ({
   const otherMales = breeding.eventData?.otherMales || []
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
-      <header className="flex w-full justify-between p-2">
+      <header>
+        {/* BADGES */}
+        <div className="relative">
+          <span className="absolute ">
+            <IconBreedingStatus
+              startInDays={breedingDates?.birthStartInDays as number}
+              finishInDays={breedingDates?.birthFinishInDays as number}
+            />
+          </span>
+          <span className="absolute right-0 -top-2">
+            {!hiddenConfig && <ModalBreedingOptions breeding={breeding} />}
+          </span>
+        </div>
+        {/* Breeding info */}
+        <div className="grid text-center text-xs">
+          <span className="font-bold">{breeding.eventData?.breedingId}</span>
+          <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
+        </div>
+      </header>
+      <MalesTable
+        males={[
+          {
+            earring: breedingMale?.earring || '',
+            name: breedingMale?.name || '',
+            startAt: breedingDates?.breedingStartAt || '',
+            finishAt: breedingDates?.breedingFinishAt || ''
+          },
+          ...otherMales
+        ]}
+      />
+      {/* <div className="text-center w-full">
+        <span className=" whitespace-nowrap">
+          {breeding.eventData?.breedingId}
+        </span>
+      </div>
+      <div className="text-xs text-center">
+        <span>Creado: </span>
+        <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
+      </div> */}
+      {/* <header className="flex w-full justify-between p-2">
         <div className="flex pr-1 mt-1 ">
-          <IconBreedingStatus
-            startInDays={breedingDates?.birthStartInDays as number}
-            finishInDays={breedingDates?.birthFinishInDays as number}
-          />
+        
         </div>
         <div className="w-full flex justify-between">
           <div className="">
@@ -60,36 +96,16 @@ export const BreedingCard = ({
               startAt={breedingDates?.birthStartAt as number}
               finishAt={breedingDates?.birthFinishAt as number}
             />
-
-            <div className="text-xs">
-              <span>Creado: </span>
-              <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
-            </div>
           </div>
-          <span>
-            Lote:{' '}
-            <span className="font-bold">{breeding.eventData?.breedingId}</span>
-          </span>
+
           <div className="relative">
-            <span className="absolute -top-6 -right-2">
-              {!hiddenConfig && <ModalBreedingOptions breeding={breeding} />}
-            </span>
+           
             <div className="max-w-[250px]">
-              <MalesTable
-                males={[
-                  {
-                    earring: breedingMale?.earring || '',
-                    name: breedingMale?.name || '',
-                    startAt: breedingDates?.breedingStartAt || '',
-                    finishAt: breedingDates?.breedingFinishAt || ''
-                  },
-                  ...otherMales
-                ]}
-              />
+             
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
       <BreedingCardBody breeding={breeding} hiddenBirths={hiddenBirths} />
     </div>
   )
@@ -106,7 +122,8 @@ const BreedingDatesInfo = ({
   const finish = finishAt && myFormatDate(finishAt, 'dd-MMM')
   return (
     <div className="font-lg flex ">
-      <span>Partos: </span>
+      {/* Partos: {fromNow(startAt, { addSuffix: true })} */}
+      {/* <span>Partos: </span>
       {start === finish ? (
         start
       ) : (
@@ -115,7 +132,7 @@ const BreedingDatesInfo = ({
           <span className="mx-2">al</span>
           <span className="">{finish}</span>
         </>
-      )}
+      )} */}
     </div>
   )
 }
