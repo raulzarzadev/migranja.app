@@ -18,6 +18,7 @@ export const MalesTable = ({
   showOps?: boolean
   handleRemoveMale?: (index: number) => void
 }) => {
+  console.log({ males })
   return (
     <div className="text-xs w-full mx-auto my-4">
       <h1 className="text-sm text-center font-bold ">Macho (s)</h1>
@@ -74,7 +75,7 @@ export const MaleRow = ({
       <td className="truncate">
         <ModalAnimalDetails earring={earring} size="sm" /> {name} {breed}
       </td>
-      <td className="truncate">{myFormatDate(startAt, 'dd-MMM')}</td>
+      <td className="truncate">{myFormatDate(startAt, 'dd-MMM-yy')}</td>
       <td className="truncate">{myFormatDate(finishAt, 'dd-MMM-yy')}</td>
     </>
   )

@@ -72,10 +72,14 @@ export const BreedingCard = ({
             earring: breedingMale?.earring || '',
             name: breedingMale?.name || '',
             startAt: breedingDates?.breedingStartAt || '',
-            finishAt: breedingDates?.breedingFinishAt || ''
+            finishAt: breeding.eventData.finishAt || ''
           },
           ...otherMales
         ]}
+      />
+      <BreedingDatesInfo
+        startAt={breedingDates?.birthStartAt as number}
+        finishAt={breedingDates?.birthFinishAt as number}
       />
       {/* <div className="text-center w-full">
         <span className=" whitespace-nowrap">
@@ -92,10 +96,7 @@ export const BreedingCard = ({
         </div>
         <div className="w-full flex justify-between">
           <div className="">
-            <BreedingDatesInfo
-              startAt={breedingDates?.birthStartAt as number}
-              finishAt={breedingDates?.birthFinishAt as number}
-            />
+           
           </div>
 
           <div className="relative">
@@ -121,7 +122,10 @@ const BreedingDatesInfo = ({
   const start = startAt && myFormatDate(startAt, 'dd-MMM')
   const finish = finishAt && myFormatDate(finishAt, 'dd-MMM')
   return (
-    <div className="font-lg flex ">
+    <div className="text-center ">
+      Partos esperados: <span className="font-bold">{start}</span>
+      <span className="mx-2">al</span>
+      <span className="font-bold">{finish}</span>
       {/* Partos: {fromNow(startAt, { addSuffix: true })} */}
       {/* <span>Partos: </span>
       {start === finish ? (
