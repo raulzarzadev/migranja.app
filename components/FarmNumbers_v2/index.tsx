@@ -60,6 +60,11 @@ const FarmNumbers = () => {
         animals: activeFemales.filter(({ state }) => state === 'FREE')
       },
       {
+        title: 'Engorda',
+        subTitle: 'En edad pero sin compromisos',
+        animals: activeFemales.filter(({ state }) => state === 'FATTEN')
+      },
+      {
         title: 'En monta',
         subTitle: 'Preñadas o no',
         animals: activeFemales.filter(({ state }) => state === 'BREEDING')
@@ -96,6 +101,11 @@ const FarmNumbers = () => {
       }
     ],
     Machos: [
+      {
+        title: 'Sementales',
+        subTitle: 'Sementales activos',
+        animals: activeMales.filter((animal) => animal.isStallion)
+      },
       {
         title: 'Engorda',
         subTitle: 'En engorda',
@@ -188,11 +198,6 @@ const FarmNumbers = () => {
         animals: activeMales
       },
       {
-        title: 'Sementales',
-        subTitle: 'Sementales activos',
-        animals: activeMales.filter((animal) => animal.isStallion)
-      },
-      {
         title: '0-70 días',
         subTitle: 'Machos activos entre 0-70 días',
         animals: animalsBetweenDays(activeMales, 0, 70)
@@ -278,9 +283,9 @@ export const StatCard = ({
   description = 'description'
 }) => {
   return (
-    <div className="stats shadow bg-base-200 cursor-pointer hover:shadow-none active:shadow-inner  w-[200px]">
+    <div className="stats shadow bg-base-200 cursor-pointer hover:shadow-none active:shadow-inner  w-[120px]">
       <div className="stat">
-        <div className="stat-title">{title}</div>
+        <div className="stat-title truncate">{title}</div>
         <div className="stat-value">{quantity}</div>
         <div className="stat-desc truncate">
           <span className="">{description}</span>

@@ -31,7 +31,7 @@ export const formatBreedingBatchesAnimalsWithBreedingData = (
     const breedingDates = calculatePossibleBirthStartAndFinish({
       finishAt: batch?.eventData?.finishAt as number,
       startAt: batch?.eventData?.startAt as number,
-      //@ts-ignore
+      //@ts-ignore // FIXME: this should be fixed
       otherMales: batch?.eventData?.otherMales
     })
     const animals = batch?.eventData?.breedingBatch?.map((animal) => {
