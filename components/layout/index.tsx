@@ -9,7 +9,7 @@ export interface LayoutProps {
 
 function Layout({ children }: LayoutProps) {
   return (
-    <div className="p-2 prose bg-[url('/assets/images/HomeVisit/waves_pathern.png')] min-h-screen flex flex-col justify-between">
+    <div className="p-2 prose bg-[url('/assets/images/HomeVisit/waves_pathern.png')] min-h-screen flex flex-col justify-between bg-cover">
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />

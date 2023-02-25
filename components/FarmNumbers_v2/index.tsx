@@ -38,45 +38,42 @@ const FarmNumbers = () => {
         animals: activeAnimals
       },
       {
-        title: 'En egorda ',
-        subTitle: 'Todos los animales en engorda',
-        animals: activeAnimals.filter(({ state }) => state === 'FATTEN')
+        title: 'Hembras ',
+        subTitle: 'Hembras activas',
+        animals: activeFemales
       },
+
       {
-        title: 'Muertos ',
-        subTitle: 'Todos los animales muertos',
-        animals: farmAnimals.filter(({ state }) => state === 'DEAD')
-      },
-      {
-        title: 'Vendidos ',
-        subTitle: 'Todos los animales vendidos',
-        animals: farmAnimals.filter(({ state }) => state === 'SOLD')
+        title: 'Machos ',
+        subTitle: 'Macho activas',
+        animals: activeMales
       }
+      //
+      // {
+      //   title: 'En egorda ',
+      //   subTitle: 'Todos los animales en engorda',
+      //   animals: activeAnimals.filter(({ state }) => state === 'FATTEN')
+      // },
+      // {
+      //   title: 'Muertos ',
+      //   subTitle: 'Todos los animales muertos',
+      //   animals: farmAnimals.filter(({ state }) => state === 'DEAD')
+      // },
+      // {
+      //   title: 'Vendidos ',
+      //   subTitle: 'Todos los animales vendidos',
+      //   animals: farmAnimals.filter(({ state }) => state === 'SOLD')
+      // }
     ],
     Hembras: [
       {
-        title: 'Libres',
-        subTitle: 'En edad pero sin compromisos',
-        animals: activeFemales.filter(({ state }) => state === 'FREE')
-      },
-      {
-        title: 'Engorda',
-        subTitle: 'En edad pero sin compromisos',
-        animals: activeFemales.filter(({ state }) => state === 'FATTEN')
-      },
-      {
-        title: 'En monta',
-        subTitle: 'Preñadas o no',
-        animals: activeFemales.filter(({ state }) => state === 'BREEDING')
-      },
-      {
-        title: 'Amamantando',
+        title: 'Lactando',
         subTitle: 'Recien paridas',
         animals: activeFemales.filter(({ state }) => state === 'SUCKLE')
       },
       {
         title: 'Lactandes',
-        subTitle: 'Aun mamando',
+        subTitle: 'Recien nacidas',
         animals: femaleAnimals.filter(({ state }) => state === 'LACTATING')
       },
       {
@@ -85,26 +82,44 @@ const FarmNumbers = () => {
         animals: activeFemales.filter(({ state }) => state === 'FOR_BELLY')
       },
       {
-        title: 'Para venta',
-        subTitle: 'Listas para venderse',
-        animals: activeFemales.filter(({ state }) => state === 'FOR_SALE')
+        title: 'En monta',
+        subTitle: 'Preñadas o no',
+        animals: activeFemales.filter(({ state }) => state === 'BREEDING')
       },
+
+      {
+        title: 'Engorda',
+        subTitle: 'En edad pero sin compromisos',
+        animals: activeFemales.filter(({ state }) => state === 'FATTEN')
+      },
+
+      {
+        title: 'Vendidas',
+        subTitle: 'Hembras vendidas',
+        animals: activeFemales.filter(({ state }) => state === 'SOLD')
+      },
+
       {
         title: 'Muertas',
         subTitle: 'Hembras muertas',
         animals: activeFemales.filter(({ state }) => state === 'DEAD')
       },
       {
-        title: 'Vendidas',
-        subTitle: 'Hembras vendidas',
-        animals: activeFemales.filter(({ state }) => state === 'SOLD')
+        title: 'Para venta',
+        subTitle: 'Listas para venderse',
+        animals: activeFemales.filter(({ state }) => state === 'FOR_SALE')
       }
+      // {
+      //   title: 'Libres',
+      //   subTitle: 'En edad pero sin compromisos',
+      //   animals: activeFemales.filter(({ state }) => state === 'FREE')
+      // }
     ],
     Machos: [
       {
-        title: 'Sementales',
-        subTitle: 'Sementales activos',
-        animals: activeMales.filter((animal) => animal.isStallion)
+        title: 'Lactandes',
+        subTitle: 'Aun mamando',
+        animals: activeMales.filter(({ state }) => state === 'LACTATING')
       },
       {
         title: 'Engorda',
@@ -112,25 +127,26 @@ const FarmNumbers = () => {
         animals: activeMales.filter(({ state }) => state === 'FATTEN')
       },
       {
-        title: 'Lactandes',
-        subTitle: 'Aun mamando',
-        animals: activeMales.filter(({ state }) => state === 'LACTATING')
+        title: 'Sementales',
+        subTitle: 'Sementales activos',
+        animals: activeMales.filter((animal) => animal.isStallion)
       },
+
       {
-        title: 'En venta',
+        title: 'Para venta',
         subTitle: 'Listos para venta',
         animals: activeMales.filter(({ state }) => state === 'FOR_SALE')
       },
 
       {
-        title: 'Muertos',
-        subTitle: 'Muertos ',
-        animals: activeMales.filter(({ state }) => state === 'DEAD')
-      },
-      {
         title: 'Vendidos',
         subTitle: 'Vendidos',
         animals: activeMales.filter(({ state }) => state === 'SOLD')
+      },
+      {
+        title: 'Muertos',
+        subTitle: 'Muertos ',
+        animals: activeMales.filter(({ state }) => state === 'DEAD')
       }
     ]
   }
@@ -269,9 +285,8 @@ export const StatsRow = ({
     <div className="">
       <h3 className="text-lg font-bold">{title}</h3>
       <div className="grid">
-        <div className="flex flex-row gap-2 overflow-x-auto overflow-y-hidden  h-[135px] items-top  snap-x ">
-          {children}
-        </div>
+        {/* <div className="flex flex-row gap-2 overflow-x-auto overflow-y-hidden  h-[135px] items-top  snap-x "> */}
+        <div className="flex flex-wrap gap-2 ">{children}</div>
       </div>
     </div>
   )
@@ -283,7 +298,7 @@ export const StatCard = ({
   description = 'description'
 }) => {
   return (
-    <div className="stats shadow bg-base-200 cursor-pointer hover:shadow-none active:shadow-inner  w-[120px]">
+    <div className="stats shadow bg-base-200 cursor-pointer hover:shadow-none active:shadow-inner  w-[150px]">
       <div className="stat">
         <div className="stat-title truncate">{title}</div>
         <div className="stat-value">{quantity}</div>
