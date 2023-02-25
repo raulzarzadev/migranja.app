@@ -21,10 +21,24 @@ const BreedingsByBatches = ({ breedings = [] }: BreedingBatchesListType) => {
     if (a?.updatedAt > b?.updatedAt) return -1
     return 0
   }
+  const sortByPossibleBirth = (a: any, b: any) => {
+    if (
+      a?.eventData.breedingDates.birthFinishInDays <
+      b?.eventData.breedingDates.birthFinishInDays
+    )
+      return -1
+    if (
+      a?.eventData.breedingDates.birthFinishInDays >
+      b?.eventData.breedingDates.birthFinishInDays
+    )
+      return 1
+    return 0
+  }
+  console.log({ breedings: breedings.sort(sortByPossibleBirth) })
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
-      {breedings.sort(sortByUpdated).map((breeding) => (
+      {breedings.sort(sortByPossibleBirth).map((breeding) => (
         <div className="my-2 " key={breeding?.id}>
           <BreedingCard breeding={breeding} />
         </div>

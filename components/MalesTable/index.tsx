@@ -18,7 +18,6 @@ export const MalesTable = ({
   showOps?: boolean
   handleRemoveMale?: (index: number) => void
 }) => {
-  console.log({ males })
   return (
     <div className="text-xs w-full mx-auto my-4">
       <h1 className="text-sm text-center font-bold ">Macho (s)</h1>
