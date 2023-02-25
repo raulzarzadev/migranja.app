@@ -8,7 +8,7 @@ const FarmPage = () => {
   const currentFarm = useSelector(selectFarmState)
 
   return (
-    <div>
+    <div className="relative">
       <FarmNavigation
         farm={{ id: currentFarm?.id, name: currentFarm?.name }}
         showGo={undefined}

@@ -84,12 +84,12 @@ const FarmMenu = (props: any) => {
   const newSheepInventory =
     isSheepSelected && column2 === 'inventory' && isAddSelected
   return (
-    <div className=" sm:flex">
+    <div className=" sm:flex  ">
       {/* ********************************* FARM MENU ************************************* */}
 
-      <MenuSection className="  sm:w-[320px]  ">
+      <MenuSection className="  sm:w-[320px]   ">
         <>
-          <div className="  p-1 flex justify-start w-min mx-auto  ">
+          <div className="  p-1 flex justify-start w-min mx-auto h-min sticky top-0">
             {/****************  column 1 *********************/}
 
             <div className="flex-col flex ">
