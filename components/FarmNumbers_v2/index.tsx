@@ -284,9 +284,11 @@ export const StatsRow = ({
   return (
     <div className="">
       <h3 className="text-lg font-bold">{title}</h3>
-      <div className="grid">
+      <div className="grid  ">
         {/* <div className="flex flex-row gap-2 overflow-x-auto overflow-y-hidden  h-[135px] items-top  snap-x "> */}
-        <div className="flex flex-wrap gap-2 ">{children}</div>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -298,7 +300,7 @@ export const StatCard = ({
   description = 'description'
 }) => {
   return (
-    <div className="stats shadow bg-base-200 cursor-pointer hover:shadow-none active:shadow-inner  w-[150px]">
+    <div className="stats shadow bg-base-200 cursor-pointer hover:shadow-none active:shadow-inner  w-full">
       <div className="stat">
         <div className="stat-title truncate">{title}</div>
         <div className="stat-value">{quantity}</div>
