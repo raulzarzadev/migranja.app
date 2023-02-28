@@ -1,8 +1,14 @@
 import { FilterType } from '@comps/hooks/useFilterByField'
 import { addMonths, subMonths } from 'date-fns'
+import { activeAnimalsStates } from 'types/base/AnimalState.model'
 import Filters from '.'
 const animalsFilters: Record<string, FilterType | FilterType[]> = {
-  // Activos: { field: 'state', symbol: '!=', value: 'ACTIVE' },
+  Activos: { field: 'state', symbol: 'inArray', value: activeAnimalsStates },
+  Inactivos: {
+    field: 'state',
+    symbol: 'notInArray',
+    value: activeAnimalsStates
+  },
   Machos: { field: 'gender', symbol: '==', value: 'male' },
   Hembras: { field: 'gender', symbol: '==', value: 'female' },
   Muertos: {
@@ -64,12 +70,7 @@ const AnimalsTableFilter = ({
 }) => {
   return (
     <div>
-      <Filters
-        filters={animalsFilters}
-        array={array}
-        setArray={setArray}
-        defaultFilter={'Activos'}
-      />
+      <Filters filters={animalsFilters} array={array} setArray={setArray} />
     </div>
   )
 }

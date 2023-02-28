@@ -1,4 +1,3 @@
-import { getProperty } from 'dot-prop'
 import {
   filterArrayByFiledValueCoincidences,
   FilterSymbols

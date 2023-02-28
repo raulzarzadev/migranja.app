@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react'
 import { getProperty } from 'dot-prop'
 import filterByArrayOfFilters from 'utils/filterByArrayOfFilters'
-import { filterArrayByFiledValueCoincidences } from 'utils/filterArrayByFiledValueCoincidences'
+import {
+  filterArrayByFiledValueCoincidences,
+  FilterSymbols
+} from 'utils/filterArrayByFiledValueCoincidences'
 
 export interface FilterType {
   field: string
-  symbol: '==' | '<' | '>' | '<=' | '>='
+  symbol: FilterSymbols
   value: any
 }
 const useFilterByField = <T,>(
-  array: T[],
-  ops?: { defaultFilter?: any[]; labelDefaultFilter?: string }
+  array: T[]
+  //* default filtered it was implemented efficiently
+  // ops?: { defaultFilter?: any[]; labelDefaultFilter?: string }
 ) => {
-  const defaultFilters = ops?.defaultFilter
-  const labelDefaultFilter = ops?.labelDefaultFilter
-
   const [_array, _setArray] = useState<T[]>([])
   const [filtersSelected, setFiltersSelected] = useState<string[]>([])
 
@@ -24,7 +25,7 @@ const useFilterByField = <T,>(
 
   const handleFilterBy = (
     field = '',
-    symbol: '==' | '<' | '>' | '<=' | '>=',
+    symbol: FilterSymbols,
     value: any,
     ops?: { label: string }
   ) => {

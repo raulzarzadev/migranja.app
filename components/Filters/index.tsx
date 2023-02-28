@@ -5,13 +5,12 @@ import { useEffect } from 'react'
 const Filters = ({
   array,
   setArray,
-  filters,
-  defaultFilter = ''
+  filters
 }: {
   array: unknown[]
   setArray: (array: any) => void
   filters: Record<string, FilterType | FilterType[]>
-  defaultFilter?: string
+  // defaultFilter?: string
 }) => {
   const {
     handleFilterBy,
@@ -19,12 +18,7 @@ const Filters = ({
     reset,
     arrayFiltered,
     handleFilterByArray
-  } = useFilterByField(array, {
-    labelDefaultFilter: defaultFilter,
-    defaultFilter: Array.isArray(filters?.[defaultFilter])
-      ? (filters?.[defaultFilter] as any[])
-      : [filters?.[defaultFilter]]
-  })
+  } = useFilterByField(array)
 
   useEffect(() => {
     setArray(arrayFiltered)

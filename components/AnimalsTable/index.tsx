@@ -72,17 +72,20 @@ const AnimalsTable = ({
     columnHelper.accessor('gender', {
       header: 'Sexo',
       cell: (props) => (
-        <span>{GENDER_OPTIONS[props.getValue() || 'female']?.label}</span>
+        <div className="text-center">
+          {GENDER_OPTIONS[props.getValue() || 'female']?.label?.slice(0, 2)}
+        </div>
       )
     }),
     columnHelper.accessor('birthday', {
-      header: 'Edad',
+      header: 'Edad ',
       cell: (props) => (
-        <span>
+        <div className="text-center">
           {props.getValue()
-            ? props.getValue() && fromNow(props.getValue(), { unit: 'month' })
+            ? props.getValue() &&
+              fromNow(props.getValue(), { unit: 'month' }).split(' ')[0]
             : '-'}
-        </span>
+        </div>
       )
     }),
 
@@ -105,10 +108,10 @@ const AnimalsTable = ({
         </span>
       )
     }),
-    columnHelper.accessor('currentStatus', {
-      header: 'Status',
-      cell: (props) => <span>{props.getValue() ? props.getValue() : '-'}</span>
-    }),
+    // columnHelper.accessor('currentStatus', {
+    //   header: 'Status',
+    //   cell: (props) => <span>{props.getValue() ? props.getValue() : '-'}</span>
+    // }),
     columnHelper.accessor('state', {
       header: 'Estado',
       cell: (props) => (
