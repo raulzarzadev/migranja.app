@@ -14,10 +14,9 @@ const FarmNumbers = () => {
     return activeAnimalsStates.includes(animal?.state)
   })
 
-  const femaleAnimals = activeAnimals.filter(
-    ({ gender }) => gender === 'female'
-  )
-  const maleAnimals = activeAnimals.filter(({ gender }) => gender === 'male')
+  const femaleAnimals = farmAnimals.filter(({ gender }) => gender === 'female')
+  const maleAnimals = farmAnimals.filter(({ gender }) => gender === 'male')
+
   const activeFemales = activeAnimals.filter(
     ({ gender }) => gender === 'female'
   )
@@ -48,22 +47,6 @@ const FarmNumbers = () => {
         subTitle: 'Macho activas',
         animals: activeMales
       }
-      //
-      // {
-      //   title: 'En egorda ',
-      //   subTitle: 'Todos los animales en engorda',
-      //   animals: activeAnimals.filter(({ state }) => state === 'FATTEN')
-      // },
-      // {
-      //   title: 'Muertos ',
-      //   subTitle: 'Todos los animales muertos',
-      //   animals: farmAnimals.filter(({ state }) => state === 'DEAD')
-      // },
-      // {
-      //   title: 'Vendidos ',
-      //   subTitle: 'Todos los animales vendidos',
-      //   animals: farmAnimals.filter(({ state }) => state === 'SOLD')
-      // }
     ],
     Hembras: [
       {
@@ -74,7 +57,7 @@ const FarmNumbers = () => {
       {
         title: 'Lactandes',
         subTitle: 'Recien nacidas',
-        animals: femaleAnimals.filter(({ state }) => state === 'LACTATING')
+        animals: activeFemales.filter(({ state }) => state === 'LACTATING')
       },
       {
         title: 'Corderas ',
@@ -96,13 +79,13 @@ const FarmNumbers = () => {
       {
         title: 'Vendidas',
         subTitle: 'Hembras vendidas',
-        animals: activeFemales.filter(({ state }) => state === 'SOLD')
+        animals: femaleAnimals.filter(({ state }) => state === 'SOLD')
       },
 
       {
         title: 'Muertas',
         subTitle: 'Hembras muertas',
-        animals: activeFemales.filter(({ state }) => state === 'DEAD')
+        animals: femaleAnimals.filter(({ state }) => state === 'DEAD')
       },
       {
         title: 'Para venta',
@@ -141,12 +124,12 @@ const FarmNumbers = () => {
       {
         title: 'Vendidos',
         subTitle: 'Vendidos',
-        animals: activeMales.filter(({ state }) => state === 'SOLD')
+        animals: maleAnimals.filter(({ state }) => state === 'SOLD')
       },
       {
         title: 'Muertos',
         subTitle: 'Muertos ',
-        animals: activeMales.filter(({ state }) => state === 'DEAD')
+        animals: maleAnimals.filter(({ state }) => state === 'DEAD')
       }
     ]
   }
