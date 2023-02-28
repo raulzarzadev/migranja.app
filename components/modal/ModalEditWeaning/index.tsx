@@ -4,6 +4,7 @@ import { updateEvent } from '@firebase/Events/main'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
+import { AnimalStateType } from 'types/base/AnimalState.model'
 import Modal from '..'
 import ModalAnimalDetails from '../ModalAnimalDetails'
 
@@ -19,9 +20,24 @@ const ModalEditWeaning = ({
     setOpenEditEvent(!openEditEvent)
   }
   const farmAnimals = useSelector(selectFarmAnimals)
-  const animalId = farmAnimals.find(
-    (animal) => animal.earring === animalEarring
-  )?.id
+  const animal = farmAnimals.find((animal) => animal.earring === animalEarring)
+  const animalId = animal?.id
+  const animalMotherId = animal?.parents?.mother?.id
+
+  const handleWeaning = async (state: AnimalStateType) => {
+    if (animalId) {
+      //* Update animal state
+      await updateAnimalState(animalId, state, animal.state)
+      //* Update mother animal state
+      if (animalMotherId) {
+        await updateAnimalState(animalMotherId, 'FREE', 'SUCKLE')
+      }
+      //* Update event status to done
+      //@ts-ignore
+      await updateEvent(eventId, { 'eventData.status': 'DONE' })
+    }
+  }
+
   return (
     <>
       <button
@@ -47,13 +63,7 @@ const ModalEditWeaning = ({
               className="btn btn-info mt-5 btn-outline"
               onClick={(e) => {
                 e.preventDefault()
-                if (animalId) {
-                  updateAnimalState(animalId, 'FATTEN')
-                }
-
-                // @ts-ignore
-
-                updateEvent(eventId, { 'eventData.status': 'DONE' })
+                handleWeaning('FATTEN')
               }}
             >
               Para engorda
@@ -62,13 +72,7 @@ const ModalEditWeaning = ({
               className="btn btn-info mt-5  btn-outline"
               onClick={(e) => {
                 e.preventDefault()
-                if (animalId) {
-                  updateAnimalState(animalId, 'FOR_SALE')
-                }
-
-                // @ts-ignore
-
-                updateEvent(eventId, { 'eventData.status': 'DONE' })
+                handleWeaning('FOR_SALE')
               }}
             >
               Para venta
@@ -77,13 +81,7 @@ const ModalEditWeaning = ({
               className="btn btn-info mt-5  btn-outline"
               onClick={(e) => {
                 e.preventDefault()
-                if (animalId) {
-                  updateAnimalState(animalId, 'FOR_BELLY')
-                }
-
-                // @ts-ignore
-
-                updateEvent(eventId, { 'eventData.status': 'DONE' })
+                handleWeaning('FOR_BELLY')
               }}
             >
               Para vientre

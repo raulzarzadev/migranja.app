@@ -2,9 +2,11 @@ import Icon from '@comps/Icon'
 import InputContainer from '@comps/inputs/InputContainer'
 import { MalesTable } from '@comps/MalesTable'
 import Modal from '@comps/modal'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import ModalDelete from '@comps/modal/ModalDelete'
 import ProgressButton from '@comps/ProgressButton'
 import SearchEarring from '@comps/SearchEarring'
+import { updateAnimalState } from '@firebase/Animal/main'
 import {
   addAnimalToBreedingBatchEvent,
   addMaleToBreedingEvent,
@@ -19,7 +21,6 @@ import {
   BreedingEventCardDetails,
   OtherBreedingMale
 } from 'types/base/FarmEvent.model'
-import { myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingCardSmall from './AnimalBreedingCardSmall'
 
 const ModalBreedingOptions = ({
@@ -31,8 +32,20 @@ const ModalBreedingOptions = ({
   const handleOpenOptions = () => {
     setOpenOptions(!openOptions)
   }
+  console.log({ breeding })
+  const breedingAnimals = breeding.eventData.breedingBatch
   const handleDelete = async () => {
     const res = await deleteEvent(breeding?.id)
+    //* * * * * * * * * * * * * * * * * * * * * * * * * * update breeding animals state
+    for (let i = 0; i < breedingAnimals?.length; i++) {
+      const animal = breedingAnimals[i]
+      if (animal?.id)
+        await updateAnimalState(
+          animal?.id,
+          animal.pastState || 'FREE',
+          animal.state
+        )
+    }
     return console.log(res)
   }
 
@@ -59,6 +72,7 @@ const ModalBreedingOptions = ({
           <ModalDelete
             buttonLabel={null}
             handleDelete={() => handleDelete()}
+            text="Eliminaras esta monta y se actualizara el estado de los siguientes animales"
             title="Eliminar monta"
             openModalItem={(props) => (
               <button
@@ -68,7 +82,15 @@ const ModalBreedingOptions = ({
                 Eliminar <Icon name="delete" />
               </button>
             )}
-          />
+          >
+            <div className="flex justify-evenly flex-wrap">
+              {breedingAnimals.map((animal) => (
+                <div key={animal.id}>
+                  <ModalAnimalDetails earring={animal.earring} />
+                </div>
+              ))}
+            </div>
+          </ModalDelete>
         </div>
       </Modal>
     </div>

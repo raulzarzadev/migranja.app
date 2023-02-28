@@ -42,6 +42,13 @@ export const listenFarmAnimals = (
   cb: CallableFunction
 ) => AnimalsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
 
+/**
+ *
+ * @param animalId  is the id of the animal
+ * @param newState is the new state,
+ * @param pastState is the state of the animal before it changed, can be undefined or null
+ * @returns a promise with the update firebase response
+ */
 export const updateAnimalState = async (
   animalId: AnimalType['earring'],
   newState: AnimalType['state'],

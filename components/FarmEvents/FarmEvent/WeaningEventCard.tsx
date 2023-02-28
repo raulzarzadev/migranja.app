@@ -33,7 +33,10 @@ const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
             {WEANING_STATUS_LABELS[event?.eventData?.status || 'PENDING']}
           </span>
           <div className="ml-4">
-            <ModalEditWeaning eventId={event.id || ''} />
+            <ModalEditWeaning
+              eventId={event.id || ''}
+              animalEarring={event.eventData?.earring}
+            />
           </div>
         </div>
       </div>

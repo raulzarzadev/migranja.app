@@ -18,6 +18,7 @@ const WeaningEvents = () => {
       if (a.eventData.date < b.eventData.date) return -1
       return 0
     })
+  console.log({ weaning })
 
   return (
     <div className="w-full p-2">
