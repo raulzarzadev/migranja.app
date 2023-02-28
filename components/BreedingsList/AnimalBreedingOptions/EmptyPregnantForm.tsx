@@ -1,4 +1,5 @@
 import ProgressButton from '@comps/ProgressButton'
+import { updateAnimalState } from '@firebase/Animal/main'
 import {
   createTypedEvent,
   updateAnimalStatusInBreedingBatch
@@ -63,9 +64,9 @@ const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
         eventId: animal.eventData.id
       })
 
-      //const promises = [event, breeding]
-
-      //await Promise.all(promises)
+      //* * * * * * * * * * * * * * * * * * * * * * * * update animal state
+      setProgress(80)
+      if (animal?.id) await updateAnimalState(animal?.id, 'FREE', animal.state)
 
       setProgress(100)
       reset()

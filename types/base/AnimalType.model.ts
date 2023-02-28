@@ -39,6 +39,7 @@ export interface AnimalType extends TypeBase {
   }
   currentStatus?: AnimalCurrentStatusType
   state?: AnimalStateType //* This should be the main state of animal
+  pastState?: AnimalStateType | null
 }
 
 export interface GenderOptions {

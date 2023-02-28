@@ -15,7 +15,6 @@ import {
   DTO_CreateBreedingEventType,
   EventData
 } from 'types/base/FarmEvent.model'
-import { BreedingFormatted } from '../breeding.helpers'
 export interface CreateBirthDataType {
   eventType: EventType['type']
   currentFarm: any

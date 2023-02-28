@@ -1,6 +1,7 @@
 import RevertBirthForm from '@comps/forms/RevertBirthForm'
 import { SelectOption } from '@comps/inputs/InputContainer'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import { updateAnimalState } from '@firebase/Animal/main'
 import { removeAnimalFromBreeding } from '@firebase/Events/main'
 import Modal from 'components/modal'
 import ModalDelete from 'components/modal/ModalDelete'
@@ -51,8 +52,15 @@ const AnimalBreedingOptions = ({
   const [option, setOption] = useState('')
   const handleRemove = () => {
     removeAnimalFromBreeding(animal.eventData.id, animal.id || '')
-      .then((res) => {
+      .then(async (res) => {
         console.log(res)
+        //* * * * * * * * * * * * * * * * update (revert) animal state
+        if (animal.id)
+          await updateAnimalState(
+            animal?.id,
+            animal.pastState || 'FREE',
+            animal.state
+          )
       })
       .then((err) => console.log(err))
   }

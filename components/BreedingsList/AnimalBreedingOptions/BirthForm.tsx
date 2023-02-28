@@ -1,4 +1,8 @@
-import { createAnimal, updateAnimal } from '@firebase/Animal/main'
+import {
+  createAnimal,
+  updateAnimal,
+  updateAnimalState
+} from '@firebase/Animal/main'
 import {
   createGenericBreedingEvent,
   updateEventBreedingBatch
@@ -122,10 +126,8 @@ const BirthForm = ({
       // ****************************************************  1.  create birth
       setLabelStatus('Creando evento')
       setProgress(10)
-      //  console.log({ formatBirthEvent })
 
       const event = await createGenericBreedingEvent(formatBirthEvent)
-      // console.log({ event })
 
       // *************************************************  2.  create animals/calfs
       setLabelStatus('Creando animales')
@@ -136,7 +138,6 @@ const BirthForm = ({
       })
 
       const newAnimals = await Promise.all(newAnimalsPromises)
-      // console.log({ newAnimals })
 
       setLabelStatus('Creando detetes')
       setProgress(60)
@@ -156,7 +157,6 @@ const BirthForm = ({
         })
       })
       const newWeanings = await Promise.all(newWeaningsPromises)
-      //console.log({ newWeanings })
 
       // ***************************************************  4.  update breeding, move from batch to already done
 
@@ -169,7 +169,6 @@ const BirthForm = ({
         calfsWeaningsIds: newWeanings.map((weaning) => weaning?.res.id)
       }
 
-      // console.log({ birthEventData })
       const breeding = await updateEventBreedingBatch({
         eventId: breedingEventId || '',
         animalId: animal?.id as string,
@@ -178,7 +177,8 @@ const BirthForm = ({
       })
 
       // ***************************************************  5.  update mom state to SUCKLE
-      if (animal?.id) await updateAnimal(animal?.id, { state: 'SUCKLE' })
+      if (animal?.id)
+        await updateAnimalState(animal?.id, 'SUCKLE', animal?.state)
       setLabelStatus('Actualizando madre')
       setProgress(90)
 
@@ -191,7 +191,6 @@ const BirthForm = ({
     }
   }
   const [finishView, setFinishView] = useState(false)
-  // console.log({ formValues })
 
   const [openAlreadyExist, setOpenAlreadyExist] = useState(false)
   const handleOpenAlreadyExist = () => {
@@ -206,7 +205,6 @@ const BirthForm = ({
   }
 
   const breeding = animal.eventData
-  //console.log({ breeding })
   const sortByStartAt = (a: any, b: any) => a.startAt - b.finishAt
   const breedingMales: OtherBreedingMale[] = [
     {
@@ -261,7 +259,6 @@ const BirthForm = ({
     setValue('male', possibleMaleDependsOfDate(formValues?.date))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValues?.date, setValue])
-  console.log(formValues.male)
   interface MaleStyle {
     table: string
     calendar: string
@@ -299,7 +296,6 @@ const BirthForm = ({
   const dateTouched = methods.formState.dirtyFields.date
   const birthTypeTouched = formValues.birthType
 
-  console.log({ formValues, dateTouched, birthTypeTouched })
   return (
     <div>
       <Modal

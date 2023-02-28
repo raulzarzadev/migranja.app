@@ -42,11 +42,15 @@ export const listenFarmAnimals = (
   cb: CallableFunction
 ) => AnimalsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
 
-export const updateAnimalState = (
+export const updateAnimalState = async (
   animalId: AnimalType['earring'],
-  newState: AnimalType['state']
+  newState: AnimalType['state'],
+  pastState?: AnimalType['state']
 ) => {
-  updateAnimal(animalId, { state: newState })
+  return await updateAnimal(animalId, {
+    pastState: pastState || null,
+    state: newState
+  })
 }
 
 export const getMaleOvines = async () =>
