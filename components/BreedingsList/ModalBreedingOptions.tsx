@@ -32,7 +32,6 @@ const ModalBreedingOptions = ({
   const handleOpenOptions = () => {
     setOpenOptions(!openOptions)
   }
-  console.log({ breeding })
   const breedingAnimals = breeding.eventData.breedingBatch
   const handleDelete = async () => {
     const res = await deleteEvent(breeding?.id)

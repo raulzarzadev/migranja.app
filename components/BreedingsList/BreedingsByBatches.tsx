@@ -34,7 +34,6 @@ const BreedingsByBatches = ({ breedings = [] }: BreedingBatchesListType) => {
       return 1
     return 0
   }
-  console.log({ breedings: breedings.sort(sortByPossibleBirth) })
   return (
     <div>
       <div className="text-center">Total: {breedings.length}</div>
