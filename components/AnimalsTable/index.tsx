@@ -70,15 +70,20 @@ const AnimalsTable = ({
       header: 'Lote'
     }),
     columnHelper.accessor('gender', {
-      header: 'Sexo',
+      header: () => <div className="mx-auto">Sexo</div>,
       cell: (props) => (
-        <div className="text-center">
-          {GENDER_OPTIONS[props.getValue() || 'female']?.label?.slice(0, 2)}
+        <div className="text-center text-xs">
+          {GENDER_OPTIONS[props.getValue() || 'female']?.label}
         </div>
       )
     }),
     columnHelper.accessor('birthday', {
-      header: 'Edad ',
+      header: () => (
+        <div className="grid mx-auto text-center">
+          Edad{' '}
+          <span className="font-normal text-2xs lowercase">{`(meses)`}</span>
+        </div>
+      ),
       cell: (props) => (
         <div className="text-center">
           {props.getValue()
@@ -90,9 +95,9 @@ const AnimalsTable = ({
     }),
 
     columnHelper.accessor('parents', {
-      header: 'Padres',
+      header: () => <div className="text-center mx-auto">Padres</div>,
       cell: (props) => (
-        <span className="flex w-full justify-between">
+        <div className="flex w-full justify-center gap-2">
           {
             <ParentModal
               parentReference={props.getValue()?.father?.earring}
@@ -105,7 +110,7 @@ const AnimalsTable = ({
               type="mother"
             />
           }
-        </span>
+        </div>
       )
     }),
     // columnHelper.accessor('currentStatus', {
