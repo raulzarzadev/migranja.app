@@ -92,7 +92,8 @@ export const FARM_EVENT: FarmStateAnimalEvent = {
   },
   birthEventData: undefined,
   isStallion: undefined,
-  state: undefined
+  state: undefined,
+  pastState: undefined
 }
 describe('Farm Events List', () => {
   it('Farm Events List', () => {
