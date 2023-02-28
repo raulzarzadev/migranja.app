@@ -83,6 +83,7 @@ const FarmMenu = (props: any) => {
     isSheepSelected && column2 === 'inventory' && !isAddSelected
   const newSheepInventory =
     isSheepSelected && column2 === 'inventory' && isAddSelected
+
   return (
     <div className=" sm:flex  ">
       {/* ********************************* FARM MENU ************************************* */}
