@@ -24,7 +24,7 @@ const OvinesTable = () => {
         <AnimalsTable /> 
         */}
         {!!selectedRows?.length && (
-          <div className=" bg-base-300 shadow-md rounded-md m-2 lg:w-1/2 h-min">
+          <div className=" bg-base-300 shadow-md rounded-md m-2 ">
             <AnimalsOptions
               animalsEarrings={selectedRows}
               setAnimalsEarrings={setSelectedRows}
