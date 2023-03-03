@@ -264,11 +264,16 @@ const FarmMenu = (props: any) => {
           {/* ********************************+******+ +++************** ANIMALS LIST */}
           {isSheepSelected && !column2 && <OvinesTable />}
           {/* ********************************+******+ +++************** ADD ONE ANIMAL */}
-          {isSheepSelected && column2 === 'add' && <AnimalForm />}
+          {isSheepSelected && column2 === 'add' && (
+            <div className=" bg-base-300 shadow-md rounded-md p-2">
+              <AnimalForm />
+            </div>
+          )}
           {/* ********************************+******+ +++************** ADD ANIMALS */}
           {isSheepSelected && menuOptions.column2 === 'addMany' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               <AnimalsForm
+                avoidFarmAnimals
                 animal={{
                   type: 'ovine'
                 }}

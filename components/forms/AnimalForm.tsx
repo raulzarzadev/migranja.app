@@ -17,6 +17,7 @@ import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 import { AnimalState } from 'types/base/AnimalState.model'
+import { AnimalType } from 'types/base/AnimalType.model'
 const schema = yup
   .object()
   .shape({
@@ -42,7 +43,8 @@ export const AnimalForm = ({
   }
 
   const [loading, setLoading] = useState(false)
-  const defaultValues = {
+  const defaultValues: Partial<AnimalType> = {
+    state: 'FREE',
     birthday: new Date(),
     gender: 'female',
     joinedAt: new Date(),
@@ -76,6 +78,8 @@ export const AnimalForm = ({
 
   const onSubmit = (data: any) => {
     setLoading(true)
+    console.log({ data })
+    return
     if (id) {
       updateAnimal(id, data)
         .then((res: any) => {
@@ -196,7 +200,17 @@ export const AnimalForm = ({
               <div>
                 <div className="text-right flex flex-wrap justify-end">
                   <div className="w-[100px]">
-                    <InputContainer name="earring" type="text" label="Arete" />
+                    <InputContainer
+                      name="earring"
+                      type="text"
+                      label="Arete"
+                      rules={{
+                        validate: (val) => {
+                          console.log({ val })
+                          return false
+                        }
+                      }}
+                    />
                   </div>
                   <div className="w-[100px]">
                     <InputContainer name="name" type="text" label="Nombre" />
