@@ -36,7 +36,7 @@ export const AnimalForm = ({
   checkFarmEarrings
 }: {
   animal?: CreateAnimalDTO
-  checkFarmEarrings: boolean
+  checkFarmEarrings?: boolean
   setEditing?: (v: boolean) => void
 }) => {
   const currentFarm = useSelector(selectFarmState)

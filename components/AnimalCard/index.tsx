@@ -1,5 +1,6 @@
 import GeneticTree from '@comps/GeneticTree'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
+import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
 import { deleteAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
@@ -208,33 +209,6 @@ export const AnimalDetails = ({
           </div>
         </div>
         <div>
-          {/* <div className="">
-            Genetica
-            <div className=" flex w-full justify-around">
-              <div className="flex flex-col justify-center text-center">
-                <span>Padre: </span>
-
-                <span>
-                  {parents?.father?.earring ? (
-                    <ModalAnimalDetails earring={parents?.father?.earring} />
-                  ) : (
-                    'sin'
-                  )}
-                </span>
-              </div>
-
-              <div className="flex flex-col justify-center text-center">
-                <span>Madre: </span>
-                <span>
-                  {parents?.mother?.earring ? (
-                    <ModalAnimalDetails earring={parents?.mother?.earring} />
-                  ) : (
-                    'sin'
-                  )}
-                </span>
-              </div>
-            </div>
-          </div> */}
           <div className="my-4 mt-8">
             <GeneticTree
               elements={{
@@ -274,6 +248,7 @@ export const AnimalDetails = ({
         </div>
       </main>
       <footer>
+        <AnimalsOptions animalsEarrings={[animal?.earring || '']} />
         <EventsSection animalEarring={animal?.earring || ''} />
       </footer>
     </div>
