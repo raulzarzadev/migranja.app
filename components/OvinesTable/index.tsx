@@ -12,6 +12,9 @@ const OvinesTable = () => {
   return (
     <>
       <div className="w-full bg-base-300 shadow-md rounded-md m-2  h-min ">
+        <h2 className="text-center text-lg font-bold mt-2">
+          Lista de borregas
+        </h2>
         <AnimalsTable
           animalsData={farmAnimals}
           //selectedRows={selectedRows}

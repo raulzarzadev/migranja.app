@@ -131,7 +131,7 @@ export const AnimalsList = ({
       <div className="grid grid-flow-row auto-rows-fr grid-cols-3 sm:grid-cols-6">
         {[...sortedSuffixByEarring, ...sortedByEarring]?.map(
           ({ earring }, i) => (
-            <div key={`${earring}-${i}`} className="m-1">
+            <div key={`${earring}-${i}`} className="m-1 truncate">
               <span className="whitespace-nowrap flex items-end">
                 <input
                   type={'checkbox'}

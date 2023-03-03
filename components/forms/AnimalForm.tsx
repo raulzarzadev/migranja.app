@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 import { AnimalState } from 'types/base/AnimalState.model'
 import { AnimalType } from 'types/base/AnimalType.model'
+import useEarringAlreadyExist from '@comps/hooks/useEarringAlreadyExist'
+
 const schema = yup
   .object()
   .shape({
@@ -30,13 +32,15 @@ const schema = yup
 
 export const AnimalForm = ({
   animal,
-  setEditing
+  setEditing,
+  checkFarmEarrings
 }: {
   animal?: CreateAnimalDTO
+  checkFarmEarrings: boolean
   setEditing?: (v: boolean) => void
 }) => {
   const currentFarm = useSelector(selectFarmState)
-
+  const { checkIfExist, ModalAlreadyExist } = useEarringAlreadyExist()
   const farmData = {
     id: currentFarm?.id,
     name: currentFarm?.name
@@ -78,8 +82,14 @@ export const AnimalForm = ({
 
   const onSubmit = (data: any) => {
     setLoading(true)
-    console.log({ data })
-    return
+
+    //* if checkFarmEarrings is true so check if this earring exist (active or inactive ) and if do, so show an alert and avoid created
+    if (checkFarmEarrings && checkIfExist(data.earring)) {
+      setError({ type: 'alreadyExist', message: '' })
+      setLoading(false)
+      return
+    }
+
     if (id) {
       updateAnimal(id, data)
         .then((res: any) => {
@@ -121,6 +131,10 @@ export const AnimalForm = ({
   // useDebugInformation('AnimalForm', { animal })
   return (
     <div>
+      <h2 className="text-xl font-bold text-center">
+        {id ? 'Editar animal' : 'Nuevo animal'}
+      </h2>
+      <>{ModalAlreadyExist}</>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex w-full justify-end">

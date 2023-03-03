@@ -128,9 +128,9 @@ export const AnimalsForm = ({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onAddItem)}>
           <header className="">
-            <h3 className="text-xl font-bold">Crear varios</h3>{' '}
+            <h3 className="text-xl font-bold text-center">Crear varios</h3>{' '}
           </header>
-          <h5 className="text-lg font-bold">Datos generales</h5>
+          {/* <h5 className="text-lg font-bold">Datos generales</h5> */}
           <InputContainer name="batch" type="text" label="Lote" />
           <InputContainer
             name="birthday"

@@ -6,7 +6,6 @@ import InventoryForm from '@comps/InventoryForm'
 import InventoryHistory from '@comps/InventoryHistory'
 import SalesList from '@comps/Sales/SalesList'
 import WeaningEvents from '@comps/WeaningEvents'
-import Batch from 'components/Batch'
 import BreedingsList from 'components/BreedingsList'
 import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
@@ -17,6 +16,7 @@ import SquareOption from 'components/SquareOption'
 import { ReactNode, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
+import AddBatch from '@comps/AddBatch'
 
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option =
@@ -266,14 +266,13 @@ const FarmMenu = (props: any) => {
           {/* ********************************+******+ +++************** ADD ONE ANIMAL */}
           {isSheepSelected && column2 === 'add' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
-              <AnimalForm />
+              <AnimalForm checkFarmEarrings />
             </div>
           )}
           {/* ********************************+******+ +++************** ADD ANIMALS */}
           {isSheepSelected && menuOptions.column2 === 'addMany' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
               <AnimalsForm
-                avoidFarmAnimals
                 animal={{
                   type: 'ovine'
                 }}
@@ -281,7 +280,9 @@ const FarmMenu = (props: any) => {
             </div>
           )}
           {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}
-          {isSheepSelected && menuOptions.column2 === 'addBatch' && <Batch />}
+          {isSheepSelected && menuOptions.column2 === 'addBatch' && (
+            <AddBatch />
+          )}
           {newSheepInventory && <InventoryForm />}
           {sheepInventory && <InventoryHistory />}
           {/* ********************************+******+ +++************** ADMIN FARM TEAM*/}

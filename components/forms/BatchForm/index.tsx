@@ -158,7 +158,7 @@ const DefineBatchForm = ({
   return (
     <div className="p-2">
       <header>
-        <div>Nuevo lote</div>
+        <h2 className="text-xl font-bold text-center">Nuevo lote</h2>
       </header>
       <main>
         <FormProvider {...methods}>
@@ -167,7 +167,7 @@ const DefineBatchForm = ({
               <InputContainer
                 type="text"
                 name="batchName"
-                label="Nombre / Titulo"
+                label="Titulo de lote"
               />
             </div>
             <div className="flex justify-center w-full my-4 flex-col items-center">
