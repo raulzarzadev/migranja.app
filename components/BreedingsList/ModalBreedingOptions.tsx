@@ -34,19 +34,30 @@ const ModalBreedingOptions = ({
   }
   const breedingAnimals = breeding.eventData.breedingBatch
   const handleDelete = async () => {
-    const res = await deleteEvent(breeding?.id)
     //* * * * * * * * * * * * * * * * * * * * * * * * * * update breeding animals state
-    for (let i = 0; i < breedingAnimals?.length; i++) {
-      const animal = breedingAnimals[i]
-      if (animal?.id)
-        await updateAnimalState(
-          animal?.id,
-          animal.pastState || 'FREE',
-          animal.state
-        )
+    try {
+      if (shouldUpdateAnimalState) {
+        console.log('updating animals state')
+        for (let i = 0; i < breedingAnimals?.length; i++) {
+          const animal = breedingAnimals[i]
+          if (animal?.id)
+            await updateAnimalState(
+              animal?.id,
+              animal.pastState || 'FREE',
+              animal.state
+            )
+        }
+      }
+      //* * * * * * * * * * * * * * * * * * * * * * * * * * delete breeding
+
+      const res = await deleteEvent(breeding?.id)
+      return console.log(res)
+    } catch (error) {
+      console.log({ error })
     }
-    return console.log(res)
   }
+
+  const [shouldUpdateAnimalState, setShouldUpdateAnimalState] = useState(true)
 
   return (
     <div>
@@ -82,6 +93,21 @@ const ModalBreedingOptions = ({
               </button>
             )}
           >
+            <div>
+              <label className="items-center flex">
+                <input
+                  onChange={(e) => {
+                    setShouldUpdateAnimalState(e.target.checked)
+                  }}
+                  className="checkbox mr-2"
+                  type={'checkbox'}
+                  checked={shouldUpdateAnimalState}
+                />
+                <span className="">
+                  ¿Modificar estado de los siguientes animales ?
+                </span>
+              </label>
+            </div>
             <div className="flex justify-evenly flex-wrap">
               {breedingAnimals.map((animal) => (
                 <div key={animal.id}>
