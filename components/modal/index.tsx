@@ -21,6 +21,15 @@ const Modal = ({
     full: 'w-full',
     half: 'w-1/2'
   }
+  useEffect(() => {
+    //* close modals when key Escape is pressed
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape' && open) {
+        handleOpen()
+      }
+    })
+  }, [handleOpen, open])
+
   return (
     <div
       className={`top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black bg-opacity-50 z-30 ${
