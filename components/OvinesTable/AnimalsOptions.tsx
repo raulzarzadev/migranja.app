@@ -99,7 +99,7 @@ const AnimalsOptions = ({
       {!!animalsEarrings.length && (
         <div className="flex  items-center justify-evenly flex-col h-full text-center w-full ">
           <span>
-            Estos cambios se aplicaran a todos los animales seleccionados
+            Estos cambios se aplicaran a todos los animales seleccionados:{' '}
             <span className="font-bold">{animalsEarrings.length || 0}</span>
           </span>
           <div className="flex w-full justify-evenly ">

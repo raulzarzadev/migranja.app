@@ -27,7 +27,7 @@ const Filters = ({
   return (
     <div>
       <span className="text-sm">Filtrar por :</span>
-      <div>
+      <div className="flex flex-wrap">
         {!!filtersSelected.length && (
           <button
             className={`btn btn-circle m-1 btn-xs btn-outline btn-error`}
