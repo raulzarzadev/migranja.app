@@ -18,7 +18,7 @@ const Modal = ({
 }) => {
   const modalId = useId()
   const sizing = {
-    full: 'w-full',
+    full: ' w-full',
     half: 'w-1/2'
   }
   useEffect(() => {

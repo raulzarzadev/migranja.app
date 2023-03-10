@@ -42,6 +42,7 @@ export const listenFarmAnimals = (
   cb: CallableFunction
 ) => AnimalsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
 
+// }
 /**
  *
  * @param animalId  is the id of the animal

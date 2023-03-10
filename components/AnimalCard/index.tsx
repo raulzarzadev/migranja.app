@@ -1,7 +1,8 @@
 import GeneticTree from '@comps/GeneticTree'
+import InputFiles, { PreviewImage } from '@comps/InputFiles'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
-import { deleteAnimal } from '@firebase/Animal/main'
+import { deleteAnimal, updateAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
 import { FemaleOptions, MaleOptions } from 'components/CONSTANTS/GENDER_OPTIONS'
 import AnimalForm from 'components/forms/AnimalForm'
@@ -19,6 +20,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
 import { AnimalState, AnimalStateType } from 'types/base/AnimalState.model'
+import { ImageType } from 'types/base/ImageType.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
@@ -81,6 +83,16 @@ export const AnimalDetails = ({
     const res = await deleteAnimal(id as string)
     console.log(res)
     return res
+  }
+  const handleSetImages = (images: string[]) => {
+    const auxImages: ImageType[] = images.map((image) => ({
+      url: image,
+      metadata: ''
+    }))
+    if (animal.id)
+      updateAnimal(animal?.id, { images: auxImages })
+        .then((res) => console.log({ res }))
+        .catch((err) => console.log({ err }))
   }
   // useDebugInformation('AnimalDetails', animal)
   return (
@@ -196,12 +208,16 @@ export const AnimalDetails = ({
           </div>
           <div className="w-1/2 flex justify-center items-center">
             <div className="w-full">
-              <figure className=" w-full aspect-video flex justify-center items-center bg-base-200 shadow-sm">
+              <figure className="w-full aspect-video flex justify-center items-center bg-base-200 shadow-sm relative">
                 {images?.[0] ? (
-                  <Image src={images[0].url} fill alt="animal-photo" />
+                  <PreviewImage image={images[0].url} />
                 ) : (
                   <>
-                    <Icon name="camera" />
+                    <InputFiles
+                      fieldName="animalImages"
+                      images={images?.map((image) => image.url)}
+                      setImages={handleSetImages}
+                    />
                   </>
                 )}
               </figure>

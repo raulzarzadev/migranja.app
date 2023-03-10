@@ -119,3 +119,21 @@ export async function googleLogin() {
 export async function logout() {
   return await signOut(auth)
 }
+
+export const uploadImage = (
+  image: Blob | Uint8Array | ArrayBuffer,
+  fieldName: string,
+  cb: ({
+    progress,
+    downloadURL
+  }: {
+    progress: number
+    downloadURL: string | null
+  }) => void
+) => {
+  usersCRUD.uploadFile(image, fieldName, (progress, downloadURL) => {
+    cb({ progress, downloadURL })
+  })
+
+  //cb(res)
+}
