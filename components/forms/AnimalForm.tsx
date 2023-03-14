@@ -301,9 +301,14 @@ export const AnimalForm = ({
                 </div>
                 <div className="w-1/2 flex justify-center items-center p-4 ">
                   <div className="w-full h-full ">
-                    <figure className=" w-full h-full flex justify-center items-center bg-base-200 shadow-sm">
+                    <figure className=" w-full h-full flex justify-center items-center bg-base-200 shadow-sm relative">
                       {images?.[0] ? (
-                        <Image src={images[0].url} fill alt="animal-photo" />
+                        <Image
+                          src={images[0].url}
+                          fill
+                          alt="animal-photo"
+                          className="object-cover"
+                        />
                       ) : (
                         <>
                           <Icon name="camera" />

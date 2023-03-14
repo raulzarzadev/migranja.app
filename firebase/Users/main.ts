@@ -137,3 +137,6 @@ export const uploadImage = (
 
   //cb(res)
 }
+export const deleteImage = ({ url }: { url: string }) => {
+  return usersCRUD.deleteFile(url)
+}

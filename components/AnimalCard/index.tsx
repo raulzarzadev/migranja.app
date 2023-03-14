@@ -1,4 +1,6 @@
 import GeneticTree from '@comps/GeneticTree'
+import useDebugInformation from '@comps/hooks/useDebugInformation'
+import ImagesDisplay from '@comps/ImagesDisplay'
 import InputFiles, { PreviewImage } from '@comps/InputFiles'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
@@ -26,7 +28,6 @@ import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 const AnimalCard = ({ animalId }: { animalId?: string }) => {
   const [editing, setEditing] = useState<boolean>(false)
   const ovines = useSelector(selectFarmOvines)
-  // useDebugInformation('AnimalCard', { animalId })
 
   const animal = ovines.find(
     ({ id, earring }) => id === animalId || earring === animalId
@@ -34,11 +35,11 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
   if (!animal)
     return (
       <>
-        {' '}
         Este animal no esta. Puede que el arete haya sido modificado o haya sido
         eliminado de la granja de forma permanente
       </>
     )
+  console.log({ animal })
   return (
     <div className="p-2 ">
       {editing ? (
@@ -94,7 +95,7 @@ export const AnimalDetails = ({
         .then((res) => console.log({ res }))
         .catch((err) => console.log({ err }))
   }
-  // useDebugInformation('AnimalDetails', animal)
+  //useDebugInformation('AnimalDetails', animal)
   return (
     <div className="">
       <div className="flex w-full justify-end ">
@@ -207,21 +208,10 @@ export const AnimalDetails = ({
             </div>
           </div>
           <div className="w-1/2 flex justify-center items-center">
-            <div className="w-full">
-              <figure className="w-full aspect-video flex justify-center items-center bg-base-200 shadow-sm relative">
-                {images?.[0] ? (
-                  <PreviewImage image={images[0].url} />
-                ) : (
-                  <>
-                    <InputFiles
-                      fieldName="animalImages"
-                      images={images?.map((image) => image.url)}
-                      setImages={handleSetImages}
-                    />
-                  </>
-                )}
-              </figure>
-            </div>
+            <ImagesDisplay
+              images={images?.map((image) => image.url) || []}
+              setImages={handleSetImages}
+            />
           </div>
         </div>
         <div>

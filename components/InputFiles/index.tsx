@@ -1,4 +1,5 @@
 import Icon from '@comps/Icon'
+import Loading from '@comps/Loading'
 import Modal from '@comps/modal'
 import ModalDelete from '@comps/modal/ModalDelete'
 import { uploadImage } from '@firebase/Users/main'
@@ -14,13 +15,12 @@ const InputFiles = ({
   images: string[]
   setImages: (images: string[]) => void
 }) => {
-  const [_images, _setImages] = useState([])
+  const [_images, _setImages] = useState<File[]>([])
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
     setOpenModal(!openModal)
   }
   const handleRemoveImageByIndex = (index: number) => {
-    console.log({ index })
     const aux = [..._images]
     aux.splice(index, 1)
     _setImages(aux)
@@ -46,18 +46,34 @@ const InputFiles = ({
         handleOpen={handleOpenModal}
         title="Subir imagenes"
       >
-        <div className="flex gap-2 p-2 flex-wrap">
+        <div className="flex gap-2 p-2 flex-wrap mb-7 ">
+          {/* {_images?.map((image, i) => (
+            <div key={i} className="w-14 aspect-square">
+              <PreviewImage key={i} image={URL.createObjectURL(image)} />
+            </div>
+          ))} */}
           {images?.map((image, i) => (
-            <PreviewImage key={i} image={image} />
+            <div key={i} className="w-14 aspect-square">
+              <PreviewImage key={i} image={image} />
+            </div>
           ))}
           {_images.map((image, i) => (
-            <UploadingAndDisplayFile
-              key={i}
-              file={image}
-              fieldName={fieldName}
-              handleRemoveImage={() => handleRemoveImageByIndex(i)}
-              setImageURL={(url: string) => setImages([...images, url])}
-            />
+            <div key={i} className="w-14 aspect-square">
+              <UploadingAndDisplayFile
+                key={i}
+                file={image}
+                fieldName={fieldName}
+                handleRemoveImage={() => handleRemoveImageByIndex(i)}
+                setImageURL={(url: string) => {
+                  setImages([...images, url])
+                  // TODO: Not workint because delete the index, and if you handle save in incorrect order it broken
+
+                  let aux = _images
+                  aux.splice(i, 1)
+                  _setImages(aux)
+                }}
+              />
+            </div>
           ))}
         </div>
         <label>
@@ -75,12 +91,13 @@ const InputFiles = ({
             onChange={(e) => {
               let auxArr = []
               const files = e.target.files
-              if (files)
+              if (files?.length) {
                 for (let i = 0; i < files?.length; i++) {
                   const file = files[i]
                   auxArr.push(file)
                 }
-              _setImages([..._images, ...auxArr])
+                _setImages([...auxArr])
+              }
             }}
           />
         </label>
@@ -100,45 +117,61 @@ const UploadingAndDisplayFile = ({
   handleRemoveImage?: (image: string) => void
   setImageURL: (url: string) => void
 }) => {
-  const [progress, setProgress] = useState(10)
+  const [progress, setProgress] = useState(0)
   const [_imageURL, _setImageURL] = useState('')
   useEffect(() => {
     if (file) {
-      uploadImage(file, fieldName, (res) => {
-        setProgress(res.progress)
-        if (res.downloadURL) {
-          setImageURL(res.downloadURL)
-          _setImageURL(res.downloadURL)
-        }
-      })
+      const objectUrl = URL.createObjectURL(file)
+      setPreview(objectUrl)
+      // uploadImage(file, fieldName, (res) => {
+      //   setProgress(res.progress)
+      //   if (res.downloadURL) {
+      //     setImageURL(res.downloadURL)
+      //     _setImageURL(res.downloadURL)
+      //   }
+      // })
     }
-  }, [fieldName, file, setImageURL])
-  console.log({ progress, _imageURL, file })
+    return URL.revokeObjectURL(file)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const handleUpload = () => {
+    setProgress(1)
+    uploadImage(file, fieldName, (res) => {
+      setProgress(res.progress)
+      if (res.downloadURL) {
+        setImageURL(res.downloadURL)
+        _setImageURL(res.downloadURL)
+      }
+    })
+  }
   const [preview, setPreview] = useState('')
-  useEffect(() => {
-    // create the preview
-    const objectUrl = URL.createObjectURL(file)
-    setPreview(objectUrl)
-
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [file])
 
   return (
-    <div className="w-20 aspect-square relative ">
-      {/* <img src={} /> */}
+    <div className="w-full h-full relative ">
       {preview && (
-        <div
-          className={`relative w-full h-full ${
-            progress < 100 ? 'opacity-70' : 'opacity-100'
-          }`}
-        >
+        <div className={`relative w-full h-full `}>
           <PreviewImage image={preview} handleRemoveImage={handleRemoveImage} />
           <progress
-            className="progress absolute bottom-0  "
+            className="progress absolute bottom-0 bg-primary "
             value={progress}
             max={100}
           />
+          <div className="flex w-full justify-center">
+            {progress > 0 ? (
+              <Loading />
+            ) : (
+              <button
+                className="btn btn-xs flex "
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleUpload()
+                }}
+                disabled={progress > 0}
+              >
+                Subir
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

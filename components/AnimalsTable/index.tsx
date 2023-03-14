@@ -24,6 +24,7 @@ import Modal from 'components/modal'
 import AnimalCard from 'components/AnimalCard'
 import AnimalsTableFilter from '@comps/Filters/AnimalsTableFilter'
 import { AnimalState } from 'types/base/AnimalState.model'
+import useDebugInformation from '@comps/hooks/useDebugInformation'
 export interface RowSelectedType {
   id?: string
   earring?: string

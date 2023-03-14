@@ -143,6 +143,25 @@ export class FirebaseCRUD {
         console.log('Uploaded a blob or file!');
       } */
   }
+  /**
+   *
+   * @param url should be a url from firebase storage
+   * @returns
+   */
+  deleteFile = async (url: string) => {
+    const desertRef = ref(this.storage, url)
+    try {
+      return await deleteObject(desertRef).then((res) => {
+        return this.formatResponse(
+          true,
+          `${this.collectionName}_IMAGE_DELETED`,
+          res
+        )
+      })
+    } catch (error) {
+      console.log({ error })
+    }
+  }
 
   /**
    * @param files an array of files to upload

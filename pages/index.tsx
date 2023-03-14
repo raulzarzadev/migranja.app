@@ -8,11 +8,13 @@ import VisitHome from '../components/VisitHome'
 const Home: NextPage = () => {
   const user = useSelector(selectAuthState)
   const router = useRouter()
+
   useEffect(() => {
     if (user) {
       router.replace('/home')
     }
   }, [router, user])
+
   return (
     <>
       <div>
