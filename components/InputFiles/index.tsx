@@ -46,7 +46,7 @@ const InputFiles = ({
       >
         <div className="flex gap-2 p-2 flex-wrap mb-7 ">
           {_images.map((image, i) => (
-            <div key={i} className="w-24 aspect-square">
+            <div key={i} className="w-36 aspect-square">
               <UploadingAndDisplayFile
                 key={image.name}
                 file={image}
@@ -58,10 +58,6 @@ const InputFiles = ({
                     (file) => file.name !== image.name
                   )
                   _setImages(newArr)
-                  // TODO: Not workint because delete the index, and if you handle save in incorrect order it broken
-                  // let aux = _images
-                  // aux.splice(i, 1)
-                  // _setImages(aux)
                 }}
               />
             </div>
@@ -118,19 +114,10 @@ const UploadingAndDisplayFile = ({
     if (file) {
       const objectUrl = URL.createObjectURL(file)
       setPreview(objectUrl)
-      // uploadImage(file, fieldName, (res) => {
-      //   setProgress(res.progress)
-      //   if (res.downloadURL) {
-      //     setImageURL(res.downloadURL)
-      //     _setImageURL(res.downloadURL)
-      //   }
-      // })
     }
     return URL.revokeObjectURL(file)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [file])
   const handleUpload = () => {
-    setProgress(1)
     uploadImage(file, fieldName, (res) => {
       setProgress(res.progress)
       if (res.downloadURL) {
@@ -152,20 +139,17 @@ const UploadingAndDisplayFile = ({
             max={100}
           />
           <div className="flex w-full justify-center">
-            {progress > 0 ? (
-              <Loading />
-            ) : (
-              <button
-                className="btn btn-xs flex "
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleUpload()
-                }}
-                disabled={progress > 0}
-              >
-                Subir
-              </button>
-            )}
+            <button
+              className="btn btn-xs flex "
+              onClick={(e) => {
+                e.preventDefault()
+                setProgress(5)
+                handleUpload()
+              }}
+              disabled={progress > 0}
+            >
+              Subir <span className="ml-1">{progress > 0 && <Loading />}</span>
+            </button>
           </div>
         </div>
       )}
@@ -212,8 +196,11 @@ export const PreviewImage = ({
             text="Eliminar esta imagen de forma permanente"
             title="Descartar imagen"
             openModalItem={(props) => (
-              <button className="absolute top-1 right-1 hover:" {...props}>
-                <Icon name="delete" size="xs" />
+              <button
+                className="absolute top-1 right-1 text-error hover:scale-125 btn btn-xs btn-ghost btn-circle"
+                {...props}
+              >
+                <Icon name="delete" size="sm" />
               </button>
             )}
           />
