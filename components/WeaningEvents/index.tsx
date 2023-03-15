@@ -1,14 +1,13 @@
-import { WEANING_STATUS_LABELS } from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
-import { IconStatus } from '@comps/IconBreedingStatus'
-import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
-import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
+import _ from 'lodash'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmEvents } from 'store/slices/farmSlice'
-import { myFormatDate } from 'utils/dates/myDateUtils'
-import { defineStatusByDate } from 'utils/defineStatusByDate'
+import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
+import WeaningByEarring from './WeaningByEarring'
+import WeaningByMoms from './WeaningByMoms'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
+  const animalsFarm = useSelector(selectFarmAnimals)
   const weaning = events
     .filter((event) => event.type === 'WEANING')
     .filter((event) => event.eventData.status !== 'DONE')
@@ -19,53 +18,48 @@ const WeaningEvents = () => {
       return 0
     })
 
+  const weaningWithMoms = weaning.map((weaning) => ({
+    ...weaning,
+    animalMother:
+      animalsFarm.find((animal) => animal.earring === weaning.eventData.earring)
+        ?.parents?.mother?.earring || ''
+  }))
+  const weaningByMoms = _.groupBy(weaningWithMoms, 'animalMother')
+  type Views = 'byEarring' | 'byMothers'
+  const [viewSelected, setViewSelected] = useState<Views>('byMothers')
   return (
     <div className="w-full p-2">
       <h2 className="text-2xl font-bold text-center">Destetes Programados</h2>
       <div>Pendientes: {weaning.length}</div>
-      <div className="">
-        <table className="table w-full table-compact">
-          <thead>
-            <tr>
-              <th>Arete</th>
-              <th>Fecha</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody className="">
-            {weaning.map((event) => (
-              <tr
-                key={event.id}
-                className="bg-base-300 rounded-md my-2 p-1 px-2"
-              >
-                <td>
-                  <ModalAnimalDetails
-                    earring={event.eventData.earring}
-                    size="sm"
-                  />
-                </td>
-                <td>{myFormatDate(event?.eventData?.date, 'dd MMM yy')}</td>
-
-                <td>
-                  <span>
-                    <IconStatus
-                      status={
-                        defineStatusByDate(event?.eventData?.date as number) ||
-                        'info'
-                      }
-                    />{' '}
-                  </span>
-                  <span>{WEANING_STATUS_LABELS[event?.eventData?.status]}</span>
-                  <ModalEditWeaning
-                    eventId={event.id || ''}
-                    animalEarring={event.eventData.earring}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="flex w-full justify-evenly my-2">
+        Destete por:
+        <button
+          className={`btn ${
+            viewSelected === 'byEarring' ? 'btn-sm btn-outline' : 'btn-md'
+          } `}
+          onClick={(e) => {
+            e.preventDefault()
+            setViewSelected('byMothers')
+          }}
+        >
+          Madres
+        </button>
+        <button
+          className={`btn ${
+            viewSelected === 'byMothers' ? 'btn-sm btn-outline' : 'btn-md'
+          } `}
+          onClick={(e) => {
+            e.preventDefault()
+            setViewSelected('byEarring')
+          }}
+        >
+          Crías
+        </button>
       </div>
+      {viewSelected === 'byEarring' && <WeaningByEarring weaning={weaning} />}
+      {viewSelected === 'byMothers' && (
+        <WeaningByMoms mothers={weaningByMoms} />
+      )}
     </div>
   )
 }
