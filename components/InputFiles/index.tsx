@@ -26,8 +26,6 @@ const InputFiles = ({
     _setImages(aux)
   }
 
-  console.log({ _images })
-
   return (
     <div>
       <button
@@ -47,47 +45,44 @@ const InputFiles = ({
         title="Subir imagenes"
       >
         <div className="flex gap-2 p-2 flex-wrap mb-7 ">
-          {/* {_images?.map((image, i) => (
-            <div key={i} className="w-14 aspect-square">
-              <PreviewImage key={i} image={URL.createObjectURL(image)} />
-            </div>
-          ))} */}
-          {images?.map((image, i) => (
-            <div key={i} className="w-14 aspect-square">
-              <PreviewImage key={i} image={image} />
-            </div>
-          ))}
           {_images.map((image, i) => (
-            <div key={i} className="w-14 aspect-square">
+            <div key={i} className="w-24 aspect-square">
               <UploadingAndDisplayFile
-                key={i}
+                key={image.name}
                 file={image}
                 fieldName={fieldName}
                 handleRemoveImage={() => handleRemoveImageByIndex(i)}
                 setImageURL={(url: string) => {
                   setImages([...images, url])
+                  const newArr = _images.filter(
+                    (file) => file.name !== image.name
+                  )
+                  _setImages(newArr)
                   // TODO: Not workint because delete the index, and if you handle save in incorrect order it broken
-
-                  let aux = _images
-                  aux.splice(i, 1)
-                  _setImages(aux)
+                  // let aux = _images
+                  // aux.splice(i, 1)
+                  // _setImages(aux)
                 }}
               />
             </div>
           ))}
         </div>
         <label>
-          <div className="border-2 border-dashed w-full h-52 rounded-lg border-black cursor-pointer hover:border-dotted flex justify-center items-center">
+          <div className="border-2 border-dashed w-full h-24 rounded-lg border-black cursor-pointer hover:border-dotted flex justify-center items-center">
             <div className="flex flex-col justify-center items-center">
               <span>Seleccionar imagenes</span>
-              <div className="divider">o</div>
-              <span>Arrastrar aquí</span>
+              {/* <div className="divider">o</div>
+              <span>Arrastrar aquí</span> */}
             </div>
           </div>
           <input
             type="file"
             multiple
+            accept="image/png, image/jpeg"
             className="hidden"
+            onBlur={(e) => {
+              console.log(e)
+            }}
             onChange={(e) => {
               let auxArr = []
               const files = e.target.files
@@ -96,7 +91,7 @@ const InputFiles = ({
                   const file = files[i]
                   auxArr.push(file)
                 }
-                _setImages([...auxArr])
+                _setImages([..._images, ...auxArr])
               }
             }}
           />

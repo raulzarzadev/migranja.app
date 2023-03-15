@@ -39,7 +39,6 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
         eliminado de la granja de forma permanente
       </>
     )
-  console.log({ animal })
   return (
     <div className="p-2 ">
       {editing ? (
