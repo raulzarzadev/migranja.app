@@ -30,6 +30,7 @@ const ModalEditWeaning = ({
       await updateAnimalState(animalId, state, animal.state)
       //* Update mother animal state
       if (animalMotherId) {
+        //* TODO: Check if have more children weaning
         await updateAnimalState(animalMotherId, 'FREE', 'SUCKLE')
       }
       //* Update event status to done
@@ -56,36 +57,62 @@ const ModalEditWeaning = ({
       >
         <div className="flex flex-col w-full justify-center items-center my-5">
           <span>
-            Destetar arete <ModalAnimalDetails earring={animalEarring} />
+            Destetar arete:{' '}
+            <ModalAnimalDetails earring={animalEarring} size="normal" />
           </span>
-          <div className="grid grid-cols-3 gap-4">
-            <button
-              className="btn btn-info mt-5 btn-outline"
-              onClick={(e) => {
-                e.preventDefault()
-                handleWeaning('FATTEN')
-              }}
-            >
-              Para engorda
-            </button>
-            <button
-              className="btn btn-info mt-5  btn-outline"
-              onClick={(e) => {
-                e.preventDefault()
-                handleWeaning('FOR_SALE')
-              }}
-            >
-              Para venta
-            </button>
-            <button
-              className="btn btn-info mt-5  btn-outline"
-              onClick={(e) => {
-                e.preventDefault()
-                handleWeaning('FOR_BELLY')
-              }}
-            >
-              Para vientre
-            </button>
+          <p>Se realizarán los siguientes movimientos:</p>
+          <ul>
+            <li className="list-disc">
+              Estado del animal Engorda/Venta/Vientre
+            </li>
+            <li className="list-disc">Estado del la madre a "Libre"</li>
+            <li className="list-disc">
+              Estado del evento "Destete" como a "Hecho"
+            </li>
+          </ul>
+          <div className="grid  sm:grid-cols-3 gap-2 sm:gap-4 text-center">
+            <div>
+              <button
+                className="btn btn-info mt-5 btn-outline "
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleWeaning('FATTEN')
+                }}
+              >
+                <span className="truncate">Para engorda</span>
+              </button>
+              <p className="whitespace-pre-wrap text-xs ">
+                * Aun no esta listo para vender. Puede ser hembra o macho
+              </p>
+            </div>
+            <div>
+              <button
+                className="btn btn-info mt-5  btn-outline"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleWeaning('FOR_SALE')
+                }}
+              >
+                Para venta
+              </button>
+              <p className="whitespace-pre-wrap text-xs ">
+                * Puede ser vendido ahora.
+              </p>
+            </div>
+            <div>
+              <button
+                className="btn btn-info mt-5  btn-outline"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleWeaning('FOR_BELLY')
+                }}
+              >
+                Para vientre
+              </button>
+              <p className="whitespace-pre-wrap text-xs ">
+                * Una hembra que formara parte del ganado principal
+              </p>
+            </div>
           </div>
         </div>
       </Modal>
