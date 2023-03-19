@@ -8,7 +8,7 @@ const WeaningByMoms = ({ mothers }: { mothers: any }) => {
   return (
     <div>
       <div>
-        <table className="table table-compact w-full">
+        <table className="table table-compact w-full ">
           <thead>
             <tr>
               <th className="text-center">Madre</th>
@@ -21,18 +21,17 @@ const WeaningByMoms = ({ mothers }: { mothers: any }) => {
                 <td className="text-center">
                   <ModalAnimalDetails earring={momEarring} size="normal" />
                 </td>
-                <td>
-                  <div className=" w-full grid grid-flow-col gap-3 justify-start">
+                <td className="">
+                  <div className=" w-full flex flex-wrap  justify-start  ">
                     {weanings?.map(
                       (weaning: {
                         eventData: { earring: null | undefined }
                       }) => (
-                        <div key={weaning.eventData.earring}>
+                        <div key={weaning.eventData.earring} className="m-1">
                           <ModalAnimalDetails
                             earring={weaning.eventData.earring || ''}
                             size="normal"
                           />
-                          {}
                         </div>
                       )
                     )}
