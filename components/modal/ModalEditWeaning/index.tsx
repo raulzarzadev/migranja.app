@@ -23,9 +23,10 @@ const ModalEditWeaning = ({
   const animal = farmAnimals.find((animal) => animal.earring === animalEarring)
   const animalId = animal?.id
   const animalMotherId = animal?.parents?.mother?.id
-
+  const [error, setError] = useState('')
   const handleWeaning = async (state: AnimalStateType) => {
-    if (animalId) {
+    if (!animalId) return setError('No animalId')
+    try {
       //* Update animal state
       await updateAnimalState(animalId, state, animal.state)
       //* Update mother animal state
@@ -36,8 +37,11 @@ const ModalEditWeaning = ({
       //* Update event status to done
       //@ts-ignore
       await updateEvent(eventId, { 'eventData.status': 'DONE' })
+    } catch (error) {
+      console.log({ error })
     }
   }
+  // console.log({ eventId })
 
   return (
     <>
@@ -57,7 +61,7 @@ const ModalEditWeaning = ({
       >
         <div className="flex flex-col w-full justify-center items-center my-5">
           <span>
-            Destetar arete:{' '}
+            Destetar arete:
             <ModalAnimalDetails earring={animalEarring} size="normal" />
           </span>
           <p>Se realizarán los siguientes movimientos:</p>
@@ -65,11 +69,16 @@ const ModalEditWeaning = ({
             <li className="list-disc">
               Estado del animal Engorda/Venta/Vientre
             </li>
-            <li className="list-disc">Estado del la madre a "Libre"</li>
+            <li className="list-disc">{`Estado del la madre a "Libre"`}</li>
             <li className="list-disc">
-              Estado del evento "Destete" como a "Hecho"
+              {`Estado del evento "Destete" como a "Hecho"`}
             </li>
           </ul>
+          {error && (
+            <div className="bg-error text-error-content p-1 text-sm rounded-md">
+              {error}
+            </div>
+          )}
           <div className="grid  sm:grid-cols-3 gap-2 sm:gap-4 text-center">
             <div>
               <button

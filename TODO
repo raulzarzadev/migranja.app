@@ -1,6 +1,6 @@
 [X] Update animal currentStatus to state in create event dropOut
 [X] Update animal currentStatus to state in sale event
 [X] Update animal state in inventory, coincidences list
-[ ] Update animal state in inventory, missing list
-[ ] Note information cleanup inventory before count
-[ ] Births data, and status of births in births by state
+[x] Update animal state in inventory, missing list
+[x] Note information cleanup inventory before count
+[x] Births data, and status of births in births by state
