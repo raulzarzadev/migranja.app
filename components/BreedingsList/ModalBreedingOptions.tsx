@@ -229,6 +229,7 @@ const AddBreedingMaleTo = ({
           </p>
 
           {/* TODO: Verificar confictos familiares */}
+
           <MalesTable
             males={[principalMale, ...otherMales]}
             showOps
@@ -283,17 +284,24 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
   }
   const handleAddEarring = ({ earring }: { earring: string }) => {
     // console.log({ earring })
-    const animal = farmAnimals.find((animal) => animal.earring === earring)
-    if (animal) {
+    try {
+      const animal = farmAnimals.find((animal) => animal.earring === earring)
+
+      //* If animal do not exist, show error
+      if (!animal) return console.log('error finding animal')
+
       setAnimalsAdded((state) => {
         return [...state, animal]
       })
+
       //*Update animal state when is added to breeding
       updateAnimalState(animal.id, 'BREEDING', animal.state)
+
       //* Update Breeding adding an animal in the batch
       addAnimalToBreedingBatchEvent(breeding.id, animal)
+    } catch (error) {
+      console.log(error)
     }
-    console.log('error finding animal')
   }
   const [animalsAdded, setAnimalsAdded] = useState<any[]>([])
   return (
