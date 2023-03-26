@@ -25,7 +25,8 @@ const AnimalsOptions = ({
     return {
       earring: animal?.earring || '',
       id: animal?.id || '',
-      name: animal?.name || ''
+      name: animal?.name || '',
+      state: animal?.state || ''
     }
   })
 
@@ -65,7 +66,7 @@ const AnimalsOptions = ({
         handleOpen={handleOpenEvent}
         open={openEvent}
       >
-        <p className="my-4 text-center">
+        <p className="my-4 text-center whitespace-pre-line">
           El siguiente evento solo afectara a los siguientes animales pre
           seleccionados:
         </p>
