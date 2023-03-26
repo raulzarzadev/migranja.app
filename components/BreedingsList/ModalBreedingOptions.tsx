@@ -288,7 +288,9 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
       setAnimalsAdded((state) => {
         return [...state, animal]
       })
-
+      //*Update animal state when is added to breeding
+      updateAnimalState(animal.id, 'BREEDING', animal.state)
+      //* Update Breeding adding an animal in the batch
       addAnimalToBreedingBatchEvent(breeding.id, animal)
     }
     console.log('error finding animal')
