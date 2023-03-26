@@ -5,8 +5,38 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalStateType } from 'types/base/AnimalState.model'
+import { AnimalType } from 'types/base/AnimalType.model'
 import Modal from '..'
 import ModalAnimalDetails from '../ModalAnimalDetails'
+
+const onWeaning = async ({
+  state,
+  animalId,
+  motherId,
+  eventId,
+  animalPastState
+}: {
+  state: AnimalStateType
+  animalId: string
+  eventId: string
+  animalPastState: AnimalType['state']
+  motherId?: string
+}) => {
+  try {
+    //* Update animal state
+    await updateAnimalState(animalId, state, animalPastState)
+    //* Update mother animal state
+    if (motherId) {
+      //* TODO: Check if have more children weaning
+      await updateAnimalState(motherId, 'FREE', 'SUCKLE')
+    }
+    //* Update event status to done
+    //@ts-ignore
+    await updateEvent(eventId, { 'eventData.status': 'DONE' })
+  } catch (error) {
+    console.log({ error })
+  }
+}
 
 const ModalEditWeaning = ({
   eventId,

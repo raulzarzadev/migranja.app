@@ -65,6 +65,11 @@ const FarmNumbers = () => {
         animals: activeFemales.filter(({ state }) => state === 'FOR_BELLY')
       },
       {
+        title: 'Libres',
+        subTitle: 'Listas para monta',
+        animals: activeFemales.filter(({ state }) => state === 'FREE')
+      },
+      {
         title: 'En monta',
         subTitle: 'Preñadas o no',
         animals: activeFemales.filter(({ state }) => state === 'BREEDING')

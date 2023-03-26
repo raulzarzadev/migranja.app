@@ -47,7 +47,7 @@ export const listenFarmAnimals = (
  *
  * @param animalId  is the id of the animal
  * @param newState is the new state,
- * @param pastState is the state of the animal before it changed, can be undefined or null
+ * @param pastState   is the  state of the animal before it changed, can be undefined or null
  * @returns a promise with the update firebase response
  */
 export const updateAnimalState = async (

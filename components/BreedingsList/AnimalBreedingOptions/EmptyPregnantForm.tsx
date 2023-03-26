@@ -31,6 +31,7 @@ const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
     try {
       // ****************************************************   create birth
       const event = await createTypedEvent<EmptyDetailsEvent>({
+        type: 'EMPTY',
         eventData: {
           ...animal.eventData,
           parents: {
@@ -51,8 +52,7 @@ const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
         farm: {
           id: currentFarm?.id || '',
           name: currentFarm?.name || ''
-        },
-        type: 'EMPTY'
+        }
       })
       setProgress(50)
 
@@ -66,6 +66,7 @@ const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
 
       //* * * * * * * * * * * * * * * * * * * * * * * * update animal state
       setProgress(80)
+      //* TODO: check if is in other breeding
       if (animal?.id) await updateAnimalState(animal?.id, 'FREE', animal.state)
 
       setProgress(100)
