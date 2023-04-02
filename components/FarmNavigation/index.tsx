@@ -23,6 +23,8 @@ const FarmNavigation = ({
   showInvitationsStatus?: boolean
 }) => {
   const user = useSelector(selectAuthState)
+  const router = useRouter()
+  const areInHome = router.pathname === '/home'
   if (farm?.id && showGo)
     return (
       <Link href={`/${farm?.id}`}>
@@ -35,6 +37,7 @@ const FarmNavigation = ({
             setEditing={setEditing}
             showInvitationsStatus={showInvitationsStatus}
             user={user}
+            showBack={!areInHome}
           />
         </div>
       </Link>
@@ -50,6 +53,7 @@ const FarmNavigation = ({
           setEditing={setEditing}
           showInvitationsStatus={showInvitationsStatus}
           user={user}
+          showBack={!areInHome}
         />
       </div>
     )
@@ -79,12 +83,14 @@ const FarmRow = ({
   farm,
   setEditing,
   showInvitationsStatus,
-  user
+  user,
+  showBack = true
 }: {
   farm: { name: string; id: string }
   setEditing?: (bool: boolean) => void
   showInvitationsStatus?: boolean
   user?: UserType | null
+  showBack?: boolean
 }) => {
   const router = useRouter()
   const atHome = router.pathname === '/'
@@ -92,18 +98,20 @@ const FarmRow = ({
     <div className=" w-full  p-2  min-h-12 mb-2 ">
       <div className=" grid grid-flow-col grid-cols-3 place-items-center items-center">
         <span className=" flex ">
-          <button
-            aria-label="go-back-button"
-            disabled={atHome}
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              router.back()
-            }}
-            className={'btn btn-sm btn-circle btn-ghost'}
-          >
-            <Icon name="left" size="sm" />
-          </button>
+          {showBack && (
+            <button
+              aria-label="go-back-button"
+              disabled={atHome}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                router.back()
+              }}
+              className={'btn btn-sm btn-circle btn-ghost'}
+            >
+              <Icon name="left" size="sm" />
+            </button>
+          )}
         </span>
         <H2>{farm.name}</H2>
         <div className="flex justify-between">

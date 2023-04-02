@@ -104,8 +104,8 @@ const InvitationStatus = ({
         <Modal
           title="Rechazar invitación"
           openComponent={(props) => (
-            <button {...props} className="btn btn-sm btn-circle btn-success">
-              <Icon name="done" />{' '}
+            <button {...props} className="btn btn-xs btn-circle btn-success ">
+              <Icon name="done" size="xs" />{' '}
             </button>
           )}
         >
@@ -244,7 +244,7 @@ const InvitationStatus = ({
   }
   return (
     <div className="flex items-center">
-      <span className="mr-2">Invitación: </span>
+      <span className="mr-2 text-xs">Invitación status: </span>
       {STATUSES?.[invitationStatus]}
     </div>
   )

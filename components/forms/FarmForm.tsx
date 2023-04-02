@@ -39,6 +39,17 @@ const FarmForm = ({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className={'flex w-full'}>
           <div className="flex flex-col justify-evenly w-full items-center ">
+            <div className="flex w-full justify-end">
+              <button
+                className="btn  btn-xs btn-ghost"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setEditing(false)
+                }}
+              >
+                <Icon name="close" />
+              </button>
+            </div>
             <InputContainer type="text" name={'name'} label="Nombre" />
 
             <div className="form-control">
@@ -65,7 +76,7 @@ const FarmForm = ({
               </label>
             </div>
             <div className="flex w-full justify-evenly">
-              <button
+              {/* <button
                 className="btn  btn-outline "
                 onClick={(e) => {
                   e.preventDefault()
@@ -73,7 +84,7 @@ const FarmForm = ({
                 }}
               >
                 Cancelar{' '}
-              </button>
+              </button> */}
               <ModalDelete
                 title="Eliminar granja"
                 text="Eliminar granja de forma permanente. Solo eliminaras los datos de la granja como nombre y equipo. No afecta a los animales, o eventos previamente creados bajo le nombre de esta granja "
