@@ -1,3 +1,4 @@
+import InfoBadge from '@comps/Badges/InfoBadge'
 import ModalDelete from '@comps/modal/ModalDelete'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { createFarm, deleteFarm, updateFarm } from '@firebase/Farm/main'
@@ -51,27 +52,37 @@ const FarmForm = ({
               </button>
             </div>
             <InputContainer type="text" name={'name'} label="Nombre" />
-
-            <div className="form-control">
+            <div></div>
+            <h4 className="w-full">Configuración</h4>
+            {/* CONFIG ZONE In this zone you should put all the options to config the farm menu */}
+            <div className="form-control input-group w-[250px]">
               <label className="label flex">
-                <span className="label-text max-w-[150px]  text-end w-full  mx-1">
+                <span className="label-text max-w-[200px]  text-end w-full  mx-1">
                   Equipo activo
+                  <InfoBadge
+                    title="Equipo activo"
+                    text="Podras agregar personas a tu equipo de trabajo, asignarles tareas y responsabilidades y mucho más. (Próximamente)"
+                  />
                 </span>
                 <input
                   {...register('haveATeam')}
                   checked={methods.watch('haveATeam')}
                   type="checkbox"
-                  className="checkbox"
+                  className="checkbox checkbox-xs "
                 />
               </label>
               <label className="label flex">
-                <span className="label-text max-w-[150px] text-end w-full mx-1">
-                  Visible
+                <span className="label-text max-w-[200px] text-end w-full mx-1">
+                  Granja pública{' '}
+                  <InfoBadge
+                    title="Granja pública"
+                    text="Esta granja sera visible para otros usuarios, podra ser encontrada por otros ususarios y podras publicar en la tienda (Próximamente)"
+                  />
                 </span>
                 <input
                   {...register('isPublic')}
                   type="checkbox"
-                  className="checkbox"
+                  className="checkbox checkbox-xs"
                 />
               </label>
             </div>
