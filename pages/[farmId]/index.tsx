@@ -9,11 +9,10 @@ import { selectFarmState, selectUserFarm } from 'store/slices/farmSlice'
 const FarmPage = () => {
   const currentFarm = useSelector(selectFarmState)
   const [editing, setEditing] = useState(false)
-  const userFarm = useSelector(selectUserFarm)
   return (
     <div className="relative">
       {editing ? (
-        <FarmForm farm={userFarm || undefined} setEditing={setEditing} />
+        <FarmForm farm={currentFarm || undefined} setEditing={setEditing} />
       ) : (
         <FarmNavigation
           farm={{ id: currentFarm?.id, name: currentFarm?.name }}
