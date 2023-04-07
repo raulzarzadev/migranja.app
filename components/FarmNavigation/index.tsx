@@ -120,14 +120,14 @@ const FarmRow = ({
           )}
           {setEditing && (
             <button
-              className="btn  btn-sm btn-ghost text-info"
+              className="btn  btn-sm btn-ghost text-gray-800"
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
                 setEditing?.(true)
               }}
             >
-              <Icon name="edit" />
+              <Icon name="settings" />
             </button>
           )}
         </div>

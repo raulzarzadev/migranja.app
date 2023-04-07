@@ -1,3 +1,4 @@
+import BackupButton from '@comps/BackupButton'
 import FarmForm from '@comps/forms/FarmForm'
 import FarmNavigation from 'components/FarmNavigation'
 import withAuth from 'components/HOCs/withAuth'
@@ -12,7 +13,10 @@ const FarmPage = () => {
   return (
     <div className="relative">
       {editing ? (
-        <FarmForm farm={currentFarm || undefined} setEditing={setEditing} />
+        <div className=" bg-base-300 p-2 rounded-md shadow-md justify-evenly mb-2">
+          <FarmForm farm={currentFarm || undefined} setEditing={setEditing} />
+          <BackupButton />
+        </div>
       ) : (
         <FarmNavigation
           farm={{ id: currentFarm?.id, name: currentFarm?.name }}

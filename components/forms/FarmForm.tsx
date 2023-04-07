@@ -4,12 +4,7 @@ import { FarmType } from '@firebase/Farm/farm.model'
 import { createFarm, deleteFarm, updateFarm } from '@firebase/Farm/main'
 import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
-import {
-  FormProvider,
-  RegisterOptions,
-  UseFormRegister,
-  useForm
-} from 'react-hook-form'
+import { FormProvider, UseFormRegister, useForm } from 'react-hook-form'
 
 const FarmForm = ({
   farm,
@@ -40,7 +35,7 @@ const FarmForm = ({
         .catch((err) => console.log(err))
   }
   return (
-    <div className="flex  w-full bg-base-300 p-2 rounded-md shadow-md justify-evenly mb-2">
+    <div className="flex w-full">
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className={'flex w-full'}>
           <div className="flex flex-col justify-evenly w-full items-center ">
