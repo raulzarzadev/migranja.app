@@ -2,10 +2,14 @@ import InfoBadge from '@comps/Badges/InfoBadge'
 import ModalDelete from '@comps/modal/ModalDelete'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { createFarm, deleteFarm, updateFarm } from '@firebase/Farm/main'
-import useDebugInformation from 'components/hooks/useDebugInformation'
 import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
-import { FormProvider, useForm } from 'react-hook-form'
+import {
+  FormProvider,
+  RegisterOptions,
+  UseFormRegister,
+  useForm
+} from 'react-hook-form'
 
 const FarmForm = ({
   farm,
@@ -56,46 +60,30 @@ const FarmForm = ({
             <h4 className="w-full max-w-sm mx-auto font-bold">Configuración</h4>
             {/* CONFIG ZONE In this zone you should put all the options to config the farm menu */}
             <div className="form-control input-group w-[250px]">
-              <label className="label flex">
-                <span className="label-text max-w-[200px]  text-end w-full  mx-1">
-                  Equipo activo
-                  <InfoBadge
-                    title="Equipo activo"
-                    text="Podras agregar personas a tu equipo de trabajo, asignarles tareas y responsabilidades y mucho más. (Próximamente)"
-                  />
-                </span>
-                <input
-                  {...register('haveATeam')}
-                  checked={methods.watch('haveATeam')}
-                  type="checkbox"
-                  className="checkbox checkbox-xs "
-                />
-              </label>
-              <label className="label flex">
-                <span className="label-text max-w-[200px] text-end w-full mx-1">
-                  Granja pública{' '}
-                  <InfoBadge
-                    title="Granja pública"
-                    text="Esta granja sera visible para otros usuarios, podra ser encontrada por otros ususarios y podras publicar en la tienda (Próximamente)"
-                  />
-                </span>
-                <input
-                  {...register('isPublic')}
-                  type="checkbox"
-                  className="checkbox checkbox-xs"
-                />
-              </label>
+              <InputContainer
+                type="checkbox"
+                name={'haveATeam'}
+                label="Equipo actívo"
+                checked={methods.watch('haveATeam')}
+                infoBadge={{
+                  title: 'Equipo actívo',
+                  text: 'POdras agregar personas a tu equipo de trabajo, asignarles tareas, responsabilidades y mucho más. (Próximamente)'
+                }}
+                className="flex justify-between"
+              />
+              <InputContainer
+                type="checkbox"
+                name={'isPublic'}
+                label="Granja pública "
+                checked={methods.watch('isPublic')}
+                infoBadge={{
+                  title: 'Granja pública',
+                  text: 'Esta granja sera visible para otros usuarios, podra ser encontrada por otros ususarios y podras publicar en la tienda (Próximamente)'
+                }}
+                className="flex justify-between "
+              />
             </div>
             <div className="flex w-full justify-evenly">
-              {/* <button
-                className="btn  btn-outline "
-                onClick={(e) => {
-                  e.preventDefault()
-                  setEditing(false)
-                }}
-              >
-                Cancelar{' '}
-              </button> */}
               <ModalDelete
                 title="Eliminar granja"
                 text="Eliminar granja de forma permanente. Solo eliminaras los datos de la granja como nombre y equipo. No afecta a los animales, o eventos previamente creados bajo le nombre de esta granja "
@@ -115,5 +103,38 @@ const FarmForm = ({
     </div>
   )
 }
+
+const CheckboxInput = ({
+  label,
+  name,
+  register,
+  checked,
+  infoBadge
+}: {
+  name: string
+  label: string
+  register: UseFormRegister<FarmType>
+  checked: boolean
+  infoBadge?: {
+    title: string
+    text: string
+  }
+}) => (
+  <label className="label flex">
+    <span className="label-text max-w-[200px]  text-end w-full  mx-1">
+      {label}
+      {infoBadge && (
+        <InfoBadge title={infoBadge?.title} text={infoBadge?.text} />
+      )}
+    </span>
+    <input
+      {...register}
+      checked={checked}
+      //checked={methods.watch('haveATeam')}
+      type="checkbox"
+      className="checkbox checkbox-xs "
+    />
+  </label>
+)
 
 export default FarmForm

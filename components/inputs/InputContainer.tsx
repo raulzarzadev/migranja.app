@@ -5,6 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import React from 'react'
 import { addDays, subDays } from 'date-fns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
+import InfoBadge, { InfoBadgeType } from '@comps/Badges/InfoBadge'
 export interface SelectOption {
   label?: string
   value?: string | number
@@ -15,7 +16,7 @@ export interface ColorizeRangeDates {
   color: string
 }
 export interface CustomInputTypes
-  extends Partial<Pick<HTMLInputElement, 'step' | 'disabled'>> {
+  extends Partial<Pick<HTMLInputElement, 'step' | 'disabled' | 'checked'>> {
   name: string
   min?: any
   max?: any
@@ -38,6 +39,8 @@ export interface CustomInputTypes
   defaultChecked?: boolean
   onClickAlreadyExist?: (earring: string) => void
   datesRangeColor?: ColorizeRangeDates[]
+  infoBadge?: InfoBadgeType
+  // checked?: boolean
 }
 
 const InputContainer = ({
@@ -52,6 +55,8 @@ const InputContainer = ({
   defaultChecked,
   onClickAlreadyExist,
   datesRangeColor,
+  infoBadge,
+  // checked,
   ...rest
 }: CustomInputTypes) => {
   return (
@@ -63,8 +68,16 @@ const InputContainer = ({
         fieldState: { isTouched, isDirty, error },
         formState: { defaultValues }
       }) => (
-        <label className={`form-control ${className ?? ''}`}>
-          {label && <span className="label-text">{label}</span>}
+        <label className={` ${className ?? ' form-control '} `}>
+          {label && (
+            <span className="label-text">
+              {label}{' '}
+              {infoBadge && (
+                <InfoBadge title={infoBadge.title} text={infoBadge.text} />
+              )}
+            </span>
+          )}
+
           {['text'].includes(type) && (
             <input
               className="input input-bordered input-sm bg-transparent"
@@ -173,13 +186,14 @@ const InputContainer = ({
             <>
               <input
                 type={'checkbox'}
-                className={`checkbox ${inputClassName}`}
+                className={`checkbox checkbox-xs ${inputClassName}`}
                 onChange={onChange}
                 onBlur={onBlur}
                 name={name}
                 ref={ref}
                 value={value}
                 defaultChecked={defaultChecked}
+                // checked={checked}
                 {...rest}
               />
             </>

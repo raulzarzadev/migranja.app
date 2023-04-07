@@ -1,7 +1,11 @@
 import Icon from '@comps/Icon'
 import { useState } from 'react'
 
-const InfoBadge = ({ title, text }: { title: string; text: string }) => {
+export interface InfoBadgeType {
+  title: string
+  text: string
+}
+const InfoBadge = ({ title, text }: InfoBadgeType) => {
   const [show, setShow] = useState(false)
   return (
     <span className="relative">
@@ -16,12 +20,12 @@ const InfoBadge = ({ title, text }: { title: string; text: string }) => {
       </button>
       {show && (
         <div className="absolute top-0 right-0 z-10 ">
-          <div className="min-h-20 aspect-video bg-base-200 p-2 text-xs shadow-md rounded-md whitespace-pre-wrap ">
+          <div className=" bg-base-200 p-2 text-xs shadow-md rounded-md  max-sm-2xl">
             <div className="flex w-full justify-end">
               <Icon name="close" size="xs" />
             </div>
             <h6 className="font-bold">{title}</h6>
-            <p>{text}</p>
+            <p className="break-words overflow-auto ">{text}</p>
           </div>
         </div>
       )}
