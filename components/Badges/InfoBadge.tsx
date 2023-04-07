@@ -8,7 +8,7 @@ export interface InfoBadgeType {
 const InfoBadge = ({ title, text }: InfoBadgeType) => {
   const [show, setShow] = useState(false)
   return (
-    <span className="relative">
+    <span className="relative bg-transparent">
       <button
         className="btn  btn-xs btn-ghost btn-circle text-info"
         onClick={(e) => {

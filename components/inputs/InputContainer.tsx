@@ -70,7 +70,7 @@ const InputContainer = ({
       }) => (
         <label className={` ${className ?? ' form-control '} `}>
           {label && (
-            <span className="label-text">
+            <span className="label-text bg-transparent">
               {label}{' '}
               {infoBadge && (
                 <InfoBadge title={infoBadge.title} text={infoBadge.text} />

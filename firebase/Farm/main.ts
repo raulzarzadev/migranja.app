@@ -34,6 +34,13 @@ export const getUserFarm = async (userId?: UserType['id']) => {
     .getItems([where('userId', '==', currentUser)])
     .then((items) => items[0] || null)
 }
+export const getUserFarms = async (userId?: UserType['id']) => {
+  const currentUser = userId || getAuth().currentUser?.uid
+  return await farmsCRUD
+    .getItems([where('userId', '==', currentUser)])
+    .then((items) => items || [])
+}
+
 /** ************** LISTEN ONE ********** */
 
 export const listenFarm = async (itemId: string, cb: CallableFunction) =>

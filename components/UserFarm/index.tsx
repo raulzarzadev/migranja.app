@@ -2,7 +2,7 @@ import FarmNavigation from 'components/FarmNavigation'
 import FarmForm from 'components/forms/FarmForm'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectUserFarm } from 'store/slices/farmSlice'
+import { selectUserFarm, selectUserFarms } from 'store/slices/farmSlice'
 
 const UserFarm = () => {
   const userFarm = useSelector(selectUserFarm)
@@ -21,6 +21,18 @@ const UserFarm = () => {
         // setEditing={setEditing}
         showGo={true}
       />
+    </div>
+  )
+}
+
+export const UserFarms = () => {
+  const userFarms = useSelector(selectUserFarms)
+
+  return (
+    <div>
+      {userFarms?.map((farm) => (
+        <FarmNavigation key={farm.id} farm={farm} showGo={true} />
+      ))}
     </div>
   )
 }

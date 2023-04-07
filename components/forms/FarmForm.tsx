@@ -13,19 +13,24 @@ const FarmForm = ({
   farm?: FarmType
   setEditing: (bool: boolean) => void
 }) => {
-  console.log({ farm })
+  // console.log({ farm })
   // useDebugInformation('FarmForm', { farm, setEditing })
-  const methods = useForm({ defaultValues: farm })
+  const defaultValues = farm || {
+    haveATeam: false,
+    isPublic: false,
+    name: 'Nueva granja'
+  }
+  const methods = useForm({ defaultValues })
   const { handleSubmit, register, setValue } = methods
   const onSubmit = (data: any) => {
     data.id
       ? updateFarm(data.id, data).then((res) => {
-          setEditing(false)
+          setEditing?.(false)
         })
       : createFarm(data).then((res) => {
           const newFormId = res?.res?.id
           setValue('id', newFormId)
-          setEditing(false)
+          setEditing?.(false)
         })
   }
   const handleDeleteFarm = (farmId: string | undefined) => {

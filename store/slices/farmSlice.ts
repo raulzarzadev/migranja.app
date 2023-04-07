@@ -13,6 +13,7 @@ export interface FarmState {
   userFarm?: FarmType | null
   animals: AnimalType[]
   events: FarmStateAnimalEvent[]
+  userFarms?: FarmType[] | null
 }
 
 // Initial state
@@ -20,7 +21,8 @@ const initialState: FarmState = {
   farm: undefined,
   userFarm: undefined,
   animals: [],
-  events: []
+  events: [],
+  userFarms: []
 }
 
 // Actual Slice
@@ -42,6 +44,9 @@ export const farmSlice = createSlice({
     },
     setUserFarm(state, action) {
       state.userFarm = action.payload
+    },
+    setUserFarms(state, action) {
+      state.userFarms = action.payload
     }
 
     // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -62,7 +67,8 @@ export const {
   setFarmOvines,
   setFarmAnimals,
   setFarmEvents,
-  setUserFarm
+  setUserFarm,
+  setUserFarms
 } = farmSlice.actions
 
 export const selectFarmState = (state: AppState) => state.farm.farm
@@ -70,5 +76,6 @@ export const selectFarmOvines = (state: AppState) => state.farm.animals
 export const selectFarmAnimals = (state: AppState) => state.farm.animals
 export const selectFarmEvents = (state: AppState) => state.farm.events
 export const selectUserFarm = (state: AppState) => state.farm.userFarm
+export const selectUserFarms = (state: AppState) => state.farm.userFarms
 
 export default farmSlice.reducer

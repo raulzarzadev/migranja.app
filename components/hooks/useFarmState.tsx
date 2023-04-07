@@ -1,6 +1,6 @@
 import { listenFarmAnimals } from '@firebase/Animal/main'
 import { listenFarmEvents } from '@firebase/Events/main'
-import { getUserFarm, listenFarm } from '@firebase/Farm/main'
+import { getUserFarm, getUserFarms, listenFarm } from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +9,8 @@ import {
   setFarmAnimals,
   setFarmEvents,
   setFarmState,
-  setUserFarm
+  setUserFarm,
+  setUserFarms
 } from 'store/slices/farmSlice'
 import useDebugInformation from './useDebugInformation'
 
@@ -22,10 +23,14 @@ const useFarmState = () => {
   } = useRouter()
 
   useEffect(() => {
-    user &&
+    if (user) {
       getUserFarm(user.id).then((res) => {
         dispatch(setUserFarm(res))
       })
+      getUserFarms(user.id).then((res) => {
+        dispatch(setUserFarms(res))
+      })
+    }
   }, [dispatch, user])
 
   useEffect(() => {
