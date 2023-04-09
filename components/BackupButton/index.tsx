@@ -1,4 +1,5 @@
 import Icon from '@comps/Icon'
+import Loading from '@comps/Loading'
 import InputContainer from '@comps/inputs/InputContainer'
 import Modal from '@comps/modal'
 import { uploadAnimalsArray } from '@firebase/Animal/main'
@@ -26,6 +27,7 @@ const BackupButton = () => {
   const [openUpload, setOpenUpload] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(false)
   const handleOpenUpload = () => {
     setOpenUpload(!openUpload)
   }
@@ -35,6 +37,7 @@ const BackupButton = () => {
     setError(false)
     setSelectedFile(file)
   }
+
   const handleUpload = () => {
     if (selectedFile) {
       console.log({ selectedFile })
@@ -45,12 +48,14 @@ const BackupButton = () => {
         const jsonString = event?.target?.result as string
         const jsonObject = JSON.parse(jsonString)
         // Utilizar el objeto JSON...
+        setLoading(true)
         uploadAnimalsArray(jsonObject, {
           deleteFarmData: true,
           newFarmData: { id: currantFarm?.id, name: currantFarm?.name },
           deleteId: true
         }).then((res) => {
           // console.log(res)
+          setLoading(false)
           if (res.ok) {
             setDone(true)
           } else {
@@ -130,19 +135,6 @@ const BackupButton = () => {
 
               {selectedFile && (
                 <div className="text-center mt-4 ">
-                  <FormProvider {...methods}>
-                    <form className="w-[240px] mx-auto">
-                      <InputContainer
-                        name="deleteFarmData"
-                        label="Reescribir datos de granja"
-                        type="checkbox"
-                        infoBadge={{
-                          title: 'Reescribir datos de granja',
-                          text: 'Se sustituiran los datos de la granja anterior de cada elementoe'
-                        }}
-                      />
-                    </form>
-                  </FormProvider>
                   <button
                     onClick={(e) => {
                       e.preventDefault()
@@ -187,16 +179,27 @@ const BackupButton = () => {
                         Archivo cargado <Icon name="done" />
                       </div>
                     ) : (
-                      <button
-                        disabled={error}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handleUpload()
-                        }}
-                        className="btn btn-primary mx-auto"
-                      >
-                        Subir
-                      </button>
+                      <>
+                        {loading ? (
+                          <button disabled className="btn ">
+                            Subiendo{' '}
+                            <span className="ml-2">
+                              <Loading />
+                            </span>
+                          </button>
+                        ) : (
+                          <button
+                            disabled={error}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              handleUpload()
+                            }}
+                            className="btn  mx-auto"
+                          >
+                            Subir
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
