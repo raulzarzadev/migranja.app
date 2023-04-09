@@ -41,9 +41,9 @@ const AddFarm = () => {
       >
         <div>
           <FarmForm
-            setEditing={function (bool: boolean): void {
-              throw new Error('Function not implemented.')
-            }}
+          // setEditing={function (bool: boolean): void {
+          //   throw new Error('Function not implemented.')
+          // }}
           />
         </div>
       </Modal>

@@ -68,7 +68,12 @@ const InputContainer = ({
         fieldState: { isTouched, isDirty, error },
         formState: { defaultValues }
       }) => (
-        <label className={` ${className ?? ' form-control '} `}>
+        <label
+          className={`
+           ${type === 'checkbox' ? ' flex justify-between ' : 'form-control'} 
+           ${className ?? ' '} 
+           `}
+        >
           {label && (
             <span className="label-text bg-transparent">
               {label}{' '}

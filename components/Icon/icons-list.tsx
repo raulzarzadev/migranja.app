@@ -29,6 +29,7 @@ import {
   SlClock,
   SlClose,
   SlCloudDownload,
+  SlCloudUpload,
   SlCreditCard,
   SlEvent,
   SlExclamation,
@@ -63,6 +64,7 @@ import { IoSaveOutline } from 'react-icons/io5'
 import { HiArrowSmDown, HiArrowSmUp } from 'react-icons/hi'
 
 const ICON_LIST = {
+  upload: SlCloudUpload,
   download: SlCloudDownload,
   arrowDown: HiArrowSmDown,
   arrowUp: HiArrowSmUp,

@@ -11,7 +11,7 @@ const FarmForm = ({
   setEditing
 }: {
   farm?: FarmType
-  setEditing: (bool: boolean) => void
+  setEditing?: (bool: boolean) => void
 }) => {
   // console.log({ farm })
   // useDebugInformation('FarmForm', { farm, setEditing })
@@ -22,17 +22,25 @@ const FarmForm = ({
   }
   const methods = useForm({ defaultValues })
   const { handleSubmit, register, setValue } = methods
-  const onSubmit = (data: any) => {
-    data.id
-      ? updateFarm(data.id, data).then((res) => {
-          setEditing?.(false)
-        })
-      : createFarm(data).then((res) => {
-          const newFormId = res?.res?.id
-          setValue('id', newFormId)
-          setEditing?.(false)
-        })
+  const onSubmit = async (data: any) => {
+    try {
+      const res = data.id
+        ? await updateFarm(data.id, data).then((res) => {
+            setEditing?.(false)
+            return res
+          })
+        : await createFarm(data).then((res) => {
+            const newFormId = res?.res?.id
+            setValue('id', newFormId)
+            setEditing?.(false)
+            return res
+          })
+      console.log({ res })
+    } catch (error) {
+      console.error(error)
+    }
   }
+
   const handleDeleteFarm = (farmId: string | undefined) => {
     if (farmId)
       return deleteFarm(farmId)
@@ -49,7 +57,7 @@ const FarmForm = ({
                 className="btn  btn-xs btn-ghost"
                 onClick={(e) => {
                   e.preventDefault()
-                  setEditing(false)
+                  setEditing?.(false)
                 }}
               >
                 <Icon name="close" />

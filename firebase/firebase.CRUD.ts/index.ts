@@ -22,7 +22,8 @@ import {
   setDoc,
   Timestamp,
   updateDoc,
-  where
+  where,
+  writeBatch
 } from 'firebase/firestore'
 import { Dates } from 'firebase-dates-util'
 import { es } from 'date-fns/locale'
@@ -44,53 +45,6 @@ export class FirebaseCRUD {
     this.storage = firebaseStorage
     this.dateTarget = dateTarget
   }
-
-  // constructor(
-  //   private readonly collectionName: string = '',
-  //   private readonly db: any,
-  //   private readonly storage: any
-  // ) {
-  //   this.db = db
-  //   this.storage = storage
-  // }
-
-  // -------------------------------------------------------------> CRUD-File
-  // deleteFile = async ({ url }: { url: string }) => {
-  //   const desertRef = ref(this.storage, url)
-  //   return await deleteObject(desertRef).then(() => {
-  //     // File deleted successfully
-  //     return { ok: true, url }
-  //   })
-  //   // .catch((error) => {
-  //   //   console.error(error);
-  //   //   return { ok:false, url}
-  //   //   // Uh-oh, an error occurred!
-  //   // });
-  // }
-
-  // static uploadFileAsync = async ({
-  //   file,
-  //   fieldName = ''
-  // }: UploadFileAsync) => {
-  //   const uuid = uidGenerator()
-  //   const imageRef = storageRef(`${fieldName}/${uuid}`)
-  //   // console.log('uploading')
-  //   const uploadTask = await uploadBytes(imageRef, file).then(async (res) => {
-  //     // console.log('uploaded')
-  //     const url = await getDownloadURL(res.ref)
-  //     const { bucket, contentType, fullPath, size } = res.metadata
-  //     return {
-  //       url,
-  //       metadata: {
-  //         bucket,
-  //         contentType,
-  //         fullPath,
-  //         size
-  //       }
-  //     }
-  //   })
-  //   return uploadTask
-  // }
 
   /**
    *
@@ -143,6 +97,7 @@ export class FirebaseCRUD {
         console.log('Uploaded a blob or file!');
       } */
   }
+
   /**
    *
    * @param url should be a url from firebase storage
@@ -163,14 +118,33 @@ export class FirebaseCRUD {
     }
   }
 
-  /**
-   * @param files an array of files to upload
-   */
-  // static async uploadFiles(files: any[], cb) {
-  //   console.log('empieza a subir imagenes ', { files })
-  // }
+  uploadJSON = async ({ json }: { json: any[] }) => {
+    try {
+      //* TODO: should delete id?
+      const batch = writeBatch(this.db)
+      const data = json
+
+      const promises = data.map(async (document) => {
+        const docRef = await addDoc(
+          collection(this.db, this.collectionName),
+          document
+        )
+        return batch.set(docRef, { id: docRef.id, ...document })
+      })
+      await Promise.all(promises)
+      await batch.commit()
+      return this.formatResponse(true, 'JSON_UPLOADED', {})
+    } catch (error) {
+      return this.formatResponse(false, 'JSON_UPLOADED_ERROR', error)
+    }
+  }
 
   // -------------------------------------------------------------> CRUD-Items
+  /**
+   *
+   * @param item object to create
+   * @returns promise add doc
+   */
   async createItem(item: object) {
     const currentUser = getAuth().currentUser
 
@@ -227,11 +201,11 @@ export class FirebaseCRUD {
       .catch((err) => console.error(err))
   }
 
+  /**
+   * get a single document from the collection
+   * @param itemId the id of the document to get
+   */
   async getItem(itemId: string) {
-    /**
-     * get a single document from the collection
-     * @param itemId the id of the document to get
-     */
     const ref = doc(this.db, this.collectionName, itemId)
     const docSnap = await getDoc(ref)
     // FirebaseCRUD.showDataFrom(docSnap, this.collectionName);
@@ -239,11 +213,11 @@ export class FirebaseCRUD {
     return this.normalizeItem(docSnap)
   }
 
+  /**
+   * * get all documents in a collection implementing filters
+   * @param filters: where(itemField,'==','value')
+   */
   async getItems(filters: any[]) {
-    /**
-     * * get all documents in a collection implementing filters
-     * @param filters: where(itemField,'==','value')
-     */
     this.validateFilters(filters, this.collectionName)
     const q: Query = query(collection(this.db, this.collectionName), ...filters)
 
@@ -281,11 +255,11 @@ export class FirebaseCRUD {
       .catch((err) => console.error(err))
   }
 
+  /**
+   * * get all documents in a collection implementing filters
+   * @param filters: where(itemField,'==','value')
+   */
   async getUserItems(filters: any[]) {
-    /**
-     * * get all documents in a collection implementing filters
-     * @param filters: where(itemField,'==','value')
-     */
     const userId = getAuth().currentUser?.uid
     this.validateFilters(
       [...filters, where('userId', '==', userId)],
@@ -313,12 +287,11 @@ export class FirebaseCRUD {
     })
   }
 
+  /**
+   * listen all documents in a collection implementing filters
+   * @param filters[]: where(itemField,'==','value')
+   */
   async listenItems(filters: any, cb: CallableFunction) {
-    /**
-     * listen all documents in a collection implementing filters
-     * @param filters[]: where(itemField,'==','value')
-     */
-
     this.validateFilters(filters, this.collectionName)
 
     const q = query(collection(this.db, this.collectionName), ...filters)
@@ -411,7 +384,9 @@ export class FirebaseCRUD {
   }
 
   formatResponse = (ok: boolean, type: string, res: any) => {
-    if (!ok) throw new Error(type)
+    if (!ok) {
+      console.error(type, { type, res })
+    }
     const formattedType = type.toUpperCase()
     return { type: formattedType, ok, res }
   }
@@ -446,6 +421,7 @@ export class FirebaseCRUD {
       return 'NaD'
     }
   }
+
   dateToFirebase(date: string): Timestamp | null {
     const dateFormatted = this.transformAnyToDate(date)
     if (!dateFormatted) return null

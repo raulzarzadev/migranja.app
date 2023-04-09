@@ -21,7 +21,6 @@ const ImagesDisplay = ({
     const res = await deleteImage({ url: image })
     console.log({ res })
   }
-  console.log({ images })
   return (
     <div className="w-full">
       <div className="grid grid-flow-col w-min max-w-full overflow-x-auto">

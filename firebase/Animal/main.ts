@@ -86,3 +86,55 @@ export const getFarmMaleOvines = async (farmId: string) =>
     where('type', '==', 'ovine'),
     where('gender', '==', 'male')
   ])
+
+type DeleteFarmData = true | false
+type UploadAnimalsArrayOptions = {
+  deleteFarmData?: boolean
+  deleteId?: boolean
+  newFarmData?: DeleteFarmData extends true
+    ? AnimalType['farm']
+    : AnimalType['farm'] | undefined
+}
+
+/**
+ *
+ * @param animals an array of animals
+ * @param ops configuration of de upload functions
+ * @returns
+ */
+export const uploadAnimalsArray = async (
+  animals: AnimalType[],
+  ops?: UploadAnimalsArrayOptions
+) => {
+  let data: Partial<AnimalType>[] = animals
+
+  //* Delete original farm data in each element
+  if (ops?.deleteFarmData) {
+    data = [...deleteProperty(data, 'farm')]
+  }
+  //* Delete id property in each element if is true you should indicate the new farm data
+  if (ops?.deleteId) {
+    data = [
+      ...deleteProperty(data, 'id').map((animal) => ({
+        ...animal,
+        farm: ops.newFarmData
+      }))
+    ]
+  }
+  //* Add recovered animal property
+  data = [
+    ...data.map((animal) => ({
+      ...animal,
+      recoveredData: { recoveredAt: new Date() }
+    }))
+  ]
+
+  return await AnimalsCRUD.uploadJSON({ json: data })
+}
+
+function deleteProperty<T extends Record<string, any>, K extends keyof T>(
+  array: T[],
+  property: K
+): Omit<T, K>[] {
+  return array.map(({ [property]: prop, ...rest }) => rest)
+}
