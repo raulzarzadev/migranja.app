@@ -65,126 +65,147 @@ const BackupButton = () => {
   const handleOpenUploadModal = () => {
     setOpenUploadModal(!openUploadModal)
   }
+  const [openBackup, setOpenBackup] = useState(false)
+  const handleOpenBackup = () => {
+    setOpenBackup(!openBackup)
+  }
 
   const methods = useForm()
   return (
-    <div className="flex flex-col sm:flex-row w-full justify-center">
-      <button
-        className="btn btn-outline m-2"
-        onClick={(e) => {
-          e.preventDefault()
-          generateJsonFile({ data: farmAnimals, fieldName: 'animales' })
-        }}
-      >
-        Respaldo de animales (.json)
-        <span className="ml-2">
-          <Icon name="download" />
-        </span>
-      </button>
-      <button
-        className="btn btn-outline m-2"
-        onClick={(e) => {
-          e.preventDefault()
-          handleOpenUpload()
-        }}
-      >
-        Restaurar granja (.json){' '}
-        <span className="ml-2">
-          <Icon name="upload" />
-        </span>
-      </button>
-      <Modal
-        open={openUpload}
-        handleOpen={handleOpenUpload}
-        title="Restaurar granja"
-      >
-        <div>Deberas seleccionar un archivo .json debidamente formateado</div>
-        <div>
-          <FileInput
-            onChange={(e) => {
-              const file = e.target.files?.[0] || null
-              handleFileChange(file)
+    <>
+      <div className="my-4">
+        <button
+          className="btn btn-outline w-full  "
+          onClick={(e) => {
+            e.preventDefault()
+            handleOpenBackup()
+          }}
+        >
+          Respaldos
+        </button>
+      </div>
+      <Modal open={openBackup} handleOpen={handleOpenBackup} title="Respaldos">
+        <div className="flex flex-col sm:flex-row w-full justify-center">
+          <button
+            className="btn btn-outline m-2"
+            onClick={(e) => {
+              e.preventDefault()
+              generateJsonFile({ data: farmAnimals, fieldName: 'animales' })
             }}
-            fileName={selectedFile?.name || ''}
-            label="Selecciona archivo de animales"
-          />
-
-          {selectedFile && (
-            <div className="text-center mt-4 ">
-              <FormProvider {...methods}>
-                <form className="w-[240px] mx-auto">
-                  <InputContainer
-                    name="deleteFarmData"
-                    label="Reescribir datos de granja"
-                    type="checkbox"
-                    infoBadge={{
-                      title: 'Reescribir datos de granja',
-                      text: 'Se sustituiran los datos de la granja anterior de cada elementoe'
-                    }}
-                  />
-                </form>
-              </FormProvider>
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleOpenUploadModal()
-                }}
-                className="btn btn-md "
-              >
-                Subir
-              </button>
-            </div>
-          )}
+          >
+            Respaldo de animales (.json)
+            <span className="ml-2">
+              <Icon name="download" />
+            </span>
+          </button>
+          <button
+            className="btn btn-outline m-2"
+            onClick={(e) => {
+              e.preventDefault()
+              handleOpenUpload()
+            }}
+          >
+            Restaurar granja (.json){' '}
+            <span className="ml-2">
+              <Icon name="upload" />
+            </span>
+          </button>
           <Modal
-            open={openUploadModal}
-            handleOpen={handleOpenUploadModal}
-            title="Subir archivo"
+            open={openUpload}
+            handleOpen={handleOpenUpload}
+            title="Restaurar granja"
           >
             <div>
-              <h5 className="text-error font-bold">Importante</h5>
-              <p className=" border-red-500 border-2 p-2 whitespace-pre-line">
-                {`Antes de agregar los nuevos datos de animales, se verificará que el archivo tenga el formato correcto. 
+              Deberas seleccionar un archivo .json debidamente formateado
+            </div>
+            <div>
+              <FileInput
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null
+                  handleFileChange(file)
+                }}
+                fileName={selectedFile?.name || ''}
+                label="Selecciona archivo de animales"
+              />
 
-                Si ya existe un animal con el mismo identificador, se actualizarán sus datos con los nuevos.`}
-              </p>
-              <p className="text-center my-2">
-                ¿Deseas subir este archivo de animales?
-              </p>
-              <div className="text-center mt-4">
-                {error && (
-                  <div className="border border-error">
-                    <div className="flex w-full justify-center text-error">
-                      <Icon name="baned" />
-                    </div>
-                    <p className="whitespace-pre-line">
-                      {`Ocurrio un error.
-                      Cambia el archivo o recarga la página e
-                      intentalo de nuevo`}
-                    </p>
-                  </div>
-                )}
-                {done ? (
-                  <div className="flex justify-center text-success">
-                    Archivo cargado <Icon name="done" />
-                  </div>
-                ) : (
+              {selectedFile && (
+                <div className="text-center mt-4 ">
+                  <FormProvider {...methods}>
+                    <form className="w-[240px] mx-auto">
+                      <InputContainer
+                        name="deleteFarmData"
+                        label="Reescribir datos de granja"
+                        type="checkbox"
+                        infoBadge={{
+                          title: 'Reescribir datos de granja',
+                          text: 'Se sustituiran los datos de la granja anterior de cada elementoe'
+                        }}
+                      />
+                    </form>
+                  </FormProvider>
                   <button
-                    disabled={error}
                     onClick={(e) => {
                       e.preventDefault()
-                      handleUpload()
+                      handleOpenUploadModal()
                     }}
-                    className="btn btn-primary mx-auto"
+                    className="btn btn-md "
                   >
                     Subir
                   </button>
-                )}
-              </div>
+                </div>
+              )}
+              <Modal
+                open={openUploadModal}
+                handleOpen={handleOpenUploadModal}
+                title="Subir archivo"
+              >
+                <div>
+                  <h5 className="text-error font-bold">Importante</h5>
+                  <p className=" border-red-500 border-2 p-2 whitespace-pre-line">
+                    {`Antes de agregar los nuevos datos de animales, se verificará que el archivo tenga el formato correcto. 
+
+                Si ya existe un animal con el mismo identificador, se actualizarán sus datos con los nuevos.`}
+                  </p>
+                  <p className="text-center my-2">
+                    ¿Deseas subir este archivo de animales?
+                  </p>
+                  <div className="text-center mt-4">
+                    {error && (
+                      <div className="border border-error">
+                        <div className="flex w-full justify-center text-error">
+                          <Icon name="baned" />
+                        </div>
+                        <p className="whitespace-pre-line">
+                          {`Ocurrio un error.
+                      Cambia el archivo o recarga la página e
+                      intentalo de nuevo`}
+                        </p>
+                      </div>
+                    )}
+                    {done ? (
+                      <div className="flex justify-center text-success">
+                        Archivo cargado <Icon name="done" />
+                      </div>
+                    ) : (
+                      <button
+                        disabled={error}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleUpload()
+                        }}
+                        className="btn btn-primary mx-auto"
+                      >
+                        Subir
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </Modal>
             </div>
           </Modal>
         </div>
       </Modal>
-    </div>
+    </>
   )
 }
 
@@ -210,6 +231,7 @@ function FileInput({
           Seleccionar archivo
         </label>
         <input
+          accept=".json"
           id="file-input"
           type="file"
           name="file"

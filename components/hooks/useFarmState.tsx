@@ -33,9 +33,6 @@ const useFarmState = () => {
         dispatch(setUserFarm(res))
       })
       listenUserFarms((res: any[]) => dispatch(setUserFarms(res)))
-      // getUserFarms(user.id).then((res) => {
-      //   dispatch(setUserFarms(res))
-      // })
     }
   }, [dispatch, user])
 
