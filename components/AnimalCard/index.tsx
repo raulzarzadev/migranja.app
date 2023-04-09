@@ -94,7 +94,7 @@ export const AnimalDetails = ({
         .then((res) => console.log({ res }))
         .catch((err) => console.log({ err }))
   }
-  console.log({ animal })
+
   //useDebugInformation('AnimalDetails', animal)
   return (
     <div className="">

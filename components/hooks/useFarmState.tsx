@@ -1,6 +1,11 @@
 import { listenFarmAnimals } from '@firebase/Animal/main'
 import { listenFarmEvents } from '@firebase/Events/main'
-import { getUserFarm, getUserFarms, listenFarm } from '@firebase/Farm/main'
+import {
+  getUserFarm,
+  getUserFarms,
+  listenFarm,
+  listenUserFarms
+} from '@firebase/Farm/main'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,9 +32,10 @@ const useFarmState = () => {
       getUserFarm(user.id).then((res) => {
         dispatch(setUserFarm(res))
       })
-      getUserFarms(user.id).then((res) => {
-        dispatch(setUserFarms(res))
-      })
+      listenUserFarms((res: any[]) => dispatch(setUserFarms(res)))
+      // getUserFarms(user.id).then((res) => {
+      //   dispatch(setUserFarms(res))
+      // })
     }
   }, [dispatch, user])
 

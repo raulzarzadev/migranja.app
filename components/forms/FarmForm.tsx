@@ -1,9 +1,12 @@
 import InfoBadge from '@comps/Badges/InfoBadge'
+import Modal from '@comps/modal'
 import ModalDelete from '@comps/modal/ModalDelete'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { createFarm, deleteFarm, updateFarm } from '@firebase/Farm/main'
 import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { FormProvider, UseFormRegister, useForm } from 'react-hook-form'
 
 const FarmForm = ({
@@ -15,6 +18,9 @@ const FarmForm = ({
 }) => {
   // console.log({ farm })
   // useDebugInformation('FarmForm', { farm, setEditing })
+  const [done, setDone] = useState(false)
+  const [error, setError] = useState(false)
+  const router = useRouter()
   const defaultValues = farm || {
     haveATeam: false,
     isPublic: false,
@@ -35,8 +41,11 @@ const FarmForm = ({
             setEditing?.(false)
             return res
           })
-      console.log({ res })
+
+      // console.log({ res })
+      setDone(true)
     } catch (error) {
+      setError(true)
       console.error(error)
     }
   }
@@ -47,22 +56,15 @@ const FarmForm = ({
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
   }
+  const [openDelete, setOpenDelete] = useState(false)
+  const handleOpenDelete = () => {
+    setOpenDelete(!openDelete)
+  }
   return (
     <div className="flex w-full">
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className={'flex w-full'}>
           <div className="flex flex-col justify-evenly w-full items-center ">
-            <div className="flex w-full justify-end">
-              <button
-                className="btn  btn-xs btn-ghost"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setEditing?.(false)
-                }}
-              >
-                <Icon name="close" />
-              </button>
-            </div>
             <InputContainer type="text" name={'name'} label="Nombre" />
             <div></div>
             <h4 className="w-full max-w-sm mx-auto font-bold">Configuración</h4>
@@ -92,18 +94,61 @@ const FarmForm = ({
               />
             </div>
             <div className="flex w-full justify-evenly">
-              <ModalDelete
+              <button
+                className="btn btn-error btn-outline
+              "
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleOpenDelete()
+                }}
+              >
+                Eliminar
+              </button>
+              <Modal
+                open={openDelete}
+                handleOpen={handleOpenDelete}
+                title={`Eliminar granja`}
+              >
+                <p className="text-center my-2">{`Eliminar esta granja de forma permanente. `}</p>
+                <p className="text-center font-bold"> {farm?.name}</p>
+                <div className="flex w-full justify-center mt-2">
+                  <ModalDelete
+                    title="Eliminar granja"
+                    text={`Esta acción no es reversible, eliminaras esta granja`}
+                    handleDelete={() => {
+                      handleDeleteFarm(farm?.id)?.then((res) => {
+                        setOpenDelete(false)
+                        router.replace('/home')
+                      })
+                    }}
+                    buttonLabel={'Eliminar'}
+                  />
+                </div>
+              </Modal>
+              {/* <ModalDelete
                 title="Eliminar granja"
-                text="Eliminar granja de forma permanente. Solo eliminaras los datos de la granja como nombre y equipo. No afecta a los animales, o eventos previamente creados bajo le nombre de esta granja "
+                text={`Eliminar granja de forma permanente. Solo eliminaras los datos de la granja como nombre y equipo.
+                 No afecta a los animales o eventos previamente creados bajo le nombre de esta granja `}
                 handleDelete={() => handleDeleteFarm(farm?.id)}
                 buttonLabel={'Eliminar'}
-              />
-              <button className="btn  btn-outline btn-info">
-                Guardar{' '}
-                <span className="ml-2">
-                  <Icon name="save" size="sm" />
-                </span>
-              </button>
+              /> */}
+              <div className="flex items-center">
+                {error && (
+                  <span>
+                    Hubo un error, recarga la página e intentalo de nuevo
+                  </span>
+                )}
+                {done ? (
+                  <span>Granja guardada</span>
+                ) : (
+                  <button className="btn  btn-outline btn-info">
+                    Guardar
+                    <span className="ml-2">
+                      <Icon name="save" size="sm" />
+                    </span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </form>

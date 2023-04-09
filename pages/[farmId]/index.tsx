@@ -1,4 +1,5 @@
 import BackupButton from '@comps/BackupButton'
+import Icon from '@comps/Icon'
 import FarmForm from '@comps/forms/FarmForm'
 import FarmNavigation from 'components/FarmNavigation'
 import withAuth from 'components/HOCs/withAuth'
@@ -14,6 +15,17 @@ const FarmPage = () => {
     <div className="relative">
       {editing ? (
         <div className=" bg-base-300 p-2 rounded-md shadow-md justify-evenly mb-2">
+          <div className="flex w-full justify-end">
+            <button
+              className="btn  btn-xs btn-ghost"
+              onClick={(e) => {
+                e.preventDefault()
+                setEditing?.(false)
+              }}
+            >
+              <Icon name="close" />
+            </button>
+          </div>
           <FarmForm farm={currentFarm || undefined} setEditing={setEditing} />
           <BackupButton />
         </div>

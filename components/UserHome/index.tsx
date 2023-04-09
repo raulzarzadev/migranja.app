@@ -10,7 +10,7 @@ const UserHome = () => {
   return (
     <>
       <H2>
-        Mis granja <AddFarm />
+        Mis granjas <AddFarm />
       </H2>
       {/* <UserFarm /> */}
       <UserFarms />
