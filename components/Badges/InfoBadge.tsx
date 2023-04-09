@@ -19,13 +19,13 @@ const InfoBadge = ({ title, text }: InfoBadgeType) => {
         <Icon name="info" size="xs" />
       </button>
       {show && (
-        <div className="absolute top-0 right-0 z-10 ">
-          <div className=" bg-base-200 p-2 text-xs shadow-md rounded-md  max-sm-2xl">
+        <div className="absolute top-0 right-0 z-10  ">
+          <div className=" bg-base-200 p-2 text-xs  shadow-md rounded-md min-w-[200px] ">
             <div className="flex w-full justify-end">
               <Icon name="close" size="xs" />
             </div>
             <h6 className="font-bold">{title}</h6>
-            <p className="break-words overflow-auto ">{text}</p>
+            <p className="  ">{text}</p>
           </div>
         </div>
       )}

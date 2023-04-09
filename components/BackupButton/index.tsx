@@ -112,7 +112,7 @@ const BackupButton = () => {
           {selectedFile && (
             <div className="text-center mt-4 ">
               <FormProvider {...methods}>
-                <form>
+                <form className="w-[240px] mx-auto">
                   <InputContainer
                     name="deleteFarmData"
                     label="Reescribir datos de granja"
@@ -202,11 +202,11 @@ function FileInput({
       <label htmlFor="file-input" className="block  font-bold mb-2">
         {label}:
       </label>
-      <div className="flex items-center justify-between border border-base-content py-2 px-4 w-full">
-        <span className="text-gray-600">
+      <div className="flex items-center justify-between flex-col sm:flex-row border border-base-content py-2 px-4 w-full">
+        <span className="text-gray-600  ">
           {fileName || 'Ningún archivo seleccionado'}
         </span>
-        <label htmlFor="file-input" className="btn btn-sm ">
+        <label htmlFor="file-input" className="btn btn-sm">
           Seleccionar archivo
         </label>
         <input

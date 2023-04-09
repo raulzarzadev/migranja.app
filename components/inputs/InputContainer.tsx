@@ -70,7 +70,11 @@ const InputContainer = ({
       }) => (
         <label
           className={`
-           ${type === 'checkbox' ? ' flex justify-between ' : 'form-control'} 
+           ${
+             type === 'checkbox'
+               ? ' flex justify-between items-center'
+               : 'form-control'
+           } 
            ${className ?? ' '} 
            `}
         >
