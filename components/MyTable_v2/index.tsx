@@ -2,11 +2,18 @@ import * as React from 'react'
 
 import {
   ColumnDef,
+  FilterFn,
+  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
+import IndeterminateCheckbox from './IndeterminableCheckbox'
+import DebouncedInput from '@comps/inputs/DebouncedInput'
+import { rankItem } from '@tanstack/match-sorter-utils'
 
 type Person = {
   firstName: string
@@ -27,115 +34,103 @@ interface Image {
   description: string
 }
 
-const defaultData: Person[] = [
-  {
-    firstName: 'tanner',
-    lastName: 'linsley',
-    age: 24,
-    visits: 100,
-    status: 'In Relationship',
-    progress: 50,
-    weight: {
-      atBirth: 3,
-      atWeaning: 12,
-      at6Months: 24
-    }
-  },
-  {
-    firstName: 'tandy',
-    lastName: 'miller',
-    age: 40,
-    visits: 40,
-    status: 'Single',
-    progress: 80,
-    images: [{ url: 'http://localhost/image', description: 'imagen de prueba' }]
-  },
-  {
-    firstName: 'joe',
-    lastName: 'dirte',
-    age: 45,
-    visits: 20,
-    status: 'Complicated',
-    progress: 10
-  }
-]
-
 const columnHelper = createColumnHelper<Person>()
 
-const columns = [
-  columnHelper.group({
-    id: 'hello',
-    header: () => <span>Hello</span>,
-    // footer: props => props.column.id,
-    columns: [
-      columnHelper.accessor('firstName', {
-        cell: (info) => info.getValue(),
-        footer: (props) => props.column.id
-      }),
-      columnHelper.accessor((row) => row.lastName, {
-        id: 'lastName',
-        cell: (info) => info.getValue(),
-        header: () => <span>Last Name</span>,
-        footer: (props) => props.column.id
-      })
-    ]
-  }),
-  columnHelper.group({
-    header: 'Info',
-    footer: (props) => props.column.id,
-    columns: [
-      columnHelper.accessor('age', {
-        header: () => 'Age',
-        footer: (props) => props.column.id
-      }),
-      columnHelper.group({
-        header: 'More Info',
-        columns: [
-          columnHelper.accessor('visits', {
-            header: () => <span>Visits</span>,
-            footer: (props) => props.column.id
-          }),
-          columnHelper.accessor('status', {
-            header: 'Status',
-            footer: (props) => props.column.id
-          }),
-          columnHelper.accessor('progress', {
-            header: 'Profile Progress',
-            footer: (props) => props.column.id
-          })
-        ]
-      })
-    ]
+interface HeaderType {
+  label: string
+  format?: (props: any) => React.ReactNode
+}
+function MyTable<T>({
+  data = [],
+  headers = {},
+  showGlobalFilter,
+  showSelectRow,
+  onRowClick,
+  hiddenCols
+}: {
+  data: T[]
+  headers?: Record<string, HeaderType>
+  showGlobalFilter?: boolean
+  showSelectRow?: boolean
+  onRowClick?: (row: string | number) => void
+  hiddenCols: string[]
+}) {
+  const { columns } = getColumnsFromData(data, {
+    includeAction: showSelectRow,
+    headers,
+    hiddenCols
   })
-]
 
-function MyTable<T>({ data = [] }: { data: T[] }) {
-  const { columns } = getColumnsFromData(data)
-  console.log({ columns })
-  //const [data, setData] = React.useState(() => [...defaultData])
-  const rerender = React.useReducer(() => ({}), {})[1]
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [globalFilter, setGlobalFilter] = React.useState('')
+  const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+    // Rank the item
+    console.log({ row: row.getValue(columnId) })
+    const itemRank = rankItem(row.getValue(columnId), value)
+    console.log({ itemRank })
+
+    // Store the itemRank info
+    addMeta({
+      itemRank
+    })
+
+    // Return if the item should be filtered in/out
+    return itemRank.passed
+  }
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
-  })
+    state: {
+      sorting,
+      globalFilter
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
 
-  console.log({ table })
+    //* Global filters configurations
+    onGlobalFilterChange: setGlobalFilter,
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: fuzzyFilter
+  })
 
   return (
     <div className="p-2">
-      <table className="table">
+      {showGlobalFilter && (
+        <div>
+          <DebouncedInput
+            value={globalFilter ?? ''}
+            onChange={(value) => setGlobalFilter(String(value))}
+            className="p-2 font-lg shadow border border-block"
+            placeholder="Search all columns..."
+          />
+        </div>
+      )}
+      <table className="">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id} colSpan={header.colSpan}>
+                <th
+                  key={header.id}
+                  colSpan={header.colSpan}
+                  {...{
+                    className: header.column.getCanSort()
+                      ? 'cursor-pointer select-none'
+                      : '',
+                    onClick: header.column.getToggleSortingHandler()
+                  }}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
                         header.column.columnDef?.header || [],
                         header.getContext()
                       )}
+                  {{
+                    asc: ' 🔼',
+                    desc: ' 🔽'
+                  }[header.column.getIsSorted() as string] ?? null}
                 </th>
               ))}
             </tr>
@@ -143,7 +138,13 @@ function MyTable<T>({ data = [] }: { data: T[] }) {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              onClick={() => {
+                console.log(row.id)
+                onRowClick?.(row.id)
+              }}
+            >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
                   {flexRender(
@@ -162,105 +163,57 @@ function MyTable<T>({ data = [] }: { data: T[] }) {
 
 export default MyTable
 
-type Column = {
-  id?: string
-  header?: any
-  footer?: any
-  columns?: Column[]
-  cell?: (info: any) => any
+interface TableOptions {
+  includeAction?: boolean
+  headers?: Record<string, HeaderType>
+  hiddenCols?: string[]
 }
 
-type ColumnGroup = {
-  id?: string
-  header?: any
-  footer?: any
-  columns?: Column[]
-}
-
-function getColumnsFromData(data: any[]) {
+function getColumnsFromData(data: any[], options?: TableOptions) {
   const columns: any[] = []
   const columnHelper = createColumnHelper()
   const obj = data?.[0] || {}
   const keys = Object.keys(obj)
   // Display Column
-  columns.push(
-    columnHelper.display({
-      id: 'actions',
-      cell: (props) => <span key={props.row.id}> action</span> // RowActions
+  if (options?.includeAction) {
+    columns.push({
+      id: 'select',
+      header: ({ table }: any) => (
+        <IndeterminateCheckbox
+          {...{
+            checked: table.getIsAllRowsSelected(),
+            indeterminate: table.getIsSomeRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler()
+          }}
+        />
+      ),
+      cell: ({ row }: any) => (
+        <div className="px-1">
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler()
+            }}
+          />
+        </div>
+      )
     })
-  )
+  }
 
-  keys.forEach((key) => {})
+  keys.forEach((key) => {
+    if (options?.hiddenCols?.includes(key)) return
+    const col = columnHelper.accessor(key, {
+      header: options?.headers?.[key]?.label || key,
+      footer: (props) => props.column.id,
+      cell(props) {
+        return (
+          options?.headers?.[key]?.format?.(props.getValue()) ||
+          props.getValue()
+        )
+      }
+    })
+    columns.push(col)
+  })
   return { columns }
 }
-// function transformData<T>(data: T[]) {
-//   const columnDefs: ColumnGroup[] = []
-//   const flatData: any[] = []
-
-//   function flattenData(rowData: any, groupHeaders?: any[]) {
-//     const flatRow: any = {}
-//     for (const key in rowData) {
-//       if (rowData.hasOwnProperty(key)) {
-//         const value = rowData[key]
-//         if (typeof value === 'object' && value !== null) {
-//           const newHeaders = groupHeaders ? [...groupHeaders, key] : [key]
-//           flattenData(value, newHeaders)
-//         } else {
-//           flatRow[key] = value
-//         }
-//       }
-//     }
-
-//     if (flatRow) {
-//       flatData.push(flatRow)
-//     }
-//   }
-
-//   // Flatten data
-//   data.forEach((row) => flattenData(row))
-
-//   // Build column defs
-//   const headerKeys = new Set(Object.keys(flatData[0]))
-//   headerKeys.forEach((key) => {
-//     const isNested = key.includes('.')
-//     const [headerKey, subHeaderKey] = isNested ? key.split('.') : [key]
-
-//     let group = columnDefs.find((colGroup) => colGroup.id === headerKey)
-//     if (!group) {
-//       group = { id: headerKey, columns: [] }
-//       columnDefs.push(group)
-//     }
-
-//     if (isNested) {
-//       let subGroup = group.columns?.find(
-//         (colGroup) => colGroup.id === subHeaderKey
-//       )
-//       if (!subGroup) {
-//         subGroup = { id: subHeaderKey }
-//         group.columns?.push({ columns: [subGroup] })
-//       }
-
-//       subGroup.columns?.push({ id: key })
-//     } else {
-//       group.columns?.push({ id: key })
-//     }
-//   })
-
-//   // Build cells
-//   const cells = flatData.map((row) => {
-//     const cellsRow: { [key: string]: any } = {}
-//     Object.keys(row).forEach((key) => {
-//       cellsRow[key] = {
-//         value: row[key]
-//       }
-//     })
-//     return cellsRow
-//   })
-
-//   // Build column accessor
-//   const columnAccessor: ColumnGroup = {
-//     columns: columnDefs
-//   }
-
-//   return { cells, columnDefs: columnAccessor }
-// }

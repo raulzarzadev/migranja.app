@@ -26,32 +26,50 @@ const SalesList = () => {
     <div className="">
       <h2 className="text-center font-bold">Lista de ventas</h2>
       <MyTable
-        data={[
-          {
-            firstName: 'tanner',
-            lastName: 'linsley',
-            age: 24,
-            visits: 100,
-            status: 'In Relationship',
-            progress: 50,
-            weight: {
-              atBirth: 3,
-              atWeaning: 12,
-              at6Months: 24
-            }
+        // showGlobalFilter
+        // showSelectRow
+        onRowClick={(e) => {
+          console.log({ e })
+          setSaleSelected(e)
+          handleOpenSaleModal()
+        }}
+        headers={{
+          date: {
+            label: 'Fecha',
+            format: (props) => (
+              <div className="grid text-center">
+                <span>{myFormatDate(props, 'dd/MM/yy')}</span>
+                <span className="text-xs">
+                  {fromNow(props, { addSuffix: true })}
+                </span>
+              </div>
+            )
           },
-          {
-            firstName: 'tandy',
-            lastName: 'miller',
-            age: 40,
-            visits: 40,
-            status: 'Single',
-            progress: 80,
-            images: [
-              { url: 'http://localhost/image', description: 'imagen de prueba' }
-            ]
+          price: {
+            label: 'Precio',
+            format: (props: any) => <CurrencySpan quantity={props} />
+          },
+          weightT: {
+            label: 'PesoT'
+          },
+          total: {
+            label: 'Total$',
+            format: (props) => (
+              <CurrencySpan
+                quantity={parseFloat(props).toFixed(1) as unknown as number}
+              />
+            )
           }
-        ]}
+        }}
+        hiddenCols={['id']}
+        data={sales.map((sale) => ({
+          id: sale.id,
+          date: sale.eventData.date,
+          price: sale.eventData.price,
+          weightT: sale.eventData.totalWeight,
+          cantU: sale.eventData.animalsQuantity,
+          total: sale.eventData.total
+        }))}
       />
       {openModal && (
         <Modal
