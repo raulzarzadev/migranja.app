@@ -1,5 +1,5 @@
 import CurrencySpan from '@comps/CurrencySpan'
-import MyTable, { MyTableType, TableColumn } from '@comps/MyTable'
+import MyTable from '@comps/MyTable_v2'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
 import Modal from '@comps/modal'
 import ModalDelete from '@comps/modal/ModalDelete'
@@ -16,38 +16,6 @@ const SalesList = () => {
     setSales(farmEvents.filter((event) => event.type === 'SELL'))
   }, [farmEvents])
 
-  const tableData: MyTableType<typeof sales[0]> = {
-    columns: [
-      {
-        //@ts-ignore
-        id: 'eventData.date',
-        label: 'Fecha',
-        format: (data) => fromNow(data, { addSuffix: true })
-      },
-      {
-        //@ts-ignore
-
-        id: 'eventData.price',
-        label: 'Precio',
-        format: (data) => <CurrencySpan quantity={parseFloat(data || '0')} />
-      },
-      {
-        //@ts-ignore
-
-        id: 'eventData.animalsQuantity',
-        label: 'Cant'
-      },
-      {
-        //@ts-ignore
-
-        id: 'eventData.total',
-        label: 'Total',
-        format: (data) => <CurrencySpan quantity={parseFloat(data || '0')} />
-      }
-    ],
-    rows: { data: sales }
-  }
-
   const [openModal, setOpenModal] = useState(false)
   const [saleSelected, setSaleSelected] = useState(0)
   const handleOpenSaleModal = () => {
@@ -58,14 +26,32 @@ const SalesList = () => {
     <div className="">
       <h2 className="text-center font-bold">Lista de ventas</h2>
       <MyTable
-        setRowsSelected={(e) => {
-          console.log({ e })
-        }}
-        onRowClick={(i) => {
-          setSaleSelected(i)
-          handleOpenSaleModal()
-        }}
-        {...tableData}
+        data={[
+          {
+            firstName: 'tanner',
+            lastName: 'linsley',
+            age: 24,
+            visits: 100,
+            status: 'In Relationship',
+            progress: 50,
+            weight: {
+              atBirth: 3,
+              atWeaning: 12,
+              at6Months: 24
+            }
+          },
+          {
+            firstName: 'tandy',
+            lastName: 'miller',
+            age: 40,
+            visits: 40,
+            status: 'Single',
+            progress: 80,
+            images: [
+              { url: 'http://localhost/image', description: 'imagen de prueba' }
+            ]
+          }
+        ]}
       />
       {openModal && (
         <Modal
