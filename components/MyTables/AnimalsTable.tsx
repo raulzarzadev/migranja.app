@@ -24,7 +24,6 @@ const AnimalsTable = () => {
         rows={{
           data: tableData
         }}
-        selectByField={''}
       />
     </div>
   )

@@ -1,74 +1,111 @@
 import useSortByField from '@comps/hooks/useSortByField'
 import HeaderTable from '@comps/MyTables/HeaderTable'
-import { useEffect, useState } from 'react'
+import { FC, ReactNode, useEffect, useState } from 'react'
+import { getProperty } from 'dot-prop'
 
-export interface Column<T> {
-  id: string
-  label: string
+// Define la interfaz para los datos de las filas
+interface TableRowData {
+  [key: string]: any // Puedes utilizar cualquier tipo para los valores, según tus necesidades
 }
-export interface MyTableType<TData> {
-  columns: Column<TData>[]
+
+// Define la interfaz para las columnas de la tabla
+export interface TableColumn<TData extends TableRowData> {
+  id: keyof TData // Tipamos el id con las claves del objeto que se pasará como datos
+  label: string
+  format?: (data?: string) => React.ReactNode
+  subColumns?: Array<TableColumn<TData[keyof TData]>> // Tipamos las subcolumnas
+}
+
+// Define la interfaz de la tabla con los tipos que necesitas
+
+// Define la interfaz de la tabla con los tipos que necesitas
+export interface MyTableType<TData extends TableRowData> {
+  columns: Array<{
+    id: keyof TData
+    label: string
+    format?: (data?: string) => React.ReactNode
+  }>
   rows: {
     data: TData[]
   }
   rowsSelected?: string[]
   setRowsSelected?: (rows: string[]) => void
-  selectByField: 'index' | string // of field
 }
 
-const MyTable = <T,>({
+export interface MyTableProps<TData extends TableRowData> {
+  columns: Array<{
+    id: keyof TData
+    label: string
+    format?: (data?: string) => React.ReactNode
+  }>
+  rows: {
+    data: TData[]
+  }
+  rowsSelected?: string[]
+  setRowsSelected?: (rows: string[]) => void
+  onRowClick?: (index: number) => void
+}
+
+const MyTable: FC<MyTableProps<any>> = ({
   columns,
   rows,
-  rowsSelected,
-  selectByField = 'index',
-  setRowsSelected
-}: MyTableType<T>) => {
+  setRowsSelected,
+  onRowClick
+}) => {
   const { arraySorted, ...sortMethods } = useSortByField(rows.data)
-  const [_rowsSelected, _setRowsSelected] = useState<string[]>([])
-  const handleSelectRow = ({
-    checked,
-    index
-  }: {
-    checked: boolean
-    index: number
-  }) => {
-    console.log({ checked })
-    const _field = selectByField === 'index' ? index : selectByField
-
-    if (checked) {
-      _setRowsSelected([..._rowsSelected, `${_field}`])
-      setRowsSelected?.([..._rowsSelected, `${_field}`])
+  const [_rowsSelected, _setRowsSelected] = useState<number[]>([])
+  const [halfChecked, setHalfChecked] = useState(false)
+  const onSelectRow = (index: number) => {
+    const auxArr = [..._rowsSelected]
+    if (auxArr.includes(index)) {
+      const newArr = auxArr.filter((item) => item != index)
+      _setRowsSelected([...newArr])
     } else {
-      _rowsSelected.splice(_rowsSelected.indexOf(`${_field}`), 1)
-      console.log(_rowsSelected)
-      _setRowsSelected(_rowsSelected)
-      setRowsSelected?.(_rowsSelected)
+      _setRowsSelected([...auxArr, index])
     }
   }
-  // useEffect(() => {
-  //   if (rowsSelected?.length) {
-  //     _setRowsSelected(rowsSelected)
-  //   }
-  // }, [rowsSelected])
-  console.log({ _rowsSelected })
+  const onSelectAllTable = (checked: boolean) => {
+    if (!checked) {
+      _setRowsSelected([])
+    } else {
+      const rowsIndex = rows.data.map((_, i) => i)
+      _setRowsSelected(rowsIndex)
+    }
+  }
+
+  useEffect(() => {
+    if (_rowsSelected.length > 0 && _rowsSelected.length != rows.data.length) {
+      setHalfChecked(true)
+    } else {
+      setHalfChecked(false)
+    }
+  }, [_rowsSelected, rows.data.length])
 
   return (
     <div>
-      <table className="table table-compact">
+      <table className="table table-compact text-center  ">
         <thead>
           <tr>
             {setRowsSelected && (
               <th>
                 <span>
-                  <input type={'checkbox'} />
+                  <input
+                    className={`checkbox checkbox-xs ${
+                      halfChecked && 'bg-slate-600'
+                    } `}
+                    onChange={({ target: { checked } }) =>
+                      onSelectAllTable(checked)
+                    }
+                    type={'checkbox'}
+                  />
                 </span>
               </th>
             )}
             {columns.map((column, i) => (
               <th key={i}>
                 <HeaderTable
-                  label={column?.label || column?.id}
-                  fieldName={column?.id}
+                  label={column?.label || (column?.id as string)}
+                  fieldName={column?.id as string}
                   {...sortMethods}
                 />
               </th>
@@ -77,35 +114,25 @@ const MyTable = <T,>({
         </thead>
         <tbody>
           {arraySorted.map((row, i) => {
-            console.log(
-              _rowsSelected?.includes(
-                selectByField === 'index' ? `${i}` : row[selectByField]
-              )
-            )
             return (
-              <tr key={i}>
+              <tr key={i} className="hover" onClick={() => onRowClick?.(i)}>
                 {setRowsSelected && (
                   <th>
                     <span>
                       <input
-                        checked={_rowsSelected?.includes(
-                          selectByField === 'index'
-                            ? `${i}`
-                            : row[selectByField]
-                        )}
+                        className=" checkbox checkbox-xs"
+                        checked={_rowsSelected?.includes(i)}
                         type={'checkbox'}
-                        onChange={({ target: { checked } }) =>
-                          handleSelectRow({
-                            checked,
-                            index: i
-                          })
-                        }
+                        onChange={() => onSelectRow(i)}
                       />
                     </span>
                   </th>
                 )}
                 {columns.map((column, i) => (
-                  <td key={i}>{row[column.id]}</td>
+                  <td key={i}>
+                    {column?.format?.(getProperty(row, column?.id as string)) ??
+                      getProperty(row, column.id as string)}
+                  </td>
                 ))}
               </tr>
             )

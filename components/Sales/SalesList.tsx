@@ -8,6 +8,7 @@ import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 const SalesList = () => {
   const [sales, setSales] = useState<FarmStateAnimalEvent[]>([])
   const farmEvents = useSelector(selectFarmEvents)
+
   useEffect(() => {
     setSales(farmEvents.filter((event) => event.type === 'SELL'))
   }, [farmEvents])
@@ -15,34 +16,40 @@ const SalesList = () => {
   return (
     <div className="">
       Lista de ventas
-      <div>
-        <div className="grid grid-cols-6 ">
-          <div className="truncate">Fecha</div>
-          <div className="truncate">Precio($)</div>
-          <div className="truncate">Cant(u)</div>
-          <div className="truncate">PesoT(k)</div>
-          <div className="truncate">Total$</div>
-          <div className="truncate">Ops</div>
-        </div>
-        {sales.map((sale) => (
-          <div key={sale?.id} className="grid grid-cols-6 items-center mt-5">
-            <div className="truncate">
-              <div className="truncate">
-                {myFormatDate(sale.eventData.date, 'dd/MM/yy')}
-              </div>
-            </div>
-            <div>
-              <CurrencySpan quantity={sale.eventData?.price || 0} />
-            </div>
-            <div>{sale.eventData?.animalsQuantity || 0}</div>
-            <div>{sale.eventData?.totalWeight || 0}</div>
-            <div className="truncate">
-              <CurrencySpan quantity={sale.eventData?.total || 0} />
-            </div>
-            <ModalSaleDetails sale={sale} label={'ver'} />
-          </div>
-        ))}
-      </div>
+      <table className="table table-compact">
+        <thead>
+          <tr>
+            <th className="">Fecha</th>
+            <th className="">Precio($)</th>
+            <th className="">Cant(u)</th>
+            <th className="">PesoT(k)</th>
+            <th className="">Total$</th>
+            <th className="">Ops</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sales.map((sale) => (
+            <tr key={sale?.id} className="">
+              <td className="">
+                <div className="">
+                  {myFormatDate(sale.eventData.date, 'dd/MM/yy')}
+                </div>
+              </td>
+              <td>
+                <CurrencySpan quantity={sale.eventData?.price || 0} />
+              </td>
+              <td>{sale.eventData?.animalsQuantity || 0}</td>
+              <td>{sale.eventData?.totalWeight || 0}</td>
+              <td className="truncate">
+                <CurrencySpan quantity={sale.eventData?.total || 0} />
+              </td>
+              <td>
+                <ModalSaleDetails sale={sale} label={'ver'} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

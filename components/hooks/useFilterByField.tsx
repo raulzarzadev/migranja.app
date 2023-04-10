@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { getProperty } from 'dot-prop'
 import filterByArrayOfFilters from 'utils/filterByArrayOfFilters'
 import {
   filterArrayByFiledValueCoincidences,
