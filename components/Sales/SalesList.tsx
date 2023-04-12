@@ -1,5 +1,7 @@
 import CurrencySpan from '@comps/CurrencySpan'
-import ModalSaleDetails from '@comps/modal/ModalSaleDetails'
+import MyTable from '@comps/MyTable'
+import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
+import Modal from '@comps/modal'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { FarmStateAnimalEvent, selectFarmEvents } from 'store/slices/farmSlice'
@@ -13,44 +15,80 @@ const SalesList = () => {
     setSales(farmEvents.filter((event) => event.type === 'SELL'))
   }, [farmEvents])
 
+  const [openModal, setOpenModal] = useState(false)
+  const [saleSelected, setSaleSelected] = useState(0)
+  const handleOpenSaleModal = () => {
+    setOpenModal(!openModal)
+  }
+
   return (
-    <div className="">
-      Lista de ventas
-      <table className="table table-compact">
-        <thead>
-          <tr>
-            <th className="">Fecha</th>
-            <th className="">Precio($)</th>
-            <th className="">Cant(u)</th>
-            <th className="">PesoT(k)</th>
-            <th className="">Total$</th>
-            <th className="">Ops</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sales.map((sale) => (
-            <tr key={sale?.id} className="">
-              <td className="">
-                <div className="">
-                  {myFormatDate(sale.eventData.date, 'dd/MM/yy')}
-                </div>
-              </td>
-              <td>
-                <CurrencySpan quantity={sale.eventData?.price || 0} />
-              </td>
-              <td>{sale.eventData?.animalsQuantity || 0}</td>
-              <td>{sale.eventData?.totalWeight || 0}</td>
-              <td className="truncate">
-                <CurrencySpan quantity={sale.eventData?.total || 0} />
-              </td>
-              <td>
-                <ModalSaleDetails sale={sale} label={'ver'} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <MyTable
+        title="Lista de ventas"
+        // showGlobalFilter
+        // showSelectRow
+        onRowClick={(e) => {
+          console.log({ e })
+          setSaleSelected(e)
+          handleOpenSaleModal()
+        }}
+        headers={{
+          date: {
+            label: 'Fecha',
+            format: (props) => (
+              <div className="grid text-center">
+                <span>{myFormatDate(props, 'dd/MM/yy')}</span>
+                <span className="text-xs">
+                  {fromNow(props, { addSuffix: true })}
+                </span>
+              </div>
+            )
+          },
+          price: {
+            label: 'Precio',
+            format: (props: any) => <CurrencySpan quantity={props} />
+          },
+          weightT: {
+            label: 'PesoT'
+          },
+          total: {
+            label: 'Total$',
+            format: (props) => (
+              <CurrencySpan
+                quantity={parseFloat(props).toFixed(1) as unknown as number}
+              />
+            )
+          }
+        }}
+        hiddenCols={['id']}
+        data={sales.map((sale) => ({
+          id: sale.id,
+          date: sale.eventData.date,
+          price: sale.eventData.price,
+          weightT: sale.eventData.totalWeight,
+          cantU: sale.eventData.animalsQuantity,
+          total: sale.eventData.total
+        }))}
+      />
+      {openModal && (
+        <Modal
+          open={openModal}
+          handleOpen={handleOpenSaleModal}
+          title="Detalle de venta"
+        >
+          <PrintableSellForm sale={sales[saleSelected]} />
+          <div className="flex w-full justify-center">
+            {/* <ModalDelete
+              handleDelete={() => {
+                // handleDeleteSale(sale?.id || '')
+              }}
+              title={'Eliminar venta'}
+              text='Se eliminara esta venta pero no se acutalizara el estado de los animales y quedará como "Vendido"'
+            /> */}
+          </div>
+        </Modal>
+      )}
+    </>
   )
 }
 

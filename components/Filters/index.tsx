@@ -1,3 +1,4 @@
+import useDebugInformation from '@comps/hooks/useDebugInformation'
 import useFilterByField, { FilterType } from '@comps/hooks/useFilterByField'
 import Icon from '@comps/Icon'
 import { useEffect } from 'react'
@@ -5,13 +6,18 @@ import { useEffect } from 'react'
 const Filters = ({
   array,
   setArray,
-  filters
+  filters,
+  onFilter,
+  onClearFilter
 }: {
   array: unknown[]
   setArray: (array: any) => void
   filters: Record<string, FilterType | FilterType[]>
+  onFilter?: (filter: FilterType) => void
+  onClearFilter?: () => void
   // defaultFilter?: string
 }) => {
+  useDebugInformation('Filters', { array, filters })
   const {
     handleFilterBy,
     filtersSelected,
@@ -33,6 +39,7 @@ const Filters = ({
             className={`btn btn-circle m-1 btn-xs btn-outline btn-error`}
             onClick={() => {
               reset()
+              onClearFilter?.()
             }}
           >
             <Icon name="close" size="xs" />
@@ -49,6 +56,7 @@ const Filters = ({
                 }`}
                 onClick={() => {
                   // @ts-ignore
+                  onFilter?.(filter)
                   handleFilterByArray(filter, { label })
                 }}
               >
@@ -64,6 +72,7 @@ const Filters = ({
                 filtersSelected.includes(label) && 'btn-active'
               }`}
               onClick={() => {
+                onFilter?.(filter)
                 // @ts-ignore
                 handleFilterBy(filter.field, filter.symbol, filter.value, {
                   label

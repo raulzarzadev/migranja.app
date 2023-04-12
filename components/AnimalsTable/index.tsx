@@ -248,6 +248,7 @@ const AnimalsTable = ({
   const [openDetailsModal, setOpenDetailsModal] = useState(false)
 
   const [animaId, setAnimalId] = useState('')
+
   const handleOpenDetailsModal = (animalId: SetStateAction<string>) => {
     setOpenDetailsModal(!openDetailsModal)
     setAnimalId(animalId)

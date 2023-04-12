@@ -16,8 +16,8 @@ export const labelsOfFarmEventTypes: Record<TypeOfFarmEvent, string> = {
   BIRTH: 'Parto',
   ABORT: 'Aborto',
   EMPTY: 'Vacio',
-  DROP_OUT: 'Alta',
-  DROP_IN: 'Baja',
+  DROP_OUT: 'Baja',
+  DROP_IN: 'Alta',
   WEANING: 'Destete',
   PENDING: 'Pendiente',
   SELL: 'Venta'

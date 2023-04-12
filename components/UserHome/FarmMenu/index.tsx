@@ -4,7 +4,7 @@ import AnimalForm from '@comps/forms/AnimalForm'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
 import InventoryForm from '@comps/InventoryForm'
 import InventoryHistory from '@comps/InventoryHistory'
-import SalesList from '@comps/Sales/SalesList_v2'
+import SalesList from '@comps/Sales/SalesList'
 import WeaningEvents from '@comps/WeaningEvents'
 import BreedingsList from 'components/BreedingsList'
 import FarmEvents from 'components/FarmEvents'
@@ -250,7 +250,7 @@ const FarmMenu = (props: any) => {
           {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
           {/* ********************************+ SELL ANIMALS EVENTS *************************************** */}
           {column2 === 'sales' && !column3 && (
-            <div className=" bg-base-300 shadow-md rounded-md p-2">
+            <div className=" bg-base-300 shadow-md rounded-md p-2 w-full">
               {/* <PrintComponent /> */}
               <SalesList />
               {/* */}

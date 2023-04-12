@@ -1,142 +1,213 @@
-import useSortByField from '@comps/hooks/useSortByField'
-import HeaderTable from '@comps/MyTables/HeaderTable'
-import { FC, ReactNode, useEffect, useState } from 'react'
-import { getProperty } from 'dot-prop'
+import * as React from 'react'
 
-// Define la interfaz para los datos de las filas
-interface TableRowData {
-  [key: string]: any // Puedes utilizar cualquier tipo para los valores, según tus necesidades
+import {
+  ColumnFiltersState,
+  FilterFn,
+  SortingState,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable
+} from '@tanstack/react-table'
+import IndeterminateCheckbox from './IndeterminableCheckbox'
+import DebouncedInput from '@comps/inputs/DebouncedInput'
+import { rankItem } from '@tanstack/match-sorter-utils'
+import Filters from '@comps/Filters'
+import { FilterType } from '@comps/hooks/useFilterByField'
+import useDebugInformation from '@comps/hooks/useDebugInformation'
+import { string } from 'yup'
+
+type Person = {
+  firstName: string
+  lastName: string
+  age: number
+  visits: number
+  status: string
+  progress: number
+  weight?: {
+    atBirth?: number
+    atWeaning?: number
+    at6Months?: number
+  }
+  images?: Image[]
+}
+interface Image {
+  url: string
+  description: string
 }
 
-// Define la interfaz para las columnas de la tabla
-export interface TableColumn<TData extends TableRowData> {
-  id: keyof TData // Tipamos el id con las claves del objeto que se pasará como datos
+const columnHelper = createColumnHelper<Person>()
+
+interface HeaderType {
   label: string
-  format?: (data?: string) => React.ReactNode
-  subColumns?: Array<TableColumn<TData[keyof TData]>> // Tipamos las subcolumnas
+  format?: (props: any) => React.ReactNode
 }
+function MyTable<T>({
+  data = [],
+  headers = {},
+  showGlobalFilter,
+  showSelectRow,
+  onRowClick,
+  hiddenCols,
+  filters,
+  onFilter,
+  title = 'Titulo de tabla'
+}: {
+  data: T[]
+  headers?: Record<string, HeaderType>
+  showGlobalFilter?: boolean | string[]
+  showSelectRow?: boolean
+  onRowClick?: (row: string | number) => void
+  hiddenCols?: string[]
+  filters?: Record<string, FilterType | FilterType[]>
+  onFilter?: (filter: FilterType) => void
+  title: string
+}) {
+  // useDebugInformation('MyTable', {})
+  // const [array, setArray] = React.useState([...data])
 
-// Define la interfaz de la tabla con los tipos que necesitas
+  const { columns } = getColumnsFromData(data, {
+    includeAction: showSelectRow,
+    headers,
+    hiddenCols
+  })
 
-// Define la interfaz de la tabla con los tipos que necesitas
-export interface MyTableType<TData extends TableRowData> {
-  columns: Array<{
-    id: keyof TData
-    label: string
-    format?: (data?: string) => React.ReactNode
-  }>
-  rows: {
-    data: TData[]
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [globalFilter, setGlobalFilter] = React.useState('')
+  const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+    // Rank the item
+    const itemRank = rankItem(row.getValue(columnId), value)
+    // Store the itemRank info
+    addMeta({
+      itemRank
+    })
+    // Return if the item should be filtered in/out
+    return itemRank.passed
   }
-  rowsSelected?: string[]
-  setRowsSelected?: (rows: string[]) => void
-}
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
 
-export interface MyTableProps<TData extends TableRowData> {
-  columns: Array<{
-    id: keyof TData
-    label: string
-    format?: (data?: string) => React.ReactNode
-  }>
-  rows: {
-    data: TData[]
-  }
-  rowsSelected?: string[]
-  setRowsSelected?: (rows: string[]) => void
-  onRowClick?: (index: number) => void
-}
+  //**************************************************** Table configurations
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+      sorting,
+      globalFilter,
+      columnFilters
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
 
-const MyTable: FC<MyTableProps<any>> = ({
-  columns,
-  rows,
-  setRowsSelected,
-  onRowClick
-}) => {
-  const { arraySorted, ...sortMethods } = useSortByField(rows.data)
-  const [_rowsSelected, _setRowsSelected] = useState<number[]>([])
-  const [halfChecked, setHalfChecked] = useState(false)
-  const onSelectRow = (index: number) => {
-    const auxArr = [..._rowsSelected]
-    if (auxArr.includes(index)) {
-      const newArr = auxArr.filter((item) => item != index)
-      _setRowsSelected([...newArr])
-    } else {
-      _setRowsSelected([...auxArr, index])
-    }
-  }
-  const onSelectAllTable = (checked: boolean) => {
-    if (!checked) {
-      _setRowsSelected([])
-    } else {
-      const rowsIndex = rows.data.map((_, i) => i)
-      _setRowsSelected(rowsIndex)
-    }
-  }
+    //* Global filters configurations
+    onGlobalFilterChange: setGlobalFilter,
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: fuzzyFilter,
 
-  useEffect(() => {
-    if (_rowsSelected.length > 0 && _rowsSelected.length != rows.data.length) {
-      setHalfChecked(true)
-    } else {
-      setHalfChecked(false)
-    }
-  }, [_rowsSelected, rows.data.length])
+    //* Columns filters
+    onColumnFiltersChange: setColumnFilters,
+    getFacetedMinMaxValues: getFacetedMinMaxValues()
+  })
+
+  // React.useEffect(() => {
+  //   if (table.getState().columnFilters[0]?.id === 'fullName') {
+  //     if (table.getState().sorting[0]?.id !== 'fullName') {
+  //       table.setSorting([{ id: 'fullName', desc: false }])
+  //     }
+  //   }
+  // }, [table.getState().columnFilters[0]?.id])
 
   return (
-    <div>
-      <table className="table table-compact text-center  ">
+    <div className="p-2 w-full ">
+      <h2 className="text-center font-bold">{title}</h2>
+      {showGlobalFilter && (
+        <div>
+          <DebouncedInput
+            value={globalFilter ?? ''}
+            onChange={(value) => setGlobalFilter(String(value))}
+            className="p-2 font-lg shadow border border-block"
+            placeholder="Search all columns..."
+          />
+        </div>
+      )}
+      <div>
+        {filters && Object.keys(filters).length && (
+          <Filters
+            filters={filters}
+            array={data}
+            setArray={(e) => {
+              console.log({ e })
+            }}
+            onFilter={(e) => {
+              console.log({ e })
+              if (typeof e.value === 'string' || typeof e.value === 'number') {
+                setColumnFilters([
+                  ...columnFilters,
+                  { id: e.field, value: `${e.value}` }
+                ])
+              }
+            }}
+            onClearFilter={() => {
+              setColumnFilters?.([])
+            }}
+          />
+        )}
+      </div>
+      <table className="table table-compact w-full">
         <thead>
-          <tr>
-            {setRowsSelected && (
-              <th>
-                <span>
-                  <input
-                    className={`checkbox checkbox-xs ${
-                      halfChecked && 'bg-slate-600'
-                    } `}
-                    onChange={({ target: { checked } }) =>
-                      onSelectAllTable(checked)
-                    }
-                    type={'checkbox'}
-                  />
-                </span>
-              </th>
-            )}
-            {columns.map((column, i) => (
-              <th key={i}>
-                <HeaderTable
-                  label={column?.label || (column?.id as string)}
-                  fieldName={column?.id as string}
-                  {...sortMethods}
-                />
-              </th>
-            ))}
-          </tr>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  colSpan={header.colSpan}
+                  {...{
+                    className: header.column.getCanSort()
+                      ? 'cursor-pointer select-none'
+                      : '',
+                    onClick: header.column.getToggleSortingHandler()
+                  }}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef?.header || [],
+                        header.getContext()
+                      )}
+                  {{
+                    asc: ' 🔼',
+                    desc: ' 🔽'
+                  }[header.column.getIsSorted() as string] ?? null}
+                </th>
+              ))}
+            </tr>
+          ))}
         </thead>
         <tbody>
-          {arraySorted.map((row, i) => {
-            return (
-              <tr key={i} className="hover" onClick={() => onRowClick?.(i)}>
-                {setRowsSelected && (
-                  <th>
-                    <span>
-                      <input
-                        className=" checkbox checkbox-xs"
-                        checked={_rowsSelected?.includes(i)}
-                        type={'checkbox'}
-                        onChange={() => onSelectRow(i)}
-                      />
-                    </span>
-                  </th>
-                )}
-                {columns.map((column, i) => (
-                  <td key={i}>
-                    {column?.format?.(getProperty(row, column?.id as string)) ??
-                      getProperty(row, column.id as string)}
-                  </td>
-                ))}
-              </tr>
-            )
-          })}
+          {table.getRowModel().rows.map((row) => (
+            <tr
+              className="hover"
+              key={row.id}
+              onClick={() => {
+                console.log(row.id)
+                onRowClick?.(row.id)
+              }}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id}>
+                  {flexRender(
+                    cell.column.columnDef.cell || [],
+                    cell.getContext()
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
@@ -144,3 +215,58 @@ const MyTable: FC<MyTableProps<any>> = ({
 }
 
 export default MyTable
+
+interface TableOptions {
+  includeAction?: boolean
+  headers?: Record<string, HeaderType>
+  hiddenCols?: string[]
+}
+
+function getColumnsFromData(data: any[], options?: TableOptions) {
+  const columns: any[] = []
+  const columnHelper = createColumnHelper()
+  const obj = data?.[0] || {}
+  const keys = Object.keys(obj)
+  // Display Column
+  if (options?.includeAction) {
+    columns.push({
+      id: 'select',
+      header: ({ table }: any) => (
+        <IndeterminateCheckbox
+          {...{
+            checked: table.getIsAllRowsSelected(),
+            indeterminate: table.getIsSomeRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler()
+          }}
+        />
+      ),
+      cell: ({ row }: any) => (
+        <div className="px-1">
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler()
+            }}
+          />
+        </div>
+      )
+    })
+  }
+
+  keys.forEach((key) => {
+    if (options?.hiddenCols?.includes(key)) return
+    const col = columnHelper.accessor(key, {
+      header: options?.headers?.[key]?.label || key,
+      footer: (props) => props.column.id,
+      cell(props) {
+        return (
+          options?.headers?.[key]?.format?.(props.getValue()) ||
+          props.getValue()
+        )
+      }
+    })
+    columns.push(col)
+  })
+  return { columns }
+}
