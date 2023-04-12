@@ -26,7 +26,7 @@ const FarmInvitations = () => {
         <FarmInvitation
           key={i}
           invitation={{
-            status: invitation.team?.[user?.id || ''].invitation?.status,
+            status: invitation.team?.[user?.id || '']?.invitation?.status,
             farm: {
               id: invitation.id,
               name: invitation.name
