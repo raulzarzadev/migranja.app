@@ -59,7 +59,8 @@ export const calculateFarmNumbers = ({
     const births = events.filter(
       (event) =>
         event.type === 'BIRTH' &&
-        event.eventData.date > subDays(new Date(), finishWeaning).getTime()
+        (event.eventData.date as number) >
+          subDays(new Date(), finishWeaning).getTime()
     )
 
     return births.map((birth) =>
@@ -99,7 +100,8 @@ export const calculateFarmNumbers = ({
    */
   const deads = [...events].filter((event) => event.type === 'DROP_OUT')
   const birthsLastMonth = [...births].filter(
-    (event) => event.eventData.date > addDays(new Date(), -30).getTime()
+    (event) =>
+      (event.eventData.date as number) > addDays(new Date(), -30).getTime()
   )
   const newCalfsLastMonth = [
     ...birthsLastMonth.map((event) => event.eventData.calfs)

@@ -94,32 +94,7 @@ export const BreedingCard = ({
         startAt={breedingDates?.birthStartAt as number}
         finishAt={breedingDates?.birthFinishAt as number}
       />
-      {/* <div className="text-center w-full">
-        <span className=" whitespace-nowrap">
-          {breeding.eventData?.breedingId}
-        </span>
-      </div>
-      <div className="text-xs text-center">
-        <span>Creado: </span>
-        <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
-      </div> */}
-      {/* <header className="flex w-full justify-between p-2">
-        <div className="flex pr-1 mt-1 ">
-        
-        </div>
-        <div className="w-full flex justify-between">
-          <div className="">
-           
-          </div>
 
-          <div className="relative">
-           
-            <div className="max-w-[250px]">
-             
-            </div>
-          </div>
-        </div>
-      </header> */}
       <BreedingCardBody breeding={breeding} hiddenBirths={hiddenBirths} />
     </div>
   )

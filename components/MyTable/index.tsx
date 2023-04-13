@@ -125,16 +125,7 @@ function MyTable<T>({
   return (
     <div className="p-2 w-full ">
       <h2 className="text-center font-bold">{title}</h2>
-      {showGlobalFilter && (
-        <div>
-          <DebouncedInput
-            value={globalFilter ?? ''}
-            onChange={(value) => setGlobalFilter(String(value))}
-            className="p-2 font-lg shadow border border-block"
-            placeholder="Search all columns..."
-          />
-        </div>
-      )}
+
       <div>
         {filters && Object.keys(filters).length && (
           <Filters
@@ -158,6 +149,16 @@ function MyTable<T>({
           />
         )}
       </div>
+      {showGlobalFilter && (
+        <div className="mb-2">
+          <DebouncedInput
+            value={globalFilter ?? ''}
+            onChange={(value) => setGlobalFilter(String(value))}
+            className="input input-sm w-full "
+            placeholder="Buscar ..."
+          />
+        </div>
+      )}
       <table className="table table-compact w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

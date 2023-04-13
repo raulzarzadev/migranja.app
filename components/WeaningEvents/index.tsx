@@ -2,11 +2,14 @@ import _ from 'lodash'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
-import WeaningByEarring from './WeaningByEarring'
-import WeaningByMoms from './WeaningByMoms'
 import MyTable from '@comps/MyTable'
-import { fromNow } from 'utils/dates/myDateUtils'
-import { addMonths, subMonths } from 'date-fns'
+import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
+import {
+  TypeOfFarmEvent,
+  labelsOfFarmEventTypes
+} from 'types/base/LABELS_TYPES/EventTypes'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import TableDate from '@comps/MyTable/TableDate'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
@@ -34,17 +37,23 @@ const WeaningEvents = () => {
     <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
       <div className="flex w-full justify-center">
         <MyTable
+          showGlobalFilter
           title="Destetes programados"
-          // onFilter={(e) => {
-          //   console.log({ e })
-          //   set
-          // }}
           headers={{
             date: {
               label: 'Fecha',
-              format(props) {
-                return fromNow(props, { addSuffix: true })
-              }
+              format: (props) => <TableDate date={props} />
+            },
+            earring: {
+              label: 'Arete',
+              format: (props) => (
+                <ModalAnimalDetails earring={props} size="normal" />
+              )
+            },
+            status: {
+              label: 'Status',
+              format: (props) =>
+                labelsOfFarmEventTypes?.[props as TypeOfFarmEvent]
             }
           }}
           data={weanings.map((weaning) => ({
@@ -53,12 +62,12 @@ const WeaningEvents = () => {
             status: weaning.eventData.status
           }))}
           filters={{
-            Pendiente: {
+            Pendientes: {
               field: 'status',
               symbol: '==',
               value: 'PENDING'
             },
-            Hechos: {
+            Completados: {
               field: 'status',
               symbol: '==',
               value: 'DONE'

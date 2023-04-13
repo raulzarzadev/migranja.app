@@ -1,6 +1,7 @@
 import { AnimalDetails } from '@comps/AnimalCard'
 import { EventsList } from '@comps/FarmEvents/EventsList'
 import MyTable from '@comps/MyTable'
+import TableDate from '@comps/MyTable/TableDate'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { useSelector } from 'react-redux'
 import { selectFarmEvents } from 'store/slices/farmSlice'
@@ -17,14 +18,7 @@ const BirthEvents = () => {
         headers={{
           date: {
             label: 'Fecha',
-            format: (props) => (
-              <span className="grid">
-                {myFormatDate(props, 'dd/MM/yy')}
-                <span className="text-xs">
-                  {fromNow(props, { addSuffix: true })}
-                </span>
-              </span>
-            )
+            format: (props) => <TableDate date={props} />
           },
           updatedAt: {
             label: 'Actualizado',

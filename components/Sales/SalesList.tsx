@@ -1,5 +1,6 @@
 import CurrencySpan from '@comps/CurrencySpan'
 import MyTable from '@comps/MyTable'
+import TableDate from '@comps/MyTable/TableDate'
 import PrintableSellForm from '@comps/forms/SellForm/PrintableSellForm'
 import Modal from '@comps/modal'
 import { useEffect, useState } from 'react'
@@ -35,14 +36,7 @@ const SalesList = () => {
         headers={{
           date: {
             label: 'Fecha',
-            format: (props) => (
-              <div className="grid text-center">
-                <span>{myFormatDate(props, 'dd/MM/yy')}</span>
-                <span className="text-xs">
-                  {fromNow(props, { addSuffix: true })}
-                </span>
-              </div>
-            )
+            format: (props) => <TableDate date={props} />
           },
           price: {
             label: 'Precio',
