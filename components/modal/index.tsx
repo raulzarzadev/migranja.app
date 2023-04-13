@@ -44,7 +44,7 @@ const Modal = ({
     >
       <div
         onMouseLeave={onMouseLeave}
-        className={`bg-base-100 overflow-auto max-h-full rounded-lg w-full max-w-xl ${sizing[size]} `}
+        className={`bg-base-100 overflow-auto max-h-full rounded-lg w-full max-w-xl  ${sizing[size]} `}
       >
         <header
           className={

@@ -35,6 +35,7 @@ const ModalAnimalDetails = ({
         className={`link mx-2 font-bold  underline-offset-4 ${sizing[size]} `}
         onClick={(e) => {
           e.preventDefault()
+          e.stopPropagation()
           handleOpenAnimalDetails()
         }}
       >

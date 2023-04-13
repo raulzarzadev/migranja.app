@@ -1,7 +1,12 @@
 import Icon from '@comps/Icon'
 import { updateAnimalState } from '@firebase/Animal/main'
 import { updateEvent } from '@firebase/Events/main'
-import { useState } from 'react'
+import {
+  ButtonHTMLAttributes,
+  MouseEvent,
+  MouseEventHandler,
+  useState
+} from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalStateType } from 'types/base/AnimalState.model'
@@ -71,18 +76,19 @@ const ModalEditWeaning = ({
       console.log({ error })
     }
   }
-  // console.log({ eventId })
+  console.log({ eventId, animalEarring, genero: animal?.gender })
 
   return (
     <>
       <button
-        className="text-info"
+        className="text-info btn btn-outline"
         onClick={(e) => {
           e.preventDefault()
           handleOpenEditEvent()
         }}
       >
-        <Icon name="edit" />
+        <Icon name="bell" />
+        {'Destetar'}
       </button>
       <Modal
         open={openEditEvent}
@@ -97,65 +103,65 @@ const ModalEditWeaning = ({
           <p>Se realizarán los siguientes movimientos:</p>
           <ul>
             <li className="list-disc">
-              Estado del animal Engorda/Venta/Vientre
+              {` Estado del animal a  "Engorda / Venta / Vientre"`}
             </li>
             <li className="list-disc">{`Estado del la madre a "Libre"`}</li>
-            <li className="list-disc">
-              {`Estado del evento "Destete" como a "Hecho"`}
-            </li>
+            <li className="list-disc">{`Estado del evento a "Completado"`}</li>
           </ul>
           {error && (
             <div className="bg-error text-error-content p-1 text-sm rounded-md">
               {error}
             </div>
           )}
-          <div className="grid  sm:grid-cols-3 gap-2 sm:gap-4 text-center">
-            <div>
-              <button
-                className="btn btn-info mt-5 btn-outline "
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleWeaning('FATTEN')
-                }}
-              >
-                <span className="truncate">Para engorda</span>
-              </button>
-              <p className="whitespace-pre-wrap text-xs ">
-                * Aun no esta listo para vender. Puede ser hembra o macho
-              </p>
-            </div>
-            <div>
-              <button
-                className="btn btn-info mt-5  btn-outline"
+          <div className="flex flex-col sm:flex-row w-full justify-evenly items-center">
+            <ButtonOption
+              onClick={(e) => {
+                e.preventDefault()
+                handleWeaning('FATTEN')
+              }}
+              label="Para engorda"
+              helperText="* Aun no esta listo para vender. Puede ser hembra o macho"
+            />
+            <ButtonOption
+              onClick={(e) => {
+                e.preventDefault()
+                handleWeaning('FOR_SALE')
+              }}
+              label="Para venta"
+              helperText="* Puede ser vendido ahora."
+            />
+            {animal?.gender === 'female' && (
+              <ButtonOption
                 onClick={(e) => {
                   e.preventDefault()
                   handleWeaning('FOR_SALE')
                 }}
-              >
-                Para venta
-              </button>
-              <p className="whitespace-pre-wrap text-xs ">
-                * Puede ser vendido ahora.
-              </p>
-            </div>
-            <div>
-              <button
-                className="btn btn-info mt-5  btn-outline"
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleWeaning('FOR_BELLY')
-                }}
-              >
-                Para vientre
-              </button>
-              <p className="whitespace-pre-wrap text-xs ">
-                * Una hembra que formara parte del ganado principal
-              </p>
-            </div>
+                label="Para vientre"
+                helperText="* Una hembra que formara parte del ganado principal."
+              />
+            )}
           </div>
         </div>
       </Modal>
     </>
+  )
+}
+
+export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+  helperText: string
+  label: string
+  type?: any
+}
+
+const ButtonOption: React.FC<ButtonProps> = ({ ...props }) => {
+  const { label, helperText, ...rest } = props
+  return (
+    <div className="sm:w-1/3 flex justify-start  flex-col items-center ">
+      <button className="btn btn-info mt-5 btn-outline  " {...rest}>
+        <span className="truncate">{label}</span>
+      </button>
+      <p className="whitespace-pre-wrap text-xs ">{helperText}</p>
+    </div>
   )
 }
 

@@ -20,10 +20,24 @@ const BirthEvents = () => {
             label: 'Fecha',
             format: (props) => <TableDate date={props} />
           },
-          updatedAt: {
-            label: 'Actualizado',
-            format: (e) => fromNow(e, { addSuffix: true })
+          litter: {
+            label: 'Camada',
+            format: (p) => (
+              <span>
+                {p.split(',').map((earring) => (
+                  <ModalAnimalDetails
+                    earring={earring}
+                    size="normal"
+                    key={earring}
+                  />
+                ))}
+              </span>
+            )
           },
+          // updatedAt: {
+          //   label: 'Actualizado',
+          //   format: (e) => fromNow(e, { addSuffix: true })
+          // },
           mom: {
             label: 'Madre',
             format: (p) => (
@@ -51,28 +65,14 @@ const BirthEvents = () => {
                 ))}
               </span>
             )
-          },
-          litter: {
-            label: 'Camada',
-            format: (p) => (
-              <span>
-                {p.split(',').map((earring) => (
-                  <ModalAnimalDetails
-                    earring={earring}
-                    size="normal"
-                    key={earring}
-                  />
-                ))}
-              </span>
-            )
           }
         }}
         data={births.map((e) => ({
+          litter: e.eventData.calfs?.map((a) => a.earring).join(','),
           date: e.eventData.date,
-          updatedAt: e.updatedAt,
+          //updatedAt: e.updatedAt,
           mom: e.eventData.parents.mother?.earring,
-          dad: e.eventData.parents.father?.earring,
-          litter: e.eventData.calfs?.map((a) => a.earring).join(',')
+          dad: e.eventData.parents.father?.earring
         }))}
         showGlobalFilter
       />
