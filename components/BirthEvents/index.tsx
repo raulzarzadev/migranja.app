@@ -86,7 +86,11 @@ const BirthEvents = () => {
         }}
       />
       {openModal && (
-        <Modal open={openModal} handleOpen={handleOpenModal} title="Parto">
+        <Modal
+          open={openModal}
+          handleOpen={handleOpenModal}
+          title="Detalles de parto"
+        >
           <div>
             <span className="font-bold">Fechas:</span>
             <div className="flex w-full justify-evenly text-center my-2">
