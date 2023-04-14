@@ -20,23 +20,7 @@ import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
-  // const animalsFarm = useSelector(selectFarmAnimals)
   const weanings = events.filter((event) => event.type === 'WEANING')
-  // const weaning = weanings
-  //   .filter((event) => event.eventData.status !== 'DONE')
-  //   .filter((event) => event.eventData.status !== 'DONE')
-  //   .sort((a, b) => {
-  //     if (a.eventData.date > b.eventData.date) return 1
-  //     if (a.eventData.date < b.eventData.date) return -1
-  //     return 0
-  //   })
-
-  // const weaningWithMoms = weaning.map((weaning) => ({
-  //   ...weaning,
-  //   animalMother:
-  //     animalsFarm.find((animal) => animal.earring === weaning.eventData.earring)
-  //       ?.parents?.mother?.earring || ''
-  // }))
   const [openModal, setOpenModal] = useState(false)
   const handleOpenModal = () => {
     setOpenModal(!openModal)
@@ -131,48 +115,10 @@ const WeaningEvents = () => {
                   <button className="btn btn-success">Completado</button>
                 )}
               </div>
-              {/* <ModalEditWeaning eventId='' animalEarring=''/> */}
-              {/* <ModalDelete
-              handleDelete={() => {
-                // handleDeleteSale(sale?.id || '')
-              }}
-              title={'Eliminar venta'}
-              text='Se eliminara esta venta pero no se acutalizara el estado de los animales y quedará como "Vendido"'
-            /> */}
             </div>
           </Modal>
         )}
       </div>
-      {/* <div>Pendientes: {weaning.length}</div>
-      <div className="flex w-full justify-evenly my-2">
-        Destete por:
-        <button
-          className={`btn ${
-            viewSelected === 'byEarring' ? 'btn-sm btn-outline' : 'btn-md'
-          } `}
-          onClick={(e) => {
-            e.preventDefault()
-            setViewSelected('byMothers')
-          }}
-        >
-          Madres
-        </button>
-        <button
-          className={`btn ${
-            viewSelected === 'byMothers' ? 'btn-sm btn-outline' : 'btn-md'
-          } `}
-          onClick={(e) => {
-            e.preventDefault()
-            setViewSelected('byEarring')
-          }}
-        >
-          Crías
-        </button>
-      </div> */}
-      {/* {viewSelected === 'byEarring' && <WeaningByEarring weaning={weaning} />}
-      {viewSelected === 'byMothers' && (
-        <WeaningByMoms mothers={weaningByMoms} />
-      )} */}
     </div>
   )
 }

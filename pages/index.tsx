@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 
 import VisitHome from '../components/VisitHome'
+import Head from 'next/head'
 const Home: NextPage = () => {
   const user = useSelector(selectAuthState)
   const router = useRouter()
@@ -17,6 +18,9 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Mi Granja</title>
+      </Head>
       <div>
         <span className="hidden">Home view</span>
         <VisitHome />

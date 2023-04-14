@@ -34,7 +34,7 @@ const ModalBreedingDetails = ({
           e.preventDefault()
           handleOpenBreeding()
         }}
-        className="link text-sm underline-offset-4"
+        className="link text-sm underline-offset-4 font-bold mx-2"
       >
         {breedingBatchId}
       </button>
@@ -42,10 +42,10 @@ const ModalBreedingDetails = ({
         <Modal
           open={openBreeding}
           handleOpen={handleOpenBreeding}
-          title="Breeding details"
+          title="Detalles de monta"
         >
           <BreedingCard
-            hiddenConfig
+            // hiddenConfig
             hiddenBirths
             breeding={breedingFormatted as unknown as BreedingEventCardDetails}
           />

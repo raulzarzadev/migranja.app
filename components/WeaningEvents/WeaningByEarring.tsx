@@ -1,6 +1,6 @@
 import H2 from '@comps/Basics/Title2'
 import { WEANING_STATUS_LABELS } from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
-import { IconStatus } from '@comps/IconBreedingStatus'
+import IconStatus from '@comps/IconStatus'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
 import { EventStatus } from 'types/base/LABELS_TYPES/EventTypes'

@@ -1,10 +1,10 @@
-import { IconStatus } from '@comps/IconBreedingStatus'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
 import Autocomplete from 'react-autocomplete'
 import findAnimalRelationships from 'utils/findAnimalRealtionships'
+import IconStatus from '@comps/IconStatus'
 
 const SearchEarring = ({
   onEarringClick,

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
+import IconStatus from '@comps/IconStatus'
 
 const AnimalBreedingCardSmall = ({
   animal,
@@ -20,6 +21,7 @@ const AnimalBreedingCardSmall = ({
   const handleOpenModal = () => {
     setOpenModal(!openModal)
   }
+  // console.log({ animal })
 
   return (
     <>
@@ -42,10 +44,13 @@ const AnimalBreedingCardSmall = ({
           </span>
           <span>
             <span className="mx-4">
-              <IconBreedingStatus
-                finishInDays={breedingDates?.birthFinishInDays}
-                startInDays={breedingDates?.birthStartInDays}
-              />
+              {animal.status === 'BIRTH' && <IconStatus status="success" />}
+              {animal.status === 'PENDING' && (
+                <IconBreedingStatus
+                  finishInDays={breedingDates?.birthFinishInDays}
+                  startInDays={breedingDates?.birthStartInDays}
+                />
+              )}
             </span>
             {animalCurrentStatusLabels[breedingFemale.status || 'PENDING']}
           </span>

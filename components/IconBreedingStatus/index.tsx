@@ -1,4 +1,4 @@
-import Icon from 'components/Icon'
+import IconStatus from '@comps/IconStatus'
 
 const IconBreedingStatus = ({
   startInDays,
@@ -12,7 +12,7 @@ const IconBreedingStatus = ({
     return <></>
   }
   let status: IconStatus = 'info'
-  if (startInDays > 1) status = 'success'
+  if (startInDays > 1) status = 'waiting'
   if (startInDays <= 0) status = 'warning'
   if (finishInDays < 0) status = 'error'
   return (
@@ -21,32 +21,5 @@ const IconBreedingStatus = ({
     </span>
   )
 }
-
-type IconStatus = 'error' | 'success' | 'warning' | 'info'
-
-export const IconStatus = ({ status }: { status: IconStatus }) => (
-  <span className="">
-    {status === 'error' && (
-      <span className="btn btn-xs btn-circle btn-error">
-        <Icon name="baned" size="xs" />
-      </span>
-    )}
-    {status === 'success' && (
-      <span className="btn btn-xs btn-circle btn-success ">
-        <Icon name="done" size="xs" />
-      </span>
-    )}
-    {status === 'warning' && (
-      <span className="btn btn-xs btn-circle btn-warning ">
-        <Icon name="info" size="xs" />
-      </span>
-    )}
-    {status === 'info' && (
-      <span className="btn btn-xs btn-circle btn-info ">
-        <Icon name="info" size="xs" />
-      </span>
-    )}
-  </span>
-)
 
 export default IconBreedingStatus

@@ -11,6 +11,7 @@ import { AnimalBreedingStatus } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingCardSmall from './AnimalBreedingCardSmall'
 import ModalBreedingOptions from './ModalBreedingOptions'
+import IconStatus from '@comps/IconStatus'
 
 export interface BreedingBatchesListType {
   breedings: BreedingEventCardDetails[]
@@ -58,16 +59,24 @@ export const BreedingCard = ({
   const breedingMale = breeding?.eventData?.breedingMale
   const breedingDates = breeding.eventData?.breedingDates
   const otherMales = breeding.eventData?.otherMales || []
+  const atLeastOnePending = breeding.eventData.breedingBatch
+    .map((animal) => animal.status)
+    .some((status) => status === 'PENDING')
+  console.log({ atLeastOnePending })
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
       <header>
         {/* BADGES */}
         <div className="relative">
-          <span className="absolute ">
-            <IconBreedingStatus
-              startInDays={breedingDates?.birthStartInDays as number}
-              finishInDays={breedingDates?.birthFinishInDays as number}
-            />
+          <span className="absolute left-0 -top-2 ">
+            {!atLeastOnePending ? (
+              <IconStatus status="success" />
+            ) : (
+              <IconBreedingStatus
+                startInDays={breedingDates?.birthStartInDays as number}
+                finishInDays={breedingDates?.birthFinishInDays as number}
+              />
+            )}
           </span>
           <span className="absolute right-0 -top-2">
             {!hiddenConfig && <ModalBreedingOptions breeding={breeding} />}
@@ -75,8 +84,16 @@ export const BreedingCard = ({
         </div>
         {/* Breeding info */}
         <div className="grid text-center text-xs">
-          <span className="font-bold">{breeding.eventData?.breedingId}</span>
-          <span>{fromNow(breeding.createdAt, { addSuffix: true })}</span>
+          <span className="font-bold">
+            <span className="font-normal">Monta:</span>{' '}
+            {breeding.eventData?.breedingId}
+          </span>
+          <span>
+            Creada:{' '}
+            <span className="font-bold">
+              {fromNow(breeding.createdAt, { addSuffix: true })}
+            </span>
+          </span>
         </div>
       </header>
       <MalesTable
@@ -114,17 +131,6 @@ const BreedingDatesInfo = ({
       Partos esperados: <span className="font-bold">{start}</span>
       <span className="mx-2">al</span>
       <span className="font-bold">{finish}</span>
-      {/* Partos: {fromNow(startAt, { addSuffix: true })} */}
-      {/* <span>Partos: </span>
-      {start === finish ? (
-        start
-      ) : (
-        <>
-          <span className="">{start}</span>
-          <span className="mx-2">al</span>
-          <span className="">{finish}</span>
-        </>
-      )} */}
     </div>
   )
 }
