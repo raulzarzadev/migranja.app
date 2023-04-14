@@ -295,7 +295,7 @@ const BirthForm = ({
     })
   const dateTouched = methods.formState.dirtyFields.date
   const birthTypeTouched = formValues.birthType
-
+  const buttonSaveDisabled = !formValues.calfs.length
   return (
     <div>
       <Modal
@@ -400,20 +400,9 @@ const BirthForm = ({
                     </span>
                   </div>
                 </div>
-                {/* <InputContainer
-                  className="w-[150px] mx-auto"
-                  label="Tipo de parto"
-                  name="birthType"
-                  type="select"
-                  selectOptions={[
-                    { label: '1', value: 1 },
-                    { label: '2', value: 2 },
-                    { label: '3', value: 3 }
-                  ]}
-                /> */}
 
                 {!!birthTypeTouched && (
-                  <div>
+                  <div className="">
                     <div className="flex justify-end mt-6 text-sm italic">
                       <span className="mr-1">
                         ultimo macho:
@@ -434,7 +423,7 @@ const BirthForm = ({
                     {formValues?.calfs?.map((_newAnimal: any, i: number) => (
                       <div
                         key={i}
-                        className="grid grid-cols-4 place-items-center"
+                        className="grid  grid-cols-4 place-items-center "
                       >
                         <InputContainer
                           name={`calfs.${i}.isAlive`}
@@ -471,7 +460,6 @@ const BirthForm = ({
                             </span>
                           )}
                         </div>
-
                         <InputContainer
                           rules={{
                             // required: 'Este campo es necesario',
@@ -507,7 +495,6 @@ const BirthForm = ({
                           max="10"
                           step="0.01"
                         />
-                        <div></div>
                       </div>
                     ))}
                   </div>
@@ -517,7 +504,11 @@ const BirthForm = ({
           )}
 
           <div className="mt-10">
-            <ProgressButton label={labelStatus} progress={progress} />
+            <ProgressButton
+              disabled={buttonSaveDisabled}
+              label={labelStatus}
+              progress={progress}
+            />
           </div>
           {/* {progress > 0 && (
             <progress className="progress w-full" value={progress} max={100} />
