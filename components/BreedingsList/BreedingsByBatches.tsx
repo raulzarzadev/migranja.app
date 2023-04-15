@@ -62,7 +62,6 @@ export const BreedingCard = ({
   const atLeastOnePending = breeding.eventData.breedingBatch
     .map((animal) => animal.status)
     .some((status) => status === 'PENDING')
-  console.log({ atLeastOnePending })
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
       <header>

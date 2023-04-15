@@ -22,4 +22,6 @@ export interface AnimalWeaningType extends Partial<AnimalType> {
   eventData: AnimalWeaningEventData
 }
 
+export interface AnimalWeaningEvent extends TypeBase {}
+
 export interface DTO_CreteAnimalWeaning extends AnimalWeaning {}

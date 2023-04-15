@@ -135,8 +135,18 @@ const AnimalBreedingOptions = ({
             </select>
           </label>
         </div>
-        {option === 'REVERT' && (
-          <RevertBirthForm animal={animal} birthEventData={birthEventData} />
+        {birthEventData?.birthEventId && (
+          <>
+            {option === 'REVERT' && (
+              <RevertBirthForm
+                // animal={animal}
+                //birthEventData={birthEventData}
+                birthEventId={birthEventData?.birthEventId}
+                breedingId={animal.eventData.id}
+                motherId={animal.id || ''}
+              />
+            )}
+          </>
         )}
         {option === 'BIRTH' && (
           <BirthForm

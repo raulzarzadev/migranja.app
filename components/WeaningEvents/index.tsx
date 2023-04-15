@@ -88,7 +88,7 @@ const WeaningEvents = () => {
           <Modal
             open={openModal}
             handleOpen={handleOpenModal}
-            title="Detalle de venta"
+            title="Detalle de destete"
           >
             {/* <PrintableSellForm sale={sales[saleSelected]} /> */}
             <div className="flex w-full justify-center">

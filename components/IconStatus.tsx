@@ -10,7 +10,7 @@ export const IconStatus = ({ status }: { status: IconStatus }) => (
       </span>
     )}
     {status === 'waiting' && (
-      <span className="btn btn-xs btn-circle btn-success ">
+      <span className="btn btn-xs btn-circle btn-info ">
         <Icon name="clock" size="xs" />
       </span>
     )}
