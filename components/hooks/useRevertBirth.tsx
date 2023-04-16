@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { FarmEvent } from 'types/base/FarmEvent.model'
 import useEvent from './useEvent'
 import { useSelector } from 'react-redux'
-import { selectFarmEvents } from 'store/slices/farmSlice'
+import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { AnimalWeaningEvent } from 'types/base/AnimalWeaning.model'
 import { deleteAnimal, updateAnimal } from '@firebase/Animal/main'
 
@@ -22,7 +22,8 @@ const useRevertBirth = ({
   const [progress, setProgress] = useState(0)
 
   const farmEvents = useSelector(selectFarmEvents)
-  const { event } = useEvent({ eventId: birthId })
+  const farmAnimals = useSelector(selectFarmAnimals)
+  const { event: birthEvent } = useEvent({ eventId: birthId })
 
   interface Calf {
     id: string
@@ -45,24 +46,39 @@ const useRevertBirth = ({
         weaning.push(e)
       })
     })
-    const promises = weaning.map((event) => deleteEvent(event.id))
-    return await Promise.all(promises)
+    const promises = weaning.map((birthEvent) => deleteEvent(birthEvent.id))
+
+    return await Promise.all(promises).catch((err) => console.log({ err }))
   }
 
   const deleteCalfs = async (calfs: Calf[] = []) => {
-    for (let i = 0; i < calfs?.length; i++) {
-      const calfId = calfs[i].id
-      await deleteAnimal(calfId)
+    console.log({ calfs })
+    try {
+      for (let i = 0; i < calfs?.length; i++) {
+        const calfId = calfs[i].id
+        if (!calfId) return console.log('no calf id')
+        await deleteAnimal(calfId).then((res) => {
+          console.log(res)
+        })
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
   //const breedingId = ''
+
   const handleRevertBirth = async () => {
     setProgress(10)
-    const calfs = event?.eventData.calfs?.map((calf) => ({
-      id: calf.id || '',
+
+    const calfs = birthEvent?.eventData.calfs?.map((calf) => ({
+      id:
+        calf.id ||
+        farmAnimals.find((a) => a.earring === calf.earring)?.id ||
+        '',
       earring: calf.earring || ''
     }))
+
     try {
       // ************************* delete birth event
       await deleteEvent(birthId)

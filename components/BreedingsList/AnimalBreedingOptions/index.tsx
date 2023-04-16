@@ -13,6 +13,7 @@ import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
 import EmptyPregnantForm from './EmptyPregnantForm'
+import ModalRevertBirth from '@comps/modal/ModalRevertBirth'
 
 const AnimalBreedingOptions = ({
   animal,
@@ -84,69 +85,32 @@ const AnimalBreedingOptions = ({
             </span>
           </div>
         </div>
-
-        {animal.status === 'BIRTH' && birthEventData && (
-          <div>
-            <div>Detalles de parto</div>
-            <div>
-              Evento
-              <div className="text-center">{birthEventData.birthEventId}</div>
-            </div>
-            <div>
-              Animales creados{' '}
-              <div className="text-center">
-                {birthEventData.newCalfsIds.map((animal, i) => (
-                  <div key={animal}>
-                    <ModalAnimalDetails
-                      size="md"
-                      earring={
-                        farmAnimals.find(({ id }) => id === animal)?.earring
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              Destetes programados{' '}
-              <div className="text-center">
-                {birthEventData.calfsWeaningsIds.map((weaning) => (
-                  <div key={weaning}>{weaning}</div>
-                ))}
-              </div>
-            </div>
+        {animal.status !== 'BIRTH' && (
+          <div className="flex justify-center my-2">
+            <label className={`form-control `}>
+              <span className="label-text">Opciones</span>
+              <select
+                onChange={({ target: { value } }) => setOption(value)}
+                className="input input-bordered input-sm mx-auto w-[150px] "
+              >
+                <option value={''}>Selecciona </option>
+                {OPTIONS_STATUS[animal.status as OptionValue].map(
+                  ({ value, label }) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  )
+                )}
+              </select>
+            </label>
           </div>
         )}
-        <div className="flex justify-center my-2">
-          <label className={`form-control `}>
-            <span className="label-text">Opciones</span>
-            <select
-              onChange={({ target: { value } }) => setOption(value)}
-              className="input input-bordered input-sm mx-auto w-[150px] "
-            >
-              <option value={''}>Selecciona </option>
-              {OPTIONS_STATUS[animal.status as OptionValue].map(
-                ({ value, label }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-        </div>
-        {birthEventData?.birthEventId && (
-          <>
-            {option === 'REVERT' && (
-              <RevertBirthForm
-                // animal={animal}
-                //birthEventData={birthEventData}
-                birthEventId={birthEventData?.birthEventId}
-                breedingId={animal.eventData.id}
-                motherId={animal.id || ''}
-              />
-            )}
-          </>
+        {animal.status === 'BIRTH' && birthEventData?.birthEventId && (
+          <ModalRevertBirth
+            birthId={birthEventData?.birthEventId}
+            breedingId={animal.eventData.id}
+            motherId={animal.id || ''}
+          />
         )}
         {option === 'BIRTH' && (
           <BirthForm

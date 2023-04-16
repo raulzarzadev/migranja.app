@@ -1,5 +1,7 @@
 import MyTable from '@comps/MyTable'
 import TableDate from '@comps/MyTable/TableDate'
+import RevertBirthForm from '@comps/forms/RevertBirthForm'
+import useModal from '@comps/hooks/useModal'
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
@@ -16,6 +18,13 @@ const BirthEvents = () => {
     setOpenModal(!openModal)
   }
   const [event, setEvent] = useState<AnimalFormattedWhitGenericEvenData>()
+  const revertModal = useModal()
+  const birthId = event?.id
+  const breedingId = events.find(
+    ({ eventData }) => eventData.breedingId === event?.eventData.breedingId
+  )?.id
+  const motherId = event?.eventData.parents.mother?.id
+  const canRevert = birthId && breedingId && motherId
   return (
     <div className="w-full">
       <MyTable
@@ -147,9 +156,33 @@ const BirthEvents = () => {
                 </span>
               </div>
             </div>
+            {canRevert && (
+              <div className="text-center mt-4">
+                <button
+                  onClick={() => {
+                    revertModal.handleOpen()
+                  }}
+                  className="btn btn-error btn-outline"
+                >
+                  Revertir parto
+                </button>
+                <Modal
+                  open={revertModal.open}
+                  handleOpen={revertModal.handleOpen}
+                  title="Revertir parto"
+                >
+                  <RevertBirthForm
+                    birthEventId={birthId}
+                    breedingId={breedingId}
+                    motherId={motherId}
+                  />
+                </Modal>
+              </div>
+            )}
           </div>
         </Modal>
       )}
+
       {/* <EventsList events={births} /> */}
     </div>
   )

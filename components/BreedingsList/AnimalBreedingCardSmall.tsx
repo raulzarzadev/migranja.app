@@ -33,17 +33,33 @@ const AnimalBreedingCardSmall = ({
         />
       )}
 
-      <div className={`bg-base-300 my-2 rounded-md shadow-md  `}>
-        <div className="flex justify-between items-center px-2 pt-1 w-full ">
+      <button
+        className={`bg-base-300 my-2 rounded-md shadow-md  w-full  hover:shadow-inner`}
+        onClick={(e) => {
+          if (!hiddenEvents) {
+            e.preventDefault()
+            e.stopPropagation()
+            handleOpenModal()
+          }
+        }}
+      >
+        <div className="flex justify-evenly items-center px-2 py-1 w-full ">
           <span>
             Arete:
             <span className="ml-4 ">
-              <ModalAnimalDetails earring={breedingFemale.earring} />
+              <ModalAnimalDetails
+                earring={breedingFemale.earring}
+                size="normal"
+              />
               {breedingFemale.name}
             </span>
           </span>
           <span>
             <span className="mx-4">
+              <span className="mx-2">
+                {animalCurrentStatusLabels[breedingFemale.status || 'PENDING']}
+              </span>
+
               {animal.status === 'BIRTH' && <IconStatus status="success" />}
               {animal.status === 'PENDING' && (
                 <IconBreedingStatus
@@ -52,25 +68,9 @@ const AnimalBreedingCardSmall = ({
                 />
               )}
             </span>
-            {animalCurrentStatusLabels[breedingFemale.status || 'PENDING']}
           </span>
-          {!hiddenEvents && (
-            <span className="p-1">
-              <button
-                className="text-info"
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  handleOpenModal()
-                }}
-              >
-                <Icon name="event" />
-              </button>
-            </span>
-          )}
         </div>
-        <div className="text-center"></div>
-      </div>
+      </button>
     </>
   )
 }

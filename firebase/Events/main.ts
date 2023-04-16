@@ -145,22 +145,26 @@ export const updateAnimalStatusInBreedingBatch = async ({
   animalId?: string
   eventType: BaseFarmEvent['type']
 }) => {
-  const oldDbAnimal = await eventsCRUD
-    .getItem(eventId)
-    .then((res: any) =>
-      res?.eventData?.breedingBatch?.find(
-        (animal: any) => animal.id === animalId
+  try {
+    const oldDbAnimal = await eventsCRUD
+      .getItem(eventId)
+      .then((res: any) =>
+        res?.eventData?.breedingBatch?.find(
+          (animal: any) => animal.id === animalId
+        )
       )
-    )
-  const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
-    'eventData.breedingBatch': arrayRemove(oldDbAnimal)
-  })
-  const newAnimal = { ...oldDbAnimal, status: eventType }
-  const setNewAnimal = await eventsCRUD.updateItem(eventId, {
-    'eventData.breedingBatch': arrayUnion(newAnimal)
-  })
+    const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
+      'eventData.breedingBatch': arrayRemove(oldDbAnimal)
+    })
+    const newAnimal = { ...oldDbAnimal, status: eventType }
+    const setNewAnimal = await eventsCRUD.updateItem(eventId, {
+      'eventData.breedingBatch': arrayUnion(newAnimal)
+    })
 
-  return await Promise.all([removeOldAnimal, setNewAnimal])
+    return await Promise.all([removeOldAnimal, setNewAnimal])
+  } catch (error) {
+    console.error(error)
+  }
 }
 /** ************** REMOVE ANIMAL FROM BREEDING BATCH ********** */
 
