@@ -1,11 +1,13 @@
 import Icon from '@comps/Icon'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import IconBreedingStatus from 'components/IconBreedingStatus'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
 import IconStatus from '@comps/IconStatus'
+import ModalBirthDetails from '@comps/modal/ModalBirthDetails'
+import React from 'react'
 
 const AnimalBreedingCardSmall = ({
   animal,
@@ -17,31 +19,21 @@ const AnimalBreedingCardSmall = ({
   const breedingDates = animal?.eventData?.breedingDates
   const breedingFemale = animal
 
-  const [openModal, setOpenModal] = useState(false)
-  const handleOpenModal = () => {
-    setOpenModal(!openModal)
-  }
-  // console.log({ animal })
+  const birthId = animal?.birthEventData?.birthEventId || ''
+
+  const WrapperBreedingCard = (
+    props: JSX.IntrinsicAttributes & { children?: ReactNode }
+  ) =>
+    animal.status !== 'BIRTH' ? (
+      <React.Fragment {...props} />
+    ) : (
+      <ModalBirthDetails birthId={birthId}>{props.children}</ModalBirthDetails>
+    )
 
   return (
-    <>
-      {openModal && (
-        <AnimalBreedingOptions
-          animal={animal}
-          handleOpenModal={handleOpenModal}
-          openModal={openModal}
-        />
-      )}
-
-      <button
+    <WrapperBreedingCard>
+      <div
         className={`bg-base-300 my-2 rounded-md shadow-md  w-full  hover:shadow-inner`}
-        onClick={(e) => {
-          if (!hiddenEvents) {
-            e.preventDefault()
-            e.stopPropagation()
-            handleOpenModal()
-          }
-        }}
       >
         <div className="flex justify-evenly items-center px-2 py-1 w-full ">
           <span>
@@ -70,8 +62,8 @@ const AnimalBreedingCardSmall = ({
             </span>
           </span>
         </div>
-      </button>
-    </>
+      </div>
+    </WrapperBreedingCard>
   )
 }
 export default AnimalBreedingCardSmall

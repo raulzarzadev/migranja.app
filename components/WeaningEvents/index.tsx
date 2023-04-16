@@ -17,6 +17,9 @@ import Icon from '@comps/Icon'
 import { EventType } from '@firebase/Events/event.model'
 import { FarmEventType } from '@comps/FarmEvents/FarmEvent/FarmEvent.model'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import WeaningEventCard from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
+import WeaningDetails from '@comps/WeaningDetails'
+import WeaningIconStatus from '@comps/WeaningIconStatus'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
@@ -29,6 +32,7 @@ const WeaningEvents = () => {
 
   const eventSelected: AnimalFormattedWhitGenericEvenData =
     weanings?.[selectedRow as number]
+
   return (
     <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
       <div className="flex w-full justify-center">
@@ -48,8 +52,14 @@ const WeaningEvents = () => {
             },
             status: {
               label: 'Status',
-              format: (props) =>
-                labelsOfFarmEventTypes?.[props as TypeOfFarmEvent]
+              format: (props) => (
+                <span>
+                  {labelsOfFarmEventTypes?.[props as TypeOfFarmEvent]}
+                  <span className="mx-1">
+                    <WeaningIconStatus status={props} />
+                  </span>
+                </span>
+              )
             }
           }}
           data={weanings.map((weaning) => ({
@@ -90,8 +100,8 @@ const WeaningEvents = () => {
             handleOpen={handleOpenModal}
             title="Detalle de destete"
           >
-            {/* <PrintableSellForm sale={sales[saleSelected]} /> */}
-            <div className="flex w-full justify-center">
+            <WeaningDetails weaningId={eventSelected.id} />
+            {/* <div className="flex w-full justify-center">
               <div className="flex w-full justify-evenly">
                 <ModalDelete
                   title="Eliminar evento"
@@ -115,7 +125,7 @@ const WeaningEvents = () => {
                   <button className="btn btn-success">Completado</button>
                 )}
               </div>
-            </div>
+            </div> */}
           </Modal>
         )}
       </div>

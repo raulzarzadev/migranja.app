@@ -79,12 +79,16 @@ const BirthEvents = () => {
                 ))}
               </span>
             )
+          },
+          batch: {
+            label: 'Lote'
           }
         }}
         data={births.map((e) => ({
           litter: e.eventData.calfs?.map((a) => a.earring).join(','),
           date: e.eventData.date,
           //updatedAt: e.updatedAt,
+          batch: e.eventData.breedingId,
           mom: e.eventData.parents.mother?.earring,
           dad: e.eventData.parents.father?.earring
         }))}
