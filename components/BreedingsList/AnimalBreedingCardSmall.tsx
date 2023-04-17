@@ -8,6 +8,8 @@ import AnimalBreedingOptions from './AnimalBreedingOptions'
 import IconStatus from '@comps/IconStatus'
 import ModalBirthDetails from '@comps/modal/ModalBirthDetails'
 import React from 'react'
+import ModalBreedingOptions from './ModalBreedingOptions'
+import ModalAnimalBreedingOptions from '@comps/modal/ModalAnimalBreedingOptions'
 
 const AnimalBreedingCardSmall = ({
   animal,
@@ -23,12 +25,25 @@ const AnimalBreedingCardSmall = ({
 
   const WrapperBreedingCard = (
     props: JSX.IntrinsicAttributes & { children?: ReactNode }
-  ) =>
-    animal.status !== 'BIRTH' ? (
-      <React.Fragment {...props} />
-    ) : (
-      <ModalBirthDetails birthId={birthId}>{props.children}</ModalBirthDetails>
-    )
+  ) => {
+    if (animal.status === 'BIRTH')
+      return (
+        <ModalBirthDetails birthId={birthId}>
+          {props.children}
+        </ModalBirthDetails>
+      )
+
+    if (animal.status === 'PENDING')
+      return (
+        <ModalAnimalBreedingOptions
+          breedingId={animal.eventData.breedingId}
+          animalId={animal.id}
+        >
+          {props.children}
+        </ModalAnimalBreedingOptions>
+      )
+    return <React.Fragment {...props} />
+  }
 
   return (
     <WrapperBreedingCard>

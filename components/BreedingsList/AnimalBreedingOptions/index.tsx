@@ -14,27 +14,34 @@ import AbortForm from './AbortForm'
 import BirthForm from './BirthForm'
 import EmptyPregnantForm from './EmptyPregnantForm'
 import ModalRevertBirth from '@comps/modal/ModalRevertBirth'
+import useAnimal from '@comps/hooks/useAnimal'
+import useEvent from '@comps/hooks/useEvent'
 
 const AnimalBreedingOptions = ({
-  animal,
+  // animal,
   openModal,
-  handleOpenModal
+  handleOpenModal,
+  animalId,
+  breedingId
 }: {
-  animal: AnimalBreedingEventCard
+  // animal: AnimalBreedingEventCard
   openModal: boolean
   handleOpenModal: () => void
+  breedingId: string
+  animalId: string
 }) => {
   const farmEvents = useSelector(selectFarmEvents)
-  const farmAnimals = useSelector(selectFarmAnimals)
-
+  // const farmAnimals = useSelector(selectFarmAnimals)
+  const { animal } = useAnimal({ animalId })
+  const { event } = useEvent({ eventId: breedingId })
   const breedingAnimal = farmEvents
-    .find(({ id }) => animal?.eventData?.id === id)
+    .find(({ id }) => animalId === id)
     ?.eventData.breedingBatch?.find(
       ({ earring }) => earring === animal?.earring
     )
   const birthEventData: BirthEventDataType | undefined =
     breedingAnimal?.birthEventData
-  const breedingMale = animal.eventData?.breedingMale
+  // const breedingMale = animal.eventData?.breedingMale
 
   const optionBirth: SelectOption = { label: 'Parto', value: 'BIRTH' }
   const optionAbort: SelectOption = { label: 'Aborto', value: 'ABORT' }
@@ -52,27 +59,26 @@ const AnimalBreedingOptions = ({
 
   const [option, setOption] = useState('')
   const handleRemove = () => {
-    removeAnimalFromBreeding(animal.eventData.id, animal.id || '')
+    removeAnimalFromBreeding(breedingId, animalId || '')
       .then(async (res) => {
         console.log(res)
         //* * * * * * * * * * * * * * * * update (revert) animal state
-        if (animal.id)
+        if (animalId)
           await updateAnimalState(
-            animal?.id,
-            animal.pastState || 'FREE',
-            animal.state
+            animalId,
+            animal?.pastState || 'FREE',
+            animal?.state
           )
       })
       .then((err) => console.log(err))
   }
 
+  console.log({ event })
+
   return (
-    <Modal
-      handleOpen={handleOpenModal}
-      open={openModal}
-      title="Opciones de monta individual "
-    >
-      <div>
+    <>
+      Form de opcions
+      {/* <div>
         <div className="text-xs flex justify-evenly w-full">
           <div className="text-xs text-center">
             Monta:
@@ -132,8 +138,8 @@ const AnimalBreedingOptions = ({
             />
           </div>
         )}
-      </div>
-    </Modal>
+      </div> */}
+    </>
   )
 }
 export default AnimalBreedingOptions
