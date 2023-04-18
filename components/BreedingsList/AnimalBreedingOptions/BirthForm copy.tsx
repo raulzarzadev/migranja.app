@@ -31,19 +31,24 @@ import { AnimalType } from 'types/base/AnimalType.model'
 import { MalesTable } from '@comps/MalesTable'
 import { calculatePossibleBirth } from '../breeding.helpers'
 import HelperText from '@comps/HelperText'
+import useCreateBirth from '@comps/hooks/useCreateBirth'
+import useEvent from '@comps/hooks/useEvent'
 
 const BirthForm = ({
   animal,
-  possibleBirth
+  possibleBirth,
+  breedingId
 }: {
   animal: AnimalBreedingEventCard
   possibleBirth?: number | Date
+  breedingId?: string
 }) => {
   const currentFarm = useSelector(selectFarmState)
   const farmAnimals = useSelector(selectFarmAnimals)
   const farmEarrings = useSelector(selectFarmAnimals)?.map(
     ({ earring }) => earring
   )
+  const { event } = useEvent({ eventId: breedingId })
 
   const sortByCreatedDate = (a: any, b: any) => b?.createdAt - a?.createdAt
 
@@ -94,101 +99,27 @@ const BirthForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animal, formValues?.birthType])
 
-  const [progress, setProgress] = useState(0)
   const [labelStatus, setLabelStatus] = useState('')
   const breedingEventId = animal.eventData?.id
   const breedingBatchId = animal.eventData?.breedingId
   const breedingMale = animal.eventData?.breedingMale
-  const onSubmit = async (data: any) => {
-    setProgress(1)
-    const breedingMaleSelected = farmAnimals.find(
-      ({ earring }) => earring === formValues.male
-    )
-    const { formatBirthEvent } = formatNewGenericFarmEvent<BirthDetailsEvent>({
-      eventType: 'BIRTH',
-      animal,
+
+  const breedingMaleSelected = farmAnimals.find(
+    ({ earring }) => earring === formValues.male
+  )
+  const { handleCreateBirth, status, progress } = useCreateBirth({
+    breedingId,
+    fatherId: breedingMaleSelected?.id,
+    motherId: animal.id
+  })
+
+  const onSubmit = async (data) => {
+    await handleCreateBirth({
+      breeding: { id: breedingId || '', name: event?.eventData?.batch },
       calfs: data.calfs,
-      currentFarm,
-      farmAnimals,
-      formValues,
-      breeding: {
-        breedingId: breedingBatchId,
-        breedingMale: {
-          inTheFarm: breedingMale?.inTheFarm || false,
-          ...breedingMaleSelected
-        }
-      }
+      date: data.date,
+      batch: event?.eventData?.batch
     })
-
-    if (!breedingEventId) return console.log('no eventId')
-    try {
-      const newCalfs = formatBirthEvent.eventData.calfs || []
-      // ****************************************************  1.  create birth
-      setLabelStatus('Creando evento')
-      setProgress(10)
-
-      const event = await createGenericBreedingEvent(formatBirthEvent)
-
-      // *************************************************  2.  create animals/calfs
-      setLabelStatus('Creando animales')
-      setProgress(30)
-
-      const newAnimalsPromises = newCalfs.map((calf) => {
-        return createAnimal({ ...calf, state: 'LACTATING' })
-      })
-
-      const newAnimals = await Promise.all(newAnimalsPromises)
-
-      setLabelStatus('Creando detetes')
-      setProgress(60)
-      // *************************************************  3. create animals weaning
-      const newWeaningsPromises = newCalfs.map((calf) => {
-        return creteAnimalWeaning({
-          type: 'WEANING',
-          eventData: {
-            status: 'PENDING',
-            earring: calf.earring || '',
-            date: addDays(data.date, OVINE_DAYS.finishWeaning).getTime()
-          },
-          farm: {
-            id: currentFarm?.id || '',
-            name: currentFarm?.name || ''
-          }
-        })
-      })
-      const newWeanings = await Promise.all(newWeaningsPromises)
-
-      // ***************************************************  4.  update breeding, move from batch to already done
-
-      setLabelStatus('Actualizando monta')
-      setProgress(80)
-
-      const birthEventData = {
-        birthEventId: event?.res?.id,
-        newCalfsIds: newAnimals.map((animal) => animal?.res?.id),
-        calfsWeaningsIds: newWeanings.map((weaning) => weaning?.res.id)
-      }
-
-      const breeding = await updateEventBreedingBatch({
-        eventId: breedingEventId || '',
-        animalId: animal?.id as string,
-        eventType: 'BIRTH',
-        birthEventData
-      })
-
-      // ***************************************************  5.  update mom state to SUCKLE
-      if (animal?.id)
-        await updateAnimalState(animal?.id, 'SUCKLE', animal?.state)
-      setLabelStatus('Actualizando madre')
-      setProgress(90)
-
-      setProgress(100)
-      setFinishView(true)
-      reset()
-    } catch (error) {
-      setProgress(0)
-      console.log(error)
-    }
   }
   const [finishView, setFinishView] = useState(false)
 
@@ -506,7 +437,7 @@ const BirthForm = ({
           <div className="mt-10">
             <ProgressButton
               disabled={buttonSaveDisabled}
-              label={labelStatus}
+              label={status}
               progress={progress}
             />
           </div>

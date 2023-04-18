@@ -263,5 +263,5 @@ export interface CreateEvent {
   }
 }
 
-export const createEvent_v2 = async (newItem: CreateEvent) =>
+export const createEvent2 = async (newItem: CreateEvent) =>
   await eventsCRUD.createItem(newItem)

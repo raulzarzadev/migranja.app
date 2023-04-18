@@ -45,17 +45,17 @@ const BirthDetails = ({ birthId }: { birthId: string }) => {
           <span>
             Madre:{' '}
             <ModalAnimalDetails
-              earring={event?.eventData.parents.mother?.earring}
+              earring={event?.eventData?.parents?.mother?.earring}
             />
           </span>
           <span>
             Padre:
             <span className="">
               <ModalAnimalDetails
-                earring={event?.eventData.parents.father?.earring}
+                earring={event?.eventData?.parents?.father?.earring}
               />
               <span className="text-sm">
-                {event?.eventData.parents.father?.name}
+                {event?.eventData.parents?.father?.name}
               </span>
             </span>
           </span>

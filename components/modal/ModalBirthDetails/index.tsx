@@ -23,7 +23,7 @@ const ModalBirthDetails = ({
   const breedingId = events?.find(
     ({ eventData }) => eventData.breedingId === event?.eventData.breedingId
   )?.id
-  const motherId = event?.eventData.parents.mother?.id
+  const motherId = event?.eventData?.parents?.mother?.id
   const canRevert = birthId && breedingId && motherId
   const defaultButton = 'Detalles de parto'
 
@@ -46,13 +46,11 @@ const ModalBirthDetails = ({
         >
           <div>
             <div>{birthId && <BirthDetails birthId={birthId} />}</div>
-            {canRevert && (
-              <ModalRevertBirth
-                birthId={birthId}
-                breedingId={breedingId || ''}
-                motherId={motherId || ''}
-              />
-            )}
+            <ModalRevertBirth
+              birthId={birthId}
+              breedingId={breedingId || ''}
+              motherId={motherId || ''}
+            />
           </div>
         </Modal>
       )}

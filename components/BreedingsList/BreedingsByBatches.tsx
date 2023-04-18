@@ -60,8 +60,8 @@ export const BreedingCard = ({
   const breedingDates = breeding.eventData?.breedingDates
   const otherMales = breeding.eventData?.otherMales || []
   const atLeastOnePending = breeding.eventData.breedingBatch
-    .map((animal) => animal.status)
-    .some((status) => status === 'PENDING')
+    ?.map((animal) => animal?.status)
+    ?.some((status) => status === 'PENDING')
   return (
     <div className="bg-base-300 rounded-md my-1 mt-4">
       <header>

@@ -109,7 +109,7 @@ const ModalBreedingOptions = ({
               </label>
             </div>
             <div className="flex justify-evenly flex-wrap">
-              {breedingAnimals.map((animal) => (
+              {breedingAnimals?.map((animal) => (
                 <div key={animal.id}>
                   <ModalAnimalDetails earring={animal.earring} />
                 </div>
@@ -356,7 +356,7 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
             />
           </div>
           <div>
-            {breeding?.eventData?.breedingBatch.map((animal, i) => (
+            {breeding?.eventData?.breedingBatch?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
                 animal={{ ...animal, eventData: breeding.eventData }}

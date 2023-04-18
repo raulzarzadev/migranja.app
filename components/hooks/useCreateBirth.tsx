@@ -2,11 +2,11 @@ import { AnimalType, ParentsType } from 'types/base/AnimalType.model'
 import useAnimal from './useAnimal'
 import useEvent from './useEvent'
 import { EventType } from '@firebase/Events/event.model'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   createBirthEvent,
   createEvent,
-  createEvent_v2,
+  createEvent2,
   updateEventBreedingBatch
 } from '@firebase/Events/main'
 import { DateType } from 'types/base/TypeBase.model'
@@ -33,20 +33,29 @@ export interface DTO_NewBirth {
   }
 }
 export interface NewCalf extends NewAnimal {}
-const useCreateBirth = ({ breedingId }: { breedingId?: string } = {}) => {
-  // const { animal: mother } = useAnimal({ animalId: motherId })
-  // const { animal: father } = useAnimal({ animalId: fatherId })
+const useCreateBirth = ({
+  breedingId,
+  motherId,
+  fatherId
+}: { breedingId?: string; fatherId?: string; motherId?: string } = {}) => {
+  const farm = useSelector(selectFarmState)
   const { event } = useEvent({ eventId: breedingId || '' })
   const farmAnimals = useSelector(selectFarmAnimals)
-  const farm = useSelector(selectFarmState)
-  const [fatherEarring, setFatherEarring] = useState()
-  const [motherEarring, setMotherEarring] = useState()
+  const [motherData, setMotherData] = useState<AnimalType | null>(null)
+  const [fatherData, setFatherData] = useState<AnimalType | null>(null)
+
+  useEffect(() => {
+    const mother = farmAnimals.find(({ id }) => id === motherId) || null
+    const father = farmAnimals.find(({ id }) => id === fatherId) || null
+    setMotherData(mother)
+    setFatherData(father)
+  }, [fatherId, motherId])
+
   const [date, setDate] = useState<DateType>(new Date())
   const [batch, setBatch] = useState('')
   const [status, setStatus] = useState('ready')
   const [progress, setProgress] = useState(0)
   const [calfs, setCalfs] = useState<DTO_NewBirth['eventData']['calfs']>([])
-  const parentsData = useParentsData({ motherEarring, fatherEarring })
 
   const breedingData = event
     ? {
@@ -54,45 +63,39 @@ const useCreateBirth = ({ breedingId }: { breedingId?: string } = {}) => {
         name: event?.eventData.batchId || ''
       }
     : null
-  const { animal: motherData } = useAnimal({ animalId: parentsData.mother?.id })
 
   const handleCreateBirth = async (data: {
     batch?: string
     breeding: { id: string; name: string }
     calfs: []
     date: DateType
-    fatherId: string
-    motherId: string
   }) => {
-    const parentsData = () => {
-      const father = farmAnimals.find(({ id }) => id === data.fatherId)
-      const mother = farmAnimals.find(({ id }) => id === data.motherId)
-      return {
-        father: father
-          ? {
-              id: father?.id,
-              earring: father?.earring,
-              inTheFarm: true
-            }
-          : null,
-        mother: mother
-          ? {
-              id: mother?.id,
-              earring: mother?.earring,
-              inTheFarm: true
-            }
-          : null
-      }
-    }
     const newBirth: DTO_NewBirth = {
-      type: 'BREEDING',
+      type: 'BIRTH',
       farm: farm!,
       eventData: {
         date,
         batch,
         breeding: breedingData,
         calfs: data.calfs,
-        parents: parentsData()
+        parents: {
+          father: fatherData
+            ? {
+                inTheFarm: true,
+                earring: fatherData.earring,
+                id: fatherData.id,
+                name: fatherData.name
+              }
+            : null,
+          mother: motherData
+            ? {
+                inTheFarm: true,
+                earring: motherData.earring,
+                id: motherData.id,
+                name: motherData.name
+              }
+            : null
+        }
       }
     }
     setProgress(10)
@@ -102,16 +105,27 @@ const useCreateBirth = ({ breedingId }: { breedingId?: string } = {}) => {
 
     try {
       // *************************************************  1. create birth
-      await createEvent_v2(newBirth)
+      await createEvent2(newBirth)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => console.log(err))
       setProgress(20)
       setStatus('CREATING_ANIMALS')
 
       // *************************************************  2. create animals/calfs
-      const newAnimalsPromises = calfs.map((calf) => {
-        return createAnimal({ ...calf, state: 'LACTATING' })
+      const newAnimalsPromises = calfs.map(async (calf) => {
+        try {
+          const res = await createAnimal({ ...calf, state: 'LACTATING' })
+          return console.log(res)
+        } catch (err) {
+          return console.log(err)
+        }
       })
+      console.log({ newAnimalsPromises })
       const calfsCreated = await Promise.all(newAnimalsPromises)
       setProgress(40)
+      console.log('animals created')
       setStatus('CREATING_WEANING')
 
       // *************************************************  3. create animals weaning
@@ -141,7 +155,7 @@ const useCreateBirth = ({ breedingId }: { breedingId?: string } = {}) => {
       }
       const breeding = await updateEventBreedingBatch({
         eventId: event?.id || '',
-        animalId: parentsData.mother?.id as string,
+        animalId: motherData?.id as string,
         eventType: 'BIRTH',
         birthEventData
       })
@@ -149,8 +163,8 @@ const useCreateBirth = ({ breedingId }: { breedingId?: string } = {}) => {
       setStatus('UPDATING_MOTHER_STATE')
 
       // *************************************************  5. update mom state to SUCKLE
-      if (motherData?.id)
-        await updateAnimalState(motherData?.id, 'SUCKLE', motherData?.state)
+      if (motherId)
+        await updateAnimalState(motherId, 'SUCKLE', motherData?.state)
       setProgress(100)
       setStatus('DONE')
     } catch (error) {
@@ -161,48 +175,10 @@ const useCreateBirth = ({ breedingId }: { breedingId?: string } = {}) => {
   }
   return {
     handleCreateBirth,
-    setFatherEarring,
-    setMotherEarring,
     setBatch,
     progress,
     status
   }
-}
-
-const useParentsData = ({
-  fatherEarring,
-  motherEarring
-}: {
-  fatherEarring?: AnimalType['earring']
-  motherEarring?: AnimalType['earring']
-}): ParentsType => {
-  const farmAnimals = useSelector(selectFarmAnimals)
-  const mother = motherEarring
-    ? farmAnimals.find((animal) => animal.earring === motherEarring)
-    : null
-  const father = motherEarring
-    ? farmAnimals.find((animal) => animal.earring === fatherEarring)
-    : null
-
-  const motherData: ParentsType['mother'] | null = mother
-    ? {
-        inTheFarm: !!mother,
-        name: mother?.name,
-        id: mother?.id,
-        earring: mother?.earring
-      }
-    : null
-
-  const fatherData: ParentsType['mother'] | null = father
-    ? {
-        inTheFarm: !!mother,
-        name: mother?.name,
-        id: mother?.id,
-        earring: mother?.earring
-      }
-    : null
-
-  return { mother: motherData, father: fatherData }
 }
 
 export default useCreateBirth
