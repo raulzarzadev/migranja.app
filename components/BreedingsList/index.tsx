@@ -90,8 +90,8 @@ const BreedingsList = () => {
       farmEvents as any
     )
 
-    const asAnimals = formattedBreeding.map((event) =>
-      event?.eventData.breedingBatch.map((animal) => animal)
+    const asAnimals = formattedBreeding?.map((event) =>
+      event?.eventData?.breedingBatch?.map((animal) => animal)
     )
     setBreedingsByAnimals(
       asAnimals.flat().filter((animal) => animal?.status === 'PENDING')
@@ -107,7 +107,7 @@ const BreedingsList = () => {
     setFinishedBreedings(
       formattedBreeding.filter(
         (event) =>
-          !event?.eventData.breedingBatch.find(
+          !event?.eventData?.breedingBatch?.find(
             (animal) => animal.status === 'PENDING'
           )
       )
