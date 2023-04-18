@@ -1,7 +1,8 @@
 import { calculatePossibleBirthStartAndFinish } from '@comps/BreedingsList/breeding.helpers'
+import useEvent from './useEvent'
 
 const useBreedingDates = ({ breedingId }: { breedingId: string }) => {
-  const { event: breeding } = useFarmEvent({ eventId: breedingId })
+  const { event: breeding } = useEvent({ eventId: breedingId })
   const finishAt = breeding?.eventData?.finishAt
   const startAt = breeding?.eventData?.startAt
   const otherMales = breeding?.eventData?.otherMales

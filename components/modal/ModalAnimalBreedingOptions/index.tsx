@@ -3,14 +3,20 @@ import Modal from '..'
 import useEvent from '@comps/hooks/useEvent'
 import useAnimal from '@comps/hooks/useAnimal'
 import AnimalBreedingOptions from '@comps/BreedingsList/AnimalBreedingOptions'
+import ModalNewBirth from '../ModalNewBirth/indext'
+import { AnimalType } from 'types/base/AnimalType.model'
+import { EventType } from '@firebase/Events/event.model'
+import { ReactNode } from 'react'
 
-const ModalAnimalBreedingOptions = ({ children, breedingId, animalId }) => {
-  const { event } = useEvent({ eventId: breedingId })
-
-  const { animal } = useAnimal({ animalId })
-
-  console.log(breedingId)
-
+const ModalAnimalBreedingOptions = ({
+  children,
+  breedingId,
+  motherId
+}: {
+  motherId: AnimalType['id']
+  breedingId: EventType['id']
+  children: ReactNode
+}) => {
   const modal = useModal()
   const defaultButton = 'Detalles de parto'
 
@@ -31,8 +37,11 @@ const ModalAnimalBreedingOptions = ({ children, breedingId, animalId }) => {
           handleOpen={modal.handleOpen}
           title="Detalles de monta individual"
         >
-          <div>Crear partoS</div>
-          <AnimalBreedingOptions breedingId={breedingId} />
+          <div>
+            <ModalNewBirth motherId={motherId} breedingId={breedingId} />
+            <button>Descartar animal</button>
+            <button>Vacio</button>
+          </div>
         </Modal>
       )}
     </div>

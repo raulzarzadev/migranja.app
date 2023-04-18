@@ -3,12 +3,23 @@ import { arrayRemove, arrayUnion, limit, where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { FirebaseCRUD } from '../firebase.CRUD.ts'
 import { app, db } from '../main'
-import { EventDTO, CreateEventDTO, BreedingEventType } from './event.model'
+import {
+  EventDTO,
+  CreateEventDTO,
+  BreedingEventType,
+  EventType
+} from './event.model'
 
 import { AnimalType } from 'firebase/types.model.ts/AnimalType.model'
 import { CreateGenericEventType } from 'components/FarmEvents/FarmEvent/FarmEvent.model'
-import { BaseFarmEvent, BirthDetailsEvent } from 'types/base/FarmEvent.model'
+import {
+  BaseFarmEvent,
+  BirthDetailsEvent,
+  EventData
+} from 'types/base/FarmEvent.model'
 import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
+import { DateType } from 'types/base/TypeBase.model.js'
+import { ParentsType } from 'types/base/AnimalType.model.js'
 const storage = getStorage(app)
 const TARGET_FORMAT_DATE = 'number'
 
@@ -20,6 +31,7 @@ export const eventsCRUD = new FirebaseCRUD(
 )
 
 /** ************** CREATE ********** */
+
 export const createEvent = async (newItem: CreateEventDTO) =>
   await eventsCRUD.createItem(newItem)
 
@@ -241,3 +253,15 @@ export const removeMaleFromBreedingEvent = async (
     'eventData.otherMales': arrayRemove(male)
   })
 }
+
+export interface CreateEvent {
+  type?: EventType['type']
+  farm?: EventType['farm']
+  eventData?: {
+    date: DateType
+    parents?: ParentsType
+  }
+}
+
+export const createEvent_v2 = async (newItem: CreateEvent) =>
+  await eventsCRUD.createItem(newItem)

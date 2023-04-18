@@ -249,6 +249,7 @@ const BreedingCardBody = ({
                 key={i}
                 animal={animal}
                 hiddenEvents={hiddenBirths}
+                breedingId={breeding.id}
               />
             ))}
           {view === 'PENDING' &&
@@ -257,6 +258,7 @@ const BreedingCardBody = ({
                 key={i}
                 animal={animal}
                 hiddenEvents={hiddenBirths}
+                breedingId={breeding.id}
               />
             ))}
           {view === 'ABORT' &&
@@ -265,6 +267,7 @@ const BreedingCardBody = ({
                 key={i}
                 animal={animal}
                 hiddenEvents={hiddenBirths}
+                breedingId={breeding.id}
               />
             ))}
           {view === 'BIRTH' &&
@@ -273,6 +276,7 @@ const BreedingCardBody = ({
                 key={i}
                 animal={animal}
                 hiddenEvents={hiddenBirths}
+                breedingId={breeding.id}
               />
             ))}
           {view === 'EMPTY' &&
@@ -281,6 +285,7 @@ const BreedingCardBody = ({
                 key={i}
                 animal={animal}
                 hiddenEvents={hiddenBirths}
+                breedingId={breeding.id}
               />
             ))}
         </div>

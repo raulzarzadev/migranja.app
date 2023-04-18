@@ -10,13 +10,16 @@ import ModalBirthDetails from '@comps/modal/ModalBirthDetails'
 import React from 'react'
 import ModalBreedingOptions from './ModalBreedingOptions'
 import ModalAnimalBreedingOptions from '@comps/modal/ModalAnimalBreedingOptions'
+import { AnimalType } from 'types/base/AnimalType.model'
 
 const AnimalBreedingCardSmall = ({
   animal,
-  hiddenEvents
+  hiddenEvents,
+  breedingId
 }: {
   animal: AnimalBreedingEventCard
   hiddenEvents?: boolean
+  breedingId: AnimalType['id']
 }) => {
   const breedingDates = animal?.eventData?.breedingDates
   const breedingFemale = animal
@@ -36,8 +39,8 @@ const AnimalBreedingCardSmall = ({
     if (animal.status === 'PENDING')
       return (
         <ModalAnimalBreedingOptions
-          breedingId={animal.eventData.breedingId}
-          animalId={animal.id}
+          breedingId={breedingId}
+          motherId={animal?.id || ''}
         >
           {props.children}
         </ModalAnimalBreedingOptions>
