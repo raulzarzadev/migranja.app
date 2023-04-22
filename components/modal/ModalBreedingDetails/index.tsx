@@ -8,47 +8,48 @@ import {
   FarmBreedingEvent
 } from 'types/base/FarmEvent.model'
 import Modal from '..'
+import BreedingDetails from '@comps/BreedingDetails'
+import useModal from '@comps/hooks/useModal'
 
 const ModalBreedingDetails = ({
   breedingBatchId
 }: {
   breedingBatchId: string
 }) => {
-  const [openBreeding, setOpenBreeding] = useState(false)
-  const handleOpenBreeding = () => {
-    setOpenBreeding(!openBreeding)
-  }
-  const farmEvents = useSelector(selectFarmEvents)
-  const breeding = farmEvents?.find(
-    (event) =>
-      event.eventData.breedingId === breedingBatchId &&
-      event.type === 'BREEDING'
-  )
-  const breedingFormatted = formatBreedingBatchesAnimalsWithBreedingData([
-    breeding as FarmBreedingEvent
-  ])[0]
+  const modal = useModal()
+  // const [openBreeding, setOpenBreeding] = useState(false)
+  // const handleOpenBreeding = () => {
+  //   setOpenBreeding(!openBreeding)
+  // }
+  // const farmEvents = useSelector(selectFarmEvents)
+  // const breeding = farmEvents?.find(
+  //   (event) =>
+  //     event.eventData.breedingId === breedingBatchId &&
+  //     event.type === 'BREEDING'
+  // )
+  // const breedingFormatted = formatBreedingBatchesAnimalsWithBreedingData([
+  //   breeding as FarmBreedingEvent
+  // ])[0]
+
   return (
     <>
       <button
         onClick={(e) => {
           e.preventDefault()
-          handleOpenBreeding()
+          modal.handleOpen()
         }}
         className="link text-sm underline-offset-4 font-bold mx-2"
       >
         {breedingBatchId}
       </button>
-      {breedingFormatted && openBreeding && (
-        <Modal
-          open={openBreeding}
-          handleOpen={handleOpenBreeding}
-          title="Detalles de monta"
-        >
-          <BreedingCard
+      {modal.open && (
+        <Modal {...modal} title="Detalles de monta">
+          <BreedingDetails breedingId={breedingBatchId} />
+          {/* <BreedingCard
             // hiddenConfig
             hiddenBirths
             breeding={breedingFormatted as unknown as BreedingEventCardDetails}
-          />
+          /> */}
         </Modal>
       )}
     </>

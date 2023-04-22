@@ -11,8 +11,17 @@ import {
   TypeOfFarmEvent
 } from 'types/base/LABELS_TYPES/EventTypes'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
+import useModal from '@comps/hooks/useModal'
+import Modal from '@comps/modal'
+import { FarmEvent } from 'types/base/FarmEvent.model'
+import BirthEventDetails from './BirthEventDetails'
+import BirthDetails from '@comps/BirthDetails'
+import BreedingDetails from '@comps/BreedingDetails'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
+  const modal = useModal()
+  const [event, setEvent] = useState<FarmEvent | null>(null)
+  console.log({ event })
   return (
     <div role="events-list">
       <MyTable
@@ -48,7 +57,22 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
           Bajas: { field: 'type', symbol: '>', value: 'DROP_OUT' },
           Altas: { field: 'type', symbol: '>', value: 'DROP_IN' }
         }}
+        onRowClick={(e) => {
+          setEvent(events?.[e as number] || null)
+          modal.handleOpen()
+        }}
       />
+      <Modal
+        {...modal}
+        title={`Detalles del evento:  ${
+          labelsOfFarmEventTypes[event?.type as TypeOfFarmEvent]
+        }`}
+      >
+        {event?.type === 'BIRTH' && <BirthDetails birthId={event.id} />}
+        {event?.type === 'BREEDING' && (
+          <BreedingDetails breedingId={event?.id} />
+        )}
+      </Modal>
     </div>
   )
 }
