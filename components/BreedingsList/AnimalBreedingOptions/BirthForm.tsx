@@ -2,7 +2,9 @@ import useEvent from '@comps/hooks/useEvent'
 import useBreedingDates from '@comps/hooks/useBreedingDates'
 import { FormProvider, useForm } from 'react-hook-form'
 import InputContainer from '@comps/inputs/InputContainer'
-import useCreateBirth from '@comps/hooks/useCreateBirth'
+import useCreateBirth, {
+  CreateBirthLabelStatus
+} from '@comps/hooks/useCreateBirth'
 import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
@@ -111,12 +113,16 @@ const BirthForm = ({
               methods.setValue('calfs', calfs)
             }}
           />
-          <span>{status}</span>
-          <progress
-            value={progress}
-            max={100}
-            className="progress w-full"
-          ></progress>
+          {!(progress === 0) && (
+            <>
+              <span>{CreateBirthLabelStatus[status]}</span>
+              <progress
+                value={progress}
+                max={100}
+                className="progress w-full"
+              ></progress>
+            </>
+          )}
           <div className="flex w-full justify-center my-4">
             <button className="btn btn-info " disabled={disabled}>
               Guardar

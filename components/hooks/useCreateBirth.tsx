@@ -26,6 +26,25 @@ export interface DTO_NewBirth {
     parents: ParentsType
   }
 }
+export type CreateBirthStatus =
+  | 'READY'
+  | 'CREATING_EVENT'
+  | 'CREATING_ANIMALS'
+  | 'CREATING_WEANING'
+  | 'UPDATING_BREEDING'
+  | 'UPDATING_MOTHER_STATE'
+  | 'DONE'
+  | 'ERROR'
+export const CreateBirthLabelStatus: Record<CreateBirthStatus, string> = {
+  DONE: 'Hecho',
+  READY: 'Listo',
+  CREATING_EVENT: 'Creando evento',
+  CREATING_ANIMALS: 'Creando animales',
+  CREATING_WEANING: 'Programando destetes',
+  UPDATING_BREEDING: 'Actualizando monta',
+  UPDATING_MOTHER_STATE: 'Actualizando estado de la madre',
+  ERROR: 'Ups! Algo salio mal.'
+}
 export interface NewCalf extends NewAnimal {}
 const useCreateBirth = ({
   breedingId,
@@ -45,7 +64,7 @@ const useCreateBirth = ({
     setFatherData(father)
   }, [farmAnimals, fatherId, motherId])
 
-  const [status, setStatus] = useState('ready')
+  const [status, setStatus] = useState<CreateBirthStatus>('READY')
   const [progress, setProgress] = useState(0)
 
   const breedingData = event
@@ -60,7 +79,7 @@ const useCreateBirth = ({
     date: DateType
     batch?: string
   }) => {
-    debugger
+    // debugger
     const batchName = data.batch || breedingData?.name || ''
     const newBirth: DTO_NewBirth = {
       type: 'BIRTH',
@@ -146,7 +165,10 @@ const useCreateBirth = ({
           return await createAnimal({
             ...newCalfsDefaultData,
             ...calf,
-            state: 'LACTATING'
+            state: 'LACTATING',
+            weight: {
+              atBirth: (calf.weight as number) || 0
+            }
           }).then((res) => res.res.id)
         } catch (error) {
           console.log(error)
