@@ -1,8 +1,5 @@
 import useModal from '@comps/hooks/useModal'
 import Modal from '..'
-import useEvent from '@comps/hooks/useEvent'
-import useAnimal from '@comps/hooks/useAnimal'
-import AnimalBreedingOptions from '@comps/BreedingsList/AnimalBreedingOptions'
 import ModalNewBirth from '../ModalNewBirth/indext'
 import { AnimalType } from 'types/base/AnimalType.model'
 import { EventType } from '@firebase/Events/event.model'

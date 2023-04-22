@@ -23,6 +23,7 @@ const ModalBirthDetails = ({
   const motherId = event?.eventData?.parents?.mother?.id
   // const canRevert = birthId && breedingId && motherId
   const defaultButton = 'Detalles de parto'
+  if (!birthId) return <span>Parto no encontrado</span>
   return (
     <>
       <button

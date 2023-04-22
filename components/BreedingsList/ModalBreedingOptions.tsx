@@ -361,6 +361,7 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
                 key={i}
                 animal={{ ...animal, eventData: breeding.eventData }}
                 //hiddenEvents={hiddenBirths}
+                breedingId={breeding.id}
               />
             ))}
           </div>
