@@ -1,16 +1,12 @@
-import Icon from '@comps/Icon'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { ReactNode, useState } from 'react'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
-import AnimalBreedingOptions from './AnimalBreedingOptions'
 import IconStatus from '@comps/IconStatus'
 import ModalBirthDetails from '@comps/modal/ModalBirthDetails'
 import React from 'react'
-import ModalBreedingOptions from './ModalBreedingOptions'
 import ModalAnimalBreedingOptions from '@comps/modal/ModalAnimalBreedingOptions'
-import { AnimalType } from 'types/base/AnimalType.model'
 import { EventType } from '@firebase/Events/event.model'
 
 const AnimalBreedingCardSmall = ({
@@ -22,7 +18,6 @@ const AnimalBreedingCardSmall = ({
   hiddenEvents?: boolean
   breedingId: EventType['id']
 }) => {
-  console.log({ breedingId })
   const breedingDates = animal?.eventData?.breedingDates
   const breedingFemale = animal
 

@@ -5,7 +5,6 @@ import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 
 const BirthDetails = ({ birthId }: { birthId: string }) => {
   const { event } = useEvent({ eventId: birthId })
-  console.log({ event })
   if (!event) return <span>Evento no encontrado</span>
   return (
     <div>
