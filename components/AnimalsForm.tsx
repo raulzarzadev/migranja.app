@@ -7,6 +7,7 @@ export interface NewAnimal {
   earring?: AnimalType['earring']
   gender?: 'male' | 'female'
   id?: AnimalType['id']
+  weight: number
 }
 
 const AnimalsForm = ({
@@ -35,75 +36,105 @@ const AnimalsForm = ({
       <h5 className="text-lg font-bold">
         {isBirth ? 'Camada' : 'Nuevos aretes'}
       </h5>
-      <FormProvider {...methods}>
-        {_animals.map((animal, i) => (
-          <tr key={animal?.earring}>
-            <td>{animal.earring}</td>
-            {/* <td>{animal.name}</td> */}
-            <td>{animal.gender}</td>
-            <td>
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleRemove(i)
-                }}
-              >
-                <Icon name="delete" />
-              </button>
-            </td>
-          </tr>
-        ))}
-        <tr className="flex w-full justify-center items-center">
-          <td>
-            <InputContainer
-              name="earring"
-              type="text"
-              // type="number"
-              className="w-24"
-              rules={{ required: 'Campo requerido' }}
-            />
-          </td>
-
-          <td>
-            <div className="flex flex-row">
-              <span className="flex flex-col p-0.5">
-                Hembra
-                <input
-                  type="radio"
-                  {...methods.register('gender', {
-                    required: true
-                  })}
-                  value="female"
+      <table className="table">
+        {!!_animals.length && (
+          <thead>
+            <tr>
+              <td>Arete</td>
+              <td>Sexo</td>
+              <td>Peso</td>
+              <td>Elim</td>
+            </tr>
+          </thead>
+        )}
+        <tbody>
+          {_animals.map((animal, i) => (
+            <tr key={animal?.earring}>
+              <td>{animal.earring}</td>
+              {/* <td>{animal.name}</td> */}
+              <td>{animal.gender}</td>
+              <td>{animal?.weight}</td>
+              <td>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleRemove(i)
+                  }}
+                  className="btn btn-outline btn-circle btn-error btn-xs"
+                >
+                  <Icon name="delete" size="xs" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <FormProvider {...methods}>
+          <tfoot>
+            <tr className="">
+              <td>
+                <InputContainer
+                  label="Arete"
+                  name="earring"
+                  type="text"
+                  // type="number"
+                  className="w-24"
+                  rules={{ required: 'Campo requerido' }}
                 />
-              </span>
-              <span className="flex flex-col p-0.5">
-                Macho
-                <input
-                  type="radio"
-                  {...methods.register('gender', {
-                    required: true
-                  })}
-                  value="male"
+              </td>
+              <td>
+                <span className="label-text">Sexo</span>
+                <div className="flex flex-row ">
+                  <span className="flex flex-col p-0.5 text-xs">
+                    Hembra
+                    <input
+                      type="radio"
+                      {...methods.register('gender', {
+                        required: true
+                      })}
+                      value="female"
+                    />
+                  </span>
+                  <span className="flex flex-col p-0.5 text-xs">
+                    Macho
+                    <input
+                      type="radio"
+                      {...methods.register('gender', {
+                        required: true
+                      })}
+                      value="male"
+                    />
+                  </span>
+                </div>
+                {errors.gender && (
+                  <span className="text-error label-text">
+                    Selecciona el sexo
+                  </span>
+                )}
+              </td>
+              <td>
+                <InputContainer
+                  label="Peso"
+                  name="weight"
+                  type="number"
+                  className="w-[80px]"
                 />
-              </span>
-            </div>
-            {errors.gender && (
-              <span className="text-error label-text">Selecciona el sexo</span>
-            )}
-          </td>
-          <td className="">
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                methods.handleSubmit(onSubmit)()
-              }}
-            >
-              <Icon name="plus" />
-            </button>
-          </td>
-        </tr>
-      </FormProvider>
+              </td>
+              <td>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    methods.handleSubmit(onSubmit)()
+                  }}
+                  className="btn btn-circle btn-sm btn-success  "
+                >
+                  <Icon name="plus" />
+                </button>
+              </td>
+            </tr>
+          </tfoot>
+        </FormProvider>
+      </table>
     </div>
   )
 }

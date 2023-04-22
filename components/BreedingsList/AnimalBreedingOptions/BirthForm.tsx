@@ -49,7 +49,7 @@ const BirthForm = ({
 
   const males = event?.eventData.breedingMale
     ? [event?.eventData.breedingMale]
-    : //* if a breeding is not specified select all the males in the farm
+    : //* if a breeding is not specified select all the males Stallion in the farm
       [...stallions]
   const mothers = event?.eventData.breedingBatch.map(({ id, earring }) => ({
     id,
@@ -85,19 +85,23 @@ const BirthForm = ({
           <InputContainer
             name="fatherId"
             type="select"
-            selectOptions={males.map((male) => ({
-              label: male?.earring,
-              value: male?.id
-            }))}
+            selectOptions={males
+              .map((male) => ({
+                label: male?.earring,
+                value: male?.id
+              }))
+              .sort((a: any, b: any) => a?.label - b?.label)}
             label="Macho"
           />
           <InputContainer
             name="motherId"
             type="select"
-            selectOptions={mothers?.map((male) => ({
-              label: male?.earring,
-              value: male?.id
-            }))}
+            selectOptions={mothers
+              ?.map((male) => ({
+                label: male?.earring,
+                value: male?.id
+              }))
+              .sort((a: any, b: any) => a?.label - b?.label)}
             label="Hembra"
           />
 
