@@ -17,6 +17,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 import AddBatch from '@comps/AddBatch'
+import BirthForm from '@comps/BreedingsList/AnimalBreedingOptions/BirthForm'
 
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option =
@@ -36,6 +37,7 @@ type Option =
   | 'sell'
   | 'sales'
   | 'inventory'
+  | 'newBirth'
 
 const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
@@ -216,10 +218,20 @@ const FarmMenu = (props: any) => {
                     onClick={() => handleChangeOption('column2', 'inventory')}
                     selected={column2 === 'inventory'}
                   />
+
+                  {/* ************************************* *********** BIRTHS MENU */}
                 </>
               )}
             </div>
             <div className="flex flex-col">
+              {isEventsSelected && column2 === 'birthEvents' && (
+                <SquareOption
+                  iconName="plus"
+                  title="Nuevo"
+                  selected={column3 === 'add'}
+                  onClick={() => handleChangeOption('column3', 'add')}
+                />
+              )}
               {isSheepSelected && column2 === 'inventory' && (
                 <SquareOption
                   title="Nuevo"
@@ -293,6 +305,14 @@ const FarmMenu = (props: any) => {
               </div>
             </>
           )}
+          {/* ********************************+******+ +++************** ADD NEW BIRTH*/}
+          {isEventsSelected &&
+            column2 === 'birthEvents' &&
+            column3 === 'add' && (
+              <>
+                <BirthForm />
+              </>
+            )}
         </>
       </MenuSection>
     </div>

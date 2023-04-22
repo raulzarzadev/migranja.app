@@ -4,29 +4,35 @@ import { FormProvider, useForm } from 'react-hook-form'
 import InputContainer from '@comps/inputs/InputContainer'
 import useCreateBirth from '@comps/hooks/useCreateBirth'
 import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
+import { useSelector } from 'react-redux'
+import { selectFarmAnimals } from 'store/slices/farmSlice'
 
 export interface NewCalf extends NewAnimal {}
 
 const BirthForm = ({
-  motherId,
-  breedingId
+  motherId = '',
+  breedingId = ''
 }: {
-  motherId: string
-  breedingId: string
+  motherId?: string
+  breedingId?: string
 }) => {
   const { event } = useEvent({ eventId: breedingId })
   const fatherId = event?.eventData?.breedingMale?.id || ''
   const { breedingDates } = useBreedingDates({ breedingId })
+  const farmAnimals = useSelector(selectFarmAnimals)
+  const stallions = farmAnimals.filter((animal) => animal.isStallion)
+  const females = farmAnimals.filter((animal) => animal.gender === 'female')
+  // console.log({ farmAnimals })
   const calfs: NewCalf[] = []
   const defaultValues = {
     fatherId,
     motherId,
     batch: event?.eventData.breedingId,
     breeding: {
-      id: event?.id,
-      name: event?.eventData.breedingId
+      id: event?.id || '',
+      name: event?.eventData.breedingId || ''
     },
-    date: breedingDates.birthStartAt,
+    date: breedingDates?.birthStartAt || new Date(),
     calfs
   }
   const methods = useForm({
@@ -40,17 +46,22 @@ const BirthForm = ({
   })
 
   //const otherMales = event?.eventData?.otherMales || []
-  const males = [event?.eventData.breedingMale]
-  const mothers =
-    event?.eventData.breedingBatch.map(({ id, earring }) => ({
-      id,
-      earring
-    })) || []
 
-  const onSubmit = async (data: { calfs: any; date: any }) => {
+  const males = event?.eventData.breedingMale
+    ? [event?.eventData.breedingMale]
+    : //* if a breeding is not specified select all the males in the farm
+      [...stallions]
+  const mothers = event?.eventData.breedingBatch.map(({ id, earring }) => ({
+    id,
+    earring
+    //* if a breeding is not specified select all the females in the farm
+  })) || [...females]
+
+  const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
     await handleCreateBirth({
       calfs: data.calfs,
-      date: data.date
+      date: data.date,
+      batch: data.batch
     })
   }
 
@@ -66,7 +77,11 @@ const BirthForm = ({
             label="Fecha"
             //datesRangeColor={datesRangeColor}
           />
-          <InputContainer name="batch" type="text" label="Monta (opcional)" />
+          <InputContainer
+            name="batch"
+            type="text"
+            label="Lote/Monta (opcional)"
+          />
           <InputContainer
             name="fatherId"
             type="select"
@@ -83,7 +98,7 @@ const BirthForm = ({
               label: male?.earring,
               value: male?.id
             }))}
-            label="Hembras"
+            label="Hembra"
           />
 
           <AnimalsForm

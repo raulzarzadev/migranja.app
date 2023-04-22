@@ -56,7 +56,7 @@ const BirthEvents = () => {
             label: 'Madre',
             format: (p) => (
               <span>
-                {p.split(',').map((earring: string) => (
+                {p?.split(',').map((earring: string) => (
                   <ModalAnimalDetails
                     earring={earring}
                     size="normal"
@@ -70,7 +70,7 @@ const BirthEvents = () => {
             label: 'Padre',
             format: (p) => (
               <span>
-                {p.split(',').map((earring: string) => (
+                {p?.split(',').map((earring: string) => (
                   <ModalAnimalDetails
                     earring={earring}
                     size="normal"
