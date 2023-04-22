@@ -4,7 +4,6 @@ import { selectFarmEvents } from 'store/slices/farmSlice'
 
 const useEvent = ({ eventId }: { eventId: EventType['id'] }) => {
   const event = useSelector(selectFarmEvents).find(({ id }) => id === eventId)
-
   return { event }
 }
 

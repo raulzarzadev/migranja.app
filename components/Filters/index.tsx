@@ -17,7 +17,7 @@ const Filters = ({
   onClearFilter?: () => void
   // defaultFilter?: string
 }) => {
-  useDebugInformation('Filters', { array, filters })
+  // useDebugInformation('Filters', { array, filters })
   const {
     handleFilterBy,
     filtersSelected,

@@ -24,7 +24,7 @@ const ModalAnimalBreedingOptions = ({
     <div>
       <button
         onClick={(e) => {
-          console.log({ e })
+          //console.log({ e })
           modal.handleOpen()
         }}
         className="w-full"

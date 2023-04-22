@@ -44,6 +44,7 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  batch: ReactNode
   type?: string
   total?: number
   animalsQuantity?: number

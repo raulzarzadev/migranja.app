@@ -164,13 +164,12 @@ export class FirebaseCRUD {
     return await addDoc(
       collection(this.db, this.collectionName),
       itemDatesToFirebaseTimestamp
+    ).then((res) =>
+      this.formatResponse(true, `${this.collectionName}_CREATED`, {
+        id: res.id
+      })
     )
-      .then((res) =>
-        this.formatResponse(true, `${this.collectionName}_CREATED`, {
-          id: res.id
-        })
-      )
-      .catch((err) => console.error(err))
+    // .catch((err) => console.error(err))
   }
 
   async setItem(itemId: string, newItem: object) {

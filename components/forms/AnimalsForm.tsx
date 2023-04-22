@@ -68,12 +68,7 @@ export const AnimalsForm = ({
 
   const earringAlreadyExist = (earring: string) => {
     const farmEarrings = farmAnimals.map(({ earring }) => earring)
-    console.log({ earring, farmEarrings })
     return farmEarrings.includes(earring)
-
-    // return !![...(currentFarm?.animals || []), ...animals]?.find(
-    //   (animal: AnimalType | QuickAnimal) => animal?.earring === earring
-    // )
   }
   const onAddItem = (data: any) => {
     if (earringAlreadyExist(data?.earring)) {
@@ -99,8 +94,6 @@ export const AnimalsForm = ({
       id: currentFarm?.id || '',
       name: currentFarm?.name || ''
     }
-    // console.log(animals)
-    // return
     try {
       const savingAnimals = animals.map(async (animal) => {
         console.log({ animal })
@@ -114,15 +107,12 @@ export const AnimalsForm = ({
 
       await Promise.all(savingAnimals)
       setAnimals([])
-
-      //console.log(res)
       setLoading(false)
     } catch (error) {
       console.log(error)
       setLoading(false)
     }
   }
-  // console.log({ errors })
   return (
     <div>
       <FormProvider {...methods}>

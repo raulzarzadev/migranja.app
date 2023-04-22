@@ -30,7 +30,6 @@ const AnimalsForm = ({
     setAnimals?.(animals)
   }
   const errors = methods.formState.errors
-  console.log({ errors })
   return (
     <div>
       <h5 className="text-lg font-bold">

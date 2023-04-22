@@ -49,6 +49,7 @@ const BackupButton = () => {
         const jsonObject = JSON.parse(jsonString)
         // Utilizar el objeto JSON...
         setLoading(true)
+
         uploadAnimalsArray(jsonObject, {
           deleteFarmData: true,
           newFarmData: { id: currantFarm?.id, name: currantFarm?.name },

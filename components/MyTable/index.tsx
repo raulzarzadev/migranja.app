@@ -132,7 +132,7 @@ function MyTable<T>({
             filters={filters}
             array={data}
             setArray={(e) => {
-              console.log({ e })
+              // console.log({ e })
             }}
             onFilter={(e) => {
               console.log({ e })

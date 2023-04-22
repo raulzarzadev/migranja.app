@@ -5,8 +5,16 @@ import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 
 const BirthDetails = ({ birthId }: { birthId: string }) => {
   const { event } = useEvent({ eventId: birthId })
+  console.log({ event })
+  if (!event) return <span>Evento no encontrado</span>
   return (
     <div>
+      <div className="text-xs">
+        <span>
+          <span className="font-bold">Id:</span>
+          {birthId}
+        </span>
+      </div>
       <span className="font-bold">Fechas:</span>
       <div className="flex w-full justify-evenly text-center my-2">
         <span>
@@ -22,18 +30,22 @@ const BirthDetails = ({ birthId }: { birthId: string }) => {
       <div>
         <span className="font-bold">Lote/Monta:</span>
         <div className="text-center my-2">
-          {event?.eventData.breedingId && (
-            <ModalBreedingDetails
-              breedingBatchId={event?.eventData.breedingId}
-            />
+          {event?.eventData?.batch ? (
+            <ModalBreedingDetails breedingBatchId={event?.eventData?.batch} />
+          ) : (
+            event?.eventData.breedingId && (
+              <ModalBreedingDetails
+                breedingBatchId={event?.eventData.breedingId}
+              />
+            )
           )}
         </div>
       </div>
       <div>
         <span className="font-bold">Camada:</span>
         <div className="flex w-full justify-evenly my-2">
-          {event?.eventData.calfs?.map((calf) => (
-            <div key={calf.id}>
+          {event?.eventData.calfs?.map((calf, i) => (
+            <div key={i}>
               <ModalAnimalDetails earring={calf.earring} />
             </div>
           ))}

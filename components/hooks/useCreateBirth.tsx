@@ -1,14 +1,8 @@
 import { AnimalType, ParentsType } from 'types/base/AnimalType.model'
-import useAnimal from './useAnimal'
 import useEvent from './useEvent'
 import { EventType } from '@firebase/Events/event.model'
 import { useEffect, useState } from 'react'
-import {
-  createBirthEvent,
-  createEvent,
-  createEvent2,
-  updateEventBreedingBatch
-} from '@firebase/Events/main'
+import { createEvent2, updateEventBreedingBatch } from '@firebase/Events/main'
 import { DateType } from 'types/base/TypeBase.model'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
@@ -51,31 +45,23 @@ const useCreateBirth = ({
     setFatherData(father)
   }, [fatherId, motherId])
 
-  const [date, setDate] = useState<DateType>(new Date())
-  const [batch, setBatch] = useState('')
   const [status, setStatus] = useState('ready')
   const [progress, setProgress] = useState(0)
-  const [calfs, setCalfs] = useState<DTO_NewBirth['eventData']['calfs']>([])
 
   const breedingData = event
     ? {
         id: event?.id || '',
-        name: event?.eventData.batchId || ''
+        name: event?.eventData?.breedingId || ''
       }
     : null
 
-  const handleCreateBirth = async (data: {
-    batch?: string
-    breeding: { id: string; name: string }
-    calfs: []
-    date: DateType
-  }) => {
+  const handleCreateBirth = async (data: { calfs: []; date: DateType }) => {
     const newBirth: DTO_NewBirth = {
       type: 'BIRTH',
-      farm: farm!,
+      farm: { id: farm?.id || '', name: farm?.name || '' },
       eventData: {
-        date,
-        batch,
+        date: data.date,
+        batch: breedingData?.name || '',
         breeding: breedingData,
         calfs: data.calfs,
         parents: {
@@ -84,7 +70,7 @@ const useCreateBirth = ({
                 inTheFarm: true,
                 earring: fatherData.earring,
                 id: fatherData.id,
-                name: fatherData.name
+                name: fatherData.name || ''
               }
             : null,
           mother: motherData
@@ -92,7 +78,7 @@ const useCreateBirth = ({
                 inTheFarm: true,
                 earring: motherData.earring,
                 id: motherData.id,
-                name: motherData.name
+                name: motherData.name || ''
               }
             : null
         }
@@ -101,47 +87,91 @@ const useCreateBirth = ({
     setProgress(10)
     setStatus('CREATING_EVENT')
 
-    console.log({ newBirth })
+    const parensBirthEvent = newBirth.eventData.parents
+    const motherBreed = parensBirthEvent.mother?.breed?.replaceAll(' ', '')
+    const fatherBreed = parensBirthEvent.father?.breed?.replaceAll(' ', '')
+    const breed =
+      (!motherBreed || !fatherBreed
+        ? motherBreed || fatherBreed
+        : fatherBreed === motherBreed
+        ? fatherBreed
+        : `(1/2${motherBreed}-1/2${fatherBreed})`) || ''
 
+    const newCalfsDefaultData: Omit<
+      AnimalType,
+      | 'earring'
+      | 'id'
+      | 'name'
+      | 'joinedAt'
+      | 'updatedAt'
+      | 'userId'
+      | 'createdAt'
+      | 'gender'
+    > = {
+      parents: parensBirthEvent || null,
+      birthType: newBirth.eventData.calfs.length || 0,
+      birthday: newBirth.eventData.date || 0,
+      batch: newBirth.eventData.batch,
+      type: 'ovine',
+      breed,
+      images: [],
+      farm: {
+        id: farm?.id,
+        name: farm?.name
+      }
+      // weight:{
+      //   ...data.weight
+      // }
+    }
     try {
       // *************************************************  1. create birth
-      await createEvent2(newBirth)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => console.log(err))
+      const eventCreated = await createEvent2(newBirth)
+      // .then((res) => {
+      //   console.log(res)
+      // })
+      // .catch((err) => console.log(err))
       setProgress(20)
       setStatus('CREATING_ANIMALS')
 
       // *************************************************  2. create animals/calfs
-      const newAnimalsPromises = calfs.map(async (calf) => {
+      const calfs: AnimalType[] = data?.calfs
+
+      const createAnimalsPromises = calfs.map(async (calf) => {
         try {
-          const res = await createAnimal({ ...calf, state: 'LACTATING' })
-          return console.log(res)
-        } catch (err) {
-          return console.log(err)
+          return await createAnimal({
+            ...newCalfsDefaultData,
+            ...calf,
+            state: 'LACTATING'
+          }).then((res) => res.res.id)
+        } catch (error) {
+          console.log(error)
         }
       })
-      console.log({ newAnimalsPromises })
-      const calfsCreated = await Promise.all(newAnimalsPromises)
+
+      const calfsCreated = await Promise.all(createAnimalsPromises)
+      console.log({ calfsCreated })
       setProgress(40)
       console.log('animals created')
       setStatus('CREATING_WEANING')
 
       // *************************************************  3. create animals weaning
-      const newWeaningsPromises = calfs.map((calf) => {
-        return creteAnimalWeaning({
-          type: 'WEANING',
-          eventData: {
-            status: 'PENDING',
-            earring: calf.earring || '',
-            date: addDays(date, OVINE_DAYS.finishWeaning).getTime()
-          },
-          farm: {
-            id: farm?.id || '',
-            name: farm?.name || ''
-          }
-        })
+      const newWeaningsPromises = calfs.map(async (calf) => {
+        try {
+          return await creteAnimalWeaning({
+            type: 'WEANING',
+            eventData: {
+              status: 'PENDING',
+              earring: calf.earring || '',
+              date: addDays(data.date, OVINE_DAYS.finishWeaning).getTime()
+            },
+            farm: {
+              id: farm?.id || '',
+              name: farm?.name || ''
+            }
+          })
+        } catch (error) {
+          console.error(error)
+        }
       })
       const weaningCreated = await Promise.all(newWeaningsPromises)
       setProgress(60)
@@ -149,16 +179,19 @@ const useCreateBirth = ({
 
       // *************************************************  4. update breeding, move from batch to already done
       const birthEventData = {
-        birthEventId: event?.id || '',
-        newCalfsIds: calfsCreated.map((animal) => animal?.res?.id),
+        birthEventId: eventCreated?.res?.id || '',
+        newCalfsIds: calfsCreated,
         calfsWeaningsIds: weaningCreated.map((weaning) => weaning?.res.id)
       }
+
       const breeding = await updateEventBreedingBatch({
         eventId: event?.id || '',
         animalId: motherData?.id as string,
         eventType: 'BIRTH',
         birthEventData
       })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
       setProgress(80)
       setStatus('UPDATING_MOTHER_STATE')
 
@@ -175,7 +208,6 @@ const useCreateBirth = ({
   }
   return {
     handleCreateBirth,
-    setBatch,
     progress,
     status
   }

@@ -1,4 +1,3 @@
-import useAnimal from '@comps/hooks/useAnimal'
 import useEvent from '@comps/hooks/useEvent'
 import useBreedingDates from '@comps/hooks/useBreedingDates'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -33,32 +32,29 @@ const BirthForm = ({
   const methods = useForm({
     defaultValues
   })
-  const { handleCreateBirth } = useCreateBirth({ breedingId })
+  const farmValues = methods.watch()
+  const { handleCreateBirth, status, progress } = useCreateBirth({
+    breedingId,
+    motherId: farmValues.motherId,
+    fatherId: farmValues.fatherId
+  })
 
-  const otherMales = event?.eventData?.otherMales || []
-  const males = [event?.eventData.breedingMale, ...otherMales]
+  //const otherMales = event?.eventData?.otherMales || []
+  const males = [event?.eventData.breedingMale]
   const mothers =
     event?.eventData.breedingBatch.map(({ id, earring }) => ({
       id,
       earring
     })) || []
 
-  console.log(methods.watch())
-  const onSubmit = (data: {
-    calfs: any
-    date: any
-    fatherId: any
-    motherId: any
-  }) => {
-    console.log(data)
-    handleCreateBirth({
-      breeding: { id: breedingId, name: event?.eventData.breedingId || '' },
+  const onSubmit = async (data: { calfs: any; date: any }) => {
+    await handleCreateBirth({
       calfs: data.calfs,
-      date: data.date,
-      fatherId: data.fatherId,
-      motherId: data.motherId
+      date: data.date
     })
   }
+
+  const disabled = methods.watch('calfs').length <= 0
 
   return (
     <div>
@@ -96,8 +92,16 @@ const BirthForm = ({
               methods.setValue('calfs', calfs)
             }}
           />
+          <span>{status}</span>
+          <progress
+            value={progress}
+            max={100}
+            className="progress w-full"
+          ></progress>
           <div className="flex w-full justify-center my-4">
-            <button className="btn btn-info ">Guardar</button>
+            <button className="btn btn-info " disabled={disabled}>
+              Guardar
+            </button>
           </div>
         </form>
       </FormProvider>
