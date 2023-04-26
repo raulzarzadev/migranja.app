@@ -6,12 +6,14 @@ import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
+import useDebugInformation from '@comps/hooks/useDebugInformation'
 
 const AnimalBreedingCard = ({
   animal
 }: {
   animal: AnimalBreedingEventCard
 }) => {
+  useDebugInformation('AnimalBreedingCard', { animal })
   const breedingDates = animal?.eventData?.breedingDates
   const breedingData = animal?.eventData
   const breedingMale = animal.eventData?.breedingMale
@@ -30,9 +32,10 @@ const AnimalBreedingCard = ({
     <>
       {openModal && (
         <AnimalBreedingOptions
-          animal={animal}
+          animalId={animal.id || ''}
           handleOpenModal={handleOpenModal}
           openModal={openModal}
+          breedingId={animal.eventData.id}
         />
       )}
 
