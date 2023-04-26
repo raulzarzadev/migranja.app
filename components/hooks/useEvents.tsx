@@ -1,11 +1,13 @@
 import { deleteEvent } from '@firebase/Events/main'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { selectFarmEvents } from 'store/slices/farmSlice'
 import { FarmEvent } from 'types/base/FarmEvent.model'
 
 const useEvents = () => {
+  const events = useSelector(selectFarmEvents)
   const [progress, setProgress] = useState(0)
-  const handleRevertBirth = async (birthId:) => {
-
+  const handleRevertBirth = async (birthId: string) => {
     setProgress(10)
     try {
       // ************************* delete birth event
@@ -41,7 +43,7 @@ const useEvents = () => {
 
     setProgress(100)
   }
-  return { handleRevertBirth, progress }
+  return { handleRevertBirth, progress, events }
 }
 
 export default useEvents

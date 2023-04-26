@@ -8,6 +8,7 @@ import ModalBirthDetails from '@comps/modal/ModalBirthDetails'
 import React from 'react'
 import ModalAnimalBreedingOptions from '@comps/modal/ModalAnimalBreedingOptions'
 import { EventType } from '@firebase/Events/event.model'
+import useEvents from '@comps/hooks/useEvents'
 
 const AnimalBreedingCardSmall = ({
   animal,
@@ -21,14 +22,24 @@ const AnimalBreedingCardSmall = ({
   const breedingDates = animal?.eventData?.breedingDates
   const breedingFemale = animal
 
-  const birthId = animal?.birthEventData?.birthEventId || ''
+  //const birthId = animal?.birthEventData?.birthEventId || ''
+  const batchName = animal.eventData.breedingId
+  const motherId = animal.id
+  const { events } = useEvents()
+  const birthId =
+    animal?.birthEventData?.birthEventId ||
+    events.find(
+      (e) =>
+        e.eventData.breedingId === batchName &&
+        e?.eventData?.parents?.mother?.id === motherId
+    )?.id
 
   const WrapperBreedingCard = (
     props: JSX.IntrinsicAttributes & { children?: ReactNode }
   ) => {
     if (animal.status === 'BIRTH')
       return (
-        <ModalBirthDetails birthId={birthId}>
+        <ModalBirthDetails birthId={birthId || ''}>
           {props.children}
         </ModalBirthDetails>
       )
