@@ -23,6 +23,7 @@ const BirthEvents = () => {
   const breedingId = events.find(
     ({ eventData }) => eventData.breedingId === event?.eventData.breedingId
   )?.id
+
   const motherId = event?.eventData.parents.mother?.id
   const canRevert = birthId && breedingId && motherId
   return (
@@ -38,11 +39,11 @@ const BirthEvents = () => {
             label: 'Camada',
             format: (props) => (
               <span>
-                {props?.split(',').map((earring: string) => (
+                {props?.split(',').map((earring: string, i: number) => (
                   <ModalAnimalDetails
                     earring={earring}
                     size="normal"
-                    key={earring}
+                    key={earring + i}
                   />
                 ))}
               </span>
