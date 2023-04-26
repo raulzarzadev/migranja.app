@@ -13,7 +13,6 @@ const AnimalBreedingCard = ({
 }: {
   animal: AnimalBreedingEventCard
 }) => {
-  useDebugInformation('AnimalBreedingCard', { animal })
   const breedingDates = animal?.eventData?.breedingDates
   const breedingData = animal?.eventData
   const breedingMale = animal.eventData?.breedingMale
