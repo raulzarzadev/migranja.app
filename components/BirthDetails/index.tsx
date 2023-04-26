@@ -31,7 +31,9 @@ const BirthDetails = ({ birthId }: { birthId: string }) => {
         <span className="font-bold">Lote/Monta:</span>
         <div className="text-center my-2">
           {event?.eventData?.batch ? (
-            <ModalBreedingDetails breedingBatchId={event?.eventData?.batch} />
+            <ModalBreedingDetails
+              breedingBatchId={(event?.eventData?.batch as string) || ''}
+            />
           ) : (
             event?.eventData.breedingId && (
               <ModalBreedingDetails

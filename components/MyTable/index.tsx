@@ -271,6 +271,7 @@ function getColumnsFromData(data: any[], options?: TableOptions) {
 
   keys.forEach((key) => {
     if (options?.hiddenCols?.includes(key)) return
+    //@ts-ignore
     const col = columnHelper.accessor(key, {
       header: options?.headers?.[key]?.label || key,
       footer: (props) => props.column.id,

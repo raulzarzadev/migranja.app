@@ -17,7 +17,7 @@ const SalesList = () => {
   }, [farmEvents])
 
   const [openModal, setOpenModal] = useState(false)
-  const [saleSelected, setSaleSelected] = useState(0)
+  const [saleSelected, setSaleSelected] = useState<number | string>(0)
   const handleOpenSaleModal = () => {
     setOpenModal(!openModal)
   }
@@ -29,7 +29,6 @@ const SalesList = () => {
         // showGlobalFilter
         // showSelectRow
         onRowClick={(e) => {
-          console.log({ e })
           setSaleSelected(e)
           handleOpenSaleModal()
         }}
@@ -70,7 +69,7 @@ const SalesList = () => {
           handleOpen={handleOpenSaleModal}
           title="Detalle de venta"
         >
-          <PrintableSellForm sale={sales[saleSelected]} />
+          <PrintableSellForm sale={sales[saleSelected as number]} />
           <div className="flex w-full justify-center">
             {/* <ModalDelete
               handleDelete={() => {
