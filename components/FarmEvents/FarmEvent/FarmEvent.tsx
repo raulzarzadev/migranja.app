@@ -6,7 +6,7 @@ import BirthEventDetails from '../BirthEventDetails'
 import EventModal from '../EventModal'
 import { BreedingDetailsEvent, GenericEventType } from './FarmEvent.model'
 
-export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
+export const detailsOptions = ({ event }: { event: FarmStateAnimalEvent }) => {
   interface FarmEventOptions {
     label: string
     Component: ReactNode
@@ -56,17 +56,25 @@ export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
       SELL: {
         label: 'Venta ',
         Component: <span>Venta</span>
+      },
+      DONE: {
+        label: 'Hecho ',
+        Component: <span>Hecho</span>
+      },
+      CANCELLED: {
+        label: 'Cancelado ',
+        Component: <span>Cancelado</span>
       }
     }
+  return DETAILS_OPTIONS[event.type || 'NULL']
+}
+export const FarmEvent = ({ event }: { event: FarmStateAnimalEvent }) => {
+  const Options = detailsOptions({ event })
+
   return (
     <div>
-      <HeaderEventCard
-        event={event}
-        options={{ label: DETAILS_OPTIONS[event?.type].label }}
-      />
-      <div className="p-2 ">
-        {DETAILS_OPTIONS[event?.type ?? 'NULL'].Component}
-      </div>
+      <HeaderEventCard event={event} options={{ label: Options?.label }} />
+      <div className="p-2 ">{Options?.Component}</div>
     </div>
   )
 }

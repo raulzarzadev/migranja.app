@@ -9,6 +9,7 @@ import {
   TypeOfFarmEvent
 } from './LABELS_TYPES/EventTypes'
 import { Merge, TypeBase } from './TypeBase.model'
+import { ReactNode } from 'react'
 
 export interface BaseFarmEvent {
   type: TypeOfFarmEvent
@@ -44,6 +45,7 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  //otherMales: any
   batch: ReactNode
   type?: string
   total?: number
@@ -71,6 +73,7 @@ export interface BreedingEventDefaultInfo {
   batchId: string
   breedingBatch: AnimalBreedingType[]
   breedingMale: ParentType | null
+  otherMales?: OtherBreedingMale[]
   parents: ShortParentsType
   startAt: number | string
   finishAt: number | string
@@ -95,7 +98,6 @@ export interface EventData
     AbortDetailsEvent,
     BirthDetailsEvent,
     AnimalWeaningEventData {
-  otherMales?: OtherBreedingMale[]
   breedingDates?: BreedingDatesType
   earring: string
   status: EventStatus

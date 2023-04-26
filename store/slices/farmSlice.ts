@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { AppState } from '..'
-import { HYDRATE } from 'next-redux-wrapper'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { AnimalType } from '@firebase/types.model.ts/AnimalType.model'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'

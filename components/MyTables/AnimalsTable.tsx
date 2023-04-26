@@ -14,7 +14,8 @@ const AnimalsTable = () => {
   const [rowsSelected, setRowsSelected] = useState([])
   return (
     <div>
-      <MyTable
+      Do not use this component
+      {/* <MyTable
         rowsSelected={rowsSelected}
         columns={[
           { id: 'earring', label: 'Arete' },
@@ -24,7 +25,7 @@ const AnimalsTable = () => {
         rows={{
           data: tableData
         }}
-      />
+      /> */}
     </div>
   )
 }
