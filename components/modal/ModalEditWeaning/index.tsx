@@ -1,12 +1,7 @@
 import Icon from '@comps/Icon'
 import { updateAnimalState } from '@firebase/Animal/main'
 import { updateEvent } from '@firebase/Events/main'
-import {
-  ButtonHTMLAttributes,
-  MouseEvent,
-  MouseEventHandler,
-  useState
-} from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalStateType } from 'types/base/AnimalState.model'

@@ -1,10 +1,5 @@
-import EventFilters from '@comps/Filters/EventFilters'
-import useSortByField from '@comps/hooks/useSortByField'
-import HeaderTable from '@comps/MyTables/HeaderTable'
 import { useState } from 'react'
 import { FarmState } from 'store/slices/farmSlice'
-
-import FarmEventCard from './FarmEvent/FarmEventCard'
 import MyTable from '@comps/MyTable'
 import {
   labelsOfFarmEventTypes,
@@ -14,14 +9,13 @@ import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import useModal from '@comps/hooks/useModal'
 import Modal from '@comps/modal'
 import { FarmEvent } from 'types/base/FarmEvent.model'
-import BirthEventDetails from './BirthEventDetails'
 import BirthDetails from '@comps/BirthDetails'
 import BreedingDetails from '@comps/BreedingDetails'
+import WeaningDetails from '@comps/WeaningDetails'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   const modal = useModal()
   const [event, setEvent] = useState<FarmEvent | null>(null)
-  console.log({ event })
   return (
     <div role="events-list">
       <MyTable
@@ -72,41 +66,8 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
         {event?.type === 'BREEDING' && (
           <BreedingDetails breedingId={event?.id} />
         )}
+        {event?.type === 'WEANING' && <WeaningDetails weaningId={event?.id} />}
       </Modal>
     </div>
   )
 }
-
-const a = () => (
-  <div>
-    {' '}
-    {/* <DebouncedInput
-        onChange={(value) => setFilterBy(`${value}`)}
-        value={''}
-        className="input input-bordered w-full placeholder:font-bold mb-2 "
-        placeholder="Buscar ... "
-      /> */}
-    <EventFilters array={events} setArray={setFilteredEvents} />
-    <div className="flex w-full items-center justify-around my-4 flex-col sm:flex-row gap-2 ">
-      <div>Ordenar por:</div>
-      <HeaderTable label={'Creado'} fieldName={'createdAt'} {...sortMethods} />
-      <HeaderTable
-        label={'Programado'}
-        fieldName={'eventData.date'}
-        {...sortMethods}
-      />
-      <HeaderTable
-        label={'Tipo de evento'}
-        fieldName={'type'}
-        {...sortMethods}
-      />
-    </div>
-    <div className="event-list overflow-auto shadow-inner">
-      {[...arraySorted].map((event, i) => (
-        <div key={`${event?.id}-${i}`} className="my-2">
-          <FarmEventCard event={event} />
-        </div>
-      ))}
-    </div>
-  </div>
-)
