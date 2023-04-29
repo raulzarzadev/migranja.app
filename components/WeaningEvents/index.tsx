@@ -27,11 +27,13 @@ const WeaningEvents = () => {
   const eventSelected: AnimalFormattedWhitGenericEvenData =
     weanings?.[selectedRow as number]
 
-  const data = weanings.map((weaning) => ({
-    date: weaning.eventData.date,
-    earring: weaning.eventData.earring,
-    status: weaning.eventData.status
-  }))
+  const data = weanings
+    .map((weaning) => ({
+      date: weaning.eventData.date,
+      earring: weaning.eventData.earring,
+      status: weaning.eventData.status
+    }))
+    .filter((event) => event.status === 'PENDING')
 
   return (
     <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
@@ -64,28 +66,28 @@ const WeaningEvents = () => {
             }
           }}
           data={data}
-          filters={{
-            Pendientes: {
-              field: 'status',
-              symbol: '==',
-              value: 'PENDING'
-            },
-            Completados: {
-              field: 'status',
-              symbol: '==',
-              value: 'DONE'
-            }
-            // '-2meses': {
-            //   field: 'date',
-            //   symbol: '>=',
-            //   value: subMonths(new Date(), 2).getTime()
-            // },
-            // '+2meses': {
-            //   field: 'date',
-            //   symbol: '>=',
-            //   value: addMonths(new Date(), 2).getTime()
-            // }
-          }}
+          // filters={{
+          //   Pendientes: {
+          //     field: 'status',
+          //     symbol: '==',
+          //     value: 'PENDING'
+          //   },
+          //   Completados: {
+          //     field: 'status',
+          //     symbol: '==',
+          //     value: 'DONE'
+          //   }
+          //   // '-2meses': {
+          //   //   field: 'date',
+          //   //   symbol: '>=',
+          //   //   value: subMonths(new Date(), 2).getTime()
+          //   // },
+          //   // '+2meses': {
+          //   //   field: 'date',
+          //   //   symbol: '>=',
+          //   //   value: addMonths(new Date(), 2).getTime()
+          //   // }
+          // }}
           onRowClick={(row) => {
             setSelectedRow?.(row)
             handleOpenModal()
