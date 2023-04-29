@@ -11,13 +11,7 @@ import {
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import TableDate from '@comps/MyTable/TableDate'
 import Modal from '@comps/modal'
-import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
-import ModalDelete from '@comps/modal/ModalDelete'
-import Icon from '@comps/Icon'
-import { EventType } from '@firebase/Events/event.model'
-import { FarmEventType } from '@comps/FarmEvents/FarmEvent/FarmEvent.model'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
-import WeaningEventCard from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
 import WeaningDetails from '@comps/WeaningDetails'
 import WeaningIconStatus from '@comps/WeaningIconStatus'
 
@@ -33,10 +27,17 @@ const WeaningEvents = () => {
   const eventSelected: AnimalFormattedWhitGenericEvenData =
     weanings?.[selectedRow as number]
 
+  const data = weanings.map((weaning) => ({
+    date: weaning.eventData.date,
+    earring: weaning.eventData.earring,
+    status: weaning.eventData.status
+  }))
+
   return (
     <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
       <div className="flex w-full justify-center">
         <MyTable
+          defaultSort={[{ id: 'date', desc: true }]}
           showGlobalFilter
           title="Destetes programados"
           headers={{
@@ -62,11 +63,7 @@ const WeaningEvents = () => {
               )
             }
           }}
-          data={weanings.map((weaning) => ({
-            date: weaning.eventData.date,
-            earring: weaning.eventData.earring,
-            status: weaning.eventData.status
-          }))}
+          data={data}
           filters={{
             Pendientes: {
               field: 'status',

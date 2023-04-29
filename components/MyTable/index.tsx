@@ -54,7 +54,8 @@ function MyTable<T>({
   hiddenCols,
   filters,
   onFilter,
-  title = 'Titulo de tabla'
+  title = 'Titulo de tabla',
+  defaultSort = []
 }: {
   data: T[]
   headers?: Record<string, HeaderType>
@@ -65,6 +66,7 @@ function MyTable<T>({
   filters?: Record<string, FilterType | FilterType[]>
   onFilter?: (filter: FilterType) => void
   title: string
+  defaultSort?: SortingState
 }) {
   // useDebugInformation('MyTable', {})
   // const [array, setArray] = React.useState([...data])
@@ -75,7 +77,7 @@ function MyTable<T>({
     hiddenCols
   })
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([...defaultSort])
   const [globalFilter, setGlobalFilter] = React.useState('')
   const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     // Rank the item
