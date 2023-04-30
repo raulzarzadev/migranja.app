@@ -14,6 +14,7 @@ import Modal from '@comps/modal'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import WeaningDetails from '@comps/WeaningDetails'
 import WeaningIconStatus from '@comps/WeaningIconStatus'
+import WeaningNumbers from './WeaningNumbers'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
@@ -34,9 +35,14 @@ const WeaningEvents = () => {
       status: weaning.eventData.status
     }))
     .filter((event) => event.status === 'PENDING')
-
+  console.log({ weanings })
   return (
     <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
+      <div className="">
+        <WeaningNumbers
+          weaning={weanings.filter((e) => e.eventData.status === 'PENDING')}
+        />
+      </div>
       <div className="flex w-full justify-center">
         <MyTable
           defaultSort={[{ id: 'date', desc: true }]}

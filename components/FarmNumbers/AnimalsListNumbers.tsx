@@ -1,71 +1,13 @@
-import Modal from '@comps/modal'
-import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
-import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
 import { useEffect, useState } from 'react'
-import { AnimalType } from 'types/base/AnimalType.model'
-import { StatCard } from '../../FarmNumbers'
-import PrintableAnimalsNumberList from '../../FarmNumbers/PrintableAnimalsNumberList'
-import { FarmEvent } from 'types/base/FarmEvent.model'
-
-const StatCardWithModalEvents = ({
-  events,
-  description = 'desc',
-  title,
-  ...rest
-}: {
-  events: FarmEvent[]
-  description: string
-  title: string
-}) => {
-  const [openList, setOpenList] = useState(false)
-  const handleOpenList = () => {
-    setOpenList(!openList)
-  }
-  const [selectedAnimals, setSelectedAnimals] = useState<string[]>([])
-  return (
-    <>
-      <div
-        className=""
-        onClick={(e) => {
-          e.preventDefault()
-          handleOpenList()
-        }}
-      >
-        <StatCard
-          {...rest}
-          quantity={events.length}
-          title={title}
-          description={description}
-        />
-      </div>
-      {openList && (
-        <Modal
-          open={openList}
-          handleOpen={handleOpenList}
-          title={`Lista de aretes: ${title} `}
-        >
-          <div className="relative">
-            <PrintableAnimalsNumberList
-              animals={events}
-              title={title}
-              earringsSelected={selectedAnimals}
-              setEarringsSelected={setSelectedAnimals}
-            />
-            <AnimalsOptions animalsEarrings={selectedAnimals} title={title} />
-          </div>
-        </Modal>
-      )}
-    </>
-  )
-}
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 
 export interface NumbersAnimalListType {
   title: string
-  animals: AnimalType[]
+  animals: { id?: string; earring: string }[]
   earringsSelected?: string[]
   setEarringsSelected?: (earring: string[]) => void
 }
-export const AnimalsList = ({
+export const AnimalsListNumbers = ({
   animals,
   title,
   setEarringsSelected,
@@ -78,8 +20,8 @@ export const AnimalsList = ({
   const earringsWithSuffix = animals?.filter((a) => a?.earring?.includes('-'))
 
   const sortByNumber = (a: any, b: any) => {
-    const aEarring = parseFloat(a?.earring.split('-')[0] || '0')
-    const bEarring = parseFloat(b?.earring.split('-')[0] || '0')
+    const aEarring = parseFloat(a?.earring?.split('-')[0] || '0')
+    const bEarring = parseFloat(b?.earring?.split('-')[0] || '0')
 
     if (aEarring < bEarring) return -1
     if (aEarring > bEarring) return 1
@@ -156,4 +98,4 @@ export const AnimalsList = ({
   )
 }
 
-export default StatCardWithModalEvents
+export default AnimalsListNumbers

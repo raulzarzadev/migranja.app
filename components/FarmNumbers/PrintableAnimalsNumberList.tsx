@@ -1,10 +1,8 @@
 import Icon from '@comps/Icon'
 import React, { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
-import {
-  AnimalsList,
-  NumbersAnimalListType
-} from './StatCardWithModalAnimalsList'
+import { NumbersAnimalListType } from './StatCardWithModalAnimalsList'
+import AnimalsListNumbers from './AnimalsListNumbers'
 
 const PrintableAnimalsNumberList = ({
   animals,
@@ -57,7 +55,7 @@ const ForwardPrintArea = React.forwardRef(
           <span>Lista de: </span>
           <strong className="font-bold">{title}</strong>
         </h3>
-        <AnimalsList
+        <AnimalsListNumbers
           animals={animals}
           title={title}
           earringsSelected={earringsSelected}
