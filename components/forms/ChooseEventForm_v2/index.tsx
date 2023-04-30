@@ -13,6 +13,7 @@ const ChooseEventForm = ({
   animalsSelected: any[]
   setAnimalsSelected?: (animals: any[]) => void
 }) => {
+  console.log({ animalsSelected })
   const animalsIds = animalsSelected.map((animal) => animal.id)
   const EVENTS_FORMS = {
     // default: <DefaultFormInfo />,
@@ -38,7 +39,8 @@ const ChooseEventForm = ({
         animalsIds={animalsIds}
         inventoryType={`partial/${title}`}
       />
-    )
+    ),
+    weaning: <div>Destear</div>
   } as const
   type EventName = keyof typeof EVENTS_FORMS
 
@@ -47,8 +49,10 @@ const ChooseEventForm = ({
     dropOut: 'Dar de baja',
     //dropIn: 'Dar de alta',
     sell: 'Vender',
-    inventory: 'Inventario'
+    inventory: 'Inventario',
+    weaning: 'Destetar'
   }
+
   return (
     <div className="grid grid-cols-3 gap-4">
       {Object.entries(EVENTS_FORMS).map(([key, value]) => {

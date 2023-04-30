@@ -25,16 +25,18 @@ const WeaningEvents = () => {
   }
   const [selectedRow, setSelectedRow] = useState<number | string | undefined>()
 
-  const eventSelected: AnimalFormattedWhitGenericEvenData =
-    weanings?.[selectedRow as number]
-
   const data = weanings
     .map((weaning) => ({
+      id: weaning.id,
       date: weaning.eventData.date,
       earring: weaning.eventData.earring,
       status: weaning.eventData.status
     }))
     .filter((event) => event.status === 'PENDING')
+
+  const eventSelected: AnimalFormattedWhitGenericEvenData =
+    data?.[selectedRow as number]
+
   console.log({ weanings })
   return (
     <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
@@ -48,6 +50,7 @@ const WeaningEvents = () => {
           defaultSort={[{ id: 'date', desc: true }]}
           showGlobalFilter
           title="Destetes programados"
+          hiddenCols={['id']}
           headers={{
             date: {
               label: 'Fecha',

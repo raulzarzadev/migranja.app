@@ -66,7 +66,7 @@ function MyTable<T>({
   filters?: Record<string, FilterType | FilterType[]>
   onFilter?: (filter: FilterType) => void
   title: string
-  defaultSort?: SortingState
+  defaultSort: SortingState
 }) {
   // useDebugInformation('MyTable', {})
   // const [array, setArray] = React.useState([...data])
