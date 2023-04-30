@@ -55,7 +55,7 @@ const FarmNumbers = () => {
         animals: activeFemales.filter(({ state }) => state === 'SUCKLE')
       },
       {
-        title: 'Lactandes',
+        title: 'Lactantes',
         subTitle: 'Recien nacidas',
         animals: activeFemales.filter(({ state }) => state === 'LACTATING')
       },
@@ -105,7 +105,7 @@ const FarmNumbers = () => {
     ],
     Machos: [
       {
-        title: 'Lactandes',
+        title: 'Lactantes',
         subTitle: 'Aun mamando',
         animals: activeMales.filter(({ state }) => state === 'LACTATING')
       },
