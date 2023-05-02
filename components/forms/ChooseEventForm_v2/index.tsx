@@ -39,8 +39,7 @@ const ChooseEventForm = ({
         animalsIds={animalsIds}
         inventoryType={`partial/${title}`}
       />
-    ),
-    weaning: <div>Destear</div>
+    )
   } as const
   type EventName = keyof typeof EVENTS_FORMS
 
@@ -49,8 +48,7 @@ const ChooseEventForm = ({
     dropOut: 'Dar de baja',
     //dropIn: 'Dar de alta',
     sell: 'Vender',
-    inventory: 'Inventario',
-    weaning: 'Destetar'
+    inventory: 'Inventario'
   }
 
   return (

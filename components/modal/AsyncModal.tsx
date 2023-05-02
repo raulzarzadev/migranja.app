@@ -16,8 +16,11 @@ const AsyncModal = ({
   openButtonClassName = '',
   openIcon,
   hiddenButtons = false,
-  openButtonDisabled
+  openButtonDisabled,
+  saveLabel = 'Guardar',
+  saveIcon = 'save'
 }: {
+  saveLabel: string
   btnLabel: string | React.ReactNode
   handleAccept: () => Promise<boolean | number>
   modalTitle: string
@@ -25,6 +28,7 @@ const AsyncModal = ({
   canOpen?: boolean
   openButtonClassName?: string
   openIcon?: IconName
+  saveIcon?: IconName
   hiddenButtons?: boolean
   openButtonDisabled?: boolean
 }) => {
@@ -95,7 +99,7 @@ const AsyncModal = ({
         <div>
           <div>{children}</div>
           {!hiddenButtons && (
-            <div className="flex w-full justify-around ">
+            <div className="flex w-full justify-around mt-4 ">
               <button
                 disabled={progress > 0}
                 onClick={(e) => {
@@ -114,7 +118,9 @@ const AsyncModal = ({
                 }}
                 className="btn btn-info btn-outline"
               >
-                Guardar {progress > 0 ? <Loading /> : <Icon name="save" />}
+                <span className="mr-2">{saveLabel}</span>
+
+                {progress > 0 ? <Loading /> : <Icon name={saveIcon} />}
               </button>
             </div>
           )}

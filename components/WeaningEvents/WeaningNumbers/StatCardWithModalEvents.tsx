@@ -6,6 +6,7 @@ import { AnimalType } from 'types/base/AnimalType.model'
 import { StatCard } from '../../FarmNumbers'
 import PrintableAnimalsNumberList from '../../FarmNumbers/PrintableAnimalsNumberList'
 import { FarmEvent } from 'types/base/FarmEvent.model'
+import AnimalsEventsOptions from './AnimalsEventsOptions'
 
 const StatCardWithModalEvents = ({
   events,
@@ -51,6 +52,7 @@ const StatCardWithModalEvents = ({
               earringsSelected={selectedAnimals}
               setEarringsSelected={setSelectedAnimals}
             />
+            {/* <AnimalsEventsOptions animalsEarrings={selectedAnimals} /> */}
             <AnimalsOptions animalsEarrings={selectedAnimals} title={title} />
           </div>
         </Modal>

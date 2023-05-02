@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import FormEarringsSelected from '../forms/FormEarringsSelected'
+import WeaningAnimals, { WeaningAnimal } from './WeaningAnimals'
 
 const AnimalsOptions = ({
   animalsEarrings,
@@ -33,7 +34,6 @@ const AnimalsOptions = ({
   const [progress, setProgress] = useState(0)
 
   const animalsIds = earringsSelected.map((animal) => animal.id)
-
   const handleDeleteAll = async () => {
     setProgress(1)
 
@@ -50,6 +50,7 @@ const AnimalsOptions = ({
       setProgress(0)
     }
   }
+
   const [openEvent, setOpenEvent] = useState(false)
   const handleOpenEvent = () => {
     setOpenEvent(!openEvent)
@@ -61,6 +62,8 @@ const AnimalsOptions = ({
 
   return (
     <div className="p-2">
+      <WeaningAnimals earringsSelected={earringsSelected} />
+
       <Modal
         title="Registrar evento"
         handleOpen={handleOpenEvent}

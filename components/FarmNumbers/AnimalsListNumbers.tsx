@@ -6,12 +6,14 @@ export interface NumbersAnimalListType {
   animals: { id?: string; earring: string }[]
   earringsSelected?: string[]
   setEarringsSelected?: (earring: string[]) => void
+  selectDisabled?: boolean
 }
 export const AnimalsListNumbers = ({
   animals,
   title,
   setEarringsSelected,
-  earringsSelected
+  earringsSelected,
+  selectDisabled = false
 }: NumbersAnimalListType) => {
   const earringsWithOutSuffix = animals?.filter(
     //* Verify if exist and if have suffix
@@ -69,6 +71,7 @@ export const AnimalsListNumbers = ({
             <div key={`${earring}-${i}`} className="m-1">
               <span className="whitespace-nowrap flex items-end">
                 <input
+                  disabled={selectDisabled}
                   type={'checkbox'}
                   onChange={(e) => {
                     onSelectEarring(earring, e.target.checked)
@@ -82,9 +85,23 @@ export const AnimalsListNumbers = ({
           )
         )}
       </div>
-      <div className=" flex justify-end items-center">
-        {' '}
+      <div className=" flex justify-end items-center mt-4">
         <input
+          disabled={selectDisabled}
+          type={'checkbox'}
+          onChange={(e) => {
+            //onSelectAll(e.target.checked)
+            _setEarringsSelected([])
+            setEarringsSelected?.([])
+          }}
+          className={'checkbox checkbox-sm bg-transparent mr-2 '}
+          checked={_earringsSelected.length > 0}
+        />
+        Seleccionados: {_earringsSelected.length}
+      </div>
+      <div className=" flex justify-end items-center">
+        <input
+          disabled={selectDisabled}
           type={'checkbox'}
           onChange={(e) => {
             onSelectAll(e.target.checked)
