@@ -1,6 +1,9 @@
 import AnimalsListNumbers from '@comps/FarmNumbers/AnimalsListNumbers'
 import Icon from '@comps/Icon'
+import WeaningOptions from '@comps/WeaningOptions'
 import useModal from '@comps/hooks/useModal'
+import useProgress from '@comps/hooks/useProgress'
+import useWeaning, { WeaningTypes } from '@comps/hooks/useWeaning'
 import Modal from '@comps/modal'
 import AsyncModal from '@comps/modal/AsyncModal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
@@ -16,17 +19,13 @@ const WeaningAnimals = ({
 }: {
   earringsSelected: WeaningAnimal[]
 }) => {
-  const animalsLactating = earringsSelected.filter(
+  const animalsLactating = earringsSelected?.filter(
     (animal) => animal.state === 'LACTATING'
   )
-  const modal = useModal()
-  // const handleWeaningAnimals = (earrings: AnimalType['earring'][]) => {
-  //   console.log({ earrings })
-  // }
 
   return (
     <div>
-      {!!animalsLactating.length && (
+      {!!animalsLactating?.length && (
         <div className="flex w-full justify-center">
           <div className="flex w-full justify-center">
             <AsyncModal
@@ -36,14 +35,11 @@ const WeaningAnimals = ({
               saveIcon="bell"
               btnLabel="Destetar animales"
               modalTitle={'Destetando'}
-              handleAccept={async function (): Promise<number | boolean> {
-                return new Promise((resolve, reject) => {
-                  setTimeout(() => {
-                    console.log('hola')
-                    resolve(true)
-                  }, 5000)
-                })
-              }}
+              // handleAccept={async function (): Promise<number | boolean> {
+              //   handleWeaningAnimals(animalsLactating, {
+              //     weaningType: 'FOR_SALE'
+              //   })
+              // }}
             >
               <>
                 {!animalsLactating.length && (
@@ -67,6 +63,9 @@ const WeaningAnimals = ({
                     value={10}
                     max={100}
                   ></progress> */}
+                  <WeaningOptions
+                    animalsIds={animalsLactating.map((a) => a.id)}
+                  />
                 </div>
               </>
             </AsyncModal>

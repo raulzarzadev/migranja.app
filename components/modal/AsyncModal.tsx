@@ -8,10 +8,7 @@ const AsyncModal = ({
   btnLabel = 'label button',
   children = <></>,
   modalTitle = 'Modal title',
-  handleAccept = () =>
-    new Promise((resolve, reject) => {
-      reject('Not implemented')
-    }),
+  handleAccept,
   canOpen = true,
   openButtonClassName = '',
   openIcon,
@@ -22,7 +19,7 @@ const AsyncModal = ({
 }: {
   saveLabel: string
   btnLabel: string | React.ReactNode
-  handleAccept: () => Promise<boolean | number>
+  handleAccept?: () => Promise<boolean | number>
   modalTitle: string
   children: React.ReactNode
   canOpen?: boolean
@@ -70,7 +67,7 @@ const AsyncModal = ({
   const isActionConfirmed = async (bool: boolean) => {
     if (!bool) return handleCancel()
     onStartActions()
-    await handleAccept()
+    await handleAccept?.()
     onFinishAction()
   }
 
@@ -110,18 +107,20 @@ const AsyncModal = ({
               >
                 Cancelar <Icon name="close" />
               </button>
-              <button
-                disabled={progress > 0}
-                onClick={(e) => {
-                  e.preventDefault()
-                  isActionConfirmed(true)
-                }}
-                className="btn btn-info btn-outline"
-              >
-                <span className="mr-2">{saveLabel}</span>
+              {handleAccept && (
+                <button
+                  disabled={progress > 0}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    isActionConfirmed(true)
+                  }}
+                  className="btn btn-info btn-outline"
+                >
+                  <span className="mr-2">{saveLabel}</span>
 
-                {progress > 0 ? <Loading /> : <Icon name={saveIcon} />}
-              </button>
+                  {progress > 0 ? <Loading /> : <Icon name={saveIcon} />}
+                </button>
+              )}
             </div>
           )}
         </div>

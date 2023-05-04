@@ -8,6 +8,7 @@ import { AnimalStateType } from 'types/base/AnimalState.model'
 import { AnimalType } from 'types/base/AnimalType.model'
 import Modal from '..'
 import ModalAnimalDetails from '../ModalAnimalDetails'
+import WeaningOptions from '@comps/WeaningOptions'
 
 const onWeaning = async ({
   state,
@@ -38,6 +39,8 @@ const onWeaning = async ({
   }
 }
 
+export interface WeaningType {}
+
 const ModalEditWeaning = ({
   eventId,
   animalEarring
@@ -52,25 +55,25 @@ const ModalEditWeaning = ({
   const farmAnimals = useSelector(selectFarmAnimals)
   const animal = farmAnimals.find((animal) => animal.earring === animalEarring)
   const animalId = animal?.id
-  const animalMotherId = animal?.parents?.mother?.id
+  // const animalMotherId = animal?.parents?.mother?.id
   const [error, setError] = useState('')
-  const handleWeaning = async (state: AnimalStateType) => {
-    if (!animalId) return setError('No animalId')
-    try {
-      //* Update animal state
-      await updateAnimalState(animalId, state, animal.state)
-      //* Update mother animal state
-      if (animalMotherId) {
-        //* TODO: Check if have more children weaning
-        await updateAnimalState(animalMotherId, 'FREE', 'SUCKLE')
-      }
-      //* Update event status to done
-      //@ts-ignore
-      await updateEvent(eventId, { 'eventData.status': 'DONE' })
-    } catch (error) {
-      console.log({ error })
-    }
-  }
+  // const handleWeaning = async (state: AnimalStateType) => {
+  //   if (!animalId) return setError('No animalId')
+  //   try {
+  //     //* Update animal state
+  //     await updateAnimalState(animalId, state, animal.state)
+  //     //* Update mother animal state
+  //     if (animalMotherId) {
+  //       //* TODO: Check if have more children weaning
+  //       await updateAnimalState(animalMotherId, 'FREE', 'SUCKLE')
+  //     }
+  //     //* Update event status to done
+  //     //@ts-ignore
+  //     await updateEvent(eventId, { 'eventData.status': 'DONE' })
+  //   } catch (error) {
+  //     console.log({ error })
+  //   }
+  // }
   console.log({ eventId, animalEarring, genero: animal?.gender })
 
   return (
@@ -109,7 +112,8 @@ const ModalEditWeaning = ({
             </div>
           )}
           <div className="flex flex-col sm:flex-row w-full justify-evenly items-center">
-            <ButtonOption
+            <WeaningOptions animalId={animalId} />
+            {/* <ButtonOption
               onClick={(e) => {
                 e.preventDefault()
                 handleWeaning('FATTEN')
@@ -134,7 +138,7 @@ const ModalEditWeaning = ({
                 label="Para vientre"
                 helperText="* Una hembra que formara parte del ganado principal."
               />
-            )}
+            )} */}
           </div>
         </div>
       </Modal>
@@ -142,22 +146,22 @@ const ModalEditWeaning = ({
   )
 }
 
-export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
-  helperText: string
-  label: string
-  type?: any
-}
+// export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+//   helperText: string
+//   label: string
+//   type?: any
+// }
 
-const ButtonOption: React.FC<ButtonProps> = ({ ...props }) => {
-  const { label, helperText, ...rest } = props
-  return (
-    <div className="sm:w-1/3 flex justify-start  flex-col items-center ">
-      <button className="btn btn-info mt-5 btn-outline  " {...rest}>
-        <span className="truncate">{label}</span>
-      </button>
-      <p className="whitespace-pre-wrap text-xs ">{helperText}</p>
-    </div>
-  )
-}
+// const ButtonOption: React.FC<ButtonProps> = ({ ...props }) => {
+//   const { label, helperText, ...rest } = props
+//   return (
+//     <div className="sm:w-1/3 flex justify-start  flex-col items-center ">
+//       <button className="btn btn-info mt-5 btn-outline  " {...rest}>
+//         <span className="truncate">{label}</span>
+//       </button>
+//       <p className="whitespace-pre-wrap text-xs ">{helperText}</p>
+//     </div>
+//   )
+// }
 
 export default ModalEditWeaning
