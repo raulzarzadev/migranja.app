@@ -125,36 +125,36 @@ export const updateEventBreedingBatch = async ({
   return await Promise.all([oldAnimal, removeOldAnimal, setNewAnimal])
 }
 
-export const updateBreedingEventBatch = async ({
-  animalId,
-  eventType,
-  eventData
-}: {
-  animalId?: string
-  eventType: BaseFarmEvent['type']
-  eventData: any
-}) => {
-  const oldAnimal = [...(eventData?.breedingBatch || [])].find(
-    (animal) => animal?.id === animalId
-  )
-  console.log({ oldAnimal, eventType, eventData })
+// export const updateBreedingEventBatch = async ({
+//   animalId,
+//   eventType,
+//   eventData
+// }: {
+//   animalId?: string
+//   eventType: BaseFarmEvent['type']
+//   eventData: any
+// }) => {
+//   const oldAnimal = [...(eventData?.breedingBatch || [])].find(
+//     (animal) => animal?.id === animalId
+//   )
+//   console.log({ oldAnimal, eventType, eventData })
 
-  // const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
-  //   'eventData.breedingBatch': arrayRemove(oldAnimal)
-  // })
-  // const newAnimal = { ...oldAnimal, status: eventType }
-  // const setNewAnimal = await eventsCRUD.updateItem(eventId, {
-  //   'eventData.breedingBatch': arrayUnion(newAnimal)
-  // })
-  //return await Promise.all([removeOldAnimal, setNewAnimal])
-}
+//   // const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
+//   //   'eventData.breedingBatch': arrayRemove(oldAnimal)
+//   // })
+//   // const newAnimal = { ...oldAnimal, status: eventType }
+//   // const setNewAnimal = await eventsCRUD.updateItem(eventId, {
+//   //   'eventData.breedingBatch': arrayUnion(newAnimal)
+//   // })
+//   //return await Promise.all([removeOldAnimal, setNewAnimal])
+// }
 export const updateAnimalStatusInBreedingBatch = async ({
   eventId,
   animalId,
   eventType
 }: {
   eventId: string
-  animalId?: string
+  animalId: string
   eventType: BaseFarmEvent['type']
 }) => {
   try {
@@ -256,10 +256,15 @@ export const removeMaleFromBreedingEvent = async (
 
 export interface CreateEvent {
   type?: EventType['type']
-  farm?: EventType['farm']
+  farm?: EventType['farm'] | null
   eventData?: {
     date: DateType
     parents?: ParentsType
+    comments?: string
+    animal?: {
+      id?: AnimalType['id']
+      earring?: AnimalType['earring']
+    }
   }
 }
 

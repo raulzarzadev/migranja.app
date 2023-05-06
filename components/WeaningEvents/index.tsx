@@ -15,11 +15,13 @@ import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import WeaningDetails from '@comps/WeaningDetails'
 import WeaningIconStatus from '@comps/WeaningIconStatus'
 import WeaningNumbers from './WeaningNumbers'
+import useAnimal from '@comps/hooks/useAnimal'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
   const weanings = events.filter((event) => event.type === 'WEANING')
   const [openModal, setOpenModal] = useState(false)
+  const { findParents } = useAnimal()
   const handleOpenModal = () => {
     setOpenModal(!openModal)
   }
@@ -30,6 +32,8 @@ const WeaningEvents = () => {
       id: weaning.id,
       date: weaning.eventData.date,
       earring: weaning.eventData.earring,
+      mother: findParents({ animalEarring: weaning.eventData.earring })?.mother
+        ?.earring,
       status: weaning.eventData.status
     }))
     .filter((event) => event.status === 'PENDING')
@@ -61,6 +65,12 @@ const WeaningEvents = () => {
               format: (props) => (
                 <ModalAnimalDetails earring={props} size="normal" />
               )
+            },
+            mother: {
+              label: 'Madre',
+              format(props) {
+                return <ModalAnimalDetails earring={props} size="normal" />
+              }
             },
             status: {
               label: 'Status',

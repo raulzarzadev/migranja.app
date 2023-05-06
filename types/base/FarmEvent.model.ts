@@ -45,6 +45,7 @@ export interface EmptyDetailsEvent extends BreedingEventDefaultInfo {
   comments: string
 }
 export interface BreedingDetailsEvent extends BreedingEventDefaultInfo {
+  earrings: any[]
   //otherMales: any
   batch: ReactNode
   type?: string

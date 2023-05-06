@@ -72,7 +72,7 @@ const SellForm = ({
     // return
 
     try {
-      /** Create sell event */
+      //** Create sell event */
 
       const res = await createSellEvent({
         status: 'PENDING',
@@ -82,7 +82,7 @@ const SellForm = ({
       })
       setProgress(50)
 
-      /*** Update animals current status  and state */
+      //*** Update animals current status  and state */
 
       const animalsSold = data.earrings
       for (let i = 0; i < animalsSold.length; i++) {

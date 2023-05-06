@@ -37,7 +37,8 @@ const ModalAnimalBreedingOptions = ({
           <div>
             <ModalNewBirth motherId={motherId} breedingId={breedingId} />
             {/* <button>Descartar animal</button>
-            <button>Vacio</button> */}
+             */}
+            <ModalEmptyBirth motherId={motherId} breeding={breedingId} />
           </div>
         </Modal>
       )}

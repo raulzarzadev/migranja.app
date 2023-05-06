@@ -13,16 +13,7 @@ const useAnimal = ({ animalId, earring }: UseAnimal = {}) => {
   const animal = animals.find(
     (animal) => animal.id === animalId || animal.earring === earring
   )
-  const handleDelete = async (id?: string): Promise<boolean> => {
-    try {
-      const res = await deleteAnimal(id || (animalId as string))
-      console.log(res)
-      return true
-    } catch (err) {
-      console.log(err)
-      return false
-    }
-  }
+
   const findAnimal = ({
     animalId,
     animalEarring
@@ -37,7 +28,26 @@ const useAnimal = ({ animalId, earring }: UseAnimal = {}) => {
         //* if earringId exist and is equal to animal earring
         (!!animalEarring && animalEarring === earring)
     )
-  return { handleDelete, animal, findAnimal }
+
+  const findParents = ({
+    animalId,
+    animalEarring
+  }: {
+    animalId?: AnimalType['id']
+    animalEarring?: AnimalType['earring']
+  }) => findAnimal({ animalEarring, animalId })?.parents
+
+  const handleDelete = async (id?: string): Promise<boolean> => {
+    try {
+      const res = await deleteAnimal(id || (animalId as string))
+      console.log(res)
+      return true
+    } catch (err) {
+      console.log(err)
+      return false
+    }
+  }
+  return { handleDelete, animal, findAnimal, findParents }
 }
 
 export default useAnimal

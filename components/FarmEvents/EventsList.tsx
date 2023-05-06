@@ -12,6 +12,7 @@ import { FarmEvent } from 'types/base/FarmEvent.model'
 import BirthDetails from '@comps/BirthDetails'
 import BreedingDetails from '@comps/BreedingDetails'
 import WeaningDetails from '@comps/WeaningDetails'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   const modal = useModal()
@@ -25,7 +26,6 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
             label: 'Tipo',
             format: (props) => labelsOfFarmEventTypes[props as TypeOfFarmEvent]
           },
-
           updatedAt: {
             label: 'Actualizado',
             format(props) {
@@ -37,13 +37,53 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
             format(props) {
               return myFormatDate(props, 'dd/MM/yy')
             }
+          },
+          earrings: {
+            label: 'Animales',
+            format(props) {
+              return (
+                <div className="flex flex-wrap">
+                  {props?.().map((a, i) => (
+                    <div className="flex flex-wrap" key={i}>
+                      <ModalAnimalDetails size="sm" earring={a.earring} />
+                    </div>
+                  ))}
+                </div>
+              )
+            }
           }
         }}
         data={events.map((e) => ({
           type: e.type,
           //createAt: e.createdAt,
           updatedAt: e.updatedAt,
-          date: e.eventData.date
+          date: e.eventData.date,
+          earrings: () => {
+            let earrings = []
+            if (e.eventData.earring) {
+              earrings.push({ earring: e.eventData.earring })
+            }
+            if (e.type === 'BIRTH') {
+              earrings = [...earrings, ...(e?.eventData?.calfs || [])]
+            }
+            if (e.type === 'BREEDING') {
+              earrings = [...earrings, ...(e?.eventData?.breedingBatch || [])]
+            }
+            if (e.type === 'DROP_OUT') {
+              earrings = [...earrings, ...(e?.eventData?.animals || [])]
+            }
+            if (e.type === 'DROP_IN') {
+              earrings = [...earrings, ...(e?.eventData?.animals || [])]
+            }
+            if (e.type === 'SELL') {
+              earrings = [...earrings, ...(e?.eventData?.earrings || [])]
+            }
+            // if (e.type === 'EMPTY') {
+            //   console.log({ e })
+            //   earrings = [...earrings, ...(e?.eventData?.earrings || [])]
+            // }
+            return earrings
+          }
         }))}
         filters={{
           Destetes: { field: 'type', symbol: '>', value: 'WEANING' },
@@ -55,6 +95,7 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
           setEvent(events?.[e as number] || null)
           modal.handleOpen()
         }}
+        defaultSort={[]}
       />
       <Modal
         {...modal}

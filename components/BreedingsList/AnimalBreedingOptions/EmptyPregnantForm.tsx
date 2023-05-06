@@ -1,4 +1,5 @@
 import ProgressButton from '@comps/ProgressButton'
+import useEmptyAnimal from '@comps/hooks/useEmptyAnimal'
 import { updateAnimalState } from '@firebase/Animal/main'
 import {
   createTypedEvent,
@@ -24,57 +25,15 @@ const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
   })
   const { handleSubmit, reset } = methods
 
-  const [progress, setProgress] = useState(0)
+  const { breedingEmptyAnimal, progress } = useEmptyAnimal()
+
   const onSubmit = async (data: any) => {
-    setProgress(1)
-
-    try {
-      // ****************************************************   create birth
-      const event = await createTypedEvent<EmptyDetailsEvent>({
-        type: 'EMPTY',
-        eventData: {
-          ...animal.eventData,
-          parents: {
-            father: {
-              id: animal.eventData.breedingMale?.id,
-              earring: animal.eventData.breedingMale?.earring
-              // inTheFarm: animal.eventData.breedingMale?.inTheFarm || false
-            },
-            mother: {
-              id: animal.id,
-              name: animal.name,
-              earring: animal.earring
-            }
-          },
-          date: data.date,
-          comments: data?.comments
-        },
-        farm: {
-          id: currentFarm?.id || '',
-          name: currentFarm?.name || ''
-        }
-      })
-      setProgress(50)
-
-      // ***************************************************   update breeding, move from batch to already done
-
-      const breeding = await updateAnimalStatusInBreedingBatch({
-        animalId: animal?.id,
-        eventType: 'EMPTY',
-        eventId: animal.eventData.id
-      })
-
-      //* * * * * * * * * * * * * * * * * * * * * * * * update animal state
-      setProgress(80)
-      //* TODO: check if is in other breeding
-      if (animal?.id) await updateAnimalState(animal?.id, 'FREE', animal.state)
-
-      setProgress(100)
-      reset()
-    } catch (error) {
-      setProgress(0)
-      console.log(error)
-    }
+    breedingEmptyAnimal({
+      animalId,
+      breedingId,
+      date: data.date,
+      comments: data.comments
+    })
   }
 
   return (

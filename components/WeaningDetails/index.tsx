@@ -2,6 +2,7 @@ import IconBreedingStatus from '@comps/IconBreedingStatus'
 import IconStatus from '@comps/IconStatus'
 import TableDate from '@comps/MyTable/TableDate'
 import WeaningIconStatus from '@comps/WeaningIconStatus'
+import useAnimal from '@comps/hooks/useAnimal'
 import useEvent from '@comps/hooks/useEvent'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import ModalDelete from '@comps/modal/ModalDelete'
@@ -14,15 +15,39 @@ import {
 
 const WeaningDetails = ({ weaningId }: { weaningId: string }) => {
   const { event } = useEvent({ eventId: weaningId })
-  console.log({ event })
   const eventStatus = event?.eventData?.status as StatusOfFarmEvent
+  const { findParents } = useAnimal()
+  const mother = findParents({
+    animalEarring: event?.eventData.earring
+  })?.mother
   return (
     <div className="text-center">
-      <span className="font-bold">Fecha:</span>{' '}
-      <TableDate date={event?.eventData.date as number} />
-      <span className="font-bold">Arete:</span>
-      <div>
-        <ModalAnimalDetails earring={event?.eventData.earring} size="normal" />
+      <div className="flex justify-evenly w-full">
+        <span>
+          <span className="font-bold">Creado:</span>{' '}
+          <TableDate date={event?.createdAt as number} />
+        </span>
+        <span>
+          <span className="font-bold">Programado:</span>{' '}
+          <TableDate date={event?.eventData.date as number} />
+        </span>
+      </div>
+      <div className="flex w-full justify-evenly my-4">
+        <div>
+          <span className="font-bold">Cría:</span>
+          <div>
+            <ModalAnimalDetails
+              earring={event?.eventData.earring}
+              size="normal"
+            />
+          </div>
+        </div>
+        <div>
+          <span className="font-bold">Madre:</span>
+          <div>
+            <ModalAnimalDetails earring={mother?.earring} size="normal" />
+          </div>
+        </div>
       </div>
       <div>
         <span className="font-bold">Status:</span>
