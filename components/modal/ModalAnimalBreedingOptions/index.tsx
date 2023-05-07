@@ -4,6 +4,7 @@ import ModalNewBirth from '../ModalNewBirth/indext'
 import { AnimalType } from 'types/base/AnimalType.model'
 import { EventType } from '@firebase/Events/event.model'
 import { ReactNode } from 'react'
+import ModalEmptyBirth from '../ModalEmptyBirth'
 
 const ModalAnimalBreedingOptions = ({
   children,
@@ -34,11 +35,11 @@ const ModalAnimalBreedingOptions = ({
           handleOpen={modal.handleOpen}
           title="Detalles de monta individual"
         >
-          <div>
+          <div className="flex w-full justify-evenly">
             <ModalNewBirth motherId={motherId} breedingId={breedingId} />
             {/* <button>Descartar animal</button>
              */}
-            <ModalEmptyBirth motherId={motherId} breeding={breedingId} />
+            <ModalEmptyBirth motherId={motherId} breedingId={breedingId} />
           </div>
         </Modal>
       )}

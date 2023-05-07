@@ -29,6 +29,7 @@ const AnimalsForm = ({
     const animals = [..._animals, data]
     _setAnimals(animals)
     setAnimals?.(animals)
+    methods.reset()
   }
   const errors = methods.formState.errors
   return (
@@ -36,7 +37,7 @@ const AnimalsForm = ({
       <h5 className="text-lg font-bold">
         {isBirth ? 'Camada' : 'Nuevos aretes'}
       </h5>
-      <table className="table">
+      <table className="table w-full">
         {!!_animals.length && (
           <thead>
             <tr>

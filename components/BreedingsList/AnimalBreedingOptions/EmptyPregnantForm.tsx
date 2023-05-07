@@ -6,16 +6,19 @@ import {
   updateAnimalStatusInBreedingBatch
 } from '@firebase/Events/main'
 import InputContainer from 'components/inputs/InputContainer'
-import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
-import {
-  AnimalBreedingEventCard,
-  EmptyDetailsEvent
-} from 'types/base/FarmEvent.model'
+import { AnimalType } from 'types/base/AnimalType.model'
+import { FarmEvent } from 'types/base/FarmEvent.model'
 
-const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
+const EmptyPregnantForm = ({
+  motherId,
+  breedingId
+}: {
+  motherId: AnimalType['id']
+  breedingId: FarmEvent['id']
+}) => {
   const currentFarm = useSelector(selectFarmState)
   const methods = useForm({
     defaultValues: {
@@ -29,7 +32,7 @@ const EmptyPregnantForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
 
   const onSubmit = async (data: any) => {
     breedingEmptyAnimal({
-      animalId,
+      animalId: motherId,
       breedingId,
       date: data.date,
       comments: data.comments

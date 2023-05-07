@@ -106,7 +106,6 @@ const BirthForm = ({
               .sort((a: any, b: any) => a?.label - b?.label)}
             label="Hembra"
           />
-
           <AnimalsForm
             isBirth
             setAnimals={(calfs) => {
