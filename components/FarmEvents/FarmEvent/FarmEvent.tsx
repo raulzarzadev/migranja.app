@@ -64,6 +64,10 @@ export const detailsOptions = ({ event }: { event: FarmStateAnimalEvent }) => {
       CANCELLED: {
         label: 'Cancelado ',
         Component: <span>Cancelado</span>
+      },
+      WEANING_DONE: {
+        label: 'Destete hecho ',
+        Component: <span>Destete hecho</span>
       }
     }
   return DETAILS_OPTIONS[event.type || 'NULL']

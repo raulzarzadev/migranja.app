@@ -11,7 +11,6 @@ import {
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import TableDate from '@comps/MyTable/TableDate'
 import Modal from '@comps/modal'
-import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import WeaningDetails from '@comps/WeaningDetails'
 import WeaningIconStatus from '@comps/WeaningIconStatus'
 import WeaningNumbers from './WeaningNumbers'
@@ -38,8 +37,7 @@ const WeaningEvents = () => {
     }))
     .filter((event) => event.status === 'PENDING')
 
-  const eventSelected: AnimalFormattedWhitGenericEvenData =
-    data?.[selectedRow as number]
+  const eventSelected: any = data?.[selectedRow as number]
 
   console.log({ weanings })
   return (

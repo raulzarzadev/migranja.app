@@ -1,5 +1,4 @@
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
-import GeneticTree from 'components/GeneticTree'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import EventModal from '../EventModal'
@@ -51,35 +50,6 @@ const HeaderEventCard = ({
           </span>
         </div>
       </header>
-    </div>
-  )
-}
-
-const GenericBreedingInfo = ({
-  event
-}: {
-  event: AnimalFormattedWhitGenericEvenData
-}) => {
-  const eventData = event?.eventData
-  const father = eventData?.parents?.father
-  const mother = eventData?.parents?.mother
-  return (
-    <div>
-      <div className="text-center ">
-        <span className="">Lote: {eventData?.breedingId}</span>
-      </div>
-      <GeneticTree
-        elements={{
-          father: {
-            id: father?.id as string,
-            label: father?.earring as string
-          },
-          mother: {
-            id: mother?.id as string,
-            label: mother?.earring as string
-          }
-        }}
-      />
     </div>
   )
 }

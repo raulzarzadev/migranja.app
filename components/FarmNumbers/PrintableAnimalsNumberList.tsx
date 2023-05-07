@@ -1,8 +1,7 @@
 import Icon from '@comps/Icon'
 import React, { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
-import { NumbersAnimalListType } from './StatCardWithModalAnimalsList'
-import AnimalsListNumbers from './AnimalsListNumbers'
+import AnimalsListNumbers, { NumbersAnimalListType } from './AnimalsListNumbers'
 
 const PrintableAnimalsNumberList = ({
   animals,

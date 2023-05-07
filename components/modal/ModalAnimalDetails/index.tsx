@@ -7,19 +7,25 @@ import Modal from '..'
 
 const ModalAnimalDetails = ({
   earring = '',
+  animalId,
   size = 'lg'
 }: {
   size?: 'lg' | 'md' | 'sm' | 'normal'
   earring?: AnimalType['earring']
+  animalId?: AnimalType['id']
 }) => {
   const [openAnimalDetails, setOpenAnimalDetails] = useState(false)
   const [animal, setAnimal] = useState<AnimalType | undefined>(undefined)
   const farmAnimals = useSelector(selectFarmAnimals)
+
   const handleOpenAnimalDetails = () => {
     setOpenAnimalDetails(!openAnimalDetails)
     setAnimal(
       farmAnimals.find(
-        (animal) => animal.earring === earring || animal.id === earring
+        (animal) =>
+          animal.earring === earring ||
+          animal.id === earring ||
+          (animalId && animalId === animal.id)
       )
     )
   }

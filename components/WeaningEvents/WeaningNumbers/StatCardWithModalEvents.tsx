@@ -14,7 +14,7 @@ const StatCardWithModalEvents = ({
   title,
   ...rest
 }: {
-  events: FarmEvent[]
+  events: any[]
   description: string
   title: string
 }) => {
@@ -23,6 +23,7 @@ const StatCardWithModalEvents = ({
     setOpenList(!openList)
   }
   const [selectedAnimals, setSelectedAnimals] = useState<string[]>([])
+  console.log({ events })
   return (
     <>
       <div

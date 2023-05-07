@@ -13,6 +13,7 @@ import BirthDetails from '@comps/BirthDetails'
 import BreedingDetails from '@comps/BreedingDetails'
 import WeaningDetails from '@comps/WeaningDetails'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import { AnimalType } from 'types/base/AnimalType.model'
 
 export const EventsList = ({ events }: { events: FarmState['events'] }) => {
   const modal = useModal()
@@ -43,7 +44,7 @@ export const EventsList = ({ events }: { events: FarmState['events'] }) => {
             format(props) {
               return (
                 <div className="flex flex-wrap">
-                  {props?.().map((a, i) => (
+                  {props?.().map((a: AnimalType, i: number) => (
                     <div className="flex flex-wrap" key={i}>
                       <ModalAnimalDetails size="sm" earring={a.earring} />
                     </div>

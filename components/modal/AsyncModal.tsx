@@ -17,7 +17,7 @@ const AsyncModal = ({
   saveLabel = 'Guardar',
   saveIcon = 'save'
 }: {
-  saveLabel: string
+  saveLabel?: string
   btnLabel: string | React.ReactNode
   handleAccept?: () => Promise<boolean | number>
   modalTitle: string

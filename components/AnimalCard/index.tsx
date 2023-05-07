@@ -1,8 +1,7 @@
 import GeneticTree from '@comps/GeneticTree'
-import useDebugInformation from '@comps/hooks/useDebugInformation'
 import ImagesDisplay from '@comps/ImagesDisplay'
-import InputFiles, { PreviewImage } from '@comps/InputFiles'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
+import ModalGeneticTree from '@comps/modal/ModalGeneticTree'
 import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
 import { deleteAnimal, updateAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
@@ -216,8 +215,9 @@ export const AnimalDetails = ({
         </div>
         <div>
           <div className="my-4 mt-8">
-            <GeneticTree
-              elements={{
+            <ModalGeneticTree animalId={animal?.id || ''} />
+            {/* <GeneticTree
+              parents={{
                 father: {
                   label: parents?.father?.earring || '',
                   id: parents?.father?.id || ''
@@ -227,7 +227,7 @@ export const AnimalDetails = ({
                   id: parents?.mother?.id || ''
                 }
               }}
-            />
+            /> */}
           </div>
           <div className="">
             Peso

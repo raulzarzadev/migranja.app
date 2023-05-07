@@ -14,18 +14,7 @@ const BirthEventDetails = ({ event }: { event: FarmStateAnimalEvent }) => {
       <div>
         <span className="mr-2">Lote {birthData?.breedingId}</span>
       </div>
-      {/* <GeneticTree
-        elements={{
-          father: {
-            id: father?.id as string,
-            label: father?.earring as string
-          },
-          mother: {
-            id: mother?.id as string,
-            label: mother?.earring as string
-          }
-        }}
-      /> */}
+
       <div className="flex items-center mx-auto w-full justify-center">
         <span className="mr-2">Genetica</span>
         <div className="flex flex-col ">
