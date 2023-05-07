@@ -17,8 +17,6 @@ import DebouncedInput from '@comps/inputs/DebouncedInput'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import Filters from '@comps/Filters'
 import { FilterType } from '@comps/hooks/useFilterByField'
-import useDebugInformation from '@comps/hooks/useDebugInformation'
-import { string } from 'yup'
 
 type Person = {
   firstName: string
@@ -66,7 +64,7 @@ function MyTable<T>({
   filters?: Record<string, FilterType | FilterType[]>
   onFilter?: (filter: FilterType) => void
   title: string
-  defaultSort: SortingState
+  defaultSort?: SortingState
 }) {
   // useDebugInformation('MyTable', {})
   // const [array, setArray] = React.useState([...data])

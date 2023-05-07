@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmEvents } from 'store/slices/farmSlice'
 import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { fromNow } from 'utils/dates/myDateUtils'
 
 const BirthEvents = () => {
   const events = useSelector(selectFarmEvents)
@@ -49,10 +50,10 @@ const BirthEvents = () => {
               </span>
             )
           },
-          // updatedAt: {
-          //   label: 'Actualizado',
-          //   format: (e) => fromNow(e, { addSuffix: true })
-          // },
+          updatedAt: {
+            label: 'Actualizado',
+            format: (e) => fromNow(e, { addSuffix: true })
+          },
           mom: {
             label: 'Madre',
             format: (p) => (
@@ -88,7 +89,7 @@ const BirthEvents = () => {
         data={births.map((e) => ({
           litter: e.eventData.calfs?.map((a) => a.earring).join(','),
           date: e.eventData.date,
-          //updatedAt: e.updatedAt,
+          updatedAt: e.updatedAt,
           batch: e.eventData.breedingId,
           mom: e.eventData.parents.mother?.earring,
           dad: e.eventData.parents.father?.earring

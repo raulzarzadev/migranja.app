@@ -89,7 +89,7 @@ const InputContainer = ({
 
           {['text'].includes(type) && (
             <input
-              className="input input-bordered input-sm bg-transparent"
+              className="input input-bordered input-sm bg-transparent font-normal"
               type={type}
               onBlur={onBlur} // notify when input is touched
               onChange={onChange} // send value to hook form
@@ -100,7 +100,7 @@ const InputContainer = ({
           )}
           {type === 'number' && (
             <input
-              className="input input-bordered input-sm bg-transparent"
+              className="input input-bordered input-sm bg-transparent font-normal"
               type={type}
               onBlur={onBlur} // notify when input is touched
               onChange={(e) => onChange(parseFloat(e.target.value || ''))} // send value as number

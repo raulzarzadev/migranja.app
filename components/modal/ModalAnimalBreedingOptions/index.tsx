@@ -35,7 +35,7 @@ const ModalAnimalBreedingOptions = ({
           handleOpen={modal.handleOpen}
           title="Detalles de monta individual"
         >
-          <div className="flex w-full justify-evenly">
+          <div className="flex w-full justify-evenly" w>
             <ModalNewBirth motherId={motherId} breedingId={breedingId} />
             {/* <button>Descartar animal</button>
              */}

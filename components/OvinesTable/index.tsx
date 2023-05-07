@@ -1,5 +1,5 @@
 //import MyTable from '@comps/MyTable'
-import AnimalsTable, { RowSelectedType } from 'components/AnimalsTable'
+import AnimalsTable from 'components/AnimalsTable'
 // import AnimalsTable from '@comps/MyTables/AnimalsTable'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'

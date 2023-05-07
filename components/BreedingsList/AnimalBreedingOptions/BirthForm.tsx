@@ -13,10 +13,12 @@ export interface NewCalf extends NewAnimal {}
 
 const BirthForm = ({
   motherId = '',
-  breedingId = ''
+  breedingId = '',
+  title
 }: {
   motherId?: string
   breedingId?: string
+  title?: string
 }) => {
   const { event } = useEvent({ eventId: breedingId })
   const fatherId = event?.eventData?.breedingMale?.id || ''
@@ -71,41 +73,45 @@ const BirthForm = ({
 
   return (
     <div>
+      {title && <h3 className="font-bold text-center">{title}</h3>}
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <InputContainer
-            type="date"
-            name="date"
-            label="Fecha"
-            //datesRangeColor={datesRangeColor}
-          />
-          <InputContainer
-            name="batch"
-            type="text"
-            label="Lote/Monta (opcional)"
-          />
-          <InputContainer
-            name="fatherId"
-            type="select"
-            selectOptions={males
-              .map((male) => ({
-                label: male?.earring,
-                value: male?.id
-              }))
-              .sort((a: any, b: any) => a?.label - b?.label)}
-            label="Macho"
-          />
-          <InputContainer
-            name="motherId"
-            type="select"
-            selectOptions={mothers
-              ?.map((male) => ({
-                label: male?.earring,
-                value: male?.id
-              }))
-              .sort((a: any, b: any) => a?.label - b?.label)}
-            label="Hembra"
-          />
+          <div className="w-[250px] mx-auto">
+            <InputContainer
+              type="date"
+              name="date"
+              label="Fecha"
+              //datesRangeColor={datesRangeColor}
+            />
+            <InputContainer
+              name="batch"
+              type="text"
+              label="Lote/Monta (opcional)"
+            />
+            <InputContainer
+              name="fatherId"
+              type="select"
+              selectOptions={males
+                .map((male) => ({
+                  label: male?.earring,
+                  value: male?.id
+                }))
+                .sort((a: any, b: any) => a?.label - b?.label)}
+              label="Macho"
+            />
+            <InputContainer
+              name="motherId"
+              type="select"
+              selectOptions={mothers
+                ?.map((male) => ({
+                  label: male?.earring,
+                  value: male?.id
+                }))
+                .sort((a: any, b: any) => a?.label - b?.label)}
+              label="Hembra"
+            />
+          </div>
+
           <AnimalsForm
             isBirth
             setAnimals={(calfs) => {

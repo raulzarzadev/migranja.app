@@ -310,7 +310,9 @@ const FarmMenu = (props: any) => {
             column2 === 'birthEvents' &&
             column3 === 'add' && (
               <>
-                <BirthForm />
+                <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 w-full ">
+                  <BirthForm title="Nuevo parto" />
+                </div>
               </>
             )}
         </>
