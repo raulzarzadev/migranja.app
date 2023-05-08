@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Icon from './Icon'
 import InputContainer from './inputs/InputContainer'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -12,33 +12,37 @@ export interface NewAnimal {
 
 const AnimalsForm = ({
   isBirth,
-  setAnimals
+  setAnimals,
+  animals = []
 }: {
   isBirth: boolean
   setAnimals?: (animals: NewAnimal[]) => void
+  animals?: NewAnimal[]
 }) => {
-  const [_animals, _setAnimals] = useState<NewAnimal[]>([])
+  console.log({ animals })
+  // const [_animals, _setAnimals] = useState<NewAnimal[]>([])
   const methods = useForm()
   const handleRemove = (index: number) => {
-    const aux = [..._animals]
+    const aux = [...animals]
     aux.splice(index, 1)
     setAnimals?.(aux)
-    _setAnimals(aux)
+    // _setAnimals(aux)
   }
   const onSubmit = (data: any) => {
-    const animals = [..._animals, data]
-    _setAnimals(animals)
-    setAnimals?.(animals)
+    // const animals = [...animals, data]
+    //_setAnimals(animals)
+    setAnimals?.([...animals, data])
     methods.reset()
   }
   const errors = methods.formState.errors
+
   return (
     <div>
       <h5 className="text-lg font-bold">
         {isBirth ? 'Camada' : 'Nuevos aretes'}
       </h5>
       <table className="table w-full">
-        {!!_animals.length && (
+        {!!animals.length && (
           <thead>
             <tr>
               <td>Arete</td>
@@ -49,7 +53,7 @@ const AnimalsForm = ({
           </thead>
         )}
         <tbody>
-          {_animals.map((animal, i) => (
+          {animals.map((animal, i) => (
             <tr key={animal?.earring}>
               <td>{animal.earring}</td>
               {/* <td>{animal.name}</td> */}

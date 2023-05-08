@@ -1,13 +1,8 @@
-import _ from 'lodash'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
+import { selectFarmEvents } from 'store/slices/farmSlice'
 import MyTable from '@comps/MyTable'
-import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
-import {
-  TypeOfFarmEvent,
-  labelsOfFarmEventTypes
-} from 'types/base/LABELS_TYPES/EventTypes'
+import { StatusOfFarmEvent } from 'types/base/LABELS_TYPES/EventTypes'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import TableDate from '@comps/MyTable/TableDate'
 import Modal from '@comps/modal'
@@ -15,6 +10,8 @@ import WeaningDetails from '@comps/WeaningDetails'
 import WeaningIconStatus from '@comps/WeaningIconStatus'
 import WeaningNumbers from './WeaningNumbers'
 import useAnimal from '@comps/hooks/useAnimal'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { WEANING_STATUS_LABELS } from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
 
 const WeaningEvents = () => {
   const events = useSelector(selectFarmEvents)
@@ -25,7 +22,15 @@ const WeaningEvents = () => {
     setOpenModal(!openModal)
   }
   const [selectedRow, setSelectedRow] = useState<number | string | undefined>()
-
+  const determinateStatus = (
+    status: AnimalFormattedWhitGenericEvenData['status'],
+    date: number
+  ): AnimalFormattedWhitGenericEvenData['status'] => {
+    if (status === 'CANCELLED') return 'CANCELLED'
+    if (status === 'DONE') return 'DONE'
+    if (date < new Date().getTime()) return 'PAST'
+    return status
+  }
   const data = weanings
     .map((weaning) => ({
       id: weaning.id,
@@ -33,13 +38,15 @@ const WeaningEvents = () => {
       earring: weaning.eventData.earring,
       mother: findParents({ animalEarring: weaning.eventData.earring })?.mother
         ?.earring,
-      status: weaning.eventData.status
+      status: determinateStatus(
+        weaning.eventData.status,
+        weaning.eventData.date as number
+      )
     }))
-    .filter((event) => event.status === 'PENDING')
+    .filter((event) => event.status === 'PENDING' || event.status === 'PAST')
 
   const eventSelected: any = data?.[selectedRow as number]
 
-  console.log({ weanings })
   return (
     <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
       <div className="">
@@ -74,7 +81,7 @@ const WeaningEvents = () => {
               label: 'Status',
               format: (props) => (
                 <span>
-                  {labelsOfFarmEventTypes?.[props as TypeOfFarmEvent]}
+                  {WEANING_STATUS_LABELS?.[props as StatusOfFarmEvent]}
                   <span className="mx-1">
                     <WeaningIconStatus status={props} />
                   </span>
@@ -83,28 +90,6 @@ const WeaningEvents = () => {
             }
           }}
           data={data}
-          // filters={{
-          //   Pendientes: {
-          //     field: 'status',
-          //     symbol: '==',
-          //     value: 'PENDING'
-          //   },
-          //   Completados: {
-          //     field: 'status',
-          //     symbol: '==',
-          //     value: 'DONE'
-          //   }
-          //   // '-2meses': {
-          //   //   field: 'date',
-          //   //   symbol: '>=',
-          //   //   value: subMonths(new Date(), 2).getTime()
-          //   // },
-          //   // '+2meses': {
-          //   //   field: 'date',
-          //   //   symbol: '>=',
-          //   //   value: addMonths(new Date(), 2).getTime()
-          //   // }
-          // }}
           onRowClick={(row) => {
             setSelectedRow?.(row)
             handleOpenModal()
@@ -117,31 +102,6 @@ const WeaningEvents = () => {
             title="Detalle de destete"
           >
             <WeaningDetails weaningId={eventSelected.id} />
-            {/* <div className="flex w-full justify-center">
-              <div className="flex w-full justify-evenly">
-                <ModalDelete
-                  title="Eliminar evento"
-                  buttonLabel={'Eliminar'}
-                  handleDelete={() => {
-                    console.log('delete')
-                  }}
-                />
-                {eventSelected.eventData.status === 'PENDING' && (
-                  <ModalEditWeaning
-                    eventId={eventSelected?.id}
-                    animalEarring={eventSelected?.eventData?.earring}
-                  />
-                )}
-                {eventSelected.eventData.status === 'CANCELLED' && (
-                  <button className="btn btn-outline btn-error">
-                    Cancelado
-                  </button>
-                )}
-                {eventSelected.eventData.status === 'DONE' && (
-                  <button className="btn btn-success">Completado</button>
-                )}
-              </div>
-            </div> */}
           </Modal>
         )}
       </div>

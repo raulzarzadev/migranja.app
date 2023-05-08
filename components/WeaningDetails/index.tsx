@@ -1,5 +1,4 @@
-import IconBreedingStatus from '@comps/IconBreedingStatus'
-import IconStatus from '@comps/IconStatus'
+import { WEANING_STATUS_LABELS } from '@comps/FarmEvents/FarmEvent/WeaningEventCard'
 import TableDate from '@comps/MyTable/TableDate'
 import WeaningIconStatus from '@comps/WeaningIconStatus'
 import useAnimal from '@comps/hooks/useAnimal'
@@ -7,11 +6,7 @@ import useEvent from '@comps/hooks/useEvent'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import ModalDelete from '@comps/modal/ModalDelete'
 import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
-import { AnimalWeaningType } from 'types/base/AnimalWeaning.model'
-import {
-  StatusOfFarmEvent,
-  labelsOfFarmEventTypes
-} from 'types/base/LABELS_TYPES/EventTypes'
+import { StatusOfFarmEvent } from 'types/base/LABELS_TYPES/EventTypes'
 
 const WeaningDetails = ({ weaningId }: { weaningId: string }) => {
   const { event } = useEvent({ eventId: weaningId })
@@ -52,7 +47,7 @@ const WeaningDetails = ({ weaningId }: { weaningId: string }) => {
       <div>
         <span className="font-bold">Status:</span>
         <div>
-          {labelsOfFarmEventTypes[eventStatus]}{' '}
+          {WEANING_STATUS_LABELS[eventStatus]}{' '}
           <WeaningIconStatus status={eventStatus} />
         </div>
       </div>

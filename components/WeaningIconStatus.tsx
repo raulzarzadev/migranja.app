@@ -10,7 +10,8 @@ const WeaningIconStatus = ({
   const iconStatus: Record<AnimalWeaning['eventData']['status'], IconStatus> = {
     PENDING: 'waiting',
     DONE: 'success',
-    CANCELLED: 'warning'
+    CANCELLED: 'warning',
+    PAST: 'error'
   }
   return <IconStatus status={iconStatus[status]} />
 }

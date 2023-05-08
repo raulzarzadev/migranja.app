@@ -1,4 +1,4 @@
-import Loading from '@comps/Loading'
+import ProgressBar from '@comps/ProgressBar'
 
 export const ProgressButton = ({
   progress,
@@ -18,18 +18,7 @@ export const ProgressButton = ({
 }) => {
   return (
     <div role="buttonProgress">
-      {!!progress && (
-        <progress value={progress} max={100} className="progress"></progress>
-      )}
-      {progress > 0 && progress !== 100 && (
-        <div>
-          Espera mientras terminar <Loading />
-        </div>
-      )}
-      {progress < 100 && progress > 1 && (
-        <div className="text-center">{label} </div>
-      )}
-      {progress == 100 && <div className="text-center">Listo. </div>}
+      <ProgressBar progress={progress} />
       <div className="flex w-full justify-center">
         <button
           onClick={onClick}

@@ -229,7 +229,7 @@ const useCreateBirth = ({
       setProgress(100)
       setStatus('DONE')
     } catch (error) {
-      setProgress(0)
+      setProgress(-1)
       setStatus('ERROR')
       console.error(error)
     }

@@ -1,4 +1,3 @@
-import LinkFarmAnimal from '@comps/Buttons&Links/LinkFarmAnimal'
 import { AnimalWeaningType } from 'types/base/AnimalWeaning.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import ModalEditWeaning from '@comps/modal/ModalEditWeaning'
@@ -9,8 +8,9 @@ export const WEANING_STATUS_LABELS: Record<
   string
 > = {
   DONE: 'Hecho',
-  PENDING: 'Pendiente',
-  CANCELLED: 'Cancelado'
+  PENDING: 'Proximamente',
+  CANCELLED: 'Cancelado',
+  PAST: 'Pendiente'
 }
 const WeaningEventCard = ({ event }: { event: Partial<AnimalWeaningType> }) => {
   return (
