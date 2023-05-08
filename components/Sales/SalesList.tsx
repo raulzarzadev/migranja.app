@@ -38,14 +38,17 @@ const SalesList = () => {
             format: (props) => <TableDate date={props} />
           },
           price: {
-            label: 'Precio',
+            label: 'Precio($)',
             format: (props: any) => <CurrencySpan quantity={props} />
           },
           weightT: {
-            label: 'PesoT'
+            label: 'Peso(T)'
+          },
+          cantU: {
+            label: 'Cant(u)'
           },
           total: {
-            label: 'Total$',
+            label: 'Total($)',
             format: (props) => (
               <CurrencySpan
                 quantity={parseFloat(props).toFixed(1) as unknown as number}

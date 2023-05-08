@@ -41,7 +41,7 @@ const AnimalsForm = ({
       <h5 className="text-lg font-bold">
         {isBirth ? 'Camada' : 'Nuevos aretes'}
       </h5>
-      <table className="table w-full">
+      <table className="table w-full table-compact">
         {!!animals.length && (
           <thead>
             <tr>
@@ -88,8 +88,8 @@ const AnimalsForm = ({
               </td>
               <td>
                 <span className="label-text">Sexo</span>
-                <div className="flex flex-row ">
-                  <span className="flex flex-col p-0.5 text-xs">
+                <div className="flex flex-col ">
+                  <span className="flex flex-col p-0 text-xs">
                     Hembra
                     <input
                       type="radio"
@@ -99,7 +99,7 @@ const AnimalsForm = ({
                       value="female"
                     />
                   </span>
-                  <span className="flex flex-col p-0.5 text-xs">
+                  <span className="flex flex-col p-0 text-xs">
                     Macho
                     <input
                       type="radio"
