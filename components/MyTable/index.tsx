@@ -196,7 +196,6 @@ function MyTable<T>({
                 className="hover"
                 key={row.id}
                 onClick={() => {
-                  console.log(row.id)
                   onRowClick?.(row.id)
                 }}
               >

@@ -8,7 +8,6 @@ const WeaningNumbers = ({
 }: {
   weaning: AnimalFormattedWhitGenericEvenData[]
 }) => {
-  console.log({ weaning })
   const DAYS_FORWARD_TODAY = 5
 
   const format = weaning.map(

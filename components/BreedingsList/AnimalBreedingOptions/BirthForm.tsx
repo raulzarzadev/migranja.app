@@ -122,17 +122,16 @@ const BirthForm = ({
           />
 
           <div className="flex w-full justify-evenly my-4 items-end">
-            {progress === 100 && (
-              <button
-                className="btn btn-outline "
-                onClick={(e) => {
-                  e.preventDefault()
-                  methods.reset()
-                }}
-              >
-                Nuevo
-              </button>
-            )}
+            <button
+              className="btn btn-outline "
+              onClick={(e) => {
+                e.preventDefault()
+                methods.reset()
+              }}
+            >
+              {progress === 100 ? 'Nuevo' : 'Limpiar'}
+            </button>
+
             <ProgressButton progress={progress} disabled={disabled} />
           </div>
         </form>

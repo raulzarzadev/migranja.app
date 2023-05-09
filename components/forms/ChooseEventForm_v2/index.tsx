@@ -13,7 +13,6 @@ const ChooseEventForm = ({
   animalsSelected: any[]
   setAnimalsSelected?: (animals: any[]) => void
 }) => {
-  console.log({ animalsSelected })
   const animalsIds = animalsSelected.map((animal) => animal.id)
   const EVENTS_FORMS = {
     // default: <DefaultFormInfo />,

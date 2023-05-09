@@ -34,7 +34,6 @@ const AnimalsForm = ({
   setAnimals?: (animals: NewAnimal[]) => void
   animals?: NewAnimal[]
 }) => {
-  console.log({ animals })
   // const [_animals, _setAnimals] = useState<NewAnimal[]>([])
   const methods = useForm({
     resolver: yupResolver(schema)
@@ -63,7 +62,6 @@ const AnimalsForm = ({
     }
   }
   const errors = methods.formState.errors
-  console.log({ errors })
   return (
     <div>
       <h5 className="text-lg font-bold">
