@@ -2,9 +2,7 @@ import useEvent from '@comps/hooks/useEvent'
 import useBreedingDates from '@comps/hooks/useBreedingDates'
 import { FormProvider, useForm } from 'react-hook-form'
 import InputContainer from '@comps/inputs/InputContainer'
-import useCreateBirth, {
-  CreateBirthLabelStatus
-} from '@comps/hooks/useCreateBirth'
+import useCreateBirth from '@comps/hooks/useCreateBirth'
 import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
