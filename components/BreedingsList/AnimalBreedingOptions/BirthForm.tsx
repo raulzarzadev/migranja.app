@@ -8,7 +8,6 @@ import useCreateBirth, {
 import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
-import ProgressBar from '@comps/ProgressBar'
 import ProgressButton from '@comps/ProgressButton'
 
 export interface NewCalf extends NewAnimal {}
@@ -45,13 +44,11 @@ const BirthForm = ({
     defaultValues
   })
   const farmValues = methods.watch()
-  const { handleCreateBirth, status, progress } = useCreateBirth({
+  const { handleCreateBirth, status, progress, setProgress } = useCreateBirth({
     breedingId,
     motherId: farmValues.motherId,
     fatherId: farmValues.fatherId
   })
-
-  //const otherMales = event?.eventData?.otherMales || []
 
   const males = event?.eventData.breedingMale
     ? [event?.eventData.breedingMale]
@@ -124,18 +121,18 @@ const BirthForm = ({
             }}
           />
 
-          {progress === 100 && (
-            <button
-              className="btn btn-outline "
-              onClick={(e) => {
-                e.preventDefault()
-                methods.reset()
-              }}
-            >
-              Nuevo
-            </button>
-          )}
-          <div className="flex w-full justify-center my-4">
+          <div className="flex w-full justify-evenly my-4 items-end">
+            {progress === 100 && (
+              <button
+                className="btn btn-outline "
+                onClick={(e) => {
+                  e.preventDefault()
+                  methods.reset()
+                }}
+              >
+                Nuevo
+              </button>
+            )}
             <ProgressButton progress={progress} disabled={disabled} />
           </div>
         </form>

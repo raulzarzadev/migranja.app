@@ -237,6 +237,7 @@ const useCreateBirth = ({
   return {
     handleCreateBirth,
     progress,
+    setProgress,
     status
   }
 }

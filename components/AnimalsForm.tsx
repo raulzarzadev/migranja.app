@@ -1,8 +1,23 @@
-import { useEffect, useState } from 'react'
 import Icon from './Icon'
 import InputContainer from './inputs/InputContainer'
 import { FormProvider, useForm } from 'react-hook-form'
 import { AnimalType } from 'types/base/AnimalType.model'
+import useEarringAlreadyExist from './hooks/useEarringAlreadyExist'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+const schema = yup
+  .object()
+  .shape({
+    gender: yup.string().required('Este campo es necesario'),
+    earring: yup
+      .string()
+      .required('Es necesario*')
+      .min(3, 'Al menos 3 caracteres')
+    //.max(3, 'Maximo 3 letras')
+  })
+  .required()
+
 export interface NewAnimal {
   earring?: AnimalType['earring']
   gender?: 'male' | 'female'
@@ -15,27 +30,40 @@ const AnimalsForm = ({
   setAnimals,
   animals = []
 }: {
-  isBirth: boolean
+  isBirth?: boolean
   setAnimals?: (animals: NewAnimal[]) => void
   animals?: NewAnimal[]
 }) => {
   console.log({ animals })
   // const [_animals, _setAnimals] = useState<NewAnimal[]>([])
-  const methods = useForm()
+  const methods = useForm({
+    resolver: yupResolver(schema)
+  })
   const handleRemove = (index: number) => {
     const aux = [...animals]
     aux.splice(index, 1)
     setAnimals?.(aux)
     // _setAnimals(aux)
   }
+  const { checkIfExist } = useEarringAlreadyExist()
   const onSubmit = (data: any) => {
     // const animals = [...animals, data]
     //_setAnimals(animals)
-    setAnimals?.([...animals, data])
-    methods.reset()
+    if (
+      checkIfExist(data?.earring) ||
+      animals.find((a) => a.earring === data.earring)
+    ) {
+      methods.setError('earring', {
+        type: 'validate',
+        message: 'Este arete ya existe'
+      })
+    } else {
+      setAnimals?.([...animals, data])
+      methods.reset()
+    }
   }
   const errors = methods.formState.errors
-
+  console.log({ errors })
   return (
     <div>
       <h5 className="text-lg font-bold">
@@ -111,7 +139,7 @@ const AnimalsForm = ({
                   </span>
                 </div>
                 {errors.gender && (
-                  <span className="text-error label-text">
+                  <span className="text-error label-text text-xs whitespace-pre-line">
                     Selecciona el sexo
                   </span>
                 )}

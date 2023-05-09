@@ -9,7 +9,7 @@ import WeaningEvents from '@comps/WeaningEvents'
 import BreedingsList from 'components/BreedingsList'
 import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
-import AnimalsForm from 'components/forms/AnimalsForm'
+//import AnimalsForm from '@comps/forms/AnimalsForm_old'
 import BreedingForm from 'components/forms/BreedingForm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
@@ -284,11 +284,14 @@ const FarmMenu = (props: any) => {
           {/* ********************************+******+ +++************** ADD ANIMALS */}
           {isSheepSelected && menuOptions.column2 === 'addMany' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
+              <span>En mantenimiento</span>
+              {/* 
+              //TODO: fix add animals form add many form
               <AnimalsForm
                 animal={{
                   type: 'ovine'
                 }}
-              />
+              /> */}
             </div>
           )}
           {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}

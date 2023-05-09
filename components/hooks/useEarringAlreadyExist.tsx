@@ -3,6 +3,7 @@ import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
+import { AnimalType } from 'types/base/AnimalType.model'
 
 const useEarringAlreadyExist = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
@@ -24,7 +25,13 @@ const useEarringAlreadyExist = () => {
     </Modal>
   )
 
-  const checkIfExist = (earring: string) => {
+  /**
+   *
+   * @param earring should be a AnimaType['earring']
+   * @returns
+   */
+
+  const checkIfExist = (earring: AnimalType['earring']) => {
     setEarring(earring)
     const alreadyExist = farmAnimals.find(
       (animal) => animal.earring === earring

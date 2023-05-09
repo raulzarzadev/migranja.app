@@ -218,7 +218,7 @@ const InputContainer = ({
             />
           )}
           {error?.type && (
-            <span className="label-text text-alt text-error ">
+            <span className="label-text text-alt text-error whitespace-pre-line text-xs">
               {error?.message}
               {error?.type === 'alreadyExist' && (
                 <span
