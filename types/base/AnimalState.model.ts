@@ -11,6 +11,7 @@ export const AnimalState = {
   DEAD: 'muerto',
   LOST: 'perdido'
 }
+
 export const inactiveAnimalsStates: AnimalStateType[] = ['SOLD', 'LOST', 'DEAD']
 export type AnimalStateType = keyof typeof AnimalState
 

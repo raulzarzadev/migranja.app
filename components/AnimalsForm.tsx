@@ -5,10 +5,13 @@ import { AnimalType } from 'types/base/AnimalType.model'
 import useEarringAlreadyExist from './hooks/useEarringAlreadyExist'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { AnimalState } from 'types/base/AnimalState.model'
+import GENDER_OPTIONS from './CONSTANTS/GENDER_OPTIONS'
 
 const schema = yup
   .object()
   .shape({
+    state: yup.string().required('Este campo es necesario'),
     gender: yup.string().required('Este campo es necesario'),
     earring: yup
       .string()
@@ -23,6 +26,7 @@ export interface NewAnimal {
   gender?: 'male' | 'female'
   id?: AnimalType['id']
   weight: number
+  state: AnimalType['state']
 }
 
 const AnimalsForm = ({
@@ -57,7 +61,10 @@ const AnimalsForm = ({
         message: 'Este arete ya existe'
       })
     } else {
-      setAnimals?.([...animals, data])
+      const newAnimal = { ...data }
+
+      console.log(newAnimal)
+      setAnimals?.([...animals, newAnimal])
       methods.reset()
     }
   }
@@ -72,6 +79,7 @@ const AnimalsForm = ({
           <thead>
             <tr>
               <td>Arete</td>
+              <td>Estado</td>
               <td>Sexo</td>
               <td>Peso</td>
               <td>Elim</td>
@@ -82,8 +90,10 @@ const AnimalsForm = ({
           {animals.map((animal, i) => (
             <tr key={animal?.earring}>
               <td>{animal.earring}</td>
-              {/* <td>{animal.name}</td> */}
-              <td>{animal.gender}</td>
+              <td className="capitalize">
+                {AnimalState[animal.state || 'LACTATING']}
+              </td>
+              <td>{GENDER_OPTIONS[animal.gender || 'female'].label}</td>
               <td>{animal?.weight}</td>
               <td>
                 <button
@@ -111,6 +121,47 @@ const AnimalsForm = ({
                   className="w-24"
                   rules={{ required: 'Campo requerido' }}
                 />
+              </td>
+              <td>
+                <div className="flex flex-col gap-2">
+                  {/* <span className="flex  w-full justify-end p-0 text-xs">
+                    Sancho
+                    <input
+                      type="radio"
+                      {...methods.register('state', {
+                        required: true
+                      })}
+                      disabled
+                      value="SANCHO"
+                    />
+                  </span> */}
+                  <span className="flex  w-full justify-end p-0 text-xs">
+                    Lactante
+                    <input
+                      type="radio"
+                      {...methods.register('state', {
+                        required: true
+                      })}
+                      defaultChecked
+                      value="LACTATING"
+                    />
+                  </span>
+                  <span className="flex w-full justify-end p-0 text-xs">
+                    Muerto
+                    <input
+                      type="radio"
+                      {...methods.register('state', {
+                        required: true
+                      })}
+                      value="DEAD"
+                    />
+                  </span>
+                </div>
+                {errors.state && (
+                  <span className="text-error label-text text-xs whitespace-pre-line">
+                    Selecciona status
+                  </span>
+                )}
               </td>
               <td>
                 <span className="label-text">Sexo</span>

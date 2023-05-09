@@ -25,6 +25,27 @@ const BirthForm = ({
   const farmAnimals = useSelector(selectFarmAnimals)
   const stallions = farmAnimals.filter((animal) => animal.isStallion)
   const females = farmAnimals.filter((animal) => animal.gender === 'female')
+
+  const sortByCreatedDate = (a: any, b: any) => b.createdAt - a.createdAt
+  // Show the last male earring to have a reference for the next earrings
+  const lastMaleCalfEarring = farmAnimals
+    .filter(({ gender }) => gender === 'male')
+    .sort(sortByCreatedDate)
+    .shift()
+  // Show the last female earring to have a reference for the next earrings
+  const lastFemaleCalfEarring = farmAnimals
+    .filter(({ gender }) => gender === 'female')
+    .sort(sortByCreatedDate)
+    .shift()
+  const defaultCalf = {
+    isAlive: true,
+    gender: '',
+    earring: '',
+    weight: {
+      atBirth: 0
+    }
+  }
+
   // console.log({ farmAnimals })
   const calfs: NewCalf[] = []
   const defaultValues = {
@@ -119,18 +140,28 @@ const BirthForm = ({
             }}
           />
 
-          <div className="flex w-full justify-evenly my-4 items-end">
-            <button
-              className="btn btn-outline "
-              onClick={(e) => {
-                e.preventDefault()
-                methods.reset()
-              }}
-            >
-              {progress === 100 ? 'Nuevo' : 'Limpiar'}
-            </button>
-
-            <ProgressButton progress={progress} disabled={disabled} />
+          <div className="mb-4 ">
+            <div className="text-end text-sm italic">Ultimos creados</div>
+            <div className="flex justify-end  text-sm italic">
+              <span className="mr-1">
+                macho:<strong>{lastMaleCalfEarring?.earring}</strong>{' '}
+              </span>
+              <span>
+                hembra: <strong>{lastFemaleCalfEarring?.earring}</strong>
+              </span>
+            </div>
+            <div className="flex w-full justify-evenly my-4 items-end">
+              <button
+                className="btn btn-outline "
+                onClick={(e) => {
+                  e.preventDefault()
+                  methods.reset()
+                }}
+              >
+                {progress === 100 ? 'Nuevo' : 'Limpiar'}
+              </button>
+              <ProgressButton progress={progress} disabled={disabled} />
+            </div>
           </div>
         </form>
       </FormProvider>
