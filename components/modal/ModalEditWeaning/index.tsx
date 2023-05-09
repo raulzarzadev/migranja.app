@@ -38,6 +38,7 @@ const ModalEditWeaning = ({
             Destetar arete:
             <ModalAnimalDetails earring={animalEarring} size="normal" />
           </span>
+          Mo
           <p>Se realizarán los siguientes movimientos:</p>
           <ul>
             <li className="list-disc">
@@ -46,7 +47,6 @@ const ModalEditWeaning = ({
             <li className="list-disc">{`Estado del la madre a "Libre"`}</li>
             <li className="list-disc">{`Estado del evento a "Completado"`}</li>
           </ul>
-
           <div className="flex flex-col sm:flex-row w-full justify-evenly items-center">
             <WeaningOptions animalId={animalId} />
           </div>
