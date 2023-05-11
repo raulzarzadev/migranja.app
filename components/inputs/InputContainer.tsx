@@ -40,6 +40,7 @@ export interface CustomInputTypes
     | 'textarea'
     //| 'radio'
     | 'number'
+    | 'radios'
   // | 'date-inline'
   label?: string
   selectOptions?: SelectOption[]
@@ -51,6 +52,11 @@ export interface CustomInputTypes
   onClickAlreadyExist?: (earring: string) => void
   datesRangeColor?: ColorizeRangeDates[]
   infoBadge?: InfoBadgeType
+  radioOpts?: {
+    value: string | number
+    label: string
+    defaultChecked?: boolean
+  }[]
   // checked?: boolean
 }
 
@@ -67,6 +73,7 @@ const InputContainer = ({
   onClickAlreadyExist,
   datesRangeColor,
   infoBadge,
+  radioOpts,
   // checked,
   ...rest
 }: CustomInputTypes) => {
@@ -179,19 +186,56 @@ const InputContainer = ({
               {...rest}
             />
           )}
-          {error?.type && (
-            <span className="label-text text-alt text-error whitespace-pre-line text-xs">
-              {error?.message}
-              {error?.type === 'alreadyExist' && (
-                <span
-                  className="ml-2 link"
-                  onClick={(e) => onClickAlreadyExist?.(value)}
-                >
-                  ver
-                </span>
-              )}
-            </span>
+
+          {type === 'radios' && (
+            <>
+              <div className="text-center">
+                <span className="label-text">{label}</span>
+              </div>
+              <div className="flex flex-col gap-1 font-semibold">
+                {radioOpts?.map((radio) => (
+                  <span
+                    key={radio.label}
+                    className="flex  w-full justify-end p-0 text-xs "
+                  >
+                    {radio.label}
+                    <input
+                      type="radio"
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name={name}
+                      ref={ref}
+                      value={radio.value}
+                      checked={value === radio.value}
+                      //defaultChecked={radio?.defaultChecked}
+                      {...rest}
+                    />
+                  </span>
+                ))}
+
+                {/* {error?.message && (
+                  <span className="text-error label-text text-xs whitespace-pre-line">
+                    {error.message}
+                  </span>
+                )} */}
+              </div>
+            </>
           )}
+          <div>
+            {error?.type && (
+              <span className="label-text text-alt text-error whitespace-pre-line text-xs">
+                {error?.message}
+                {error?.type === 'alreadyExist' && (
+                  <span
+                    className="ml-2 link"
+                    onClick={(e) => onClickAlreadyExist?.(value)}
+                  >
+                    ver
+                  </span>
+                )}
+              </span>
+            )}
+          </div>
         </div>
       )}
     />

@@ -123,75 +123,45 @@ const AnimalsForm = ({
                 />
               </td>
               <td>
-                <div className="flex flex-col gap-2">
-                  {/* <span className="flex  w-full justify-end p-0 text-xs">
-                    Sancho
-                    <input
-                      type="radio"
-                      {...methods.register('state', {
-                        required: true
-                      })}
-                      disabled
-                      value="SANCHO"
-                    />
-                  </span> */}
-                  <span className="flex  w-full justify-end p-0 text-xs">
-                    Lactante
-                    <input
-                      type="radio"
-                      {...methods.register('state', {
-                        required: true
-                      })}
-                      defaultChecked
-                      value="LACTATING"
-                    />
-                  </span>
-                  <span className="flex w-full justify-end p-0 text-xs">
-                    Muerto
-                    <input
-                      type="radio"
-                      {...methods.register('state', {
-                        required: true
-                      })}
-                      value="DEAD"
-                    />
-                  </span>
-                </div>
-                {errors.state && (
-                  <span className="text-error label-text text-xs whitespace-pre-line">
-                    Selecciona status
-                  </span>
-                )}
+                <InputContainer
+                  type={'radios'}
+                  label="Estado"
+                  name="state"
+                  radioOpts={[
+                    {
+                      label: 'Lactando',
+                      value: 'LACTATING',
+                      defaultChecked: true
+                    },
+                    {
+                      label: 'Muerto',
+                      value: 'DEAD'
+                    }
+                  ]}
+                  rules={{
+                    required: true
+                  }}
+                />
               </td>
               <td>
-                <span className="label-text">Sexo</span>
-                <div className="flex flex-col ">
-                  <span className="flex flex-col p-0 text-xs">
-                    Hembra
-                    <input
-                      type="radio"
-                      {...methods.register('gender', {
-                        required: true
-                      })}
-                      value="female"
-                    />
-                  </span>
-                  <span className="flex flex-col p-0 text-xs">
-                    Macho
-                    <input
-                      type="radio"
-                      {...methods.register('gender', {
-                        required: true
-                      })}
-                      value="male"
-                    />
-                  </span>
-                </div>
-                {errors.gender && (
-                  <span className="text-error label-text text-xs whitespace-pre-line">
-                    Selecciona el sexo
-                  </span>
-                )}
+                <InputContainer
+                  type={'radios'}
+                  name="gender"
+                  label="Sexo"
+                  radioOpts={[
+                    {
+                      label: 'Hembra',
+                      value: 'female'
+                    },
+                    {
+                      label: 'Macho',
+                      value: 'male'
+                    }
+                  ]}
+                  rules={{
+                    required: true
+                  }}
+                />
               </td>
               <td>
                 <InputContainer
