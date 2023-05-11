@@ -63,11 +63,17 @@ const SearchEarring = ({
   const isRelative = (earring: string) =>
     relativeTo && findAnimalRelationships(earring, relativeTo, farmAnimals)
 
-  const options = matches.map((animal) => ({
-    label: animal.earring,
-    id: animal.id,
-    name: animal.name
-  }))
+  const options = matches
+    .map((animal) => ({
+      label: animal.earring,
+      id: animal.id,
+      name: animal.name
+    }))
+    .sort((a, b) => {
+      if (a.label > b.label) return 1
+      if (a.label < b.label) return -1
+      return 0
+    })
   console.log({ relativeTo })
 
   return (
