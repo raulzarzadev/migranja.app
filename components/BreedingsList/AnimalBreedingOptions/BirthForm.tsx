@@ -88,7 +88,7 @@ const BirthForm = ({
     })
   }
 
-  console.log(methods.watch('motherId'))
+  console.log(methods.watch())
 
   const disabled = methods.watch('calfs').length <= 0 || progress === 100
 

@@ -95,14 +95,22 @@ const DropOutForm = ({
       <h2 className="text-center font-bold my-4">Baja de animal</h2>
       <div>
         <FormProvider {...methods}>
-          <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="grid gap-4 place-content-center "
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <InputContainer
               type="select"
               selectOptions={dropOutReasons}
               name="reason"
+              label="Razon"
             />
-            <InputContainer type="date" name="date" />
-            <InputContainer type="textarea" name="comments" />
+            <InputContainer type="date" name="date" label="Fecha" />
+            <InputContainer
+              type="textarea"
+              name="comments"
+              label="Comentarios"
+            />
             <ProgressButton progress={progress} />
           </form>
         </FormProvider>

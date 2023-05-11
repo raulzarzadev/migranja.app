@@ -1,12 +1,22 @@
 import { es } from 'date-fns/locale'
 import { Controller, ControllerProps } from 'react-hook-form'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+//import DatePicker from 'react-datepicker'
+//import 'react-datepicker/dist/react-datepicker.css'
 import React from 'react'
 import { addDays, subDays } from 'date-fns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import InfoBadge, { InfoBadgeType } from '@comps/Badges/InfoBadge'
-import { TextField } from '@mui/material'
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
+} from '@mui/material'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+
 export interface SelectOption {
   label?: string
   value?: string | number
@@ -30,7 +40,7 @@ export interface CustomInputTypes
     | 'textarea'
     //| 'radio'
     | 'number'
-    | 'date-inline'
+  // | 'date-inline'
   label?: string
   selectOptions?: SelectOption[]
   placeholder?: string
@@ -69,25 +79,7 @@ const InputContainer = ({
         fieldState: { isTouched, isDirty, error },
         formState: { defaultValues }
       }) => (
-        <label
-          className={`
-           ${
-             type === 'checkbox'
-               ? ' flex justify-between items-center'
-               : 'form-control'
-           } 
-           ${className ?? ' '} 
-           `}
-        >
-          {label && (
-            <span className="label-text bg-transparent">
-              {label}{' '}
-              {infoBadge && (
-                <InfoBadge title={infoBadge.title} text={infoBadge.text} />
-              )}
-            </span>
-          )}
-
+        <div className="my-2">
           {['text'].includes(type) && (
             <>
               <TextField
@@ -97,6 +89,7 @@ const InputContainer = ({
                 onChange={onChange} // send value to hook form
                 placeholder={placeholder}
                 value={value ?? ''}
+                ref={ref}
                 {...rest}
               />
             </>
@@ -109,56 +102,40 @@ const InputContainer = ({
                 onBlur={onBlur} // notify when input is touched
                 onChange={onChange} // send value to hook form
                 placeholder={placeholder}
-                value={value ?? ''}
+                value={value ?? 0}
                 {...rest}
               />
             </>
           )}
           {type === 'date' && (
-            <div className="">
-              <DatePicker
-                onBlur={onBlur}
-                className={`input input-bordered input-sm w-full bg-transparent ${inputClassName}`}
-                selected={value ? new Date(value) : new Date()}
-                onChange={(date: Date) => onChange(date)}
-                //onBlur={onBlur}
-                // closeOnScroll
-                locale={es}
-                dateFormat="dd-MM-yy"
-                ref={ref}
-                name={name}
-                minDate={rest?.min as unknown as Date}
-                maxDate={rest?.max as unknown as Date}
-                dayClassName={(date) => {
-                  const plusMinusDays = OVINE_DAYS.gestationTolerance
-                  const res = datesRangeColor
-                    ?.map(({ start, end, color }) => {
-                      if (
-                        subDays(start, plusMinusDays).getTime() <=
-                          date.getTime() &&
-                        date.getTime() <= addDays(end, plusMinusDays).getTime()
-                      )
-                        return color
-                    })
-                    .join(' ')
-                  return res || ' '
-                }}
-                {...rest}
-              />
-            </div>
+            <>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  format="dd / MMM / yy"
+                  label={label}
+                  onChange={(event) => {
+                    onChange(event)
+                  }}
+                  inputRef={ref}
+                  value={value}
+                  {...rest}
+                />
+              </LocalizationProvider>
+            </>
           )}
-          {type === 'date-inline' && (
+          {/* {type === 'date-inline' && (
             <DatePicker
+              onChange={onChange}
               //onBlur={onBlur}
               //className="input input-bordered input-sm w-full bg-transparent"
-              selected={value ? new Date(value) : new Date()}
-              onChange={(date: Date) => onChange(date)}
-              locale={es}
+              // selected={value ? new Date(value) : new Date()}
+              //onChange={(date: Date) => onChange(date)}
+              // locale={es}
               //dateFormat="dd-MM-yy"
               //ref={ref}
-              inline
-              name={name}
-              focusSelectedMonth
+              //inline
+              //name={name}
+              // focusSelectedMonth
               // minDate={rest?.min as unknown as Date}
               // maxDate={rest?.max as unknown as Date}
               // dayClassName={(date) => {
@@ -177,24 +154,45 @@ const InputContainer = ({
               // }}
               //{...rest}
             />
-          )}
+          )} */}
           {type === 'select' && (
-            <select
-              className={`input input-bordered input-sm bg-transparent capitalize ${inputClassName}`}
-              onChange={onChange}
-              onBlur={onBlur}
-              name={name}
-              ref={ref}
-              value={value}
-              {...rest}
-            >
-              <option value="">{placeholder ?? 'Select'}</option>
-              {selectOptions?.map(({ value, label }: SelectOption) => (
-                <option key={label} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
+            <>
+              <FormControl sx={{ minWidth: 120, width: '100%' }}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  {label || placeholder}
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  onChange={onChange}
+                  ref={ref}
+                  {...rest}
+                  label={label}
+                  //  label={placeholder || 'Seleccionar'}
+                >
+                  {selectOptions?.map(({ value, label }: SelectOption) => (
+                    <MenuItem key={label} value={value}>
+                      {label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </>
+            // <select
+            //   className={`input input-bordered input-sm bg-transparent capitalize ${inputClassName}`}
+            //   onChange={onChange}
+            //   onBlur={onBlur}
+            //   name={name}
+            //   ref={ref}
+            //   value={value}
+            //   {...rest}
+            // >
+            //   <option value="">{placeholder ?? 'Select'}</option>
+            //   {selectOptions?.map(({ value, label }: SelectOption) => (
+            //     <option key={label} value={value}>
+            //       {label}
+            //     </option>
+            //   ))}
+            // </select>
           )}
           {type === 'checkbox' && (
             <>
@@ -213,8 +211,11 @@ const InputContainer = ({
             </>
           )}
           {type === 'textarea' && (
-            <textarea
-              className="textarea input-bordered resize-none"
+            <TextField
+              multiline
+              minRows={3}
+              fullWidth
+              // className="textarea input-bordered resize-none"
               onBlur={onBlur} // notify when input is touched
               onChange={onChange} // send value as number
               placeholder={placeholder}
@@ -235,7 +236,7 @@ const InputContainer = ({
               )}
             </span>
           )}
-        </label>
+        </div>
       )}
     />
   )
