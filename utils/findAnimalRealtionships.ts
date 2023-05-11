@@ -3,6 +3,13 @@ import determinateDeepRelationship, {
   Member
 } from './determinateDeepRelationship'
 
+/**
+ *
+ * @param a1 Animal 1 earring
+ * @param a2 Animal 2 earring
+ * @param animals List of animals where you will check
+ * @returns
+ */
 const findAnimalRelationships = (
   a1: AnimalType['earring'],
   a2: AnimalType['earring'],

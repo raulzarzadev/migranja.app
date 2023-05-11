@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
-import Autocomplete from 'react-autocomplete'
+//import Autocomplete from 'react-autocomplete'
 import findAnimalRelationships from 'utils/findAnimalRealtionships'
 import IconStatus from '@comps/IconStatus'
+import ComboBox from '@comps/Autocomplete'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import parse from 'autosuggest-highlight/parse'
+import match from 'autosuggest-highlight/match'
 
 const SearchEarring = ({
   onEarringClick,
@@ -14,7 +19,8 @@ const SearchEarring = ({
   relativeTo,
   className,
   label,
-  filterBy = (animal) => []
+  filterBy = (animal) => [],
+  justStallion
 }: {
   omitEarrings?: string[]
   onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
@@ -24,32 +30,30 @@ const SearchEarring = ({
   label?: string
   className?: string
   filterBy?: (animal: AnimalType) => any
+  justStallion?: boolean
 }) => {
   const [search, setSearch] = useState<string | number>('')
   const [matches, setMatches] = useState<AnimalType[]>([])
   const farmAnimals = useSelector(selectFarmAnimals)
-  useEffect(() => {
-    if (!search) {
-      setMatches([])
-    } else {
-      const animals = farmAnimals
-        //* Aply a custom filter i exist. Elseware retur all animals
-        .filter((animal) => filterBy?.(animal))
-        //* Aplay gender filter in animls
-        .filter((animal) =>
-          gender === 'all' ? true : animal.gender === gender
-        )
-        //* Aplay search filters
-        .filter(
-          (animal) =>
-            animal?.earring?.includes(`${search}`) ||
-            animal?.name?.includes(`${search}`)
-        )
 
-        .sort((a: any, b: any) => a.earring - b.earring)
-      //console.log(animals)
-      setMatches(animals)
-    }
+  useEffect(() => {
+    const animals = farmAnimals
+      //* Aply a custom filter i exist. Elseware retur all animals
+      .filter((animal) => filterBy?.(animal))
+      //* Aplay gender filter in animls
+      .filter((animal) => (gender === 'all' ? true : animal.gender === gender))
+
+      //* filter stallions
+      .filter((a) => (justStallion ? a.isStallion === true : true))
+      //* Aplay search filters
+      .filter(
+        (animal) =>
+          animal?.earring?.includes(`${search}`) ||
+          animal?.name?.includes(`${search}`)
+      )
+
+      .sort((a: any, b: any) => a.earring - b.earring)
+    setMatches(animals)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [farmAnimals, gender, search])
 
@@ -57,13 +61,68 @@ const SearchEarring = ({
     return omitEarrings.includes(earring)
   }
   const isRelative = (earring: string) =>
-    relativeTo && !!findAnimalRelationships(earring, relativeTo, farmAnimals)
+    relativeTo && findAnimalRelationships(earring, relativeTo, farmAnimals)
+
+  const options = matches.map((animal) => ({
+    label: animal.earring,
+    id: animal.id,
+    name: animal.name
+  }))
+  console.log({ relativeTo })
 
   return (
-    <div className="flex w-full justify-center">
-      <div className=" form-control relative ">
-        {label && <span>{label}</span>}
-        <Autocomplete
+    <>
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={options}
+        // sx={{ width: 300 }}
+        className={` ${className} `}
+        renderInput={(params) => <TextField {...params} label={label} />}
+        // renderOption={(props, option, state) => (
+        //   <li
+        //     {...props}
+        //     className={`${isRelative(option.label) && 'bg-error'}`}
+        //   >{`${option.label} ${option.name || ''}`}</li>
+        // )}
+        renderOption={(props, option, { inputValue }) => {
+          const matches = match(option.label, inputValue, {
+            insideWords: true
+          })
+          const parts = parse(option.label, matches)
+
+          return (
+            <li
+              {...props}
+              className={`${props.className} ${
+                isRelative(option.label) && ' bg-error text-white'
+              } `}
+            >
+              <div>
+                {parts.map((part, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      fontWeight: part.highlight ? 700 : 400
+                    }}
+                  >
+                    {part.text}
+                    <span className="ml-2">{isRelative(option.label)}</span>
+                  </span>
+                ))}
+              </div>
+            </li>
+          )
+        }}
+        onChange={(e, newValue) =>
+          onEarringClick({
+            earring: newValue?.label || '',
+            id: newValue?.id || ''
+          })
+        }
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+      />
+      {/* <Autocomplete
           inputProps={{
             placeholder,
             className: `input input-sm input-outline input-bordered w-full ${className} `
@@ -98,9 +157,8 @@ const SearchEarring = ({
                 id: matches.find(({ earring }) => earring === val)?.id || ''
               })
           }}
-        ></Autocomplete>
-      </div>
-    </div>
+        ></Autocomplete> */}
+    </>
   )
 }
 

@@ -7,6 +7,7 @@ import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import ProgressButton from '@comps/ProgressButton'
+import SearchEarring from '@comps/SearchEarring'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -87,7 +88,7 @@ const BirthForm = ({
     })
   }
 
-  // console.log(methods.watch())
+  console.log(methods.watch('motherId'))
 
   const disabled = methods.watch('calfs').length <= 0 || progress === 100
 
@@ -108,18 +109,33 @@ const BirthForm = ({
               type="text"
               label="Lote/Monta (opcional)"
             />
-            <InputContainer
-              name="fatherId"
-              type="select"
-              selectOptions={males
-                .map((male) => ({
-                  label: male?.earring,
-                  value: male?.id
-                }))
-                .sort((a: any, b: any) => a?.label - b?.label)}
-              label="Macho"
+
+            <SearchEarring
+              justStallion
+              relativeTo={
+                farmAnimals.find(({ id }) => methods.watch('motherId') === id)
+                  ?.earring
+              }
+              gender="male"
+              label="Padre"
+              onEarringClick={(e) => {
+                methods.setValue('fatherId', e.id)
+              }}
+              className="w-[250px] my-2"
             />
-            <InputContainer
+            <SearchEarring
+              relativeTo={
+                farmAnimals.find(({ id }) => methods.watch('fatherId') === id)
+                  ?.earring
+              }
+              gender="female"
+              label="Madre"
+              onEarringClick={(e) => {
+                methods.setValue('motherId', e.id)
+              }}
+              className="w-[250px] my-2"
+            />
+            {/* <InputContainer
               name="motherId"
               type="select"
               selectOptions={mothers
@@ -129,7 +145,7 @@ const BirthForm = ({
                 }))
                 .sort((a: any, b: any) => a?.label - b?.label)}
               label="Hembra"
-            />
+            /> */}
           </div>
 
           <AnimalsForm
