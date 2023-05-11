@@ -98,7 +98,7 @@ const AnimalsTable = ({
     columnHelper.accessor('parents', {
       header: () => <div className="text-center mx-auto">Padres</div>,
       cell: (props) => (
-        <div className="flex w-full justify-center gap-2">
+        <div className="flex justify-between">
           {
             <ParentModal
               parentReference={props.getValue()?.father?.earring}

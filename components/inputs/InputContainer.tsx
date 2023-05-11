@@ -123,38 +123,7 @@ const InputContainer = ({
               </LocalizationProvider>
             </>
           )}
-          {/* {type === 'date-inline' && (
-            <DatePicker
-              onChange={onChange}
-              //onBlur={onBlur}
-              //className="input input-bordered input-sm w-full bg-transparent"
-              // selected={value ? new Date(value) : new Date()}
-              //onChange={(date: Date) => onChange(date)}
-              // locale={es}
-              //dateFormat="dd-MM-yy"
-              //ref={ref}
-              //inline
-              //name={name}
-              // focusSelectedMonth
-              // minDate={rest?.min as unknown as Date}
-              // maxDate={rest?.max as unknown as Date}
-              // dayClassName={(date) => {
-              //   const plusMinusDays = OVINE_DAYS.gestationTolerance
-              //   const res = datesRangeColor
-              //     ?.map(({ start, end, color }) => {
-              //       if (
-              //         subDays(start, plusMinusDays).getTime() <=
-              //           date.getTime() &&
-              //         date.getTime() <= addDays(end, plusMinusDays).getTime()
-              //       )
-              //         return color
-              //     })
-              //     .join(' ')
-              //   return res || ' '
-              // }}
-              //{...rest}
-            />
-          )} */}
+
           {type === 'select' && (
             <>
               <FormControl sx={{ minWidth: 120, width: '100%' }}>
@@ -177,37 +146,24 @@ const InputContainer = ({
                 </Select>
               </FormControl>
             </>
-            // <select
-            //   className={`input input-bordered input-sm bg-transparent capitalize ${inputClassName}`}
-            //   onChange={onChange}
-            //   onBlur={onBlur}
-            //   name={name}
-            //   ref={ref}
-            //   value={value}
-            //   {...rest}
-            // >
-            //   <option value="">{placeholder ?? 'Select'}</option>
-            //   {selectOptions?.map(({ value, label }: SelectOption) => (
-            //     <option key={label} value={value}>
-            //       {label}
-            //     </option>
-            //   ))}
-            // </select>
           )}
           {type === 'checkbox' && (
             <>
-              <input
-                type={'checkbox'}
-                className={`checkbox checkbox-xs ${inputClassName}`}
-                onChange={onChange}
-                onBlur={onBlur}
-                name={name}
-                ref={ref}
-                value={value}
-                defaultChecked={defaultChecked}
-                // checked={checked}
-                {...rest}
-              />
+              <label className="flex items-center">
+                <input
+                  type={'checkbox'}
+                  className={`checkbox checkbox-xs ${inputClassName}`}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  name={name}
+                  ref={ref}
+                  value={value}
+                  defaultChecked={defaultChecked}
+                  // checked={checked}
+                  {...rest}
+                />
+                <span>{label}</span>
+              </label>
             </>
           )}
           {type === 'textarea' && (
