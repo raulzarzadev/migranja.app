@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 import AddBatch from '@comps/AddBatch'
 import BirthForm from '@comps/BreedingsList/AnimalBreedingOptions/BirthForm'
+import AnimalsForm from '@comps/AnimalsForm'
 
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option =
@@ -204,12 +205,25 @@ const FarmMenu = (props: any) => {
                     onClick={() => handleChangeOption('column2', 'addMany')}
                     selected={column2 === 'addMany'}
                   />
+                  {/*
+                  <SquareOption
+                    title="Nuevo"
+                    iconName="plus"
+                    onClick={() => handleChangeOption('column2', 'add')}
+                    selected={column2 === 'add'}
+                  />
+                  <SquareOption
+                    title="Varios"
+                    iconName="plus"
+                    onClick={() => handleChangeOption('column2', 'addMany')}
+                    selected={column2 === 'addMany'}
+                  />
                   <SquareOption
                     title="Lote"
                     iconName="plus"
                     onClick={() => handleChangeOption('column2', 'addBatch')}
                     selected={column2 === 'addBatch'}
-                  />
+                  /> */}
                   {/* ************************************* *********** INVENTORY MENU */}
 
                   <SquareOption
@@ -284,7 +298,6 @@ const FarmMenu = (props: any) => {
           {/* ********************************+******+ +++************** ADD ANIMALS */}
           {isSheepSelected && menuOptions.column2 === 'addMany' && (
             <div className=" bg-base-300 shadow-md rounded-md p-2">
-              <span>En mantenimiento</span>
               {/* 
               //TODO: fix add animals form add many form
               <AnimalsForm
@@ -292,12 +305,13 @@ const FarmMenu = (props: any) => {
                   type: 'ovine'
                 }}
               /> */}
+              <BirthForm title="Crear varios" />
             </div>
           )}
           {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}
-          {isSheepSelected && menuOptions.column2 === 'addBatch' && (
+          {/* {isSheepSelected && menuOptions.column2 === 'addBatch' && (
             <AddBatch />
-          )}
+          )} */}
           {newSheepInventory && <InventoryForm />}
           {sheepInventory && <InventoryHistory />}
           {/* ********************************+******+ +++************** ADMIN FARM TEAM*/}

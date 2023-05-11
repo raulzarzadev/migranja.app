@@ -101,7 +101,7 @@ const BirthForm = ({
             <InputContainer
               type="date"
               name="date"
-              label="Fecha"
+              label="Fecha de nacimiento"
               //datesRangeColor={datesRangeColor}
             />
             <InputContainer

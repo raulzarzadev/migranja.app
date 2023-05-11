@@ -6,6 +6,7 @@ import React from 'react'
 import { addDays, subDays } from 'date-fns'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
 import InfoBadge, { InfoBadgeType } from '@comps/Badges/InfoBadge'
+import { TextField } from '@mui/material'
 export interface SelectOption {
   label?: string
   value?: string | number
@@ -88,26 +89,30 @@ const InputContainer = ({
           )}
 
           {['text'].includes(type) && (
-            <input
-              className="input input-bordered input-sm bg-transparent font-normal"
-              type={type}
-              onBlur={onBlur} // notify when input is touched
-              onChange={onChange} // send value to hook form
-              placeholder={placeholder}
-              value={value ?? ''}
-              {...rest}
-            />
+            <>
+              <TextField
+                label={label}
+                type={type}
+                onBlur={onBlur} // notify when input is touched
+                onChange={onChange} // send value to hook form
+                placeholder={placeholder}
+                value={value ?? ''}
+                {...rest}
+              />
+            </>
           )}
           {type === 'number' && (
-            <input
-              className="input input-bordered input-sm bg-transparent font-normal"
-              type={type}
-              onBlur={onBlur} // notify when input is touched
-              onChange={(e) => onChange(parseFloat(e.target.value || ''))} // send value as number
-              placeholder={placeholder}
-              value={value ?? ''}
-              {...rest}
-            />
+            <>
+              <TextField
+                label={label}
+                type={'number'}
+                onBlur={onBlur} // notify when input is touched
+                onChange={onChange} // send value to hook form
+                placeholder={placeholder}
+                value={value ?? ''}
+                {...rest}
+              />
+            </>
           )}
           {type === 'date' && (
             <div className="">
