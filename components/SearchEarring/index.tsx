@@ -78,7 +78,9 @@ const SearchEarring = ({
         options={options}
         // sx={{ width: 300 }}
         className={` ${className} `}
-        renderInput={(params) => <TextField {...params} label={label} />}
+        renderInput={(params) => (
+          <TextField {...params} label={label} className="z-0" />
+        )}
         // renderOption={(props, option, state) => (
         //   <li
         //     {...props}
