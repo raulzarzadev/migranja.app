@@ -2,7 +2,8 @@ import * as React from 'react'
 import TextField from '@mui/material/TextField'
 import MUIAutocomplete from '@mui/material/Autocomplete'
 
-export default function Autocomplete({items}:{items:}) {
+export default function Autocomplete() {
+  //** DONT USED */
   return (
     <MUIAutocomplete
       disablePortal
