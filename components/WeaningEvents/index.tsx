@@ -56,7 +56,7 @@ const WeaningEvents = () => {
       </div>
       <div className="flex w-full justify-center">
         <MyTable
-          defaultSort={[{ id: 'date', desc: true }]}
+          defaultSort={[{ id: 'date', desc: false }]}
           showGlobalFilter
           title="Destetes programados"
           hiddenCols={['id']}

@@ -16,7 +16,6 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-
 export interface SelectOption {
   label?: string
   value?: string | number
@@ -118,7 +117,10 @@ const InputContainer = ({
           )}
           {type === 'date' && (
             <>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider
+                dateAdapter={AdapterDateFns}
+                adapterLocale={es}
+              >
                 <DatePicker
                   className="w-full"
                   format="dd / MMM / yy"

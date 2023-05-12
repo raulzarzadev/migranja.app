@@ -99,6 +99,7 @@ const BirthEvents = () => {
           handleOpenModal()
           setEvent(births[row as number])
         }}
+        defaultSort={[{ id: 'updatedAt', desc: true }]}
       />
       {openModal && (
         <Modal
