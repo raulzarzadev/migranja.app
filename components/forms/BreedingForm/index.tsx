@@ -142,7 +142,7 @@ const BreedingForm = () => {
         <h3 className="text-xl text-center">Nueva monta</h3>
       </div>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className=" ">
+        <form onSubmit={handleSubmit(onSubmit)} className=" max-w-sm mx-auto">
           {/* ******************************************** 
                 Select bull               
      *******************************************rz */}
@@ -152,6 +152,7 @@ const BreedingForm = () => {
           />
           <div className="">
             <SearchEarring
+              justStallion
               label="Buscar macho"
               placeholder="Buscar macho"
               gender="male"
@@ -164,7 +165,7 @@ const BreedingForm = () => {
                 Write the batch name               
      *******************************************rz */}
           <InputContainer
-            className="w-36 mx-auto"
+            className=" mx-auto border"
             type="text"
             name="batch"
             label="Lote"

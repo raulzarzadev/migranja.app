@@ -90,6 +90,8 @@ const InputContainer = ({
           {['text'].includes(type) && (
             <>
               <TextField
+                fullWidth
+                className={className}
                 label={label}
                 type={type}
                 onBlur={onBlur} // notify when input is touched
@@ -118,6 +120,7 @@ const InputContainer = ({
             <>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
+                  className="w-full"
                   format="dd / MMM / yy"
                   label={label}
                   onChange={(event) => {
