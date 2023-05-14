@@ -56,6 +56,7 @@ export interface CustomInputTypes
     label: string
     defaultChecked?: boolean
   }[]
+  defaultValue: string
   // checked?: boolean
 }
 
@@ -73,6 +74,7 @@ const InputContainer = ({
   datesRangeColor,
   infoBadge,
   radioOpts,
+  defaultValue = '',
   // checked,
   ...rest
 }: CustomInputTypes) => {
@@ -148,7 +150,7 @@ const InputContainer = ({
                   ref={ref}
                   {...rest}
                   label={label}
-                  defaultValue={''}
+                  defaultValue={defaultValue}
                   //  label={placeholder || 'Seleccionar'}
                 >
                   {selectOptions?.map(({ value, label }: SelectOption) => (
