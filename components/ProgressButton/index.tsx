@@ -1,4 +1,5 @@
 import ProgressBar from '@comps/ProgressBar'
+import { MouseEvent } from 'react'
 
 export const ProgressButton = ({
   progress,
@@ -7,6 +8,7 @@ export const ProgressButton = ({
   onClick,
   className,
   disabled,
+  errorLabel,
   ...rest
 }: {
   label?: string
@@ -14,20 +16,23 @@ export const ProgressButton = ({
   buttonLabel?: string
   className?: string
   disabled?: boolean
-  onClick?: () => void
+  errorLabel?: string
+  onClick?: (e: MouseEvent) => void | undefined
 }) => {
   return (
     <div role="buttonProgress">
-      <ProgressBar progress={progress} />
-      <div className="flex w-full justify-center">
-        <button
-          onClick={onClick}
-          className={`btn btn-info ${className}`}
-          disabled={progress > 0 || disabled}
-        >
-          {buttonLabel}
-        </button>
-      </div>
+      <ProgressBar progress={progress} errorLabel={errorLabel} />
+      {progress >= 0 && (
+        <div className="flex w-full justify-center">
+          <button
+            onClick={onClick}
+            className={`btn btn-info ${className}`}
+            disabled={progress > 0 || disabled}
+          >
+            {buttonLabel}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

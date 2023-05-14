@@ -1,7 +1,13 @@
-const ProgressBar = ({ progress }: { progress: number }) => {
+const ProgressBar = ({
+  progress,
+  errorLabel = 'error'
+}: {
+  progress: number
+  errorLabel?: string
+}) => {
   return (
     <div className="text-center">
-      {progress < 0 && 'Error'}
+      {progress < 0 && <span className="text-error text-xs">{errorLabel}</span>}
       {progress > 0 && (
         <>
           <span>{progress.toFixed(0)}%</span>

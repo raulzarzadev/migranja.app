@@ -82,6 +82,7 @@ export class FirebaseCRUD {
       },
       (error) => {
         console.log({ error })
+        cb(-1, null)
         // Handle unsuccessful uploads
       },
       () => {

@@ -1,5 +1,7 @@
 import Icon from '@comps/Icon'
 import Loading from '@comps/Loading'
+import ProgressBar from '@comps/ProgressBar'
+import ProgressButton from '@comps/ProgressButton'
 import Modal from '@comps/modal'
 import ModalDelete from '@comps/modal/ModalDelete'
 import { uploadImage } from '@firebase/Users/main'
@@ -133,12 +135,23 @@ const UploadingAndDisplayFile = ({
       {preview && (
         <div className={`relative w-full h-full `}>
           <PreviewImage image={preview} handleRemoveImage={handleRemoveImage} />
-          <progress
+          {/* <ProgressBar progress={progress} /> */}
+          {/* <progress
             className="progress absolute bottom-0 bg-primary "
             value={progress}
             max={100}
+          /> */}
+          <ProgressButton
+            progress={progress}
+            buttonLabel="Subir"
+            errorLabel="Error. Intenta despues"
+            onClick={(e) => {
+              e.preventDefault()
+              setProgress(5)
+              handleUpload()
+            }}
           />
-          <div className="flex w-full justify-center">
+          {/* <div className="flex w-full justify-center">
             <button
               className="btn btn-xs flex "
               onClick={(e) => {
@@ -150,7 +163,7 @@ const UploadingAndDisplayFile = ({
             >
               Subir <span className="ml-1">{progress > 0 && <Loading />}</span>
             </button>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

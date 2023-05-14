@@ -56,7 +56,7 @@ export interface CustomInputTypes
     label: string
     defaultChecked?: boolean
   }[]
-  defaultValue: string
+  defaultValue?: string
   // checked?: boolean
 }
 
