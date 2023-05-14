@@ -148,6 +148,7 @@ const InputContainer = ({
                   ref={ref}
                   {...rest}
                   label={label}
+                  defaultValue={''}
                   //  label={placeholder || 'Seleccionar'}
                 >
                   {selectOptions?.map(({ value, label }: SelectOption) => (

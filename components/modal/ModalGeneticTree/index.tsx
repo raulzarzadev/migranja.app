@@ -62,7 +62,7 @@ const ModalGeneticTree = ({ animalId }: { animalId: AnimalType['id'] }) => {
 const LambingHistory = ({ animalId }: { animalId: AnimalType['id'] }) => {
   const [lambs, setLambs] = useState<AnimalType[]>([])
   const animals = useFarmAnimals()
-  console.log(animals?.[16]?.parents)
+
   const searchLambs = ({ animalId }: { animalId: AnimalType['id'] }) => {
     return animals.filter((animal) => {
       return (
@@ -76,7 +76,6 @@ const LambingHistory = ({ animalId }: { animalId: AnimalType['id'] }) => {
     setLambs(res)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log({ lambs })
 
   return (
     <div className="flex flex-wrap">
