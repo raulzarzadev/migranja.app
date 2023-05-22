@@ -13,7 +13,7 @@ export interface FarmType extends TypeBase {
   isPublic?: boolean
   coordinates?: {
     lat: number
-    lon: number
+    lng: number
   }
   //animals?: AnimalType[]
 }

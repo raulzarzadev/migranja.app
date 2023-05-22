@@ -29,7 +29,7 @@ const useWeather = () => {
   }
   useEffect(() => {
     if (farm?.coordinates) {
-      getWeather(farm?.coordinates?.lat, farm.coordinates?.lon)
+      getWeather(farm?.coordinates?.lat, farm.coordinates?.lng)
     }
   }, [farm?.coordinates])
 

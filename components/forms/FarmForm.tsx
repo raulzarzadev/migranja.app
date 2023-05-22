@@ -1,6 +1,7 @@
 import InfoBadge from '@comps/Badges/InfoBadge'
 import Modal from '@comps/modal'
 import ModalDelete from '@comps/modal/ModalDelete'
+import ModalLocationPicker from '@comps/modal/ModalLocationPicker'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { createFarm, deleteFarm, updateFarm } from '@firebase/Farm/main'
 import Icon from 'components/Icon'
@@ -27,7 +28,7 @@ const FarmForm = ({
     name: 'Nueva granja'
   }
   const methods = useForm({ defaultValues })
-  const { handleSubmit, register, setValue } = methods
+  const { handleSubmit, setValue } = methods
   const onSubmit = async (data: any) => {
     try {
       const res = data.id
@@ -60,6 +61,7 @@ const FarmForm = ({
   const handleOpenDelete = () => {
     setOpenDelete(!openDelete)
   }
+
   return (
     <div className="flex w-full">
       <FormProvider {...methods}>
@@ -69,7 +71,15 @@ const FarmForm = ({
             <div></div>
             <h4 className="w-full max-w-sm mx-auto font-bold">Configuración</h4>
             {/* CONFIG ZONE In this zone you should put all the options to config the farm menu */}
-            <div></div>
+            <div>
+              <ModalLocationPicker
+                location={methods.watch('coordinates') || { lat: 19, lng: -99 }}
+                setLocation={(coor) => {
+                  methods.setValue('coordinates.lat', coor.lat)
+                  methods.setValue('coordinates.lng', coor.lng)
+                }}
+              />
+            </div>
             <div className="form-control input-group w-[250px]">
               <InputContainer
                 type="checkbox"
