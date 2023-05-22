@@ -8,7 +8,11 @@ import { VscDesktopDownload } from 'react-icons/vsc'
 
 import { AiOutlineTeam } from 'react-icons/ai'
 import { FaBirthdayCake, FaSkullCrossbones } from 'react-icons/fa'
-import { MdOutlineNoFood } from 'react-icons/md'
+import {
+  MdOutlineNoFood,
+  MdSignalWifiOff,
+  MdSignalWifiStatusbar4Bar
+} from 'react-icons/md'
 import { BsCurrencyDollar, BsPrinter } from 'react-icons/bs'
 
 import {
@@ -64,6 +68,8 @@ import { IoSaveOutline } from 'react-icons/io5'
 import { HiArrowSmDown, HiArrowSmUp } from 'react-icons/hi'
 
 const ICON_LIST = {
+  onLine: MdSignalWifiStatusbar4Bar,
+  offLine: MdSignalWifiOff,
   clock: SlClock,
   upload: SlCloudUpload,
   download: SlCloudDownload,

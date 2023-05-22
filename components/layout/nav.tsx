@@ -8,10 +8,13 @@ import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 import { googleLogin, logout } from '../../firebase/Users/main'
 import { UserType } from '../../firebase/Users/user.model'
+import useIsOnline from '@comps/hooks/useIsOnline'
+import OnLineBanner from '@comps/OnLineBanner'
 
 export const Nav = () => {
   const user = useSelector(selectAuthState)
   const router = useRouter()
+
   return (
     <nav className="mb-2">
       <div className="navbar bg-base-300 rounded-lg shadow-md ">
@@ -20,6 +23,7 @@ export const Nav = () => {
             className="btn btn-ghost normal-case text-xl btn-sm"
             
           > */}
+
           <button
             onClick={(e) => {
               e.preventDefault()
@@ -34,6 +38,7 @@ export const Nav = () => {
             <span className="ml-1">Mi Granja</span>
           </button>
         </div>
+        <OnLineBanner />
 
         {user ? (
           <UserMenu user={user} />
