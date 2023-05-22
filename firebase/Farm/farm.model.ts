@@ -11,6 +11,10 @@ export interface FarmType extends TypeBase {
   email?: string
   deleted?: boolean
   isPublic?: boolean
+  coordinates?: {
+    lat: number
+    lon: number
+  }
   //animals?: AnimalType[]
 }
 

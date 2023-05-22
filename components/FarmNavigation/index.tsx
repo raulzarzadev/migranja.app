@@ -1,4 +1,5 @@
 import H2 from '@comps/Basics/Title2'
+import useWeather from '@comps/hooks/useWeather'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { UserType } from '@firebase/Users/user.model'
 import Icon from 'components/Icon'
@@ -94,6 +95,8 @@ const FarmRow = ({
 }) => {
   const router = useRouter()
   const atHome = router.pathname === '/'
+  const { currentFarmWeather } = useWeather()
+  console.log({ currentFarmWeather })
   return (
     <div className=" w-full  p-2  min-h-12 mb-2 ">
       <div className=" grid grid-flow-col grid-cols-3 place-items-center items-center">
@@ -114,6 +117,7 @@ const FarmRow = ({
           )}
         </span>
         <H2>{farm.name}</H2>
+
         <div className="flex justify-between">
           {showInvitationsStatus && (
             <InvitationStatus farmId={farm?.id} userId={user?.id} />

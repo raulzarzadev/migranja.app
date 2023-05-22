@@ -69,6 +69,7 @@ const FarmForm = ({
             <div></div>
             <h4 className="w-full max-w-sm mx-auto font-bold">Configuración</h4>
             {/* CONFIG ZONE In this zone you should put all the options to config the farm menu */}
+            <div></div>
             <div className="form-control input-group w-[250px]">
               <InputContainer
                 type="checkbox"
