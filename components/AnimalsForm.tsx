@@ -62,13 +62,10 @@ const AnimalsForm = ({
       })
     } else {
       const newAnimal = { ...data }
-
-      console.log(newAnimal)
       setAnimals?.([...animals, newAnimal])
       methods.reset()
     }
   }
-  const errors = methods.formState.errors
   return (
     <div>
       <h5 className="text-lg font-bold">

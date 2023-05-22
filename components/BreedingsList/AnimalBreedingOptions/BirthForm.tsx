@@ -24,30 +24,19 @@ const BirthForm = ({
   const fatherId = event?.eventData?.breedingMale?.id || ''
   const { breedingDates } = useBreedingDates({ breedingId })
   const farmAnimals = useSelector(selectFarmAnimals)
-  const stallions = farmAnimals.filter((animal) => animal.isStallion)
-  const females = farmAnimals.filter((animal) => animal.gender === 'female')
 
   const sortByCreatedDate = (a: any, b: any) => b.createdAt - a.createdAt
-  // Show the last male earring to have a reference for the next earrings
+  //* Show the last male earring to have a reference for the next earrings
   const lastMaleCalfEarring = farmAnimals
     .filter(({ gender }) => gender === 'male')
     .sort(sortByCreatedDate)
     .shift()
-  // Show the last female earring to have a reference for the next earrings
+  //* Show the last female earring to have a reference for the next earrings
   const lastFemaleCalfEarring = farmAnimals
     .filter(({ gender }) => gender === 'female')
     .sort(sortByCreatedDate)
     .shift()
-  const defaultCalf = {
-    isAlive: true,
-    gender: '',
-    earring: '',
-    weight: {
-      atBirth: 0
-    }
-  }
 
-  // console.log({ farmAnimals })
   const calfs: NewCalf[] = []
   const defaultValues = {
     fatherId,
@@ -70,25 +59,18 @@ const BirthForm = ({
     fatherId: farmValues.fatherId
   })
 
-  const males = event?.eventData.breedingMale
-    ? [event?.eventData.breedingMale]
-    : //* if a breeding is not specified select all the males Stallion in the farm
-      [...stallions]
-  const mothers = event?.eventData.breedingBatch.map(({ id, earring }) => ({
-    id,
-    earring
-    //* if a breeding is not specified select all the females in the farm
-  })) || [...females]
-
   const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
-    await handleCreateBirth({
-      calfs: data.calfs,
-      date: data.date,
-      batch: data.batch
-    })
+    try {
+      await handleCreateBirth({
+        calfs: data.calfs,
+        date: data.date,
+        batch: data.batch
+      })
+    } catch (error) {
+      console.log({ error })
+      setProgress(-1)
+    }
   }
-
-  console.log(methods.watch())
 
   const disabled = methods.watch('calfs').length <= 0 || progress === 100
 

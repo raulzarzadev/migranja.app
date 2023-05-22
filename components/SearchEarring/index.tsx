@@ -4,8 +4,6 @@ import { selectFarmAnimals } from 'store/slices/farmSlice'
 import { AnimalType } from 'types/base/AnimalType.model'
 //import Autocomplete from 'react-autocomplete'
 import findAnimalRelationships from 'utils/findAnimalRealtionships'
-import IconStatus from '@comps/IconStatus'
-import ComboBox from '@comps/Autocomplete'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import parse from 'autosuggest-highlight/parse'
@@ -74,7 +72,6 @@ const SearchEarring = ({
       if (a.label < b.label) return -1
       return 0
     })
-  console.log({ relativeTo })
 
   return (
     <>
@@ -87,12 +84,6 @@ const SearchEarring = ({
         renderInput={(params) => (
           <TextField {...params} label={label} className="z-0" />
         )}
-        // renderOption={(props, option, state) => (
-        //   <li
-        //     {...props}
-        //     className={`${isRelative(option.label) && 'bg-error'}`}
-        //   >{`${option.label} ${option.name || ''}`}</li>
-        // )}
         renderOption={(props, option, { inputValue }) => {
           const matches = match(option.label, inputValue, {
             insideWords: true
@@ -130,42 +121,6 @@ const SearchEarring = ({
         }
         isOptionEqualToValue={(option, value) => option.id === value.id}
       />
-      {/* <Autocomplete
-          inputProps={{
-            placeholder,
-            className: `input input-sm input-outline input-bordered w-full ${className} `
-          }}
-          getItemValue={(item) => item.label}
-          items={matches.map((animal) => {
-            return { label: animal.earring, id: animal.id, name: animal.name }
-          })}
-          renderItem={(item, isHighlighted) => (
-            <div
-              key={item.label}
-              className={` ${isHighlighted ? ' bg-base-100 ' : ' bg-base-300 '} 
-              ${isRelative(item.label) ? ' bg-error ' : ''}
-              -m-1 pl-5 p-0.5 cursor-pointer rounded-lg py-1`}
-            >
-              <div className="flex">
-                <div className="w-10">
-                  {alreadyIn(item.label) ? <IconStatus status="success" /> : ''}
-                </div>
-                {item.label} {item.name}
-              </div>
-            </div>
-          )}
-          sortItems={(a, b) => a.label - b.label}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onSelect={(val) => {
-            !alreadyIn(val) && setSearch(val)
-            !alreadyIn(val) &&
-              onEarringClick({
-                earring: val,
-                id: matches.find(({ earring }) => earring === val)?.id || ''
-              })
-          }}
-        ></Autocomplete> */}
     </>
   )
 }

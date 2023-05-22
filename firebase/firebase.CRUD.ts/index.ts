@@ -209,7 +209,6 @@ export class FirebaseCRUD {
     const ref = doc(this.db, this.collectionName, itemId)
     const docSnap = await getDoc(ref)
     // FirebaseCRUD.showDataFrom(docSnap, this.collectionName);
-
     return this.normalizeItem(docSnap)
   }
 
@@ -280,9 +279,8 @@ export class FirebaseCRUD {
   async listenItem(itemId: string, cb: CallableFunction) {
     if (!itemId) return console.error('invalid value', { itemId })
     const q = doc(this.db, this.collectionName, itemId)
-    onSnapshot(q, (doc) => {
-      // FirebaseCRUD.showDataFrom(doc, this.collectionName);
 
+    onSnapshot(q, (doc) => {
       cb(this.normalizeItem(doc))
     })
   }

@@ -148,16 +148,13 @@ const useCreateBirth = ({
       // }
     }
     try {
+      debugger
       // *************************************************  1. create birth
       const eventCreated = await createEvent2(newBirth)
-      // .then((res) => {
-      //   console.log(res)
-      // })
-      // .catch((err) => console.log(err))
-      setProgress(20)
-      setStatus('CREATING_ANIMALS')
 
       // *************************************************  2. create animals/calfs
+      setProgress(20)
+      setStatus('CREATING_ANIMALS')
       const calfs: AnimalType[] = data?.calfs
 
       const createAnimalsPromises = calfs.map(async (calf) => {
