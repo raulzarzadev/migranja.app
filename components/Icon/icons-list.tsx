@@ -7,7 +7,7 @@ import { GiCow, GiSheep, GiShepherdsCrook } from 'react-icons/gi'
 import { VscDesktopDownload } from 'react-icons/vsc'
 
 import { AiOutlineTeam } from 'react-icons/ai'
-import { FaBirthdayCake, FaSkullCrossbones } from 'react-icons/fa'
+import { FaBirthdayCake, FaSkullCrossbones, FaTrash } from 'react-icons/fa'
 import {
   MdOutlineNoFood,
   MdSignalWifiOff,
@@ -64,7 +64,7 @@ import {
 import FarmIcon from './FarmIcon'
 import SheepFamilyIcon from './SheepFamilyIcon'
 import SheepIcon from './SheepIcon'
-import { IoSaveOutline } from 'react-icons/io5'
+import { IoSaveOutline, IoTrashBin } from 'react-icons/io5'
 import { HiArrowSmDown, HiArrowSmUp } from 'react-icons/hi'
 
 const ICON_LIST = {
@@ -91,7 +91,7 @@ const ICON_LIST = {
   female: SlSymbleFemale,
   tag: SlTag,
   user: SlUser,
-  delete: SlTrash,
+  delete: IoTrashBin,
   list: SlList,
   search: SlMagnifier,
   home: SlHome,

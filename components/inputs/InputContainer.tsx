@@ -124,7 +124,7 @@ const InputContainer = ({
                 adapterLocale={es}
               >
                 <DatePicker
-                  className="w-full"
+                  className="w-full min-w-[100px]"
                   format="dd / MMM / yy"
                   label={label}
                   onChange={(event) => {
@@ -140,7 +140,7 @@ const InputContainer = ({
 
           {type === 'select' && (
             <>
-              <FormControl sx={{ minWidth: 120, width: '100%' }}>
+              <FormControl sx={{ minWidth: 100, width: '100%' }}>
                 <InputLabel id="demo-simple-select-standard-label">
                   {label || placeholder}
                 </InputLabel>

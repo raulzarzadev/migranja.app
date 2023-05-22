@@ -21,6 +21,11 @@ const ImagesDisplay = ({
     const res = await deleteImage({ url: image })
     console.log({ res })
   }
+
+  const imageLoader = ({ src, width, quality }: any) => {
+    return `${src}?w=${width}&q=${quality || 75}`
+  }
+
   return (
     <div className="w-full">
       <div className="grid grid-flow-col w-min max-w-full overflow-x-auto">
@@ -42,7 +47,13 @@ const ImagesDisplay = ({
               setDisplayImageIndex(i)
             }}
           >
-            <Image src={image} alt="" fill className="object-cover" />
+            <Image
+              src={image}
+              alt=""
+              fill
+              className="object-cover"
+              blurDataURL={image}
+            />
           </div>
         ))}
       </div>

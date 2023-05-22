@@ -198,6 +198,7 @@ export const PreviewImage = ({
             alt="uploaded file"
             fill
             className="object-cover"
+            blurDataURL={image}
           />
         </button>
         {handleRemoveImage && (

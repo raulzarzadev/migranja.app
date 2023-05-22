@@ -19,6 +19,8 @@ import { selectFarmState } from 'store/slices/farmSlice'
 import { AnimalState } from 'types/base/AnimalState.model'
 import { AnimalType } from 'types/base/AnimalType.model'
 import useEarringAlreadyExist from '@comps/hooks/useEarringAlreadyExist'
+import ImagesDisplay from '@comps/ImagesDisplay'
+import { ImageType } from 'types/base/ImageType.model'
 
 const schema = yup
   .object()
@@ -127,6 +129,17 @@ export const AnimalForm = ({
     return { label: value, value: key }
   })
 
+  const handleSetImages = (images: string[]) => {
+    const auxImages: ImageType[] = images.map((image) => ({
+      url: image,
+      metadata: ''
+    }))
+    if (id)
+      updateAnimal(id, { images: auxImages })
+        .then((res) => console.log({ res }))
+        .catch((err) => console.log({ err }))
+  }
+
   const { handleDelete } = useAnimal()
   // useDebugInformation('AnimalForm', { animal })
   return (
@@ -202,17 +215,15 @@ export const AnimalForm = ({
             {error && error.message}
           </div>
           <div>
-            <header className="flex w-full justify-between flex-col sm:flex-row">
-              <div>
-                Detalles de animal
-                <div>
-                  <div className="text-xs">
-                    <span>id:</span> <span className="">{id}</span>
-                  </div>
+            <header className="flex w-full justify-between flex-col">
+              <h3>{`Detalles de animal`}</h3>
+              {id && (
+                <div className="text-xs">
+                  <span>id:</span> <span className="">{id}</span>
                 </div>
-              </div>
+              )}
               <div>
-                <div className="text-right flex flex-wrap justify-end">
+                <div className="text-right flex flex-wrap justify-between">
                   <div className="w-[100px]">
                     <InputContainer
                       name="earring"
@@ -233,90 +244,71 @@ export const AnimalForm = ({
                     <InputContainer name="batch" type="text" label="Lote" />
                   </div>
                 </div>
-                <div className="flex  justify-end flex-wrap text-end">
+                <div className="flex  justify-between flex-wrap text-end">
+                  <InputContainer
+                    label="Parto"
+                    type="select"
+                    name="birthType"
+                    selectOptions={[
+                      { label: '1', value: 1 },
+                      { label: '2', value: 2 },
+                      { label: '3', value: 3 },
+                      { label: '4', value: 4 }
+                    ]}
+                  />
                   <InputContainer
                     label="Status"
                     type="select"
                     name="state"
                     selectOptions={animalStateOptions}
                   />
+                  <InputContainer
+                    label="Raza"
+                    type="select"
+                    name="breed"
+                    selectOptions={sheep_breeds}
+                  />
                 </div>
               </div>
             </header>
             <main>
-              <div className="flex w-full">
-                <div className="w-1/2">
-                  Nacimiento
-                  <div>
-                    <div className="w-[100px]">
-                      <InputContainer
-                        label="Raza"
-                        type="select"
-                        name="breed"
-                        selectOptions={sheep_breeds}
+              <div>
+                <InputContainer
+                  label="Sexo"
+                  type="select"
+                  name="gender"
+                  selectOptions={[MaleOptions, FemaleOptions]}
+                />
+                {formValues.gender === 'male' && (
+                  <div className="w-[140px] my-2 flex items-end justify-center mx-auto">
+                    <label className="flex items-center">
+                      <span className="mr-1">Es un semental </span>
+                      <input
+                        className="checkbox "
+                        type="checkbox"
+                        {...methods.register('isStallion')}
                       />
-                    </div>
-                    <InputContainer
-                      label="Parto"
-                      type="select"
-                      name="birthType"
-                      selectOptions={[
-                        { label: '1', value: 1 },
-                        { label: '2', value: 2 },
-                        { label: '3', value: 3 },
-                        { label: '4', value: 4 }
-                      ]}
-                    />
-                    <InputContainer
-                      type="date"
-                      name="birthday"
-                      label="Nacimiento"
-                    />
-                    <InputContainer
-                      type="date"
-                      name="joinedAt"
-                      label="Incorporación"
-                    />
-
-                    <InputContainer
-                      label="Sexo"
-                      type="select"
-                      name="gender"
-                      selectOptions={[MaleOptions, FemaleOptions]}
-                    />
-
-                    <div className="w-[140px] my-2 flex items-end justify-center">
-                      <label className="flex items-center">
-                        <span className="mr-1">Semental</span>
-                        <input
-                          className="checkbox checkbox-sm"
-                          type="checkbox"
-                          {...methods.register('isStallion')}
-                        />
-                      </label>
-                    </div>
-
-                    {/* <span>{part}</span> */}
+                    </label>
                   </div>
-                </div>
-                <div className="w-1/2 flex justify-center items-center p-4 ">
-                  <div className="w-full h-full ">
-                    <figure className=" w-full h-full flex justify-center items-center bg-base-200 shadow-sm relative">
-                      {images?.[0] ? (
-                        <Image
-                          src={images[0].url}
-                          fill
-                          alt="animal-photo"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <>
-                          <Icon name="camera" />
-                        </>
-                      )}
-                    </figure>
-                  </div>
-                </div>
+                )}
+
+                <InputContainer
+                  type="date"
+                  name="birthday"
+                  label="Nacimiento"
+                />
+                <InputContainer
+                  type="date"
+                  name="joinedAt"
+                  label="Incorporación"
+                />
+                {id && (
+                  <ImagesDisplay
+                    images={images?.map((image) => image.url) || []}
+                    setImages={handleSetImages}
+                  />
+                )}
+                {/* <span>{part}</span> */}
               </div>
               <div>
                 <div className="">
