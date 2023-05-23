@@ -14,19 +14,10 @@ export interface Coordinates {
 }
 const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
   const [farmWeather, setFarmWeather] = useState<WeatherResponse>()
-  const [currentFarmWeather, setCurrentFarmWeather] = useState<
-    CurrentWeather | undefined | any
-  >()
   const modal = useModal()
   const { getForecastWeather, getCurrentWeather } = useWeather()
   useEffect(() => {
     if (coord) {
-      getCurrentWeather(coord.lat, coord.lng)
-        .then((res) => {
-          setCurrentFarmWeather(res)
-        })
-        .catch((err) => console.error(err))
-
       getForecastWeather(coord.lat, coord.lng)
         .then((res) => {
           setFarmWeather(res)
@@ -36,10 +27,10 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coord])
   const weatherList = farmWeather?.list
-  console.log({ currentFarmWeather: currentFarmWeather })
+  const almostNow = weatherList?.[0]
   return (
     <div className="flex items-center">
-      {currentFarmWeather ? (
+      {almostNow ? (
         <button
           className=" btn-ghost btn btn-sm "
           onClick={(e) => {
@@ -47,13 +38,13 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
             modal.handleOpen()
           }}
         >
-          <span className="text-[10px] flex flex-col w-full justify-center items-center lowercase ">
+          <span className="text-[10px] flex flex-col w-full justify-center items-center lowercase font-bold">
             <span>
-              {currentFarmWeather.main?.temp.toFixed(0)}°
+              {almostNow.main?.temp.toFixed(0)}°
               <span className="uppercase">C</span>{' '}
-              {/* <span>{((currentFarmWeather?.pop || 0) * 100).toFixed(0)}%</span> */}
+              <span>{((almostNow?.pop || 0) * 100).toFixed(0)}%</span>
             </span>
-            <span>{currentFarmWeather?.weather?.[0]?.description}</span>
+            <span>{almostNow?.weather?.[0]?.description}</span>
           </span>
         </button>
       ) : null}
@@ -72,27 +63,18 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
               temperatura ahora, maxima y minima,
             </span>
           </div>
-          <div className="flex w-full justify-center">
-            <span className="mx-1">Ahora: </span>
-            <span className="mx-1">
-              {currentFarmWeather?.weather?.[0].description}
-            </span>
-            <span className="mx-1">
-              {currentFarmWeather?.main.temp.toFixed(0)}°C
-            </span>
-            {'-'}
-            <span className="mx-1">
-              {currentFarmWeather?.main.feels_like.toFixed(0)}°C
-            </span>
-          </div>
+
           {weatherList?.map((weather) => (
             <div key={weather.dt} className="text-xs">
               <div className="my-2">
                 <span className="flex w-full justify-between">
                   <span className="font-bold">
-                    {isToday(new Date(weather.dt_txt))
-                      ? `Hoy a las ${myFormatDate(weather.dt_txt, 'HH:mm')}`
-                      : myFormatDate(weather.dt_txt, 'EE dd MMM HH:mm')}
+                    {isToday(new Date(weather.dt * 1000))
+                      ? `Hoy a las ${myFormatDate(
+                          new Date(weather.dt * 1000),
+                          'HH:mm'
+                        )}`
+                      : myFormatDate(weather.dt * 1000, 'EE dd MMM HH:mm')}
                   </span>
                   <span className="">
                     <span className="font-bold">
