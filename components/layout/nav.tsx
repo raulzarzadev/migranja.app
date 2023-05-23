@@ -9,6 +9,7 @@ import { selectAuthState } from 'store/slices/authSlice'
 import { googleLogin, logout } from '../../firebase/Users/main'
 import { UserType } from '../../firebase/Users/user.model'
 import OnLineBanner from '@comps/OnLineBanner'
+import { Skeleton } from '@mui/material'
 
 export const Nav = () => {
   const user = useSelector(selectAuthState)
@@ -39,7 +40,17 @@ export const Nav = () => {
         </div>
         <OnLineBanner />
 
-        {user ? (
+        {user === undefined ? (
+          <div className="flex items-center">
+            <Skeleton
+              variant="rectangular"
+              width={20}
+              height={20}
+              className="mx-4"
+            />
+            <Skeleton variant="circular" width={40} height={40} />
+          </div>
+        ) : user ? (
           <UserMenu user={user} />
         ) : (
           <div>

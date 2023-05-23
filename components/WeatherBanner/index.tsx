@@ -61,7 +61,7 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
           </div>
           {weatherList?.map((weather) => (
             <div key={weather.dt} className="text-xs">
-              <p className="my-2">
+              <div className="my-2">
                 <span className="flex w-full justify-between">
                   <span className="font-bold">
                     {isToday(new Date(weather.dt_txt))
@@ -91,7 +91,7 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
                     <p>{weather.main.temp_max.toFixed(0)} °C</p>
                   </div>
                 </div>
-              </p>
+              </div>
               <hr />
             </div>
           ))}
