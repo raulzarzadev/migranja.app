@@ -1,5 +1,8 @@
 import useModal from '@comps/hooks/useModal'
-import useWeather, { WeatherResponse } from '@comps/hooks/useWeather'
+import useWeather, {
+  CurrentWeather,
+  WeatherResponse
+} from '@comps/hooks/useWeather'
 import Modal from '@comps/modal'
 import { isToday } from 'date-fns'
 import { useEffect, useState } from 'react'
@@ -11,11 +14,20 @@ export interface Coordinates {
 }
 const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
   const [farmWeather, setFarmWeather] = useState<WeatherResponse>()
+  const [currentFarmWeather, setCurrentFarmWeather] = useState<
+    CurrentWeather | undefined | any
+  >()
   const modal = useModal()
-  const { getWeather } = useWeather()
+  const { getForecastWeather, getCurrentWeather } = useWeather()
   useEffect(() => {
     if (coord) {
-      getWeather(coord.lat, coord.lng)
+      getCurrentWeather(coord.lat, coord.lng)
+        .then((res) => {
+          setCurrentFarmWeather(res)
+        })
+        .catch((err) => console.error(err))
+
+      getForecastWeather(coord.lat, coord.lng)
         .then((res) => {
           setFarmWeather(res)
         })
@@ -24,9 +36,10 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coord])
   const weatherList = farmWeather?.list
+  console.log({ currentFarmWeather: currentFarmWeather })
   return (
     <div className="flex items-center">
-      {farmWeather ? (
+      {currentFarmWeather ? (
         <button
           className=" btn-ghost btn btn-sm "
           onClick={(e) => {
@@ -36,11 +49,11 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
         >
           <span className="text-[10px] flex flex-col w-full justify-center items-center lowercase ">
             <span>
-              {weatherList?.[0].main?.temp.toFixed(0)}°
+              {currentFarmWeather.main?.temp.toFixed(0)}°
               <span className="uppercase">C</span>{' '}
-              <span>{((weatherList?.[0].pop || 0) * 100).toFixed(0)}%</span>
+              {/* <span>{((currentFarmWeather?.pop || 0) * 100).toFixed(0)}%</span> */}
             </span>
-            <span>{weatherList?.[0].weather?.[0]?.description}</span>
+            <span>{currentFarmWeather?.weather?.[0]?.description}</span>
           </span>
         </button>
       ) : null}
@@ -59,6 +72,19 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
               temperatura ahora, maxima y minima,
             </span>
           </div>
+          <div className="flex w-full justify-center">
+            <span className="mx-1">Ahora: </span>
+            <span className="mx-1">
+              {currentFarmWeather?.weather?.[0].description}
+            </span>
+            <span className="mx-1">
+              {currentFarmWeather?.main.temp.toFixed(0)}°C
+            </span>
+            {'-'}
+            <span className="mx-1">
+              {currentFarmWeather?.main.feels_like.toFixed(0)}°C
+            </span>
+          </div>
           {weatherList?.map((weather) => (
             <div key={weather.dt} className="text-xs">
               <div className="my-2">
@@ -66,7 +92,7 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
                   <span className="font-bold">
                     {isToday(new Date(weather.dt_txt))
                       ? `Hoy a las ${myFormatDate(weather.dt_txt, 'HH:mm')}`
-                      : myFormatDate(weather.dt_txt, 'dd MMM HH:mm')}
+                      : myFormatDate(weather.dt_txt, 'EE dd MMM HH:mm')}
                   </span>
                   <span className="">
                     <span className="font-bold">
