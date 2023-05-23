@@ -2,17 +2,16 @@ import axios from 'axios'
 
 /**
  * @param coordinates  write the default coordinates coordinates
- * @returns
+ * @returns {getWeather} a function you can use to know the weather in some coordinates
  */
 
 const useWeather = () => {
   const APIkey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
   async function getWeather(lat: number, lon: number) {
     try {
-      //const api = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}&units=metric&cnt=${GET_DAYS}`
-      const api = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}}&units=metric`
-      const res: WeatherResponse = await axios(api)
-      return res
+      const URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}&units=metric&lang=sp`
+      const res: { data: WeatherResponse } = await axios(URL)
+      return res.data
     } catch (error) {
       console.error(error)
     }
