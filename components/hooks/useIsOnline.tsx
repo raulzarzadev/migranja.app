@@ -19,6 +19,7 @@ const useIsOnline = () => {
   }
 
   useEffect(() => {
+    fetchData()
     setInterval(() => {
       fetchData()
     }, time)

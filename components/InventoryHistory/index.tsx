@@ -104,8 +104,8 @@ const InventoryCard = ({ inventory }: { inventory: InventoryDetails }) => {
           <div>Creado por: {createdBy.name || ''}</div>
         </div>
         <div className="grid grid-cols-2 text-center">
-          <div>Fiscas: {physicalStock?.length || 0}</div>
-          <div>Pardidas: {stockMissed?.length || 0}</div>
+          <div>Fisicas: {physicalStock?.length || 0}</div>
+          <div>Perdidas: {stockMissed?.length || 0}</div>
           <div>Coinciencias: {stockCoincidences?.length || 0}</div>
           <div>Diferencias: {stockDifferences?.length || 0}</div>
         </div>
