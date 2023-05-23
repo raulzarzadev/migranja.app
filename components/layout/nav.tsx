@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
 import { googleLogin, logout } from '../../firebase/Users/main'
 import { UserType } from '../../firebase/Users/user.model'
-import useIsOnline from '@comps/hooks/useIsOnline'
 import OnLineBanner from '@comps/OnLineBanner'
 
 export const Nav = () => {

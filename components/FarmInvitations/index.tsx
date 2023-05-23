@@ -46,7 +46,6 @@ const FarmInvitation = ({
   }
 }) => {
   const farm = invitation.farm
-  const user = useSelector(selectAuthState)
   return (
     <>
       <FarmNavigation

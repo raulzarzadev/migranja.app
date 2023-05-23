@@ -14,15 +14,16 @@ function LocationPicker({
   setLocation: (coord: Location) => void
 }) {
   const [center, setCenter] = useState(location)
+  process.env
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyChGGTMisnbRri0Vv7Ug6AQXUsGWxzK6jE'
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
   })
 
   const [map, setMap] = useState(null)
 
   const onLoad = useCallback(
-    function callback(map) {
+    function callback(map: any) {
       // This is just an example of getting and using the map instance!!! don't just blindly copy!
       const bounds = new window.google.maps.LatLngBounds(center)
       map.fitBounds(bounds)
@@ -31,7 +32,7 @@ function LocationPicker({
     [center]
   )
 
-  const onUnmount = useCallback(function callback(map) {
+  const onUnmount = useCallback(function callback() {
     setMap(null)
   }, [])
 
