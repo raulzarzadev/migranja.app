@@ -17,6 +17,8 @@ I using JSON.stringify to convert the firebase object into a string
 ```
   NEXT_PUBLIC_ENV=dev
   NEXT_PUBLIC_FIREBASE_CONFIG=<string>
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<string>
+  NEXT_PUBLIC_OPENWEATHER_API_KEY=<string>
 
 ```
 
