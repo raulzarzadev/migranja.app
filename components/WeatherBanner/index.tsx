@@ -38,7 +38,7 @@ const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
             <span>
               {weatherList?.[0].main?.temp.toFixed(0)}°
               <span className="uppercase">C</span>{' '}
-              <span>{(weatherList?.[0].pop || 0) * 100}%</span>
+              <span>{((weatherList?.[0].pop || 0) * 100).toFixed(0)}%</span>
             </span>
             <span>{weatherList?.[0].weather?.[0]?.description}</span>
           </span>
