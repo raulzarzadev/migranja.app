@@ -64,7 +64,7 @@ const Modal = ({
             <Icon name="close" size="md" />
           </button>
         </header>
-        <main className={'pt-5 p-5'}>{children}</main>
+        <main className={'pt-5 p-5'}>{open && children}</main>
       </div>
     </div>
   )

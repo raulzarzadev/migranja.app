@@ -28,10 +28,6 @@ export const Nav = () => {
             onClick={(e) => {
               e.preventDefault()
               router.push('/')
-              // router.replace('/')
-              // setTimeout(() => {
-              //   router.reload()
-              // }, 300)
             }}
             className="flex items-center font-bold btn btn-sm btn-ghost"
           >
@@ -85,24 +81,26 @@ const UserMenu = ({ user }: { user: UserType }) => {
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-10 rounded-full">
-              <Link href={'/'}>
-                <Image alt="avatar" src={user?.image} width={40} height={40} />
-              </Link>
+              {/* <Link href={'/home'}> */}
+              <Image alt="avatar" src={user?.image} width={40} height={40} />
+              {/* </Link> */}
             </div>
           </label>
           <ul
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            {/* <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </a>
+            <li>
+              <Link className="justify-between" href={'/'}>
+                Inicio
+              </Link>
             </li>
             <li>
-              <a>Settings</a>
-            </li> */}
+              <Link className="justify-between" href={'/home'}>
+                Home
+                <span className="badge">Nuevo</span>
+              </Link>
+            </li>
             <li>
               <button
                 className="border-error border "
