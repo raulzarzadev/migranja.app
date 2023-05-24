@@ -167,7 +167,7 @@ const InputContainer = ({
               <label className="flex items-center">
                 <input
                   type={'checkbox'}
-                  className={`checkbox checkbox-xs ${inputClassName}`}
+                  className={`checkbox checkbox-sm ${inputClassName}`}
                   onChange={onChange}
                   onBlur={onBlur}
                   name={name}
@@ -177,7 +177,7 @@ const InputContainer = ({
                   // checked={checked}
                   {...rest}
                 />
-                <span>{label}</span>
+                <span className="bg-transparent">{label}</span>
               </label>
             </>
           )}

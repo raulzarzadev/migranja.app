@@ -34,9 +34,7 @@ const AddFarm = () => {
       </button>
 
       <Modal {...modal} title={'Nueva granja'}>
-        <div>
-          <FarmForm />
-        </div>
+        <FarmForm />
       </Modal>
     </>
   )
