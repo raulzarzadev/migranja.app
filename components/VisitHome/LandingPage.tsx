@@ -8,12 +8,12 @@ function LandingPage() {
     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2">
       <Square className="sm:col-span-2 min-h-32 flex justify-center items-center flex-col p-2 py-6 text-center">
         <h1 className="text-3xl text-center">
-          Te ayudamos a mantener el control de tu ganado.{' '}
+          Mantener el control de tu granja.{' '}
         </h1>
-        <p className="my-1">Con herramientas utiles y faciles de usar.</p>
+        <p className="my-1">Herramientas intuitivas.</p>
         <p className="my-1">
-          <strong className="font-bold">Grátis</strong> y sin instalar nada (si
-          no quieres)
+          Explora todas las funcionalidades con nuestra{' '}
+          <strong className="font-bold">capa gratuita</strong>
         </p>
         <p className="my-1">
           En cualquier dispositivo con internet y desde tu{' '}
@@ -35,24 +35,24 @@ function LandingPage() {
       </Square>
       <Card
         title={'Reproducción'}
-        text={
-          'Monitorea el estado de tus animales, sus crías y ciclos fertilez.  \n Maximiza tus ganancias'
-        }
+        text={'Conoce la genetica de tus animales al detalle, evita cruzas'}
         image={'/assets/images/HomeVisit/corderitos.webp'}
       />
       <Card
         title={'Sanidad'}
-        text={'Manten sano a tu ganado. Ganado feliz, granjero feliz'}
+        text={'Manten sano a tu ganado. Evita perdidas por muerte'}
         image={'/assets/images/HomeVisit/oveja_veterinario.webp'}
       />
       <Card
         title={'Control'}
-        text={'Sabes todo el tiempo la cantidad y distribución de tu ganado. '}
+        text={'Monitorea el estado de tu ganado.  '}
         image={'/assets/images/HomeVisit/arete2.png'}
       />
       <Card
         title={'Clima'}
-        text={'Mantente al dia con el clima en tu rancho'}
+        text={
+          'Mantente preparado. Mira el pronostico del clima de la semana en tu granja '
+        }
         image={'/assets/images/HomeVisit/rancho_parcela.jpeg'}
       />
     </div>

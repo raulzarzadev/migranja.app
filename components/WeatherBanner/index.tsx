@@ -1,8 +1,5 @@
 import useModal from '@comps/hooks/useModal'
-import useWeather, {
-  CurrentWeather,
-  WeatherResponse
-} from '@comps/hooks/useWeather'
+import useWeather, { WeatherResponse } from '@comps/hooks/useWeather'
 import Modal from '@comps/modal'
 import { isToday } from 'date-fns'
 import { useEffect, useState } from 'react'

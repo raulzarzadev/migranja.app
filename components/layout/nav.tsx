@@ -27,10 +27,11 @@ export const Nav = () => {
           <button
             onClick={(e) => {
               e.preventDefault()
-              router.replace('/')
-              setTimeout(() => {
-                router.reload()
-              }, 300)
+              router.push('/')
+              // router.replace('/')
+              // setTimeout(() => {
+              //   router.reload()
+              // }, 300)
             }}
             className="flex items-center font-bold btn btn-sm btn-ghost"
           >

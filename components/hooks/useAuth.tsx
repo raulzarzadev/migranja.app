@@ -7,11 +7,12 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserFarm } from 'store/slices/farmSlice'
 import { selectAuthState, setAuthState } from '../../store/slices/authSlice'
+import { useRouter } from 'next/router'
 
 const useAuth = () => {
   const auth = getAuth(app)
   const user = useSelector(selectAuthState)
-
+  const router = useRouter()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const useAuth = () => {
       } else {
         dispatch(setAuthState(dbUser))
       }
+      if (user) router.push('/home')
     })
   }, [auth, dispatch])
 
