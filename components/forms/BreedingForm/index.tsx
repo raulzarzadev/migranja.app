@@ -15,6 +15,12 @@ import SearchEarring from '@comps/SearchEarring'
 import determinateDeepRelationship from 'utils/determinateDeepRelationship'
 import { updateAnimal } from '@firebase/Animal/main'
 import Icon from '@comps/Icon'
+import useProgress from '@comps/hooks/useProgress'
+import ProgressButton from '@comps/ProgressButton'
+import AsyncModal from '@comps/modal/AsyncModal'
+import Modal from '@comps/modal'
+import useModal from '@comps/hooks/useModal'
+import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -25,7 +31,7 @@ const BreedingForm = () => {
   const farmAnimals = useSelector(selectFarmAnimals)
 
   const [loading, setLoading] = useState(false)
-
+  const [done, setDone] = useState(false)
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -39,17 +45,18 @@ const BreedingForm = () => {
   const formValues = watch()
   const males = farmAnimals.filter(({ gender }) => gender === 'male')
   //const females = farmAnimals.filter(({ gender }) => gender === 'female')
-  const malesOptions = males?.map(({ earring, name }) => {
-    return { label: `${earring}${name ? ` - ${name}` : ''}`, value: earring }
-  })
+  // const malesOptions = males?.map(({ earring, name }) => {
+  //   return { label: `${earring}${name ? ` - ${name}` : ''}`, value: earring }
+  // })
 
   const excludeMalesAnimals = (animals: any[]) =>
     animals.filter(({ gender }) => gender === 'female')
 
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
-
+  const { progress, setProgress } = useProgress()
   const onSubmit = async (data: any) => {
     setLoading(true)
+    setProgress(10)
     const breedingBatch = femalesFiltered
       ?.filter(({ earring }) => sheepSelected?.includes(earring))
       .map((animal: any) => {
@@ -58,13 +65,16 @@ const BreedingForm = () => {
     const breedingMale: AnimalType | null =
       males?.find(({ earring }) => earring === data.breedingMale) || null
     try {
+      setProgress(20)
       // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * Edit breadingBatch animals state
       for (let i = 0; i < breedingBatch.length; i++) {
         const { id } = breedingBatch[i]
         if (id) {
           await updateAnimal(id, { state: 'BREEDING' })
+          setProgress(20 + 40 * (i / breedingBatch.length))
         }
       }
+      setProgress(60)
 
       const res = await createGenericBreedingEvent<BreedingDetailsEvent>({
         eventData: {
@@ -81,19 +91,24 @@ const BreedingForm = () => {
         },
         type: 'BREEDING'
       })
-
+      setProgress(100)
+      setDone(false)
       setLoading(false)
+      setDone(true)
     } catch (error) {
+      setProgress(-1)
       console.log(error)
       setLoading(false)
     }
-    setSheepSelected([])
-    reset()
+    handleClear()
   }
 
+  const modal = useModal()
   const handleClear = () => {
     setSheepSelected([])
     reset()
+    setProgress(0)
+    setDone(true)
   }
   const [femalesFiltered, setFemaleFiltered] = useState<any[]>([])
 
@@ -259,10 +274,52 @@ const BreedingForm = () => {
               </button>
             </div>
             {!!sheepSelected?.length && (
-              <button disabled={loading} className="btn btn-success">
-                Crear Monta
+              <button
+                className="btn btn-info "
+                onClick={(e) => {
+                  e.preventDefault()
+                  modal.handleOpen()
+                }}
+              >
+                Crear monta
               </button>
+              // <button disabled={loading} className="btn btn-success">
+              //   Crear Monta
+              // </button>
             )}
+            <Modal {...modal} title="Crear monta">
+              <div className="text-center">
+                <h4 className="font-bold">Crear monta</h4>
+                <p>Del: {myFormatDate(formValues.startAt, 'dd MMM yy')}</p>
+                <p>Al: {myFormatDate(formValues.finishAt, 'dd MMM yy')}</p>
+                <p className="font-bold">Macho: {formValues.breedingMale}</p>
+                {formValues.batch && (
+                  <p className="font-bold">Lote: {formValues.batch}</p>
+                )}
+                {sheepSelected?.map((earring) => (
+                  <div key={earring}>
+                    {earring}{' '}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        const aux = sheepSelected.filter(
+                          (str) => str !== earring
+                        )
+                        setSheepSelected(aux)
+                      }}
+                      className="text-error"
+                    >
+                      <Icon name="delete" size="xs" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              {done ? (
+                <span>Monta creada</span>
+              ) : (
+                <ProgressButton buttonLabel="Crear monta" progress={progress} />
+              )}
+            </Modal>
           </div>
         </form>
       </FormProvider>
