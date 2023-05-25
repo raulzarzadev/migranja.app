@@ -130,6 +130,8 @@ const InputContainer = ({
                   }}
                   inputRef={ref}
                   value={value || new Date()}
+                  minDate={rest.min}
+                  maxDate={rest.max}
                   {...rest}
                 />
               </LocalizationProvider>

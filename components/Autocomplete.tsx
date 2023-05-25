@@ -9,7 +9,7 @@ export default function Autocomplete() {
       disablePortal
       id="combo-box-demo"
       options={top100Films}
-      sx={{ width: 300 }}
+      sx={{ width: 300, marginY: '0.5rem' }}
       renderInput={(params) => <TextField {...params} label="Movie" />}
     />
   )

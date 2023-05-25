@@ -82,7 +82,7 @@ const SearchEarring = ({
         // sx={{ width: 300 }}
         className={` ${className} `}
         renderInput={(params) => (
-          <TextField {...params} label={label} className="z-0" />
+          <TextField {...params} label={label} className="z-0 my-2" />
         )}
         renderOption={(props, option, { inputValue }) => {
           const matches = match(option.label, inputValue, {
