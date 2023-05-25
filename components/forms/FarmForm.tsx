@@ -1,4 +1,7 @@
 import InfoBadge from '@comps/Badges/InfoBadge'
+import ProgressButton from '@comps/ProgressButton'
+import useFarmWeather from '@comps/hooks/useFarmWeather'
+import useProgress from '@comps/hooks/useProgress'
 import Modal from '@comps/modal'
 import ModalDelete from '@comps/modal/ModalDelete'
 import ModalLocationPicker from '@comps/modal/ModalLocationPicker'
@@ -12,14 +15,15 @@ import { FormProvider, UseFormRegister, useForm } from 'react-hook-form'
 
 const FarmForm = ({
   farm,
-  setEditing
+  setEditing,
+  onCancel
 }: {
   farm?: FarmType
   setEditing?: (bool: boolean) => void
+  onCancel?: () => void
 }) => {
   // console.log({ farm })
   // useDebugInformation('FarmForm', { farm, setEditing })
-  const [done, setDone] = useState(false)
   const [error, setError] = useState(false)
   const router = useRouter()
   const defaultValues = farm || {
@@ -29,7 +33,9 @@ const FarmForm = ({
   }
   const methods = useForm({ defaultValues })
   const { handleSubmit, setValue } = methods
+  const { progress, setProgress } = useProgress()
   const onSubmit = async (data: any) => {
+    setProgress(20)
     try {
       const res = data.id
         ? await updateFarm(data.id, data).then((res) => {
@@ -42,11 +48,9 @@ const FarmForm = ({
             setEditing?.(false)
             return res
           })
-
-      // console.log({ res })
-      setDone(true)
+      setProgress(100)
     } catch (error) {
-      setError(true)
+      setProgress(-1)
       console.error(error)
     }
   }
@@ -61,6 +65,7 @@ const FarmForm = ({
   const handleOpenDelete = () => {
     setOpenDelete(!openDelete)
   }
+  const farmWeather = useFarmWeather({ farmCoordinates: farm?.coordinates })
 
   return (
     <div className="flex w-full">
@@ -68,10 +73,12 @@ const FarmForm = ({
         <form onSubmit={handleSubmit(onSubmit)} className={'flex w-full'}>
           <div className="flex flex-col justify-evenly w-full items-center ">
             <InputContainer type="text" name={'name'} label="Nombre" />
-            <div></div>
             <h4 className="w-full max-w-sm mx-auto font-bold">Configuración</h4>
             {/* CONFIG ZONE In this zone you should put all the options to config the farm menu */}
             <div>
+              <div className="text-center">
+                {farmWeather?.city?.name || 'Sin ubicación'}
+              </div>
               <ModalLocationPicker
                 location={methods.watch('coordinates') || { lat: 19, lng: -99 }}
                 setLocation={(coor) => {
@@ -113,7 +120,17 @@ const FarmForm = ({
                   handleOpenDelete()
                 }}
               >
-                Eliminar
+                Eliminar Granja
+              </button>
+              <button
+                className="btn btn-outline
+              "
+                onClick={(e) => {
+                  e.preventDefault()
+                  onCancel?.()
+                }}
+              >
+                Cancelar
               </button>
               <Modal
                 open={openDelete}
@@ -136,30 +153,14 @@ const FarmForm = ({
                   />
                 </div>
               </Modal>
-              {/* <ModalDelete
-                title="Eliminar granja"
-                text={`Eliminar granja de forma permanente. Solo eliminaras los datos de la granja como nombre y equipo.
-                 No afecta a los animales o eventos previamente creados bajo le nombre de esta granja `}
-                handleDelete={() => handleDeleteFarm(farm?.id)}
-                buttonLabel={'Eliminar'}
-              /> */}
-              <div className="flex items-center">
-                {error && (
-                  <span>
-                    Hubo un error, recarga la página e intentalo de nuevo
-                  </span>
-                )}
-                {done ? (
-                  <span>Granja guardada</span>
-                ) : (
-                  <button className="btn  btn-outline btn-info">
-                    Guardar
-                    <span className="ml-2">
-                      <Icon name="save" size="sm" />
-                    </span>
-                  </button>
-                )}
-              </div>
+              <ProgressButton
+                errorLabel={
+                  progress === -1
+                    ? ' Hubo un error, recarga la página e intentalo de nuevo'
+                    : ''
+                }
+                progress={progress}
+              />
             </div>
           </div>
         </form>
@@ -167,38 +168,5 @@ const FarmForm = ({
     </div>
   )
 }
-
-const CheckboxInput = ({
-  label,
-  name,
-  register,
-  checked,
-  infoBadge
-}: {
-  name: string
-  label: string
-  register: UseFormRegister<FarmType>
-  checked: boolean
-  infoBadge?: {
-    title: string
-    text: string
-  }
-}) => (
-  <label className="label flex">
-    <span className="label-text max-w-[200px]  text-end w-full  mx-1">
-      {label}
-      {infoBadge && (
-        <InfoBadge title={infoBadge?.title} text={infoBadge?.text} />
-      )}
-    </span>
-    <input
-      {...register}
-      checked={checked}
-      //checked={methods.watch('haveATeam')}
-      type="checkbox"
-      className="checkbox checkbox-xs "
-    />
-  </label>
-)
 
 export default FarmForm

@@ -31,7 +31,13 @@ const FarmPage = () => {
                 <Icon name="close" />
               </button>
             </div>
-            <FarmForm farm={currentFarm || undefined} setEditing={setEditing} />
+            <FarmForm
+              farm={currentFarm || undefined}
+              setEditing={setEditing}
+              onCancel={() => {
+                setEditing(false)
+              }}
+            />
 
             <BackupButton />
           </div>

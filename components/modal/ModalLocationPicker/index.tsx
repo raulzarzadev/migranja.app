@@ -25,21 +25,31 @@ const ModalLocationPicker = ({
           e.preventDefault()
           modal.handleOpen()
         }}
-        className="btn btn-ghost"
+        className="btn btn-ghost btn-sm"
       >
-        Ubicación{' '}
+        Cambiar ubicación{' '}
         <span>
           <Icon name="location" />
         </span>
       </button>
       <Modal {...modal} title="Modal">
-        <LocationPicker setLocation={_setLocation} location={_location} />
+        <LocationPicker
+          setLocation={(coord) => {
+            _setLocation(coord)
+            setLocation(coord)
+          }}
+          location={_location}
+        />
+        <span className="italic ">
+          La ubicación es aproximada y solo es usada para determinar el clima de
+          tu granja
+        </span>
         <div>
           <span>Ubicación seleccionada: </span>
-          <span className="font-bold">{location.lat.toFixed(3)}, </span>
-          <span className="font-bold"> {location.lng.toFixed(3)}</span>
+          <span className="font-bold">{location.lat.toFixed(2)}, </span>
+          <span className="font-bold"> {location.lng.toFixed(2)}</span>
         </div>
-        <button
+        {/* <button
           className="btn mx-auto my-2 text-center "
           onClick={(e) => {
             e.preventDefault()
@@ -47,7 +57,7 @@ const ModalLocationPicker = ({
           }}
         >
           Seleccionar ubicación{' '}
-        </button>
+        </button> */}
       </Modal>
     </div>
   )

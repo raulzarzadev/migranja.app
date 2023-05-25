@@ -46,7 +46,6 @@ function LocationPicker({
       onLoad={onLoad}
       onUnmount={onUnmount}
     >
-      {/* Child components, such as markers, info windows, etc. */}
       <>
         <div className="">
           <Marker

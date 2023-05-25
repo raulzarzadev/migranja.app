@@ -1,6 +1,4 @@
 import FarmNavigation from 'components/FarmNavigation'
-import FarmForm from 'components/forms/FarmForm'
-import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectUserFarm, selectUserFarms } from 'store/slices/farmSlice'
 
