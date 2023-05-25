@@ -14,6 +14,7 @@ import { ParentsType } from 'types/base/AnimalType.model'
 import SearchEarring from '@comps/SearchEarring'
 import determinateDeepRelationship from 'utils/determinateDeepRelationship'
 import { updateAnimal } from '@firebase/Animal/main'
+import Icon from '@comps/Icon'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -168,8 +169,7 @@ const BreedingForm = () => {
             className=" mx-auto border"
             type="text"
             name="batch"
-            label="Lote"
-            placeholder="lote"
+            label="Lote (opcional)"
           />
           {/* ******************************************** 
                 Select Dates               
@@ -200,7 +200,37 @@ const BreedingForm = () => {
           {/* ******************************************** 
                 Select females               
        *******************************************rz */}
+          {sheepSelected?.map((earring) => (
+            <div key={earring}>
+              {earring}{' '}
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  const aux = sheepSelected.filter((str) => str !== earring)
+                  setSheepSelected(aux)
+                }}
+                className="text-error"
+              >
+                <Icon name="delete" size="xs" />
+              </button>
+            </div>
+          ))}
           {formValues.finishAt && formValues.startAt && (
+            <SearchEarring
+              onEarringClick={(animal) => {
+                if (
+                  !!animal.earring &&
+                  !sheepSelected?.includes(animal.earring)
+                )
+                  setSheepSelected([...(sheepSelected || []), animal.earring])
+              }}
+              relativeTo={formValues.breedingMale}
+              label="Buscar hembras"
+              filterBy={(animal) => animal.gender === 'female'}
+              omitEarrings={sheepSelected || []}
+            />
+          )}
+          {/* {formValues.finishAt && formValues.startAt && (
             <div className=" sm:max-w-full">
               <HelperText
                 text="Selecciona las hembras que seran parte de la monta. Debes seleccionar al menos una"
@@ -214,7 +244,7 @@ const BreedingForm = () => {
                 showSelectRow
               />
             </div>
-          )}
+          )} */}
           <div className="flex justify-evenly w-full my-4">
             <div>
               <button

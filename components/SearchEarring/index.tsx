@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
+import Icon from '@comps/Icon'
 
 const SearchEarring = ({
   onEarringClick,
@@ -93,9 +94,10 @@ const SearchEarring = ({
           return (
             <li
               {...props}
-              className={`${props.className} ${
-                isRelative(option.label) && ' bg-error text-white'
-              } `}
+              className={`${props.className} 
+              ${isRelative(option.label) && ' bg-error text-white'} 
+              ${alreadyIn(option.label) && ' bg-slate-600 '}
+              `}
             >
               <div>
                 {parts.map((part, index) => (
@@ -107,6 +109,9 @@ const SearchEarring = ({
                   >
                     {part.text}
                     <span className="ml-2">{isRelative(option.label)}</span>
+                    <span className="ml-2">
+                      {alreadyIn(option.label) && 'Ya esta en la lista'}
+                    </span>
                   </span>
                 ))}
               </div>
