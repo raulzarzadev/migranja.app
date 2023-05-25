@@ -19,11 +19,6 @@ export const Nav = () => {
     <nav className="mb-2">
       <div className="navbar bg-base-300 rounded-lg shadow-md ">
         <div className="flex-1">
-          {/* <Link
-            className="btn btn-ghost normal-case text-xl btn-sm"
-            
-          > */}
-
           <button
             onClick={(e) => {
               e.preventDefault()
@@ -97,7 +92,7 @@ const UserMenu = ({ user }: { user: UserType }) => {
             </li>
             <li>
               <Link className="justify-between" href={'/home'}>
-                Home
+                Mis Granjas
                 <span className="badge">Nuevo</span>
               </Link>
             </li>

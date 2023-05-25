@@ -1,5 +1,6 @@
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-import { memo, useCallback, useState } from 'react'
+import axios from 'axios'
+import { memo, useCallback, useEffect, useState } from 'react'
 
 export interface Location {
   lat: number

@@ -17,6 +17,7 @@ const ModalLocationPicker = ({
 }) => {
   const modal = useModal()
   const [_location, _setLocation] = useState<Location>({ ...location })
+
   return (
     <div>
       <button

@@ -1,3 +1,4 @@
+import useFarmWeather from '@comps/hooks/useFarmWeather'
 import useModal from '@comps/hooks/useModal'
 import useWeather, { WeatherResponse } from '@comps/hooks/useWeather'
 import Modal from '@comps/modal'
@@ -10,19 +11,10 @@ export interface Coordinates {
   lng: number
 }
 const WeatherBanner = ({ coord }: { coord?: Coordinates }) => {
-  const [farmWeather, setFarmWeather] = useState<WeatherResponse>()
   const modal = useModal()
-  const { getForecastWeather, getCurrentWeather } = useWeather()
-  useEffect(() => {
-    if (coord) {
-      getForecastWeather(coord.lat, coord.lng)
-        .then((res) => {
-          setFarmWeather(res)
-        })
-        .catch((err) => console.error(err))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coord])
+  const farmWeather = useFarmWeather({
+    farmCoordinates: coord
+  })
   const weatherList = farmWeather?.list
   const almostNow = weatherList?.[0]
   return (
