@@ -1,11 +1,9 @@
 import Icon from '@comps/Icon'
 import Loading from '@comps/Loading'
-import InputContainer from '@comps/inputs/InputContainer'
 import Modal from '@comps/modal'
 import { uploadAnimalsArray } from '@firebase/Animal/main'
 import { saveAs } from 'file-saver'
 import { useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
 
@@ -76,12 +74,11 @@ const BackupButton = () => {
     setOpenBackup(!openBackup)
   }
 
-  const methods = useForm()
   return (
     <>
-      <div className="my-4">
+      <div className="my-4 text-center">
         <button
-          className="btn btn-outline w-full  "
+          className="btn btn-outline   "
           onClick={(e) => {
             e.preventDefault()
             handleOpenBackup()
@@ -91,9 +88,9 @@ const BackupButton = () => {
         </button>
       </div>
       <Modal open={openBackup} handleOpen={handleOpenBackup} title="Respaldos">
-        <div className="flex flex-col sm:flex-row w-full justify-center">
+        <div className=" text-center">
           <button
-            className="btn btn-outline m-2"
+            className="btn btn-outline m-2 "
             onClick={(e) => {
               e.preventDefault()
               generateJsonFile({ data: farmAnimals, fieldName: 'animales' })
@@ -105,13 +102,13 @@ const BackupButton = () => {
             </span>
           </button>
           <button
-            className="btn btn-outline m-2"
+            className="btn btn-outline m-2 "
             onClick={(e) => {
               e.preventDefault()
               handleOpenUpload()
             }}
           >
-            Restaurar granja (.json){' '}
+            Restaurar animales (.json){' '}
             <span className="ml-2">
               <Icon name="upload" />
             </span>
@@ -119,7 +116,7 @@ const BackupButton = () => {
           <Modal
             open={openUpload}
             handleOpen={handleOpenUpload}
-            title="Restaurar granja"
+            title="Restaurar animales"
           >
             <div>
               Deberas seleccionar un archivo .json debidamente formateado

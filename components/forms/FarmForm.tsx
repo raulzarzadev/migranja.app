@@ -1,4 +1,4 @@
-import InfoBadge from '@comps/Badges/InfoBadge'
+import HelperText from '@comps/HelperText'
 import ProgressButton from '@comps/ProgressButton'
 import useFarmWeather from '@comps/hooks/useFarmWeather'
 import useProgress from '@comps/hooks/useProgress'
@@ -7,11 +7,10 @@ import ModalDelete from '@comps/modal/ModalDelete'
 import ModalLocationPicker from '@comps/modal/ModalLocationPicker'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { createFarm, deleteFarm, updateFarm } from '@firebase/Farm/main'
-import Icon from 'components/Icon'
 import InputContainer from 'components/inputs/InputContainer'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { FormProvider, UseFormRegister, useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 const FarmForm = ({
   farm,
@@ -65,7 +64,9 @@ const FarmForm = ({
   const handleOpenDelete = () => {
     setOpenDelete(!openDelete)
   }
-  const farmWeather = useFarmWeather({ farmCoordinates: farm?.coordinates })
+  const farmWeather = useFarmWeather({
+    farmCoordinates: methods.watch('coordinates')
+  })
 
   return (
     <div className="flex w-full">
@@ -73,10 +74,16 @@ const FarmForm = ({
         <form onSubmit={handleSubmit(onSubmit)} className={'flex w-full'}>
           <div className="flex flex-col justify-evenly w-full items-center ">
             <InputContainer type="text" name={'name'} label="Nombre" />
-            <h4 className="w-full max-w-sm mx-auto font-bold">Configuración</h4>
+            <h4 className="w-full max-w-sm mx-auto font-bold text-center">
+              Configuración
+            </h4>
             {/* CONFIG ZONE In this zone you should put all the options to config the farm menu */}
-            <div>
-              <div className="text-center">
+            <div className="text-center">
+              <span>
+                La ubicación es aproximada y solo es usada para determinar el
+                clima de tu granja
+              </span>
+              <div className="text-center font-bold">
                 {farmWeather?.city?.name || 'Sin ubicación'}
               </div>
               <ModalLocationPicker

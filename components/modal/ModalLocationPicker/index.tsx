@@ -25,7 +25,7 @@ const ModalLocationPicker = ({
           e.preventDefault()
           modal.handleOpen()
         }}
-        className="btn btn-ghost btn-sm"
+        className="btn btn-ghost btn-sm btn-outline"
       >
         Cambiar ubicación{' '}
         <span>
@@ -49,15 +49,6 @@ const ModalLocationPicker = ({
           <span className="font-bold">{location.lat.toFixed(2)}, </span>
           <span className="font-bold"> {location.lng.toFixed(2)}</span>
         </div>
-        {/* <button
-          className="btn mx-auto my-2 text-center "
-          onClick={(e) => {
-            e.preventDefault()
-            setLocation(_location)
-          }}
-        >
-          Seleccionar ubicación{' '}
-        </button> */}
       </Modal>
     </div>
   )

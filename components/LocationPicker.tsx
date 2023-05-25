@@ -39,8 +39,7 @@ function LocationPicker({
 
   return isLoaded ? (
     <GoogleMap
-      //  mapContainerStyle={containerStyle}
-      mapContainerClassName="w-full aspect-square"
+      mapContainerClassName="w-full aspect-video"
       center={center}
       zoom={6}
       onLoad={onLoad}

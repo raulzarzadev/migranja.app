@@ -175,13 +175,13 @@ const BreedingForm = () => {
                 Select Dates               
      *******************************************rz */}
 
-          {formValues.breedingMale && formValues.batch && (
+          {formValues.breedingMale && (
             <>
               <HelperText
                 text="Selecciona las fechas aproximadas en las que se llevo a cabo la monta"
                 type="info"
               />
-              <div className="flex w-full justify-between my-2 p-2">
+              <div className="flex w-full justify-between ">
                 <InputContainer type="date" name="startAt" label="Desde" />
 
                 {formValues?.startAt && (
@@ -190,6 +190,7 @@ const BreedingForm = () => {
                     name="finishAt"
                     label="Hasta"
                     min={formValues?.startAt}
+                    className="w-full"
                   />
                 )}
               </div>

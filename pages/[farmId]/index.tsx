@@ -7,7 +7,7 @@ import FarmMenu from 'components/UserHome/FarmMenu'
 import Head from 'next/head'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmState, selectUserFarm } from 'store/slices/farmSlice'
+import { selectFarmState } from 'store/slices/farmSlice'
 
 const FarmPage = () => {
   const currentFarm = useSelector(selectFarmState)
@@ -31,6 +31,7 @@ const FarmPage = () => {
                 <Icon name="close" />
               </button>
             </div>
+            <BackupButton />
             <FarmForm
               farm={currentFarm || undefined}
               setEditing={setEditing}
@@ -38,8 +39,6 @@ const FarmPage = () => {
                 setEditing(false)
               }}
             />
-
-            <BackupButton />
           </div>
         ) : (
           <FarmNavigation

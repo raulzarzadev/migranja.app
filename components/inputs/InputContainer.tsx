@@ -3,9 +3,7 @@ import { Controller, ControllerProps } from 'react-hook-form'
 //import DatePicker from 'react-datepicker'
 //import 'react-datepicker/dist/react-datepicker.css'
 import React from 'react'
-import { addDays, subDays } from 'date-fns'
-import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
-import InfoBadge, { InfoBadgeType } from '@comps/Badges/InfoBadge'
+import { InfoBadgeType } from '@comps/Badges/InfoBadge'
 import {
   FormControl,
   InputLabel,
@@ -131,7 +129,7 @@ const InputContainer = ({
                     onChange(event)
                   }}
                   inputRef={ref}
-                  value={value}
+                  value={value || new Date()}
                   {...rest}
                 />
               </LocalizationProvider>
