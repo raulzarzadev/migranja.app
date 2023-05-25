@@ -8,6 +8,10 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import ProgressButton from '@comps/ProgressButton'
 import SearchEarring from '@comps/SearchEarring'
+import Modal from '@comps/modal'
+import useModal from '@comps/hooks/useModal'
+import { myFormatDate } from 'utils/dates/myDateUtils'
+import AnimalsCompatTable from '@comps/AnimalsCompatTable'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -73,6 +77,13 @@ const BirthForm = ({
   }
 
   const disabled = methods.watch('calfs').length <= 0 || progress === 100
+  const modal = useModal()
+  const selectedFather = farmAnimals.find(
+    ({ id }) => methods.watch('fatherId') === id
+  )
+  const selectedMother = farmAnimals.find(
+    ({ id }) => methods.watch('motherId') === id
+  )
 
   return (
     <div>
@@ -158,7 +169,53 @@ const BirthForm = ({
               >
                 {progress === 100 ? 'Nuevo' : 'Limpiar'}
               </button>
-              <ProgressButton progress={progress} disabled={disabled} />
+
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  modal.handleOpen()
+                }}
+                className="btn btn-info "
+                disabled={disabled}
+              >
+                Crear parto
+              </button>
+              <Modal {...modal} title="Crear parto">
+                <div>
+                  <h1>Crear el siguiente parto y los eventos relacionados*</h1>
+                  <p>
+                    Padre:
+                    <span className="font-bold">
+                      {' '}
+                      {selectedFather?.earring}
+                    </span>
+                  </p>
+                  <p>
+                    Madre:
+                    <span className="font-bold">
+                      {selectedMother?.earring}
+                    </span>{' '}
+                  </p>
+                  {farmValues.batch && (
+                    <p>
+                      Lote:{' '}
+                      <span className="font-bold">{farmValues.batch}</span>
+                    </p>
+                  )}
+                  <p>
+                    Fecha del parto:{' '}
+                    <span className="font-bold">
+                      {myFormatDate(farmValues.date, 'dd MMM yy')}
+                    </span>
+                  </p>
+                  <AnimalsCompatTable animals={farmValues.calfs} />
+                  <p className="text-xs italic my-2">
+                    *Eventos relacionados: destete, cambios de estado de la
+                    madre, nuevos animales, etc.
+                  </p>
+                </div>
+                <ProgressButton progress={progress} disabled={disabled} />
+              </Modal>
             </div>
           </div>
         </form>

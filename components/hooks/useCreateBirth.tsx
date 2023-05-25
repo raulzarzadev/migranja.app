@@ -148,7 +148,6 @@ const useCreateBirth = ({
       // }
     }
     try {
-      debugger
       // *************************************************  1. create birth
       const eventCreated = await createEvent2(newBirth)
 
