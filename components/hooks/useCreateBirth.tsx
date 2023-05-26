@@ -172,9 +172,7 @@ const useCreateBirth = ({
       })
 
       const calfsCreated = await Promise.all(createAnimalsPromises)
-      console.log({ calfsCreated })
       setProgress(40)
-      console.log('animals created')
       setStatus('CREATING_WEANING')
 
       // *************************************************  3. create animals weaning

@@ -5,10 +5,12 @@ export const ProgressButton = ({
   progress,
   label,
   buttonLabel = 'Guardar',
+  successButtonLabel = 'Hecho',
   onClick,
   className,
   disabled,
   errorLabel,
+  onSuccess,
   ...rest
 }: {
   label?: string
@@ -18,11 +20,13 @@ export const ProgressButton = ({
   disabled?: boolean
   errorLabel?: string
   onClick?: (e: MouseEvent) => void | undefined
+  successButtonLabel?: string
+  onSuccess?: () => void
 }) => {
   return (
     <div role="buttonProgress">
       <ProgressBar progress={progress} errorLabel={errorLabel} />
-      {progress >= 0 && (
+      {progress >= 0 && progress <= 100 && (
         <div className="flex w-full justify-center">
           <button
             onClick={onClick}
@@ -30,6 +34,20 @@ export const ProgressButton = ({
             disabled={progress > 0 || disabled}
           >
             {buttonLabel}
+          </button>
+        </div>
+      )}
+      {progress === 101 && (
+        <div className="flex w-full justify-center">
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              onSuccess?.()
+            }}
+            className={`btn btn-info ${className}`}
+            disabled={!onSuccess}
+          >
+            {successButtonLabel}
           </button>
         </div>
       )}

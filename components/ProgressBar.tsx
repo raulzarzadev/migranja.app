@@ -7,8 +7,10 @@ const ProgressBar = ({
 }) => {
   return (
     <div className="text-center">
-      {progress < 0 && <span className="text-error text-xs">{errorLabel}</span>}
-      {progress > 0 && (
+      {progress < -1 && (
+        <span className="text-error text-xs">{errorLabel}</span>
+      )}
+      {progress > 0 && progress <= 100 && (
         <>
           <span>{progress.toFixed(0)}%</span>
           <progress value={progress} max={100} className="progress mt-0" />

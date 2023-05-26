@@ -71,7 +71,7 @@ const BirthForm = ({
         date: data.date,
         batch: data.batch || ''
       })
-      setProgress(0)
+      setProgress(101)
     } catch (error) {
       console.log({ error })
       setProgress(-1)
@@ -156,6 +156,7 @@ const BirthForm = ({
                 onClick={(e) => {
                   e.preventDefault()
                   methods.reset()
+                  setProgress(0)
                 }}
               >
                 {progress === 100 ? 'Nuevo' : 'Limpiar'}
@@ -176,10 +177,7 @@ const BirthForm = ({
                   <h1>Crear el siguiente parto y los eventos relacionados*</h1>
                   <p>
                     Padre:
-                    <span className="font-bold">
-                      {' '}
-                      {selectedFather?.earring}
-                    </span>
+                    <span className="font-bold">{selectedFather?.earring}</span>
                   </p>
                   <p>
                     Madre:

@@ -19,7 +19,8 @@ const SearchEarring = ({
   className,
   label,
   filterBy = (animal) => [],
-  justStallion
+  justStallion,
+  onReset
 }: {
   omitEarrings?: string[]
   onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
@@ -30,6 +31,7 @@ const SearchEarring = ({
   className?: string
   filterBy?: (animal: AnimalType) => any
   justStallion?: boolean
+  onReset?: () => {}
 }) => {
   const [search, setSearch] = useState<string | number>('')
   const [matches, setMatches] = useState<AnimalType[]>([])
@@ -90,7 +92,6 @@ const SearchEarring = ({
             insideWords: true
           })
           const parts = parse(option.label, matches)
-
           return (
             <li
               {...props}
