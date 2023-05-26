@@ -77,7 +77,6 @@ const BirthForm = ({
       setProgress(-1)
     }
   }
-  console.log({ farmValues })
 
   const disabled = methods.watch('calfs').length <= 0 || progress === 100
   const modal = useModal()
@@ -131,17 +130,6 @@ const BirthForm = ({
               }}
               className="w-[250px] my-2"
             />
-            {/* <InputContainer
-              name="motherId"
-              type="select"
-              selectOptions={mothers
-                ?.map((male) => ({
-                  label: male?.earring,
-                  value: male?.id
-                }))
-                .sort((a: any, b: any) => a?.label - b?.label)}
-              label="Hembra"
-            /> */}
           </div>
 
           <AnimalsForm
@@ -211,7 +199,14 @@ const BirthForm = ({
                       {myFormatDate(farmValues.date, 'dd MMM yy')}
                     </span>
                   </p>
-                  <AnimalsCompatTable animals={farmValues.calfs} />
+                  <AnimalsCompatTable
+                    animals={farmValues.calfs}
+                    onRemove={(i) => {
+                      const aux = farmValues.calfs
+                      aux.splice(i, 1)
+                      methods.setValue('calfs', aux)
+                    }}
+                  />
                   <p className="text-xs italic my-2">
                     *Eventos relacionados: destete, cambios de estado de la
                     madre, nuevos animales, etc.

@@ -65,7 +65,6 @@ const AnimalsForm = ({
         earring: data?.earring || '',
         gender: data?.gender || 'female'
       }
-      console.log({ newAnimal })
       setAnimals?.([...animals, newAnimal])
       methods.reset()
     }

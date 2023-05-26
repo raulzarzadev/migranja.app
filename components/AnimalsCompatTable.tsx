@@ -30,7 +30,7 @@ const AnimalsCompatTable = ({
               <td>Estado</td>
               <td>Sexo</td>
               <td>Peso</td>
-              <td>Elim</td>
+              {onRemove ? <td>Elim</td> : <></>}
             </tr>
           </thead>
         )}
@@ -43,17 +43,21 @@ const AnimalsCompatTable = ({
               </td>
               <td>{GENDER_OPTIONS[animal.gender || 'female'].label}</td>
               <td>{animal?.weight}</td>
-              <td>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault()
-                    onRemove?.(i)
-                  }}
-                  className="btn btn-outline btn-circle btn-error btn-xs"
-                >
-                  <Icon name="delete" size="xs" />
-                </button>
-              </td>
+              {onRemove ? (
+                <td>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      onRemove?.(i)
+                    }}
+                    className="btn btn-outline btn-circle btn-error btn-xs"
+                  >
+                    <Icon name="delete" size="xs" />
+                  </button>
+                </td>
+              ) : (
+                <></>
+              )}
             </tr>
           ))}
         </tbody>
