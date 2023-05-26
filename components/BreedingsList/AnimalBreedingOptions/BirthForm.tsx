@@ -12,6 +12,7 @@ import Modal from '@comps/modal'
 import useModal from '@comps/hooks/useModal'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalsCompatTable from '@comps/AnimalsCompatTable'
+import { createError } from '@firebase/Errors/main'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -74,6 +75,7 @@ const BirthForm = ({
       setProgress(101)
     } catch (error) {
       console.log({ error })
+      createError('CreateBirthError', error)
       setProgress(-1)
     }
   }
@@ -86,6 +88,12 @@ const BirthForm = ({
   const selectedMother = farmAnimals.find(
     ({ id }) => methods.watch('motherId') === id
   )
+
+  const handleReset = () => {
+    methods.reset()
+    setProgress(0)
+    modal.handleOpen()
+  }
 
   return (
     <div>
@@ -155,8 +163,7 @@ const BirthForm = ({
                 className="btn btn-outline "
                 onClick={(e) => {
                   e.preventDefault()
-                  methods.reset()
-                  setProgress(0)
+                  handleReset()
                 }}
               >
                 {progress === 100 ? 'Nuevo' : 'Limpiar'}
@@ -210,7 +217,14 @@ const BirthForm = ({
                     madre, nuevos animales, etc.
                   </p>
                 </div>
-                <ProgressButton progress={progress} disabled={disabled} />
+                <ProgressButton
+                  progress={progress}
+                  disabled={disabled}
+                  successButtonLabel="Parto creado"
+                  onSuccess={() => {
+                    handleReset()
+                  }}
+                />
               </Modal>
             </div>
           </div>
