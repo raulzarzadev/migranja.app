@@ -49,10 +49,10 @@ const AnimalsForm = ({
     // _setAnimals(aux)
   }
   const { checkIfExist } = useEarringAlreadyExist()
-  const onSubmit = (data: NewAnimal) => {
+  const onSubmit = (data?: any) => {
     if (
       checkIfExist(data?.earring || '') ||
-      animals.find((a) => a.earring === data.earring)
+      animals.find((a) => a.earring === data?.earring)
     ) {
       methods.setError('earring', {
         type: 'validate',
@@ -60,10 +60,10 @@ const AnimalsForm = ({
       })
     } else {
       const newAnimal: NewAnimal = {
-        weight: data.weight || 0,
-        state: data.state || 'FREE',
-        earring: data.earring || '',
-        gender: data.gender || 'female'
+        weight: data?.weight || 0,
+        state: data?.state || 'FREE',
+        earring: data?.earring || '',
+        gender: data?.gender || 'female'
       }
       console.log({ newAnimal })
       setAnimals?.([...animals, newAnimal])
