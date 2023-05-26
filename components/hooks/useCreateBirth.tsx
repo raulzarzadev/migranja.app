@@ -77,7 +77,7 @@ const useCreateBirth = ({
   const handleCreateBirth = async (data: {
     calfs: []
     date: DateType
-    batch?: string
+    batch: string
   }) => {
     // debugger
     const batchName = data.batch || breedingData?.name || ''

@@ -45,7 +45,7 @@ const BirthForm = ({
   const defaultValues = {
     fatherId,
     motherId,
-    batch: event?.eventData.breedingId,
+    batch: event?.eventData.breedingId || '',
     breeding: {
       id: event?.id || '',
       name: event?.eventData.breedingId || ''
@@ -64,17 +64,20 @@ const BirthForm = ({
   })
 
   const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
+    console.log({ data })
     try {
       await handleCreateBirth({
         calfs: data.calfs,
         date: data.date,
-        batch: data.batch
+        batch: data.batch || ''
       })
+      setProgress(0)
     } catch (error) {
       console.log({ error })
       setProgress(-1)
     }
   }
+  console.log({ farmValues })
 
   const disabled = methods.watch('calfs').length <= 0 || progress === 100
   const modal = useModal()
