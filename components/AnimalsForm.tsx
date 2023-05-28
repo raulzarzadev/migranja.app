@@ -61,7 +61,7 @@ const AnimalsForm = ({
       })
     } else {
       const newAnimal: NewAnimal = {
-        weight: data?.weight || 0,
+        weight: parseFloat(data?.weight) || 0,
         state: data?.state || 'FREE',
         earring: data?.earring || '',
         gender: data?.gender || 'female'

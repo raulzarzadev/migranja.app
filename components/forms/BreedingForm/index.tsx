@@ -152,7 +152,6 @@ const BreedingForm = () => {
       setValue('finishAt', formValues?.startAt)
     }
   }, [formValues?.startAt, setValue])
-  console.log({ sheepSelected })
   return (
     <div className="bg-base-300 rounded-md shadow-md  w-full mt-2">
       <div>
@@ -227,7 +226,6 @@ const BreedingForm = () => {
 
                 return {
                   state: a?.state,
-                  weight: null,
                   earring: a?.earring,
                   gender: a?.gender,
                   id: a?.earring

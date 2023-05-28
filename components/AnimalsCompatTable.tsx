@@ -7,7 +7,7 @@ export interface Animal {
   earring?: AnimalType['earring']
   gender?: 'male' | 'female'
   id?: AnimalType['id']
-  weight: number | null
+  weight?: number
   state: AnimalType['state']
 }
 const AnimalsCompatTable = ({
@@ -16,12 +16,13 @@ const AnimalsCompatTable = ({
   title
 }: {
   animals: Animal[]
-  onRemove?: (index: number) => void
+  onRemove?: (index: number, animal?: Animal) => void
   title?: string
 }) => {
   const haveSimpleWeight = animals.every(
-    (animals) => typeof animals.weight === 'number'
+    (animals) => typeof animals?.weight === 'number'
   )
+  console.log({ animals })
   return (
     <div className="my-4">
       {title && <h3 className="font-bold text-center text-xl">{title}</h3>}
@@ -58,7 +59,7 @@ const AnimalsCompatTable = ({
                   <button
                     onClick={(e) => {
                       e.preventDefault()
-                      onRemove?.(i)
+                      onRemove?.(i, animal)
                     }}
                     className="btn btn-outline btn-circle btn-error btn-xs"
                   >
