@@ -22,6 +22,8 @@ import Chart from './Chart'
 import Deposits from './Deposits'
 import Orders from './Orders'
 import ErrorsList from './ErrorsList'
+import { ErrorType, listenErrors } from '@firebase/Errors/main'
+import useDashboardErrors from '@comps/hooks/useDashboardErrors'
 
 function Copyright(props: any) {
   return (

@@ -1,10 +1,16 @@
 import Dashboard from '@comps/dashboard/Dashboard'
+import useDashboardErrors from '@comps/hooks/useDashboardErrors'
+
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
+import { wrapper } from 'store'
+
 import { selectAuthState } from 'store/slices/authSlice'
 
 const Admin = () => {
   const user = useSelector(selectAuthState)
+  useDashboardErrors()
+
   if (!user?.isAdmin)
     return (
       <div className="text-center">
@@ -21,4 +27,4 @@ const Admin = () => {
   )
 }
 
-export default Admin
+export default wrapper.withRedux(Admin)

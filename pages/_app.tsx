@@ -4,6 +4,7 @@ import { wrapper } from '../store'
 import Layout from '../components/layout'
 import useAuth from 'components/hooks/useAuth'
 import useFarmState from 'components/hooks/useFarmState'
+import useDashboardErrors from '@comps/hooks/useDashboardErrors'
 
 function MyApp({ Component, pageProps }: AppProps) {
   useAuth() // Set user state in redux store

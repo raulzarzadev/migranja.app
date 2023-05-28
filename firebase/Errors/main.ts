@@ -1,14 +1,16 @@
 import { FirebaseCRUD } from '@firebase/firebase.CRUD.ts'
 import { db, app } from '@firebase/main'
 import { CreateBirthError, CreateBreedingError } from 'errorsHandlers/errors'
-import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
-const auth = getAuth(app)
+import { TypeBase } from 'types/base/TypeBase.model'
 const storage = getStorage(app)
 
 const errorCRUD = new FirebaseCRUD('errors', db, storage, 'number')
 export type Errors = 'CreateBreedingError' | 'CreateBirthError'
-
+export interface ErrorType extends TypeBase {
+  message: string
+  name: Errors
+}
 /**
  *
  * @param name Name of the handle error
@@ -32,6 +34,6 @@ export const createError = async (name: Errors, error?: any) => {
   }
 }
 
-export const listenErrors = (cb: CallableFunction) => {
+export const listenErrors = (cb: (errors: ErrorType[]) => void) => {
   errorCRUD.listenItems([], cb)
 }

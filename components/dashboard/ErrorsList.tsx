@@ -6,7 +6,11 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Title from './Title'
-import { listenErrors } from '@firebase/Errors/main'
+import { ErrorType, listenErrors } from '@firebase/Errors/main'
+import { myFormatDate } from 'utils/dates/myDateUtils'
+import { useSelector } from 'react-redux'
+import { selectAppErrors } from 'store/slices/errorsSlice'
+import { Paper } from '@mui/material'
 
 // Generate Order Data
 function createData(
@@ -25,37 +29,44 @@ function preventDefault(event: React.MouseEvent) {
 }
 
 export default function ErrorsList() {
-  const [rows, setRows] = React.useState([])
+  const [rows, setRows] = React.useState<ErrorType[]>([])
   React.useEffect(() => {
     listenErrors((res) => {
-      console.log(res)
+      setRows(res)
     })
   }, [])
+
+  const a = useSelector(selectAppErrors)
+  console.log({ a })
+
   return (
     <React.Fragment>
       <Title>Recent Errors</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Fecha</TableCell>
-            <TableCell>Usuario</TableCell>
-            <TableCell>Tipo</TableCell>
-            <TableCell>Mensaje</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+      <div className="overflow-x-auto">
+        <Table size="small" className="overflow-x-auto">
+          <TableHead>
+            <TableRow>
+              <TableCell>Fecha</TableCell>
+              <TableCell>Usuario</TableCell>
+              <TableCell>Tipo</TableCell>
+              <TableCell>Mensaje</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>
+                  {myFormatDate(row.createdAt, 'dd MMM yy HH:mm:ss')}
+                </TableCell>
+                <TableCell>{row.userId}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.message}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
       <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         See more ErrorsList
       </Link>

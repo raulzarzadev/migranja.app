@@ -3,13 +3,15 @@ import { authSlice } from './slices/authSlice'
 import { createWrapper } from 'next-redux-wrapper'
 import { counterSlice } from './slices/couterSlice'
 import { farmSlice } from './slices/farmSlice'
+import { errorsSlice } from './slices/errorsSlice'
 
 const makeStore = () =>
   configureStore({
     reducer: {
       [authSlice.name]: authSlice.reducer,
       [counterSlice.name]: counterSlice.reducer,
-      [farmSlice.name]: farmSlice.reducer
+      [farmSlice.name]: farmSlice.reducer,
+      [errorsSlice.name]: errorsSlice.reducer
     },
     devTools: true
   })

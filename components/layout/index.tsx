@@ -1,8 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Nav from './nav'
-import useDebugInformation from '@comps/hooks/useDebugInformation'
 
 export interface LayoutProps {
   children: React.ReactNode
