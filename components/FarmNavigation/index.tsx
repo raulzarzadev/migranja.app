@@ -1,7 +1,6 @@
 import H2 from '@comps/Basics/Title2'
 import { Location } from '@comps/LocationPicker'
 import WeatherBanner from '@comps/WeatherBanner'
-import useWeather from '@comps/hooks/useWeather'
 import { FarmType } from '@firebase/Farm/farm.model'
 import { getFarm } from '@firebase/Farm/main'
 import { UserType } from '@firebase/Users/user.model'

@@ -15,4 +15,5 @@ export interface UserType extends TypeBase {
   images: ImageType[]
   emailVerified: boolean
   farmId?: FarmType['id']
+  isAdmin?: boolean
 }

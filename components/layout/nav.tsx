@@ -85,6 +85,14 @@ const UserMenu = ({ user }: { user: UserType }) => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
+            {user.isAdmin && (
+              <li>
+                <Link className="justify-between" href={'/admin'}>
+                  Dashboard
+                  <span className="badge">admin</span>
+                </Link>
+              </li>
+            )}
             <li>
               <Link className="justify-between" href={'/'}>
                 Inicio
