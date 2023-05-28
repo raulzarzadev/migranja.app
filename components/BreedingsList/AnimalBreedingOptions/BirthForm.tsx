@@ -92,7 +92,6 @@ const BirthForm = ({
   const handleReset = () => {
     methods.reset()
     setProgress(0)
-    modal.handleOpen()
   }
 
   return (
@@ -184,12 +183,14 @@ const BirthForm = ({
                   <h1>Crear el siguiente parto y los eventos relacionados*</h1>
                   <p>
                     Padre:
-                    <span className="font-bold">{selectedFather?.earring}</span>
+                    <span className="font-bold">
+                      {selectedFather?.earring || ' sin '}
+                    </span>
                   </p>
                   <p>
                     Madre:
                     <span className="font-bold">
-                      {selectedMother?.earring}
+                      {selectedMother?.earring || ' sin '}
                     </span>{' '}
                   </p>
                   {farmValues.batch && (

@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { AnimalState } from 'types/base/AnimalState.model'
 import GENDER_OPTIONS from './CONSTANTS/GENDER_OPTIONS'
+import AnimalsCompatTable from './AnimalsCompatTable'
 
 const schema = yup
   .object()
@@ -71,46 +72,15 @@ const AnimalsForm = ({
   }
   return (
     <div>
-      <h5 className="text-lg font-bold">
-        {isBirth ? 'Camada' : 'Nuevos aretes'}
-      </h5>
+      <AnimalsCompatTable
+        animals={animals}
+        title="Camada"
+        onRemove={(i) => handleRemove(i)}
+      />
+      <h3 className="text-center font-bold text-xl">Agregar cría</h3>
       <table className="table w-full table-compact">
-        {!!animals.length && (
-          <thead>
-            <tr>
-              <td>Arete</td>
-              <td>Estado</td>
-              <td>Sexo</td>
-              <td>Peso</td>
-              <td>Elim</td>
-            </tr>
-          </thead>
-        )}
-        <tbody>
-          {animals.map((animal, i) => (
-            <tr key={animal?.earring}>
-              <td>{animal.earring}</td>
-              <td className="capitalize">
-                {AnimalState[animal.state || 'LACTATING']}
-              </td>
-              <td>{GENDER_OPTIONS[animal.gender || 'female'].label}</td>
-              <td>{animal?.weight}</td>
-              <td>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault()
-                    handleRemove(i)
-                  }}
-                  className="btn btn-outline btn-circle btn-error btn-xs"
-                >
-                  <Icon name="delete" size="xs" />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
         <FormProvider {...methods}>
-          <tfoot>
+          <tbody>
             <tr className="">
               <td>
                 <InputContainer
@@ -184,7 +154,7 @@ const AnimalsForm = ({
                 </button>
               </td>
             </tr>
-          </tfoot>
+          </tbody>
         </FormProvider>
       </table>
     </div>

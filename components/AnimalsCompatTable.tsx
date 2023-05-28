@@ -7,7 +7,7 @@ export interface Animal {
   earring?: AnimalType['earring']
   gender?: 'male' | 'female'
   id?: AnimalType['id']
-  weight: number
+  weight: number | null
   state: AnimalType['state']
 }
 const AnimalsCompatTable = ({
@@ -19,22 +19,32 @@ const AnimalsCompatTable = ({
   onRemove?: (index: number) => void
   title?: string
 }) => {
+  const haveSimpleWeight = animals.every(
+    (animals) => typeof animals.weight === 'number'
+  )
   return (
-    <div>
-      {title && <h3 className="font-bold">{title}</h3>}
+    <div className="my-4">
+      {title && <h3 className="font-bold text-center text-xl">{title}</h3>}
       <table className="table w-full table-compact">
-        {!!animals.length && (
-          <thead>
-            <tr>
-              <td>Arete</td>
-              <td>Estado</td>
-              <td>Sexo</td>
-              <td>Peso</td>
-              {onRemove ? <td>Elim</td> : <></>}
-            </tr>
-          </thead>
-        )}
+        <thead>
+          <tr>
+            <td>Arete</td>
+            <td>Estado</td>
+            <td>Sexo</td>
+            {haveSimpleWeight && <td>Peso</td>}
+            {onRemove ? <td>Elim</td> : <></>}
+          </tr>
+        </thead>
+
         <tbody>
+          {!animals.length && (
+            <tr>
+              <td colSpan={10} className="text-center">
+                {' '}
+                Aún no has agregado animales
+              </td>
+            </tr>
+          )}
           {animals.map((animal, i) => (
             <tr key={animal?.earring}>
               <td>{animal.earring}</td>
@@ -42,7 +52,7 @@ const AnimalsCompatTable = ({
                 {AnimalState[animal.state || 'LACTATING']}
               </td>
               <td>{GENDER_OPTIONS[animal.gender || 'female'].label}</td>
-              <td>{animal?.weight}</td>
+              {haveSimpleWeight && <td>{animal?.weight}</td>}
               {onRemove ? (
                 <td>
                   <button

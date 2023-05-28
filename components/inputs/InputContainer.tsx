@@ -129,7 +129,7 @@ const InputContainer = ({
                     onChange(event)
                   }}
                   inputRef={ref}
-                  value={value || new Date()}
+                  value={new Date(value)}
                   minDate={rest.min}
                   maxDate={rest.max}
                   {...rest}

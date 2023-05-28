@@ -23,6 +23,7 @@ import useModal from '@comps/hooks/useModal'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { createError } from '@firebase/Errors/main'
 import { CreateBreedingError } from 'errorsHandlers/errors'
+import AnimalsCompatTable from '@comps/AnimalsCompatTable'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -151,6 +152,7 @@ const BreedingForm = () => {
       setValue('finishAt', formValues?.startAt)
     }
   }, [formValues?.startAt, setValue])
+  console.log({ sheepSelected })
   return (
     <div className="bg-base-300 rounded-md shadow-md  w-full mt-2">
       <div>
@@ -215,21 +217,30 @@ const BreedingForm = () => {
           {/* ******************************************** 
                 Select females               
        *******************************************rz */}
-          {sheepSelected?.map((earring) => (
-            <div key={earring}>
-              {earring}{' '}
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  const aux = sheepSelected.filter((str) => str !== earring)
-                  setSheepSelected(aux)
-                }}
-                className="text-error"
-              >
-                <Icon name="delete" size="xs" />
-              </button>
-            </div>
-          ))}
+
+          <AnimalsCompatTable
+            animals={
+              sheepSelected?.map((earring) => {
+                const a = farmAnimals.find(
+                  (animal) => animal.earring === earring
+                )
+
+                return {
+                  state: a?.state,
+                  weight: null,
+                  earring: a?.earring,
+                  gender: a?.gender,
+                  id: a?.earring
+                }
+              }) || []
+            }
+            onRemove={(i) => {
+              const aux = sheepSelected
+              aux?.splice(i, 1)
+              setSheepSelected([...(aux || [])])
+            }}
+            title="Hembras"
+          />
           {formValues.finishAt && formValues.startAt && (
             <SearchEarring
               onEarringClick={(animal) => {
@@ -245,21 +256,7 @@ const BreedingForm = () => {
               omitEarrings={sheepSelected || []}
             />
           )}
-          {/* {formValues.finishAt && formValues.startAt && (
-            <div className=" sm:max-w-full">
-              <HelperText
-                text="Selecciona las hembras que seran parte de la monta. Debes seleccionar al menos una"
-                type="info"
-              />
-              <AnimalsTable
-                showRelationshipCol
-                animalsData={femalesFiltered || []}
-                setSelectedRows={setSheepSelected}
-                settings={{ selectMany: true }}
-                showSelectRow
-              />
-            </div>
-          )} */}
+
           <div className="flex justify-evenly w-full my-4">
             <div>
               <button
@@ -283,9 +280,6 @@ const BreedingForm = () => {
               >
                 Crear monta
               </button>
-              // <button disabled={loading} className="btn btn-success">
-              //   Crear Monta
-              // </button>
             )}
             {modal.open && (
               <Modal {...modal} title="Crear monta">
