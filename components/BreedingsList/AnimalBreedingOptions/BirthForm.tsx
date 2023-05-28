@@ -65,7 +65,6 @@ const BirthForm = ({
   })
 
   const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
-    console.log({ data })
     try {
       await handleCreateBirth({
         calfs: data.calfs,

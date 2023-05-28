@@ -19,16 +19,19 @@ export type Errors = 'CreateBreedingError' | 'CreateBirthError'
 
 export const createError = async (name: Errors, error?: any) => {
   try {
+    await errorCRUD.createItem({
+      name,
+      message: error?.message || ''
+    })
     if (name === 'CreateBreedingError')
       throw new CreateBreedingError(error?.message || 'no message')
     if (name === 'CreateBirthError')
       throw new CreateBirthError(error?.message || 'no message')
-
-    return await errorCRUD.createItem({
-      name,
-      message: error?.message || ''
-    })
   } catch (error) {
     console.error({ error })
   }
+}
+
+export const listenErrors = (cb: CallableFunction) => {
+  errorCRUD.listenItems([], cb)
 }

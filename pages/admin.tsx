@@ -1,3 +1,4 @@
+import Dashboard from '@comps/dashboard/Dashboard'
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { selectAuthState } from 'store/slices/authSlice'
@@ -14,8 +15,8 @@ const Admin = () => {
       </div>
     )
   return (
-    <div>
-      <div></div>
+    <div className="relative">
+      <Dashboard />
     </div>
   )
 }

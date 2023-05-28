@@ -26,6 +26,12 @@ export const ProgressButton = ({
   return (
     <div role="buttonProgress">
       <ProgressBar progress={progress} errorLabel={errorLabel} />
+
+      {progress === -1 && (
+        <div className="text-center text-error">
+          <span>Ups! Algo va mal. Intentalo de nuevo</span>
+        </div>
+      )}
       {progress >= 0 && progress <= 100 && (
         <div className="flex w-full justify-center">
           <button
