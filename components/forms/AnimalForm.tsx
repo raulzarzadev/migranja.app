@@ -91,9 +91,10 @@ export const AnimalForm = ({
     setLoading(true)
     const isEditing = id && animal?.earring === data.earring
     //* if checkFarmEarrings is true so check if this earring exist (active or inactive ) and if do, so show an alert and avoid created
-
     if (
+      //* is Edit animal check form is opened for a spacific animal that should be editing
       !isEditing &&
+      //* isNewAnimal should omit checkIFExist
       !isANewAnimal &&
       checkFarmEarrings &&
       checkIfExist(data.earring)

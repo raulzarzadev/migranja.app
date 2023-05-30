@@ -13,7 +13,8 @@ const useWeather = () => {
       const forecast: { data: WeatherResponse } = await axios(forecast_URL)
       return forecast.data
     } catch (error) {
-      console.error(error)
+      console.error('get forecast weather fail')
+      //console.error(error)
     }
   }
   async function getCurrentWeather(lat: number, lon: number) {
@@ -22,7 +23,8 @@ const useWeather = () => {
       const current: { data: WeatherResponse } = await axios(current_URL)
       return current.data
     } catch (error) {
-      console.error(error)
+      console.error('get current weather')
+      //console.error(error)
       return null
     }
   }

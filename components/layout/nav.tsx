@@ -10,6 +10,7 @@ import { googleLogin, logout } from '../../firebase/Users/main'
 import { UserType } from '../../firebase/Users/user.model'
 import OnLineBanner from '@comps/OnLineBanner'
 import { Skeleton } from '@mui/material'
+import LoginButton from '@comps/LoginButton'
 
 export const Nav = () => {
   const user = useSelector(selectAuthState)
@@ -19,16 +20,23 @@ export const Nav = () => {
     <nav className="mb-2">
       <div className="navbar bg-base-300 rounded-lg shadow-md ">
         <div className="flex-1">
-          <button
-            onClick={(e) => {
-              e.preventDefault()
-              router.push('/')
-            }}
+          <Link
+            // onClick={(e) => {
+            //   e.preventDefault()
+            //   router.push('/')
+            // }}
+            href={'/'}
             className="flex items-center font-bold btn btn-sm btn-ghost"
           >
             <Icon name="home" size="xs" />
             <span className="ml-1">Mi Granja</span>
-          </button>
+          </Link>
+          <Link
+            href={'/pricing'}
+            className="flex items-center font-bold btn btn-sm btn-ghost"
+          >
+            <span className="ml-1">Precios</span>
+          </Link>
         </div>
         <OnLineBanner />
 
@@ -48,15 +56,7 @@ export const Nav = () => {
           <div>
             <ul>
               <li>
-                <button
-                  className="btn btn-sm text-white"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    googleLogin()
-                  }}
-                >
-                  Ingresa
-                </button>
+                <LoginButton />
               </li>
             </ul>
           </div>

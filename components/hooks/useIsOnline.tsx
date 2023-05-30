@@ -11,10 +11,12 @@ const useIsOnline = () => {
         setIsOnline(true)
       } else {
         setIsOnline(false)
+        console.error('Checking connection: No connection')
       }
     } catch (error) {
       setIsOnline(false)
-      console.log('error', error)
+      console.error('Checking connection: No connection')
+      //console.log('error', error)
     }
   }
 
