@@ -140,3 +140,7 @@ export const uploadImage = (
 export const deleteImage = ({ url }: { url: string }) => {
   return usersCRUD.deleteFile(url)
 }
+
+export const listenAppUsers = (cb: CallableFunction) => {
+  return usersCRUD.listenItems([], cb)
+}

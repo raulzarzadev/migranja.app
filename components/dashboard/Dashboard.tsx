@@ -24,6 +24,8 @@ import Orders from './Orders'
 import ErrorsList from './ErrorsList'
 import { ErrorType, listenErrors } from '@firebase/Errors/main'
 import useDashboardErrors from '@comps/hooks/useDashboardErrors'
+import NewUsersChart from './NewUsersChart'
+import NewAnimalsChart from './NewAnimalsChart'
 
 function Copyright(props: any) {
   return (
@@ -106,7 +108,7 @@ export default function Dashboard() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        {/* <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
               pr: '24px' // keep right padding when drawer closed
@@ -139,7 +141,7 @@ export default function Dashboard() {
               </Badge>
             </IconButton>
           </Toolbar>
-        </AppBar>
+        </AppBar> */}
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -185,10 +187,22 @@ export default function Dashboard() {
                     height: 240
                   }}
                 >
-                  <Chart />
+                  <NewUsersChart />
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
+              <Grid item xs={12} md={8} lg={9}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240
+                  }}
+                >
+                  <NewAnimalsChart />
+                </Paper>
+              </Grid>
+              {/* Recent Deposits
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
@@ -200,7 +214,7 @@ export default function Dashboard() {
                 >
                   <Deposits />
                 </Paper>
-              </Grid>
+              </Grid> */}
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>

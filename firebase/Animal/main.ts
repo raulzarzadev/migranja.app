@@ -138,3 +138,7 @@ function deleteProperty<T extends Record<string, any>, K extends keyof T>(
 ): Omit<T, K>[] {
   return array.map(({ [property]: prop, ...rest }) => rest)
 }
+
+export const listenAppAnimals = (cb: CallableFunction) => {
+  return AnimalsCRUD.listenItems([], cb)
+}

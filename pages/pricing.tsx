@@ -68,7 +68,7 @@ const tiers = [
     disabled: true
   },
   {
-    title: 'Enterprise',
+    title: 'Premium',
     price: '499',
     description: [
       'Borregas ilimitadas',
@@ -286,7 +286,17 @@ export default function Pricing() {
         </Grid>
       </Container>
       <Container>
-        <Typography>Tienes alguna duda, Escribenos </Typography>
+        <Typography
+          className="text-center "
+          variant="h4"
+          component={'p'}
+          style={{ marginTop: 40 }}
+        >
+          ¿Tienes alguna duda? Escribenos{' '}
+          <Link href="mailto:migranja.app@gmail.com?subject=Quisiera saber más sobre Premium">
+            migrajna.app@gmail.com
+          </Link>
+        </Typography>
       </Container>
       {/* Footer
       <Container
