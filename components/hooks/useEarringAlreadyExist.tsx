@@ -19,8 +19,33 @@ const useEarringAlreadyExist = () => {
       open={openModal}
       title="Este arete ya existe"
     >
-      <div>
-        <ModalAnimalDetails earring={earring} />
+      <div className="text-center">
+        <p className="my-4">
+          <ModalAnimalDetails earring={earring} />
+        </p>
+        {/* <div className="flex w-full justify-evenly">
+          <button
+            className="btn btn-outline"
+            onClick={(e) => {
+              e.preventDefault()
+              handleOpenModal()
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+            className="btn btn-error"
+          >
+            Ignorar*
+          </button>
+        </div> */}
+        <p className="text-sm my-2">
+          *Ingonrar esta advertencia podria traer problemas al tener dos
+          animales con el mismo numero de arete
+        </p>
       </div>
     </Modal>
   )

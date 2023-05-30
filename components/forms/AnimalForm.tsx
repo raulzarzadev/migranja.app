@@ -16,11 +16,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
-import { AnimalState } from 'types/base/AnimalState.model'
+import { AnimalState, AnimalStates } from 'types/base/AnimalState.model'
 import { AnimalType } from 'types/base/AnimalType.model'
 import useEarringAlreadyExist from '@comps/hooks/useEarringAlreadyExist'
 import ImagesDisplay from '@comps/ImagesDisplay'
 import { ImageType } from 'types/base/ImageType.model'
+import Modal from '@comps/modal'
+import useModal from '@comps/hooks/useModal'
+import { myFormatDate } from 'utils/dates/myDateUtils'
+import GeneticTree from '@comps/GeneticTree'
 
 const schema = yup
   .object()
@@ -80,13 +84,20 @@ export const AnimalForm = ({
     type: any
     message: string
   }
-  const [error, setError] = useState<ErrorType | null>()
 
+  const [error, setError] = useState<ErrorType | null>()
+  const [isANewAnimal, setIsANewAnimal] = useState(false)
   const onSubmit = (data: any) => {
     setLoading(true)
-
+    const isEditing = id && animal?.earring === data.earring
     //* if checkFarmEarrings is true so check if this earring exist (active or inactive ) and if do, so show an alert and avoid created
-    if (checkFarmEarrings && checkIfExist(data.earring)) {
+
+    if (
+      !isEditing &&
+      !isANewAnimal &&
+      checkFarmEarrings &&
+      checkIfExist(data.earring)
+    ) {
       setError({ type: 'alreadyExist', message: '' })
       setLoading(false)
       return
@@ -113,6 +124,7 @@ export const AnimalForm = ({
         .then(({ res }: any) => {
           // @ts-ignore FIXME: circularly references itself
           setValue('id', res?.id)
+          setIsANewAnimal(true)
           setEditing?.(false)
           console.log(res)
         })
@@ -142,12 +154,13 @@ export const AnimalForm = ({
 
   const { handleDelete } = useAnimal()
   // useDebugInformation('AnimalForm', { animal })
+  const saveModal = useModal()
   return (
     <div>
       <h2 className="text-xl font-bold text-center">
         {id ? 'Editar animal' : 'Nuevo animal'}
       </h2>
-      <>{ModalAlreadyExist}</>
+
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex w-full justify-end">
@@ -179,8 +192,162 @@ export const AnimalForm = ({
                   </button>
                 )}
               </span>
-
               <button
+                disabled={!formValues.earring}
+                className=" btn btn-info btn-sm px-1 "
+                onClick={(e) => {
+                  e.preventDefault()
+                  saveModal.handleOpen()
+                }}
+              >
+                {!id ? (
+                  <>
+                    <span className="mr-1">Guardar</span>
+                    <Icon size="xs" name="save" />
+                  </>
+                ) : (
+                  <>
+                    {' '}
+                    <span className="mr-1">Editar</span>
+                    <Icon size="xs" name="edit" />
+                  </>
+                )}
+              </button>
+              <Modal {...saveModal} title="Guardar">
+                <>{ModalAlreadyExist}</>
+                <div>
+                  <h3>Se creara un animal con la siguiente información: </h3>
+                  <p className="text-center">
+                    Arete:{' '}
+                    <span className="font-bold text-2xl ">
+                      {formValues.earring}
+                    </span>
+                  </p>
+
+                  {formValues.name && (
+                    <p>
+                      Nombre:{' '}
+                      <span className="font-bold">{formValues.name}</span>
+                    </p>
+                  )}
+                  {formValues.batch && (
+                    <p>
+                      Lote:{' '}
+                      <span className="font-bold">{formValues.batch}</span>
+                    </p>
+                  )}
+                  {formValues.birthType && (
+                    <p>
+                      Tipo parto:{' '}
+                      <span className="font-bold">{formValues.birthType}</span>
+                    </p>
+                  )}
+                  {formValues.state && (
+                    <p>
+                      Estado actual:{' '}
+                      <span className="font-bold capitalize">
+                        {AnimalState[formValues.state]}
+                      </span>
+                    </p>
+                  )}
+                  {formValues.breed && (
+                    <p>
+                      Raza:{' '}
+                      <span className="font-bold">{formValues.breed}</span>
+                    </p>
+                  )}
+                  {formValues.birthday && (
+                    <p>
+                      Nacimiento:{' '}
+                      <span className="font-bold">
+                        {myFormatDate(formValues.birthday, 'dd MMM yy')}
+                      </span>
+                    </p>
+                  )}
+                  {formValues.joinedAt && (
+                    <p>
+                      Incorporación:{' '}
+                      <span className="font-bold">
+                        {myFormatDate(formValues.joinedAt, 'dd MMM yy')}
+                      </span>
+                    </p>
+                  )}
+                  <GeneticTree
+                    parents={{
+                      father: {
+                        id: formValues.parents?.father?.id || '',
+                        label: formValues.parents?.father?.earring || ''
+                      },
+                      mother: {
+                        id: formValues.parents?.mother?.id || '',
+                        label: formValues.parents?.mother?.earring || ''
+                      }
+                    }}
+                  />
+                  <p className="font-bold">Pesos: </p>
+                  <div className="flex w-full justify-between">
+                    <p>
+                      Al nacer:{' '}
+                      <span className="font-bold">
+                        {formValues.weight?.atBirth || 'sin'}
+                      </span>
+                    </p>
+                    <p>
+                      Al destete:{' '}
+                      <span className="font-bold">
+                        {formValues.weight?.atWeaning || 'sin'}
+                      </span>
+                    </p>
+                    <p>
+                      Al mes 6:{' '}
+                      <span className="font-bold">
+                        {formValues.weight?.at6Month || 'sin'}
+                      </span>
+                    </p>
+                    <p>
+                      Al mes 12:{' '}
+                      <span className="font-bold">
+                        {formValues.weight?.at12Month || 'sin'}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex w-full justify-center">
+                  <button
+                    className=" btn btn-info my-2 mt-4 "
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <div role="status">
+                        <svg
+                          aria-hidden="true"
+                          className="mr-4 w-6 h-6 text-base-content animate-spin dark:text-base-content fill-base-300"
+                          viewBox="0 0 100 101"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                            fill="currentColor"
+                          />
+                          <path
+                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                            fill="currentFill"
+                          />
+                        </svg>
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="mr-1">Guardar</span>
+                        <Icon size="md" name="save" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </Modal>
+              {/* <button
                 className=" btn btn-success btn-circle btn-sm "
                 type="submit"
                 disabled={loading}
@@ -210,25 +377,28 @@ export const AnimalForm = ({
                     <Icon size="sm" name="save" />
                   </>
                 )}
-              </button>
+              </button> */}
             </div>
             {error && error.message}
           </div>
           <div>
-            <header className="flex w-full justify-between flex-col">
-              <h3>{`Detalles de animal`}</h3>
+            <header className="flex w-full justify-between flex-col text-center">
+              {/* <h3>{`Detalles de animal`}</h3> */}
               {id && (
                 <div className="text-xs">
                   <span>id:</span> <span className="">{id}</span>
                 </div>
               )}
+              <span className="text-sm">
+                Los campos con (*) son necesarios{' '}
+              </span>
               <div>
                 <div className="text-right flex flex-wrap justify-between">
                   <div className="w-[100px]">
                     <InputContainer
                       name="earring"
                       type="text"
-                      label="Arete"
+                      label="Arete*"
                       rules={{
                         validate: (val) => {
                           console.log({ val })

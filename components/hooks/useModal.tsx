@@ -5,8 +5,11 @@ const useModal = () => {
   const handleOpen = () => {
     setOpen(!open)
   }
+  const onOpen = () => {
+    handleOpen()
+  }
 
-  return { open, handleOpen }
+  return { open, handleOpen, onOpen }
 }
 
 export default useModal

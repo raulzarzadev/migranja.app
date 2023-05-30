@@ -53,7 +53,17 @@ const ModalAnimalDetails = ({
           handleOpen={handleOpenAnimalDetails}
           title={`Detalles de arete ${earring}`}
         >
-          {animal && <AnimalDetails animal={animal} />}
+          {animal ? (
+            <AnimalDetails animal={animal} />
+          ) : (
+            <>
+              <p>No hay detalles de este animal.</p>
+              <p>
+                Es posible que haya sido eliminado o sea un animal externo a la
+                granja
+              </p>
+            </>
+          )}
         </Modal>
       )}
     </span>

@@ -9,12 +9,13 @@ const GeneticTree = ({
   parents
 }: //onClick
 {
-  parents: {
+  parents?: {
     father?: GeneticTreeElement
     mother?: GeneticTreeElement
   }
   onClick?: (element: GeneticTreeElement) => void
 }) => {
+  console.log({ parents })
   const mother = parents?.mother
   const father = parents?.father
   return (
@@ -24,14 +25,21 @@ const GeneticTree = ({
         <div className="flex flex-col ">
           <span>
             Padre:
-            <ModalAnimalDetails earring={father?.label || ''} />
+            {father ? (
+              <ModalAnimalDetails earring={father?.label || ''} />
+            ) : (
+              'sin'
+            )}
           </span>
-          {mother && (
-            <span>
-              Madre:
+
+          <span>
+            Madre:
+            {mother ? (
               <ModalAnimalDetails earring={mother?.label || ''} />
-            </span>
-          )}
+            ) : (
+              'sin'
+            )}
+          </span>
         </div>
       </div>
     </div>

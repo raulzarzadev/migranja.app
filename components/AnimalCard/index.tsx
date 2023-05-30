@@ -41,7 +41,7 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
   return (
     <div className="p-2 ">
       {editing ? (
-        <AnimalForm animal={animal} setEditing={setEditing} />
+        <AnimalForm animal={animal} setEditing={setEditing} checkFarmEarrings />
       ) : (
         <AnimalDetails animal={animal} setEditing={setEditing} />
       )}
