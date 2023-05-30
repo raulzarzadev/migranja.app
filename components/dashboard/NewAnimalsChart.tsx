@@ -6,7 +6,8 @@ import {
   XAxis,
   YAxis,
   Label,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Tooltip
 } from 'recharts'
 import Title from './Title'
 import { myFormatDate } from 'utils/dates/myDateUtils'
@@ -86,6 +87,7 @@ export default function NewAnimalsChart() {
               Animales
             </Label>
           </YAxis>
+          <Tooltip></Tooltip>
           <Line
             isAnimationActive={false}
             type="monotone"

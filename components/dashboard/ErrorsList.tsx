@@ -8,9 +8,6 @@ import TableRow from '@mui/material/TableRow'
 import Title from './Title'
 import { ErrorType, listenErrors } from '@firebase/Errors/main'
 import { myFormatDate } from 'utils/dates/myDateUtils'
-import { useSelector } from 'react-redux'
-import { selectAppErrors } from 'store/slices/errorsSlice'
-import { Paper } from '@mui/material'
 
 // Generate Order Data
 function createData(
@@ -35,9 +32,6 @@ export default function ErrorsList() {
       setRows(res)
     })
   }, [])
-
-  const a = useSelector(selectAppErrors)
-  console.log({ a })
 
   return (
     <React.Fragment>
