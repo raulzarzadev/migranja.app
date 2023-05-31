@@ -11,6 +11,7 @@ export interface FarmType extends TypeBase {
   email?: string
   deleted?: boolean
   isPublic?: boolean
+  healthRecordActive: boolean
   coordinates?: {
     lat: number
     lng: number

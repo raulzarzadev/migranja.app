@@ -31,7 +31,10 @@ const FarmPage = () => {
                 <Icon name="close" />
               </button>
             </div>
-            <BackupButton />
+
+            <h3 className="font-bold text-2xl text-center">
+              Configuración principal de la granja
+            </h3>
             <FarmForm
               farm={currentFarm || undefined}
               setEditing={setEditing}
@@ -39,6 +42,10 @@ const FarmPage = () => {
                 setEditing(false)
               }}
             />
+            <h3 className="font-bold text-2xl text-center mt-4">
+              Otras opciones
+            </h3>
+            <BackupButton />
           </div>
         ) : (
           <FarmNavigation

@@ -23,19 +23,20 @@ const AddFarm = () => {
   const modal = useModal()
   return (
     <>
-      <button
-        className="btn btn-circle btn-xs btn-success"
-        onClick={(e) => {
-          e.preventDefault()
-          modal.handleOpen()
-        }}
-      >
-        <Icon name="plus" size="xs" />
-      </button>
-
-      <Modal {...modal} title={'Nueva granja'}>
-        <FarmForm />
-      </Modal>
+      <section>
+        <button
+          className="btn btn-circle btn-xs btn-success"
+          onClick={(e) => {
+            e.preventDefault()
+            modal.handleOpen()
+          }}
+        >
+          <Icon name="plus" size="xs" />
+        </button>
+        <Modal {...modal} title={'Nueva granja'}>
+          <FarmForm />
+        </Modal>
+      </section>
     </>
   )
 }

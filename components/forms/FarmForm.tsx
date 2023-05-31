@@ -74,9 +74,7 @@ const FarmForm = ({
         <form onSubmit={handleSubmit(onSubmit)} className={'flex w-full'}>
           <div className="flex flex-col justify-evenly w-full items-center ">
             <InputContainer type="text" name={'name'} label="Nombre" />
-            <h4 className="w-full max-w-sm mx-auto font-bold text-center">
-              Configuración
-            </h4>
+
             {/* CONFIG ZONE In this zone you should put all the options to config the farm menu */}
             <div className="text-center">
               <span>
@@ -114,6 +112,17 @@ const FarmForm = ({
                 infoBadge={{
                   title: 'Granja pública',
                   text: 'Esta granja sera visible para otros usuarios, podra ser encontrada por otros ususarios y podras publicar en la tienda (Próximamente)'
+                }}
+                className="flex justify-between "
+              />
+              <InputContainer
+                type="checkbox"
+                name={'healthRecordActive'}
+                label="Sanidad "
+                checked={methods.watch('healthRecordActive')}
+                infoBadge={{
+                  title: 'Sanidad',
+                  text: 'Te perminitira registrar y monitorear el estado de salud y el registro medico de tu animales de forma global (Próximamente)'
                 }}
                 className="flex justify-between "
               />
