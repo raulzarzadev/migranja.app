@@ -102,6 +102,7 @@ const FarmForm = ({
                   title: 'Equipo actívo',
                   text: 'POdras agregar personas a tu equipo de trabajo, asignarles tareas, responsabilidades y mucho más. (Próximamente)'
                 }}
+                disabled
                 className="flex justify-between"
               />
               <InputContainer
@@ -124,6 +125,7 @@ const FarmForm = ({
                   title: 'Sanidad',
                   text: 'Te perminitira registrar y monitorear el estado de salud y el registro medico de tu animales de forma global (Próximamente)'
                 }}
+                disabled
                 className="flex justify-between "
               />
             </div>

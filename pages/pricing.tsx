@@ -71,6 +71,7 @@ const tiers = [
     title: 'Premium',
     price: '499',
     description: [
+      'Trabajo en equipo',
       'Borregas ilimitadas',
       'Monitor de clima',
       'Acceso al mercado',

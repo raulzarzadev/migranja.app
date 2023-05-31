@@ -19,6 +19,8 @@ import { selectFarmState } from 'store/slices/farmSlice'
 import AddBatch from '@comps/AddBatch'
 import BirthForm from '@comps/BreedingsList/AnimalBreedingOptions/BirthForm'
 import AnimalsForm from '@comps/AnimalsForm'
+import HealthReport from '@comps/HealtView/HealthReport'
+import Vaccines from '@comps/HealtView/Vaccines'
 
 type MenuOptions = 'column1' | 'column2' | 'column3'
 type Option =
@@ -39,6 +41,8 @@ type Option =
   | 'sales'
   | 'inventory'
   | 'newBirth'
+  | 'sanity'
+  | 'vaccine'
 
 const FarmMenu = (props: any) => {
   const farm = useSelector(selectFarmState)
@@ -86,7 +90,7 @@ const FarmMenu = (props: any) => {
     isSheepSelected && column2 === 'inventory' && !isAddSelected
   const newSheepInventory =
     isSheepSelected && column2 === 'inventory' && isAddSelected
-
+  const healthFeatureActive = farm.healthRecordActive
   return (
     <div className=" sm:flex  ">
       {/* ********************************* FARM MENU ************************************* */}
@@ -124,6 +128,14 @@ const FarmMenu = (props: any) => {
                   iconName="team"
                   onClick={() => handleChangeOption('column1', 'team')}
                   selected={menuOptions.column1 === 'team'}
+                />
+              )}
+              {healthFeatureActive && (
+                <SquareOption
+                  title="Sanidad"
+                  iconName="health"
+                  onClick={() => handleChangeOption('column1', 'sanity')}
+                  selected={menuOptions.column1 === 'sanity'}
                 />
               )}
             </div>
@@ -165,6 +177,14 @@ const FarmMenu = (props: any) => {
                   />
                 </>
               )}
+              {healthFeatureActive && column1 === 'sanity' && (
+                <SquareOption
+                  title="Vacunas"
+                  iconName="vaccine"
+                  onClick={() => handleChangeOption('column2', 'vaccine')}
+                  selected={menuOptions.column2 === 'vaccine'}
+                />
+              )}
             </div>
 
             {/****************  column 3 *********************/}
@@ -191,6 +211,7 @@ const FarmMenu = (props: any) => {
             </div>
             <div className="flex flex-col">
               {/* ************************************* *********** SHEEP MENU */}
+
               {isSheepSelected && (
                 <>
                   <SquareOption
@@ -261,7 +282,12 @@ const FarmMenu = (props: any) => {
 
       <MenuSection className="w-full   ">
         <>
-          {' '}
+          {healthFeatureActive && (
+            <>
+              {column1 === 'sanity' && !column2 && <HealthReport />}
+              {column1 === 'sanity' && column2 === 'vaccine' && <Vaccines />}
+            </>
+          )}
           {/* ********************************+ NUMBERS AND CHARTS *************************************** */}
           {column1 === 'numbers' && !column2 && <FarmNumbers />}
           {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}

@@ -9,6 +9,7 @@ import { VscDesktopDownload } from 'react-icons/vsc'
 import { AiOutlineTeam } from 'react-icons/ai'
 import { FaBirthdayCake, FaSkullCrossbones, FaTrash } from 'react-icons/fa'
 import {
+  MdOutlineHealthAndSafety,
   MdOutlineNoFood,
   MdSignalWifiOff,
   MdSignalWifiStatusbar4Bar
@@ -66,8 +67,10 @@ import SheepFamilyIcon from './SheepFamilyIcon'
 import SheepIcon from './SheepIcon'
 import { IoSaveOutline, IoTrashBin } from 'react-icons/io5'
 import { HiArrowSmDown, HiArrowSmUp } from 'react-icons/hi'
-
+import { TbVaccine } from 'react-icons/tb'
 const ICON_LIST = {
+  vaccine: TbVaccine,
+  health: MdOutlineHealthAndSafety,
   onLine: MdSignalWifiStatusbar4Bar,
   offLine: MdSignalWifiOff,
   clock: SlClock,

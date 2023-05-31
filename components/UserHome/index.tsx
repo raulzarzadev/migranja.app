@@ -23,7 +23,7 @@ const AddFarm = () => {
   const modal = useModal()
   return (
     <>
-      <section>
+      <span>
         <button
           className="btn btn-circle btn-xs btn-success"
           onClick={(e) => {
@@ -36,7 +36,7 @@ const AddFarm = () => {
         <Modal {...modal} title={'Nueva granja'}>
           <FarmForm />
         </Modal>
-      </section>
+      </span>
     </>
   )
 }
