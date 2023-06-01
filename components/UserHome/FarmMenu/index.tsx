@@ -21,76 +21,176 @@ import BirthForm from '@comps/BreedingsList/AnimalBreedingOptions/BirthForm'
 import AnimalsForm from '@comps/AnimalsForm'
 import HealthReport from '@comps/HealtView/HealthReport'
 import Vaccines from '@comps/HealtView/Vaccines'
-
-type MenuOptions = 'column1' | 'column2' | 'column3'
-type Option =
-  | ''
-  | 'animals'
-  | 'sheep'
-  | 'add'
-  | 'list'
-  | 'events'
-  | 'team'
-  | 'addMany'
-  | 'addBatch'
-  | 'breedingEvent'
-  | 'birthEvents'
-  | 'weaningEvents'
-  | 'numbers'
-  | 'sell'
-  | 'sales'
-  | 'inventory'
-  | 'newBirth'
-  | 'sanity'
-  | 'vaccine'
+import { IconName } from '@comps/Icon/icons-list'
 
 const FarmMenu = (props: any) => {
-  const farm = useSelector(selectFarmState)
-  // useDebugInformation('FarmPage', {})
-  const [menuOptions, setMenuOptions] =
-    useState<Partial<Record<MenuOptions, Option>>>()
-
-  useEffect(() => {
-    const localOptions = localStorage.getItem('menuOptions')
-    if (!localOptions || localOptions === 'undefined') {
-      setMenuOptions({ column1: '', column2: '', column3: '' })
-    } else {
-      setMenuOptions(JSON.parse(localOptions))
-    }
-  }, [])
-
-  useEffect(() => {
-    menuOptions &&
-      localStorage.setItem('menuOptions', JSON.stringify(menuOptions))
-  }, [menuOptions])
-
-  if (!farm)
-    return (
-      <div className="text-center ">
-        No tienes acceso a esta granja o ha sido eliminada
-      </div>
-    )
-  if (!menuOptions) return <></>
-  const { column1, column2, column3 } = menuOptions
-  // console.log({ column1, column2, column3 })
-
-  const handleChangeOption = (column: MenuOptions, option: Option) => {
-    if (column === 'column1')
-      return setMenuOptions({ column2: '', column3: '', column1: option })
-    if (column === 'column2' && column3 !== '')
-      return setMenuOptions({ ...menuOptions, column2: option, column3: '' })
-    setMenuOptions({ ...menuOptions, [column]: option })
+  const handleChangeOption = (option) => {
+    console.log({ option })
   }
 
-  const isAddSelected = [column1, column2, column3].includes('add')
-  const isSheepSelected = column1 === 'sheep'
-  const farmIncludeTeam = farm?.haveATeam
-  const isEventsSelected = menuOptions?.column1 === 'events'
-  const sheepInventory =
-    isSheepSelected && column2 === 'inventory' && !isAddSelected
-  const newSheepInventory =
-    isSheepSelected && column2 === 'inventory' && isAddSelected
-  const healthFeatureActive = farm.healthRecordActive
+  interface OptionInfo {
+    label: string
+    icon: IconName
+    component: ReactNode
+  }
+
+  interface MenuOption {
+    info: OptionInfo
+    [index: string]: MenuOption | OptionInfo
+  }
+
+  interface MenuOptions {
+    [index: string]: MenuOption
+  }
+
+  const menuOptions2: MenuOptions = {
+    numbers: {
+      info: {
+        label: 'Numeros',
+        icon: 'chart',
+        component: <FarmNumbers />
+      }
+    },
+
+    sheep: {
+      info: {
+        label: 'Ovejas',
+        icon: 'sheep'
+      },
+      newSheep: {
+        info: {
+          label: 'Nueva',
+          icon: 'plus'
+        }
+      },
+      newBatch: {
+        info: {
+          label: 'Varios',
+          icon: 'plus'
+        }
+      },
+      inventory: {
+        info: {
+          label: 'Inventarios',
+          icon: 'book'
+        },
+        newInventory: {
+          info: {
+            label: 'Nuevo',
+            icon: 'plus'
+          }
+        }
+      }
+    },
+    events: {
+      info: {
+        label: 'Eventos',
+        icon: 'event'
+      },
+      breedingEvent: {
+        info: {
+          label: 'Montas',
+          icon: 'cart'
+        },
+        newBreeding: {
+          info: {
+            label: 'Nueva',
+            icon: 'plus'
+          }
+        }
+      },
+      birthEvents: {
+        info: {
+          label: 'Partos',
+          icon: 'birth'
+        },
+        newBirth: {
+          info: {
+            label: 'Nuevo',
+            icon: 'plus'
+          }
+        }
+      },
+      weaningEvents: {
+        info: {
+          label: 'Destetes',
+          icon: 'noFood'
+        }
+      },
+      sales: {
+        info: {
+          label: 'Ventas',
+          icon: 'dollar'
+        },
+        newSell: {
+          info: {
+            label: 'Venta',
+            icon: 'plus'
+          }
+        }
+      }
+    },
+    team: {
+      info: {
+        label: 'Equipo',
+        icon: 'team'
+      }
+    },
+
+    sanity: {
+      info: {
+        label: 'Sanidad',
+        icon: 'health'
+      },
+      vaccine: {
+        info: {
+          label: 'Vacunas',
+          icon: 'vaccine'
+        }
+      }
+    }
+  }
+
+  const [optionSelected, setOptionSelected] = useState()
+
+  const onOptionSelected = (option) => {
+    console.log({ option })
+    setOptionSelected(option)
+  }
+  console.log({ optionSelected })
+
+  const renderMenuOptions = (options, depth: number = 0) => {
+    return (
+      <div className={`relative`}>
+        {Object.entries(options).map(([option, value]) => {
+          const info = value?.info
+          if (option === 'info') return <></>
+          console.log({ optionSelected, option })
+          return (
+            <div className={`${depth > 1 && ' absolute '} flex`} key={option}>
+              <SquareOption
+                key={option}
+                title={info?.label}
+                //options={['']}
+                selected={optionSelected === option}
+                onClick={() => {
+                  onOptionSelected(option)
+                }}
+                iconName={info?.icon}
+              />
+              <div className="relative">
+                {optionSelected === option &&
+                  renderMenuOptions(options[option], depth + 1)}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  return <div className="grid">{renderMenuOptions(menuOptions2)}</div>
+
   return (
     <div className=" sm:flex  ">
       {/* ********************************* FARM MENU ************************************* */}
