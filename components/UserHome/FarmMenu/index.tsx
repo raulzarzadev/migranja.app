@@ -13,7 +13,7 @@ import FarmTeam from 'components/FarmTeam'
 import BreedingForm from 'components/forms/BreedingForm'
 import OvinesTable from 'components/OvinesTable'
 import SquareOption from 'components/SquareOption'
-import { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmState } from 'store/slices/farmSlice'
 import AddBatch from '@comps/AddBatch'
@@ -22,445 +22,214 @@ import AnimalsForm from '@comps/AnimalsForm'
 import HealthReport from '@comps/HealtView/HealthReport'
 import Vaccines from '@comps/HealtView/Vaccines'
 import { IconName } from '@comps/Icon/icons-list'
+import { getProperty, setProperty } from 'dot-prop'
+import SquareOption2 from '@comps/SquareOption2'
+import { EventsList } from '@comps/FarmEvents/EventsList'
 
-const FarmMenu = (props: any) => {
-  const handleChangeOption = (option) => {
-    console.log({ option })
-  }
+type MenuItem = {
+  label: string
+  icon: IconName
+  showChildren: boolean
+  component?:
+    | JSX.Element
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+  children?: Record<string, MenuItem>
+}
 
-  interface OptionInfo {
-    label: string
-    icon: IconName
-    component: ReactNode
-  }
+type MenuOptions = Record<string, MenuItem>
 
-  interface MenuOption {
-    info: OptionInfo
-    [index: string]: MenuOption | OptionInfo
-  }
-
-  interface MenuOptions {
-    [index: string]: MenuOption
-  }
-
-  const menuOptions2: MenuOptions = {
-    numbers: {
-      info: {
-        label: 'Numeros',
-        icon: 'chart',
-        component: <FarmNumbers />
-      }
-    },
-
-    sheep: {
-      info: {
-        label: 'Ovejas',
-        icon: 'sheep'
-      },
+const menuOptions2: MenuOptions = {
+  numbers: {
+    label: 'Numeros',
+    icon: 'chart',
+    showChildren: false,
+    component: <FarmNumbers />
+  },
+  sheep: {
+    label: 'Ovejas',
+    icon: 'sheep',
+    showChildren: false,
+    component: <OvinesTable />,
+    children: {
       newSheep: {
-        info: {
-          label: 'Nueva',
-          icon: 'plus'
-        }
+        label: 'Nueva',
+        icon: 'plus',
+        showChildren: false,
+        component: <AnimalForm />
       },
       newBatch: {
-        info: {
-          label: 'Varios',
-          icon: 'plus'
-        }
+        label: 'Varios',
+        icon: 'plus',
+        showChildren: false,
+        component: <AnimalsForm />
       },
       inventory: {
-        info: {
-          label: 'Inventarios',
-          icon: 'book'
-        },
-        newInventory: {
-          info: {
+        label: 'Inventarios',
+        icon: 'book',
+        showChildren: false,
+        component: <InventoryHistory />,
+        children: {
+          newInventory: {
             label: 'Nuevo',
-            icon: 'plus'
+            icon: 'plus',
+            showChildren: false,
+            component: <InventoryForm />
           }
         }
       }
-    },
-    events: {
-      info: {
-        label: 'Eventos',
-        icon: 'event'
-      },
+    }
+  },
+  events: {
+    label: 'Eventos',
+    icon: 'event',
+    showChildren: false,
+    component: <FarmEvents />,
+    children: {
       breedingEvent: {
-        info: {
-          label: 'Montas',
-          icon: 'cart'
-        },
-        newBreeding: {
-          info: {
+        label: 'Montas',
+        icon: 'cart',
+        showChildren: false,
+        component: (
+          <>
+            <BreedingsList />
+          </>
+        ),
+        children: {
+          newBreeding: {
             label: 'Nueva',
-            icon: 'plus'
+            icon: 'plus',
+            showChildren: false,
+            component: (
+              <>
+                <BreedingForm />
+              </>
+            )
           }
         }
       },
       birthEvents: {
-        info: {
-          label: 'Partos',
-          icon: 'birth'
-        },
-        newBirth: {
-          info: {
+        label: 'Partos',
+        icon: 'birth',
+        showChildren: false,
+        component: (
+          <>
+            <BirthEvents />
+          </>
+        ),
+        children: {
+          newBirth: {
             label: 'Nuevo',
-            icon: 'plus'
+            icon: 'plus',
+            showChildren: false,
+            component: (
+              <>
+                <BirthForm />
+              </>
+            )
           }
         }
       },
       weaningEvents: {
-        info: {
-          label: 'Destetes',
-          icon: 'noFood'
-        }
+        label: 'Destetes',
+        icon: 'noFood',
+        showChildren: false,
+        component: <WeaningEvents />
       },
       sales: {
-        info: {
-          label: 'Ventas',
-          icon: 'dollar'
-        },
-        newSell: {
-          info: {
+        label: 'Ventas',
+        icon: 'dollar',
+        showChildren: false,
+        component: (
+          <>
+            <SalesList />
+          </>
+        ),
+        children: {
+          newSell: {
             label: 'Venta',
-            icon: 'plus'
+            icon: 'plus',
+            showChildren: false,
+            component: <PrintableSellForm />
           }
         }
       }
-    },
-    team: {
-      info: {
-        label: 'Equipo',
-        icon: 'team'
-      }
-    },
-
-    sanity: {
-      info: {
-        label: 'Sanidad',
-        icon: 'health'
-      },
+    }
+  },
+  team: {
+    label: 'Equipo',
+    icon: 'team',
+    showChildren: false,
+    component: <FarmTeam />
+  },
+  sanity: {
+    label: 'Sanidad',
+    icon: 'health',
+    showChildren: false,
+    component: <HealthReport />,
+    children: {
       vaccine: {
-        info: {
-          label: 'Vacunas',
-          icon: 'vaccine'
-        }
+        label: 'Vacunas',
+        icon: 'vaccine',
+        showChildren: false,
+        component: <Vaccines />
       }
     }
   }
+}
 
-  const [optionSelected, setOptionSelected] = useState()
+const FarmMenu = (props: any) => {
+  const [menu, setMenu] = useState(menuOptions2)
+  const [selectedItem, setSelectedItem] = useState('')
 
-  const onOptionSelected = (option) => {
-    console.log({ option })
-    setOptionSelected(option)
+  const handleClick = (key: string) => {
+    console.log({ key })
+    setSelectedItem(selectedItem === key ? '' : key)
+    const newMenu = setProperty(
+      menu,
+      `${key}.showChildren`,
+      !(selectedItem === key)
+    )
+    selectedItem === key && setProperty(menu, `${key}.showChildren`, false)
+    setMenu(newMenu)
   }
-  console.log({ optionSelected })
 
-  const renderMenuOptions = (options, depth: number = 0) => {
+  const renderMenu = (menuItems: MenuOptions, parent = '') => {
     return (
-      <div className={`relative`}>
-        {Object.entries(options).map(([option, value]) => {
-          const info = value?.info
-          if (option === 'info') return <></>
-          console.log({ optionSelected, option })
+      <menu className={`grid w-min place-items-end gap-2 place-content-start`}>
+        {Object.keys(menuItems).map((key) => {
+          const menuItem = menuItems[key]
+          const menuKey = `${parent && parent + '.children.'}${key}`
+
           return (
-            <div className={`${depth > 1 && ' absolute '} flex`} key={option}>
-              <SquareOption
-                key={option}
-                title={info?.label}
-                //options={['']}
-                selected={optionSelected === option}
-                onClick={() => {
-                  onOptionSelected(option)
-                }}
-                iconName={info?.icon}
+            <>
+              <SquareOption2
+                iconName={menuItem.icon}
+                title={menuItem.label}
+                onClick={() => handleClick(menuKey)}
+                selected={
+                  menuKey === selectedItem || selectedItem.includes(menuKey)
+                }
               />
-              <div className="relative">
-                {optionSelected === option &&
-                  renderMenuOptions(options[option], depth + 1)}
-              </div>
-            </div>
+
+              {menuItem.showChildren && menuItem.children && (
+                <div className=" ml-4 ">
+                  {renderMenu(menuItem.children, menuKey)}
+                </div>
+              )}
+            </>
           )
         })}
-      </div>
+      </menu>
     )
   }
 
-  return <div className="grid">{renderMenuOptions(menuOptions2)}</div>
-
   return (
-    <div className=" sm:flex  ">
-      {/* ********************************* FARM MENU ************************************* */}
-
-      <MenuSection className="  sm:w-[320px]   ">
-        <>
-          <div className="  p-1 flex justify-start w-min mx-auto h-min sticky top-0">
-            {/****************  column 1 *********************/}
-
-            <div className="flex-col flex ">
-              <SquareOption
-                title="Numeros"
-                iconName="chart"
-                onClick={() => handleChangeOption('column1', 'numbers')}
-                selected={menuOptions.column1 === 'numbers'}
-              />
-
-              <SquareOption
-                title="Borregas"
-                iconName="sheep"
-                onClick={() => handleChangeOption('column1', 'sheep')}
-                selected={menuOptions.column1 === 'sheep'}
-              />
-
-              <SquareOption
-                title="Eventos"
-                iconName="event"
-                onClick={() => handleChangeOption('column1', 'events')}
-                selected={menuOptions.column1 === 'events'}
-              />
-
-              {farmIncludeTeam && (
-                <SquareOption
-                  title="Equipo"
-                  iconName="team"
-                  onClick={() => handleChangeOption('column1', 'team')}
-                  selected={menuOptions.column1 === 'team'}
-                />
-              )}
-              {healthFeatureActive && (
-                <SquareOption
-                  title="Sanidad"
-                  iconName="health"
-                  onClick={() => handleChangeOption('column1', 'sanity')}
-                  selected={menuOptions.column1 === 'sanity'}
-                />
-              )}
-            </div>
-
-            {/****************  column 2 *********************/}
-
-            <div className="flex flex-col ">
-              {/* ************************************* *********** EVENTS MENU */}
-
-              {isEventsSelected && (
-                <>
-                  <SquareOption
-                    title="Montas"
-                    iconName="cart"
-                    onClick={() =>
-                      handleChangeOption('column2', 'breedingEvent')
-                    }
-                    selected={menuOptions.column2 === 'breedingEvent'}
-                  />
-                  <SquareOption
-                    title="Partos"
-                    iconName="birth"
-                    onClick={() => handleChangeOption('column2', 'birthEvents')}
-                    selected={menuOptions.column2 === 'birthEvents'}
-                  />
-                  <SquareOption
-                    title="Destetes"
-                    iconName="noFood"
-                    onClick={() =>
-                      handleChangeOption('column2', 'weaningEvents')
-                    }
-                    selected={menuOptions.column2 === 'weaningEvents'}
-                  />
-                  <SquareOption
-                    title="Ventas"
-                    iconName="dollar"
-                    onClick={() => handleChangeOption('column2', 'sales')}
-                    selected={menuOptions.column2 === 'sales'}
-                  />
-                </>
-              )}
-              {healthFeatureActive && column1 === 'sanity' && (
-                <SquareOption
-                  title="Vacunas"
-                  iconName="vaccine"
-                  onClick={() => handleChangeOption('column2', 'vaccine')}
-                  selected={menuOptions.column2 === 'vaccine'}
-                />
-              )}
-            </div>
-
-            {/****************  column 3 *********************/}
-            <div className="flex flex-col">
-              {/* ************************************* *********** BREEDINGS MENU */}
-
-              {column1 === 'events' &&
-                ['breedingEvent', 'sales'].includes(column2 || '') && (
-                  <>
-                    {/* <SquareOption
-                    title="Montas"
-                    iconName="list"
-                    onClick={() => handleChangeOption('column3', 'list')}
-                    selected={column3 === 'list'}
-                  /> */}
-                    <SquareOption
-                      title="Nueva"
-                      iconName="plus"
-                      onClick={() => handleChangeOption('column3', 'add')}
-                      selected={column3 === 'add'}
-                    />
-                  </>
-                )}
-            </div>
-            <div className="flex flex-col">
-              {/* ************************************* *********** SHEEP MENU */}
-
-              {isSheepSelected && (
-                <>
-                  <SquareOption
-                    title="Nuevo"
-                    iconName="plus"
-                    onClick={() => handleChangeOption('column2', 'add')}
-                    selected={column2 === 'add'}
-                  />
-                  <SquareOption
-                    title="Varios"
-                    iconName="plus"
-                    onClick={() => handleChangeOption('column2', 'addMany')}
-                    selected={column2 === 'addMany'}
-                  />
-                  {/*
-                  <SquareOption
-                    title="Nuevo"
-                    iconName="plus"
-                    onClick={() => handleChangeOption('column2', 'add')}
-                    selected={column2 === 'add'}
-                  />
-                  <SquareOption
-                    title="Varios"
-                    iconName="plus"
-                    onClick={() => handleChangeOption('column2', 'addMany')}
-                    selected={column2 === 'addMany'}
-                  />
-                  <SquareOption
-                    title="Lote"
-                    iconName="plus"
-                    onClick={() => handleChangeOption('column2', 'addBatch')}
-                    selected={column2 === 'addBatch'}
-                  /> */}
-                  {/* ************************************* *********** INVENTORY MENU */}
-
-                  <SquareOption
-                    title="Inventarios"
-                    iconName="list"
-                    onClick={() => handleChangeOption('column2', 'inventory')}
-                    selected={column2 === 'inventory'}
-                  />
-
-                  {/* ************************************* *********** BIRTHS MENU */}
-                </>
-              )}
-            </div>
-            <div className="flex flex-col">
-              {isEventsSelected && column2 === 'birthEvents' && (
-                <SquareOption
-                  iconName="plus"
-                  title="Nuevo"
-                  selected={column3 === 'add'}
-                  onClick={() => handleChangeOption('column3', 'add')}
-                />
-              )}
-              {isSheepSelected && column2 === 'inventory' && (
-                <SquareOption
-                  title="Nuevo"
-                  iconName="plus"
-                  onClick={() => handleChangeOption('column3', 'add')}
-                  selected={column3 === 'add'}
-                />
-              )}
-            </div>
-          </div>
-        </>
-      </MenuSection>
-
-      <MenuSection className="w-full   ">
-        <>
-          {healthFeatureActive && (
-            <>
-              {column1 === 'sanity' && !column2 && <HealthReport />}
-              {column1 === 'sanity' && column2 === 'vaccine' && <Vaccines />}
-            </>
-          )}
-          {/* ********************************+ NUMBERS AND CHARTS *************************************** */}
-          {column1 === 'numbers' && !column2 && <FarmNumbers />}
-          {/* ********************************+ ANIMAL TABLE, ANIMAL FORM ANIMALS FORM*************************************** */}
-          {column1 === 'events' && !column2 && <FarmEvents />}
-          {/* ********************************+ FARM EVENTS *************************************** */}
-          {/* ********************************+ BREEDINGS *************************************** */}
-          {column2 === 'breedingEvent' && !column3 && <BreedingsList />}
-          {column2 === 'breedingEvent' && column3 === 'add' && <BreedingForm />}
-          {/* ********************************+ BIRTH EVENTS *************************************** */}
-          {column2 === 'birthEvents' && !column3 && <BirthEvents />}
-          {/* ********************************+ WEANING EVENTS *************************************** */}
-          {column2 === 'weaningEvents' && !column3 && <WeaningEvents />}
-          {/* ********************************+ SELL ANIMALS EVENTS *************************************** */}
-          {column2 === 'sales' && !column3 && (
-            <div className=" bg-base-300 shadow-md rounded-md p-2 w-full">
-              {/* <PrintComponent /> */}
-              <SalesList />
-              {/* */}
-            </div>
-          )}
-          {column2 === 'sales' && column3 === 'add' && (
-            <div className=" ">
-              <PrintableSellForm />
-            </div>
-          )}
-          {/* ********************************+******+ +++************** ANIMALS LIST */}
-          {isSheepSelected && !column2 && <OvinesTable />}
-          {/* ********************************+******+ +++************** ADD ONE ANIMAL */}
-          {isSheepSelected && column2 === 'add' && (
-            <div className=" bg-base-300 shadow-md rounded-md p-2">
-              <AnimalForm checkFarmEarrings />
-            </div>
-          )}
-          {/* ********************************+******+ +++************** ADD ANIMALS */}
-          {isSheepSelected && menuOptions.column2 === 'addMany' && (
-            <div className=" bg-base-300 shadow-md rounded-md p-2">
-              {/* 
-              //TODO: fix add animals form add many form
-              <AnimalsForm
-                animal={{
-                  type: 'ovine'
-                }}
-              /> */}
-              <BirthForm title="Crear varios" />
-            </div>
-          )}
-          {/* ********************************+******+ +++************** ADD A BATCH OF ANIMALS */}
-          {/* {isSheepSelected && menuOptions.column2 === 'addBatch' && (
-            <AddBatch />
-          )} */}
-          {newSheepInventory && <InventoryForm />}
-          {sheepInventory && <InventoryHistory />}
-          {/* ********************************+******+ +++************** ADMIN FARM TEAM*/}
-          {menuOptions?.column1 === 'team' && (
-            <>
-              <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 w-full ">
-                <FarmTeam />
-              </div>
-            </>
-          )}
-          {/* ********************************+******+ +++************** ADD NEW BIRTH*/}
-          {isEventsSelected &&
-            column2 === 'birthEvents' &&
-            column3 === 'add' && (
-              <>
-                <div className=" bg-base-300 shadow-md rounded-md p-2  mt-1 w-full ">
-                  <BirthForm title="Nuevo parto" />
-                </div>
-              </>
-            )}
-        </>
-      </MenuSection>
-    </div>
+    <section className="flex">
+      {renderMenu(menu)}
+      <section className=" w-full flex justify-center ml-4 overflow-x-auto">
+        {getProperty(menu, selectedItem)?.component}
+      </section>
+    </section>
   )
 }
 
