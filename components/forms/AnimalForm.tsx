@@ -164,8 +164,8 @@ export const AnimalForm = ({
 
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex w-full justify-end">
-            <div className="flex w-1/3 justify-between">
+          <div className="">
+            <div className="">
               <span>
                 {id && (
                   <ModalDelete

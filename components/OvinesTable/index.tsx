@@ -11,10 +11,8 @@ const OvinesTable = () => {
   const [selectedRows, setSelectedRows] = useState<string[] | null>(null)
   return (
     <>
-      <div className="w-full bg-base-300 shadow-md rounded-md m-2  h-min ">
-        <h2 className="text-center text-lg font-bold mt-2">
-          Lista de borregas
-        </h2>
+      <div>
+        <h2 className="text-center text-lg font-bold ">Lista de borregas</h2>
         <AnimalsTable
           animalsData={farmAnimals}
           //selectedRows={selectedRows}

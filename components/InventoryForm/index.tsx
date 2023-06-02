@@ -6,6 +6,7 @@ import InputContainer from '@comps/inputs/InputContainer'
 import Modal from '@comps/modal'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import HeaderTable from '@comps/MyTables/HeaderTable'
+import SearchEarring from '@comps/SearchEarring'
 import { createInventory } from '@firebase/Inventories/main'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -176,7 +177,7 @@ const InventoryForm = ({
         <div className="flex justify-center  flex-col ">
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <FormProvider {...methods}>
-              <div className="grid gap-4 my-2 mb-10 sm:grid-cols-3 items-end">
+              <div className="grid gap-4 my-2 mb-10 sm:grid-cols-3 items-center">
                 <InputContainer
                   rules={{ required: 'Es necesario' }}
                   label="Arete"
@@ -184,14 +185,15 @@ const InventoryForm = ({
                   name="earring"
                   type="text"
                 />
+
                 <InputContainer
                   label="Comentarios"
                   className=""
                   name="comments"
                   type="text"
                 />
-                <button className="btn btn-sm    ">
-                  <span className="">Agregar</span> <Icon name="plus" />
+                <button className="btn    ">
+                  <span className="mr-2">Agregar</span> <Icon name="plus" />
                 </button>
               </div>
             </FormProvider>
@@ -301,7 +303,7 @@ const SquareResult = ({
   }
   return (
     <div
-      className="cursor-pointer hover:shadow-none active:shadow-inner bg-base-300 shadow-md rounded-md"
+      className="cursor-pointer hover:shadow-none active:shadow-inner bg-base-200 shadow-md rounded-md"
       onClick={(e) => {
         e.preventDefault()
         handleOpenModal()

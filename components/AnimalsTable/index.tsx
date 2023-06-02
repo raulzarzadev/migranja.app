@@ -255,7 +255,7 @@ const AnimalsTable = ({
   }
 
   return (
-    <div className="p-2">
+    <div className="">
       {openDetailsModal && (
         <Modal
           title="Detalles del animal"

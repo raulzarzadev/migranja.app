@@ -24,7 +24,7 @@ const StatCardWithModalAnimalsList = ({
   return (
     <>
       <div
-        className=""
+        className="w-36"
         onClick={(e) => {
           e.preventDefault()
           handleOpenList()

@@ -224,26 +224,19 @@ const FarmMenu = (props: any) => {
   }
 
   return (
-    <section className="flex">
+    <section className="flex w-full ">
       {renderMenu(menu)}
-      <section className=" w-full flex justify-center ml-4 overflow-x-auto">
-        {getProperty(menu, selectedItem)?.component}
-      </section>
+      {getProperty(menu, selectedItem)?.component && (
+        <section className="bg-base-300 rounded-lg shadow-md ml-2 overflow-x-auto  w-full ">
+          <h2 className="text-center">
+            {getProperty(menu, selectedItem)?.label}
+          </h2>
+          <section className="p-2 ">
+            {getProperty(menu, selectedItem)?.component}
+          </section>
+        </section>
+      )}
     </section>
-  )
-}
-
-const MenuSection = ({
-  children,
-  className
-}: {
-  children: ReactNode
-  className?: string
-}) => {
-  return (
-    <div className={`min-h-16 min-w-[150px]   ${className ?? ''}`}>
-      <div className="  w-full h-full flex justify-center ">{children}</div>
-    </div>
   )
 }
 

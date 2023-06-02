@@ -1,10 +1,9 @@
-import MenuSection from '@comps/MenuSection'
 import MyTable from '@comps/MyTable'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 
 const Vaccines = () => {
   return (
-    <MenuSection title="Vacunas">
+    <>
       <MyTable
         data={[
           {
@@ -24,7 +23,7 @@ const Vaccines = () => {
         ]}
         title="Vacunas aplicadas"
       />
-    </MenuSection>
+    </>
   )
 }
 

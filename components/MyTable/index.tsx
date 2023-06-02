@@ -123,7 +123,7 @@ function MyTable<T>({
   // }, [table.getState().columnFilters[0]?.id])
 
   return (
-    <div className="p-2 w-full ">
+    <div className=" ">
       <h2 className="text-center font-bold">{title}</h2>
 
       <div>

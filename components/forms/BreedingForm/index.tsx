@@ -153,7 +153,7 @@ const BreedingForm = () => {
     }
   }, [formValues?.startAt, setValue])
   return (
-    <div className="bg-base-300 rounded-md shadow-md  w-full mt-2">
+    <div className="">
       <div>
         <h3 className="text-xl text-center">Nueva monta</h3>
       </div>

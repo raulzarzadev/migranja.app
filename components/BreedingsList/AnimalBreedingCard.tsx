@@ -39,7 +39,7 @@ const AnimalBreedingCard = ({
       )}
 
       <div
-        className={`bg-base-300 my-2 rounded-md shadow-md ${
+        className={`bg-base-200 my-2 rounded-md shadow-md ${
           disableOptionsModal && ' opacity-50  shadow-none'
         } `}
       >

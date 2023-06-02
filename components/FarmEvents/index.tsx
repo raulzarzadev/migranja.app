@@ -5,11 +5,7 @@ import { EventsList } from './EventsList'
 const FarmEvents = () => {
   const events = useSelector(selectFarmEvents)
 
-  return (
-    <div className="w-full bg-base-300  p-2 rounded-md">
-      <EventsList events={events} />{' '}
-    </div>
-  )
+  return <EventsList events={events} />
 }
 
 export default FarmEvents

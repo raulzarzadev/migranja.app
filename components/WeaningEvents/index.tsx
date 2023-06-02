@@ -48,63 +48,59 @@ const WeaningEvents = () => {
   const eventSelected: any = data?.[selectedRow as number]
 
   return (
-    <div className="w-full p-2 bg-base-300 rounded-md shadow-md">
-      <div className="">
-        <WeaningNumbers
-          weaning={weanings.filter((e) => e.eventData.status === 'PENDING')}
-        />
-      </div>
-      <div className="flex w-full justify-center">
-        <MyTable
-          defaultSort={[{ id: 'date', desc: false }]}
-          showGlobalFilter
-          title="Destetes programados"
-          hiddenCols={['id']}
-          headers={{
-            date: {
-              label: 'Fecha',
-              format: (props) => <TableDate date={props} />
-            },
-            earring: {
-              label: 'Arete',
-              format: (props) => (
-                <ModalAnimalDetails earring={props} size="normal" />
-              )
-            },
-            mother: {
-              label: 'Madre',
-              format(props) {
-                return <ModalAnimalDetails earring={props} size="normal" />
-              }
-            },
-            status: {
-              label: 'Status',
-              format: (props) => (
-                <span>
-                  {WEANING_STATUS_LABELS?.[props as StatusOfFarmEvent]}
-                  <span className="mx-1">
-                    <WeaningIconStatus status={props} />
-                  </span>
-                </span>
-              )
+    <div className="">
+      <WeaningNumbers
+        weaning={weanings.filter((e) => e.eventData.status === 'PENDING')}
+      />
+      <MyTable
+        defaultSort={[{ id: 'date', desc: false }]}
+        showGlobalFilter
+        title="Destetes programados"
+        hiddenCols={['id']}
+        headers={{
+          date: {
+            label: 'Fecha',
+            format: (props) => <TableDate date={props} />
+          },
+          earring: {
+            label: 'Arete',
+            format: (props) => (
+              <ModalAnimalDetails earring={props} size="normal" />
+            )
+          },
+          mother: {
+            label: 'Madre',
+            format(props) {
+              return <ModalAnimalDetails earring={props} size="normal" />
             }
-          }}
-          data={data}
-          onRowClick={(row) => {
-            setSelectedRow?.(row)
-            handleOpenModal()
-          }}
-        />
-        {openModal && (
-          <Modal
-            open={openModal}
-            handleOpen={handleOpenModal}
-            title="Detalle de destete"
-          >
-            <WeaningDetails weaningId={eventSelected.id} />
-          </Modal>
-        )}
-      </div>
+          },
+          status: {
+            label: 'Status',
+            format: (props) => (
+              <span>
+                {WEANING_STATUS_LABELS?.[props as StatusOfFarmEvent]}
+                <span className="mx-1">
+                  <WeaningIconStatus status={props} />
+                </span>
+              </span>
+            )
+          }
+        }}
+        data={data}
+        onRowClick={(row) => {
+          setSelectedRow?.(row)
+          handleOpenModal()
+        }}
+      />
+      {openModal && (
+        <Modal
+          open={openModal}
+          handleOpen={handleOpenModal}
+          title="Detalle de destete"
+        >
+          <WeaningDetails weaningId={eventSelected.id} />
+        </Modal>
+      )}
     </div>
   )
 }

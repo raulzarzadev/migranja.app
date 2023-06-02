@@ -231,7 +231,7 @@ const FarmNumbers = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <h2 className="text-xl font-bold text-center ">
         Animales por estado actual
       </h2>
@@ -275,15 +275,10 @@ export const StatsRow = ({
   children: ReactNode
 }) => {
   return (
-    <div className="">
+    <section className="">
       <h3 className="text-lg font-bold">{title}</h3>
-      <div className="grid  ">
-        {/* <div className="flex flex-row gap-2 overflow-x-auto overflow-y-hidden  h-[135px] items-top  snap-x "> */}
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-          {children}
-        </div>
-      </div>
-    </div>
+      <section className=" flex w-full flex-wrap gap-2">{children}</section>
+    </section>
   )
 }
 
