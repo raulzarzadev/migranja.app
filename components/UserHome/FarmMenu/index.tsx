@@ -25,6 +25,7 @@ import { IconName } from '@comps/Icon/icons-list'
 import { getProperty, setProperty } from 'dot-prop'
 import SquareOption2 from '@comps/SquareOption2'
 import { EventsList } from '@comps/FarmEvents/EventsList'
+import CustomizedBreadcrumbs from '@comps/Breadcrumbs'
 
 type MenuItem = {
   label: string
@@ -38,159 +39,168 @@ type MenuItem = {
 
 type MenuOptions = Record<string, MenuItem>
 
-const menuOptions2: MenuOptions = {
-  numbers: {
-    label: 'Numeros',
-    icon: 'chart',
-    showChildren: false,
-    component: <FarmNumbers />
-  },
-  sheep: {
-    label: 'Ovejas',
-    icon: 'sheep',
-    showChildren: false,
-    component: <OvinesTable />,
-    children: {
-      newSheep: {
-        label: 'Nueva',
-        icon: 'plus',
-        showChildren: false,
-        component: <AnimalForm />
-      },
-      newBatch: {
-        label: 'Varios',
-        icon: 'plus',
-        showChildren: false,
-        component: <AnimalsForm />
-      },
-      inventory: {
-        label: 'Inventarios',
-        icon: 'book',
-        showChildren: false,
-        component: <InventoryHistory />,
-        children: {
-          newInventory: {
-            label: 'Nuevo',
-            icon: 'plus',
-            showChildren: false,
-            component: <InventoryForm />
+const FarmMenu = (props: any) => {
+  const menuOptions2: MenuOptions = {
+    numbers: {
+      label: 'Numeros',
+      icon: 'chart',
+      showChildren: false,
+      component: <FarmNumbers />
+    },
+    sheep: {
+      label: 'Ovejas',
+      icon: 'sheep',
+      showChildren: false,
+      component: <OvinesTable />,
+      children: {
+        newSheep: {
+          label: 'Nueva',
+          icon: 'plus',
+          showChildren: false,
+          component: <AnimalForm />
+        },
+        newBatch: {
+          label: 'Varios',
+          icon: 'plus',
+          showChildren: false,
+          component: <AnimalsForm />
+        },
+        inventory: {
+          label: 'Inventarios',
+          icon: 'book',
+          showChildren: false,
+          component: <InventoryHistory />,
+          children: {
+            newInventory: {
+              label: 'Nuevo',
+              icon: 'plus',
+              showChildren: false,
+              component: <InventoryForm />
+            }
           }
         }
       }
-    }
-  },
-  events: {
-    label: 'Eventos',
-    icon: 'event',
-    showChildren: false,
-    component: <FarmEvents />,
-    children: {
-      breedingEvent: {
-        label: 'Montas',
-        icon: 'cart',
-        showChildren: false,
-        component: (
-          <>
-            <BreedingsList />
-          </>
-        ),
-        children: {
-          newBreeding: {
-            label: 'Nueva',
-            icon: 'plus',
-            showChildren: false,
-            component: (
-              <>
-                <BreedingForm />
-              </>
-            )
+    },
+    events: {
+      label: 'Eventos',
+      icon: 'event',
+      showChildren: false,
+      component: <FarmEvents />,
+      children: {
+        breedingEvent: {
+          label: 'Montas',
+          icon: 'cart',
+          showChildren: false,
+          component: (
+            <>
+              <BreedingsList />
+            </>
+          ),
+          children: {
+            newBreeding: {
+              label: 'Nueva',
+              icon: 'plus',
+              showChildren: false,
+              component: (
+                <>
+                  <BreedingForm />
+                </>
+              )
+            }
           }
-        }
-      },
-      birthEvents: {
-        label: 'Partos',
-        icon: 'birth',
-        showChildren: false,
-        component: (
-          <>
-            <BirthEvents />
-          </>
-        ),
-        children: {
-          newBirth: {
-            label: 'Nuevo',
-            icon: 'plus',
-            showChildren: false,
-            component: (
-              <>
-                <BirthForm />
-              </>
-            )
+        },
+        birthEvents: {
+          label: 'Partos',
+          icon: 'birth',
+          showChildren: false,
+          component: (
+            <>
+              <BirthEvents />
+            </>
+          ),
+          children: {
+            newBirth: {
+              label: 'Nuevo',
+              icon: 'plus',
+              showChildren: false,
+              component: (
+                <>
+                  <BirthForm />
+                </>
+              )
+            }
           }
-        }
-      },
-      weaningEvents: {
-        label: 'Destetes',
-        icon: 'noFood',
-        showChildren: false,
-        component: <WeaningEvents />
-      },
-      sales: {
-        label: 'Ventas',
-        icon: 'dollar',
-        showChildren: false,
-        component: (
-          <>
-            <SalesList />
-          </>
-        ),
-        children: {
-          newSell: {
-            label: 'Venta',
-            icon: 'plus',
-            showChildren: false,
-            component: <PrintableSellForm />
+        },
+        weaningEvents: {
+          label: 'Destetes',
+          icon: 'noFood',
+          showChildren: false,
+          component: <WeaningEvents />
+        },
+        sales: {
+          label: 'Ventas',
+          icon: 'dollar',
+          showChildren: false,
+          component: (
+            <>
+              <SalesList />
+            </>
+          ),
+          children: {
+            newSell: {
+              label: 'Venta',
+              icon: 'plus',
+              showChildren: false,
+              component: <PrintableSellForm />
+            }
           }
         }
       }
-    }
-  },
-  team: {
-    label: 'Equipo',
-    icon: 'team',
-    showChildren: false,
-    component: <FarmTeam />
-  },
-  sanity: {
-    label: 'Sanidad',
-    icon: 'health',
-    showChildren: false,
-    component: <HealthReport />,
-    children: {
-      vaccine: {
-        label: 'Vacunas',
-        icon: 'vaccine',
-        showChildren: false,
-        component: <Vaccines />
+    },
+    team: {
+      label: 'Equipo',
+      icon: 'team',
+      showChildren: false,
+      component: <FarmTeam />
+    },
+    sanity: {
+      label: 'Sanidad',
+      icon: 'health',
+      showChildren: false,
+      component: <HealthReport />,
+      children: {
+        vaccine: {
+          label: 'Vacunas',
+          icon: 'vaccine',
+          showChildren: false,
+          component: <Vaccines />
+        }
       }
     }
   }
-}
-
-const FarmMenu = (props: any) => {
-  const [menu, setMenu] = useState(menuOptions2)
+  const [menu, setMenu] = useState({ ...menuOptions2 })
   const [selectedItem, setSelectedItem] = useState('')
 
   const handleClick = (key: string) => {
-    console.log({ key })
     setSelectedItem(selectedItem === key ? '' : key)
-    const newMenu = setProperty(
-      menu,
-      `${key}.showChildren`,
-      !(selectedItem === key)
-    )
-    selectedItem === key && setProperty(menu, `${key}.showChildren`, false)
-    setMenu(newMenu)
+
+    const root = key.split('.')[0]
+    if (selectedItem !== '' && !selectedItem.includes(root)) {
+      const openMenu = setProperty(
+        { ...menuOptions2 },
+        `${key}.showChildren`,
+        true
+      )
+      setMenu(openMenu)
+    } else {
+      const newMenu = setProperty(
+        menu,
+        `${key}.showChildren`,
+        !(selectedItem === key)
+      )
+      selectedItem === key && setProperty(menu, `${key}.showChildren`, false)
+      setMenu(newMenu)
+    }
   }
 
   const renderMenu = (menuItems: MenuOptions, parent = '') => {
@@ -212,7 +222,7 @@ const FarmMenu = (props: any) => {
               />
 
               {menuItem.showChildren && menuItem.children && (
-                <div className=" ml-4 ">
+                <div className=" ml-4 " id={`${menuKey}`}>
                   {renderMenu(menuItem.children, menuKey)}
                 </div>
               )}
@@ -227,11 +237,18 @@ const FarmMenu = (props: any) => {
     <section className="flex w-full ">
       {renderMenu(menu)}
       {getProperty(menu, selectedItem)?.component && (
-        <section className="bg-base-300 rounded-lg shadow-md ml-2 overflow-x-auto  w-full ">
-          <h2 className="text-center">
+        <section className="bg-base-300 rounded-lg shadow-md ml-2 overflow-x-auto  w-full p-2 ">
+          <CustomizedBreadcrumbs
+            crumbs={selectedItem
+              .replaceAll('children.', '')
+              .split('.')
+              .map((item) => ({ label: item }))}
+          />
+
+          {/* <h2 className="text-2xl font-bold">
             {getProperty(menu, selectedItem)?.label}
-          </h2>
-          <section className="p-2 ">
+          </h2> */}
+          <section className=" ">
             {getProperty(menu, selectedItem)?.component}
           </section>
         </section>
