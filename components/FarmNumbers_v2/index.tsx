@@ -241,7 +241,7 @@ const FarmNumbers = () => {
           {cardStats.map((stat) => (
             <StatCardWithModalAnimalsList
               key={stat.title}
-              title={stat.title}
+              title={`${stat.title} ${key}`}
               animals={stat.animals}
               description={stat.subTitle}
             />
