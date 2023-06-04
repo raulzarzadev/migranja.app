@@ -37,7 +37,7 @@ const FarmNumbers = () => {
         animals: activeAnimals
       },
       {
-        title: 'Lactando ',
+        title: 'Lactantes ',
         subTitle: 'Recien nacidas, aun mamado, (-70 dias)',
         animals: activeAnimals.filter(({ state }) => state === 'LACTATING')
       },
