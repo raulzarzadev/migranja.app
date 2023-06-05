@@ -30,6 +30,11 @@ import { Button, Drawer, Fab, useMediaQuery, useTheme } from '@mui/material'
 import useModal from '@comps/hooks/useModal'
 import Icon from '@comps/Icon'
 import useMaterialMediaQuery from '@comps/hooks/useMaterialMediaQuery'
+import useAuth from '@comps/hooks/useAuth'
+import useFarmState from '@comps/hooks/useFarmState'
+import useCurrentFarm from '@comps/hooks/useCurrentFarm'
+import { PRO_FEATURES } from 'FARM_CONFIG/USER_CONFIG'
+import { selectAuthState } from 'store/slices/authSlice'
 
 type MenuItem = {
   label: string
@@ -41,10 +46,11 @@ type MenuItem = {
   children?: Record<string, MenuItem>
 }
 
-type MenuOptions = Record<string, MenuItem>
-
 const FarmMenu = (props: any) => {
-  const menuOptions2: MenuOptions = {
+  const user = useSelector(selectAuthState)
+  type MenuOptions = Record<string, MenuItem>
+  const farmState = useCurrentFarm()
+  const menuOptions: MenuOptions = {
     numbers: {
       label: 'Numeros',
       icon: 'chart',
@@ -182,7 +188,16 @@ const FarmMenu = (props: any) => {
       }
     }
   }
-  const [menu, setMenu] = useState({ ...menuOptions2 })
+  const hideOptionsDependsUserAndFarm = (options: MenuOptions): MenuOptions => {
+    //if (user?.isAdmin) return options
+    // if (user?.isDev) return options
+    const aux = { ...options }
+    if (!farmState?.healthRecordActive) delete aux.sanity
+    if (!farmState?.haveATeam) delete aux.team
+    return aux
+  }
+
+  const [menu, setMenu] = useState(hideOptionsDependsUserAndFarm(menuOptions))
   const [selectedItem, setSelectedItem] = useState('')
 
   const handleClick = (key: string) => {
@@ -191,7 +206,7 @@ const FarmMenu = (props: any) => {
     const root = key.split('.')[0]
     if (selectedItem !== '' && !selectedItem.includes(root)) {
       const openMenu = setProperty(
-        { ...menuOptions2 },
+        { ...menuOptions },
         `${key}.showChildren`,
         true
       )
