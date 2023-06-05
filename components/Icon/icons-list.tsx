@@ -68,7 +68,10 @@ import SheepIcon from './SheepIcon'
 import { IoSaveOutline, IoTrashBin } from 'react-icons/io5'
 import { HiArrowSmDown, HiArrowSmUp } from 'react-icons/hi'
 import { TbVaccine } from 'react-icons/tb'
+import { CgMenuRight } from 'react-icons/cg'
+
 const ICON_LIST = {
+  menu: CgMenuRight,
   vaccine: TbVaccine,
   health: MdOutlineHealthAndSafety,
   onLine: MdSignalWifiStatusbar4Bar,

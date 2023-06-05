@@ -26,6 +26,10 @@ import { getProperty, setProperty } from 'dot-prop'
 import SquareOption2 from '@comps/SquareOption2'
 import { EventsList } from '@comps/FarmEvents/EventsList'
 import CustomizedBreadcrumbs from '@comps/Breadcrumbs'
+import { Button, Drawer, Fab, useMediaQuery, useTheme } from '@mui/material'
+import useModal from '@comps/hooks/useModal'
+import Icon from '@comps/Icon'
+import useMaterialMediaQuery from '@comps/hooks/useMaterialMediaQuery'
 
 type MenuItem = {
   label: string
@@ -205,7 +209,7 @@ const FarmMenu = (props: any) => {
 
   const renderMenu = (menuItems: MenuOptions, parent = '') => {
     return (
-      <menu className={`grid w-min place-items-end gap-2 place-content-start`}>
+      <menu className={`grid w-min place-items-end gap-2 place-content-start `}>
         {Object.keys(menuItems).map((key) => {
           const menuItem = menuItems[key]
           const menuKey = `${parent && parent + '.children.'}${key}`
@@ -233,9 +237,30 @@ const FarmMenu = (props: any) => {
     )
   }
 
+  const modal = useModal()
+  const { match } = useMaterialMediaQuery({ size: 'sm' })
   return (
     <section className="flex w-full ">
-      {renderMenu(menu)}
+      {match ? (
+        renderMenu(menu)
+      ) : (
+        <>
+          <Fab
+            onClick={modal.handleOpen}
+            className="fixed bottom-4 right-4  bg-info"
+          >
+            <span className="">
+              <Icon name="menu" />
+            </span>
+          </Fab>
+
+          <Drawer anchor={'left'} open={modal.open} onClose={modal.handleOpen}>
+            <div className="bg-base-100 h-full p-1 pt-4">
+              {renderMenu(menu)}
+            </div>
+          </Drawer>
+        </>
+      )}
       {getProperty(menu, selectedItem)?.component && (
         <section className="bg-base-300 rounded-lg shadow-md ml-2 overflow-x-auto  w-full p-2 ">
           <CustomizedBreadcrumbs

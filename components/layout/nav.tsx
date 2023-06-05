@@ -11,31 +11,27 @@ import { UserType } from '../../firebase/Users/user.model'
 import OnLineBanner from '@comps/OnLineBanner'
 import { Skeleton } from '@mui/material'
 import LoginButton from '@comps/LoginButton'
+import useMaterialMediaQuery from '@comps/hooks/useMaterialMediaQuery'
 
 export const Nav = () => {
   const user = useSelector(selectAuthState)
-  const router = useRouter()
-
+  const { match } = useMaterialMediaQuery({ size: 'sm' })
   return (
     <nav className="mb-2">
       <div className="navbar bg-base-300 rounded-lg shadow-md ">
         <div className="flex-1">
           <Link
-            // onClick={(e) => {
-            //   e.preventDefault()
-            //   router.push('/')
-            // }}
             href={'/'}
             className="flex items-center font-bold btn btn-sm btn-ghost"
           >
             <Icon name="home" size="xs" />
-            <span className="ml-1">Mi Granja</span>
+            {match && <span className="ml-1 ">Mi Granja</span>}
           </Link>
           <Link
             href={'/pricing'}
             className="flex items-center font-bold btn btn-sm btn-ghost"
           >
-            <span className="ml-1">Precios</span>
+            {match ? <span className="ml-1">Precios</span> : '$'}
           </Link>
         </div>
         <OnLineBanner />

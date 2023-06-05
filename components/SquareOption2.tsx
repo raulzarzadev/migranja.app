@@ -27,11 +27,11 @@ const SquareOption2 = ({
       {...props}
     >
       {iconName && (
-        <span className="mr-2">
+        <span className="">
           <Icon name={iconName} />
         </span>
       )}
-      <span>{title}</span>
+      <span className="ml-2">{title}</span>
     </button>
   )
 }
