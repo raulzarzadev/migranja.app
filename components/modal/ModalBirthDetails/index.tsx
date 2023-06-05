@@ -12,7 +12,7 @@ const ModalBirthDetails = ({
   children
 }: {
   birthId: string
-  children: ReactNode
+  children?: ReactNode
 }) => {
   const { event } = useEvent({ eventId: birthId })
   const events = useSelector(selectFarmEvents)
@@ -31,7 +31,7 @@ const ModalBirthDetails = ({
           // console.log({ e })
           modal.handleOpen()
         }}
-        className="w-full"
+        className=""
       >
         {children || defaultButton}
       </button>
