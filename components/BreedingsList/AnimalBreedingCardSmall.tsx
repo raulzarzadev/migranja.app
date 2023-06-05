@@ -39,7 +39,7 @@ const AnimalBreedingCardSmall = ({
   ) => {
     if (animal.status === 'BIRTH')
       return (
-        <ModalBirthDetails birthId={birthId || ''}>
+        <ModalBirthDetails birthId={birthId || ''} fullWidth>
           {props.children}
         </ModalBirthDetails>
       )

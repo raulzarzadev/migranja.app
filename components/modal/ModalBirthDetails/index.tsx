@@ -9,10 +9,12 @@ import { ReactNode } from 'react'
 
 const ModalBirthDetails = ({
   birthId,
-  children
+  children,
+  fullWidth
 }: {
   birthId: string
   children?: ReactNode
+  fullWidth?: boolean
 }) => {
   const { event } = useEvent({ eventId: birthId })
   const events = useSelector(selectFarmEvents)
@@ -31,7 +33,7 @@ const ModalBirthDetails = ({
           // console.log({ e })
           modal.handleOpen()
         }}
-        className=""
+        className={`${fullWidth && 'w-full'}`}
       >
         {children || defaultButton}
       </button>
