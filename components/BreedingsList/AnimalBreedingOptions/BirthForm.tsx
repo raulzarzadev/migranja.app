@@ -220,7 +220,7 @@ const BirthForm = ({
                 <ProgressButton
                   progress={progress}
                   disabled={disabled}
-                  successButtonLabel="Parto creado"
+                  successButtonLabel="Nuevo parto"
                   onSuccess={() => {
                     handleReset()
                   }}

@@ -37,7 +37,7 @@ const FarmNumbers = () => {
         animals: activeAnimals
       },
       {
-        title: 'Lactando ',
+        title: 'Lactantes ',
         subTitle: 'Recien nacidas, aun mamado, (-70 dias)',
         animals: activeAnimals.filter(({ state }) => state === 'LACTATING')
       },
@@ -241,7 +241,7 @@ const FarmNumbers = () => {
           {cardStats.map((stat) => (
             <StatCardWithModalAnimalsList
               key={stat.title}
-              title={stat.title}
+              title={`${stat.title} ${key}`}
               animals={stat.animals}
               description={stat.subTitle}
             />
