@@ -247,7 +247,7 @@ const FarmMenu = (props: any) => {
         <>
           <Fab
             onClick={modal.handleOpen}
-            className="fixed bottom-4 right-4  bg-info"
+            className="fixed bottom-4 right-4  bg-base-100"
           >
             <span className="">
               <Icon name="menu" />
