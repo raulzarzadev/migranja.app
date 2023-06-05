@@ -31,16 +31,18 @@ const WeaningDetails = ({ weaningId }: { weaningId: string }) => {
 
   return (
     <div className="text-center">
-      <div className="flex w-full justify-end ">
-        <ModalBirthDetails birthId={birthEvent.id}>
-          <button className="btn btn-ghost btn-sm">
-            Parto
-            <span className="ml-2">
-              <Icon name="birth" size="xs" />
-            </span>
-          </button>
-        </ModalBirthDetails>
-      </div>
+      {birthEvent && (
+        <div className="flex w-full justify-end ">
+          <ModalBirthDetails birthId={birthEvent?.id}>
+            <button className="btn btn-ghost btn-sm">
+              Parto
+              <span className="ml-2">
+                <Icon name="birth" size="xs" />
+              </span>
+            </button>
+          </ModalBirthDetails>
+        </div>
+      )}
       <div className="flex justify-evenly w-full">
         <span>
           <span className="font-bold">Creado:</span>{' '}
