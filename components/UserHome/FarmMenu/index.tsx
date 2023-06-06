@@ -9,14 +9,10 @@ import WeaningEvents from '@comps/WeaningEvents'
 import BreedingsList from 'components/BreedingsList'
 import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
-//import AnimalsForm from '@comps/forms/AnimalsForm_old'
 import BreedingForm from 'components/forms/BreedingForm'
 import OvinesTable from 'components/OvinesTable'
-import SquareOption from 'components/SquareOption'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectFarmState } from 'store/slices/farmSlice'
-import AddBatch from '@comps/AddBatch'
 import BirthForm from '@comps/BreedingsList/AnimalBreedingOptions/BirthForm'
 import AnimalsForm from '@comps/AnimalsForm'
 import HealthReport from '@comps/HealtView/HealthReport'
@@ -24,23 +20,11 @@ import Vaccines from '@comps/HealtView/Vaccines'
 import { IconName } from '@comps/Icon/icons-list'
 import { getProperty, setProperty } from 'dot-prop'
 import SquareOption2 from '@comps/SquareOption2'
-import { EventsList } from '@comps/FarmEvents/EventsList'
-import CustomizedBreadcrumbs from '@comps/Breadcrumbs'
-import {
-  Breadcrumbs,
-  Button,
-  Drawer,
-  Fab,
-  useMediaQuery,
-  useTheme
-} from '@mui/material'
+import { Breadcrumbs, Button, Drawer, Fab } from '@mui/material'
 import useModal from '@comps/hooks/useModal'
 import Icon from '@comps/Icon'
 import useMaterialMediaQuery from '@comps/hooks/useMaterialMediaQuery'
-import useAuth from '@comps/hooks/useAuth'
-import useFarmState from '@comps/hooks/useFarmState'
 import useCurrentFarm from '@comps/hooks/useCurrentFarm'
-import { PRO_FEATURES } from 'FARM_CONFIG/USER_CONFIG'
 import { selectAuthState } from 'store/slices/authSlice'
 
 type MenuItem = {
@@ -305,16 +289,7 @@ const FarmMenu = (props: any) => {
                 </button>
               ))}
           </Breadcrumbs>
-          {/* <CustomizedBreadcrumbs
-            crumbs={selectedItem
-              .replaceAll('children.', '')
-              .split('.')
-              .map((item) => ({ label: item }))}
-          /> */}
 
-          {/* <h2 className="text-2xl font-bold">
-            {getProperty(menu, selectedItem)?.label}
-          </h2> */}
           <section className=" ">
             {getProperty(menu, selectedItem)?.component}
           </section>
