@@ -36,7 +36,11 @@ const ModalAnimalBreedingOptions = ({
           title="Detalles de monta individual"
         >
           <div className="flex w-full justify-evenly">
-            <ModalNewBirth motherId={motherId} breedingId={breedingId} />
+            <ModalNewBirth
+              motherId={motherId}
+              breedingId={breedingId}
+              isBreedingBirth
+            />
             {/* <button>Descartar animal</button>
              */}
             <ModalEmptyBirth motherId={motherId} breedingId={breedingId} />

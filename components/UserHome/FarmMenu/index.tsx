@@ -126,7 +126,7 @@ const FarmMenu = (props: any) => {
               showChildren: false,
               component: (
                 <>
-                  <BirthForm />
+                  <BirthForm title="Nuevo parto" />
                 </>
               )
             }

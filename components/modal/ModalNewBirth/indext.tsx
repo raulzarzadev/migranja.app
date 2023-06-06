@@ -6,10 +6,12 @@ import useEvent from '@comps/hooks/useEvent'
 
 const ModalNewBirth = ({
   motherId,
-  breedingId
+  breedingId,
+  isBreedingBirth
 }: {
   motherId: string
   breedingId: string
+  isBreedingBirth?: boolean
 }) => {
   const modal = useModal()
   const { event } = useEvent({ eventId: breedingId })
@@ -29,7 +31,12 @@ const ModalNewBirth = ({
           breedingId ? `de monta ${event?.eventData?.breedingId}` : 'sin monta'
         }`}
       >
-        <BirthForm breedingId={breedingId} motherId={motherId} />
+        <BirthForm
+          breedingId={breedingId}
+          motherId={motherId}
+          title={`Parto de monta`}
+          isBreedingBirth={isBreedingBirth}
+        />
       </Modal>
     </div>
   )

@@ -13,17 +13,20 @@ import useModal from '@comps/hooks/useModal'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalsCompatTable from '@comps/AnimalsCompatTable'
 import { createError } from '@firebase/Errors/main'
+import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 
 export interface NewCalf extends NewAnimal {}
 
 const BirthForm = ({
   motherId = '',
   breedingId = '',
-  title
+  title,
+  isBreedingBirth
 }: {
   motherId?: string
   breedingId?: string
   title?: string
+  isBreedingBirth?: boolean
 }) => {
   const { event } = useEvent({ eventId: breedingId })
   const fatherId = event?.eventData?.breedingMale?.id || ''
@@ -65,6 +68,8 @@ const BirthForm = ({
   })
 
   const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
+    console.log(data)
+    return
     try {
       await handleCreateBirth({
         calfs: data.calfs,
@@ -95,7 +100,11 @@ const BirthForm = ({
 
   return (
     <div>
-      {title && <h3 className="font-bold text-center">{title}</h3>}
+      {title && (
+        <h3 className="font-bold text-center">
+          {title} <span>{selectedMother?.earring}</span>
+        </h3>
+      )}
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="w-[250px] mx-auto">
@@ -109,33 +118,45 @@ const BirthForm = ({
               name="batch"
               type="text"
               label="Lote/Monta (opcional)"
+              disabled={!(isBreedingBirth && !defaultValues!.batch)}
             />
-
-            <SearchEarring
-              justStallion
-              relativeTo={
-                farmAnimals.find(({ id }) => methods.watch('motherId') === id)
-                  ?.earring
-              }
-              gender="male"
-              label="Padre"
-              onEarringClick={(e) => {
-                methods.setValue('fatherId', e.id)
-              }}
-              className="w-[250px] my-2"
-            />
-            <SearchEarring
-              relativeTo={
-                farmAnimals.find(({ id }) => methods.watch('fatherId') === id)
-                  ?.earring
-              }
-              gender="female"
-              label="Madre"
-              onEarringClick={(e) => {
-                methods.setValue('motherId', e.id)
-              }}
-              className="w-[250px] my-2"
-            />
+            {isBreedingBirth && motherId ? (
+              <span>
+                Padre: <ModalAnimalDetails earring={selectedFather?.earring} />
+              </span>
+            ) : (
+              <SearchEarring
+                justStallion
+                relativeTo={
+                  farmAnimals.find(({ id }) => methods.watch('motherId') === id)
+                    ?.earring
+                }
+                gender="male"
+                label="Padre"
+                onEarringClick={(e) => {
+                  methods.setValue('fatherId', e.id)
+                }}
+                className="w-[250px] my-2"
+              />
+            )}
+            {isBreedingBirth && fatherId ? (
+              <span>
+                Madre: <ModalAnimalDetails earring={selectedMother?.earring} />
+              </span>
+            ) : (
+              <SearchEarring
+                relativeTo={
+                  farmAnimals.find(({ id }) => methods.watch('fatherId') === id)
+                    ?.earring
+                }
+                gender="female"
+                label="Madre"
+                onEarringClick={(e) => {
+                  methods.setValue('motherId', e.id)
+                }}
+                className="w-[250px] my-2"
+              />
+            )}
           </div>
 
           <AnimalsForm
