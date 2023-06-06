@@ -1,11 +1,11 @@
 import useEvent from '@comps/hooks/useEvent'
 import useBreedingDates from '@comps/hooks/useBreedingDates'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import InputContainer from '@comps/inputs/InputContainer'
 import useCreateBirth from '@comps/hooks/useCreateBirth'
 import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals } from 'store/slices/farmSlice'
+import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import ProgressButton from '@comps/ProgressButton'
 import SearchEarring from '@comps/SearchEarring'
 import Modal from '@comps/modal'
@@ -14,6 +14,8 @@ import { myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalsCompatTable from '@comps/AnimalsCompatTable'
 import { createError } from '@firebase/Errors/main'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import { useEffect, useState } from 'react'
+import { AnimalType } from 'types/base/AnimalType.model'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -60,11 +62,12 @@ const BirthForm = ({
   const methods = useForm({
     defaultValues
   })
-  const farmValues = methods.watch()
+  const formValues = methods.watch()
+
   const { handleCreateBirth, status, progress, setProgress } = useCreateBirth({
     breedingId,
-    motherId: farmValues.motherId,
-    fatherId: farmValues.fatherId
+    motherId: formValues.motherId,
+    fatherId: formValues.fatherId
   })
 
   const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
@@ -84,20 +87,20 @@ const BirthForm = ({
     }
   }
 
-  const disabled = methods.watch('calfs').length <= 0 || progress === 100
+  const disabled = formValues?.calfs?.length <= 0 || progress === 100
   const modal = useModal()
   const selectedFather = farmAnimals.find(
-    ({ id }) => methods.watch('fatherId') === id
+    ({ id }) => formValues?.fatherId && formValues?.fatherId === id
   )
   const selectedMother = farmAnimals.find(
-    ({ id }) => methods.watch('motherId') === id
+    ({ id }) => formValues?.motherId && formValues.motherId === id
   )
 
   const handleReset = () => {
     methods.reset()
     setProgress(0)
   }
-
+  console.log(formValues)
   return (
     <div>
       {title && (
@@ -125,19 +128,23 @@ const BirthForm = ({
                 Padre: <ModalAnimalDetails earring={selectedFather?.earring} />
               </span>
             ) : (
-              <SearchEarring
-                justStallion
-                relativeTo={
-                  farmAnimals.find(({ id }) => methods.watch('motherId') === id)
-                    ?.earring
-                }
-                gender="male"
-                label="Padre"
-                onEarringClick={(e) => {
-                  methods.setValue('fatherId', e.id)
-                }}
-                className="w-[250px] my-2"
-              />
+              <>
+                <SearchEarring
+                  justStallion
+                  relativeTo={
+                    farmAnimals.find(
+                      ({ id }) => methods.watch('motherId') === id
+                    )?.earring
+                  }
+                  gender="male"
+                  label="Padre"
+                  onEarringClick={(e) => {
+                    methods.setValue('fatherId', e.id)
+                  }}
+                  className="w-[250px] my-2"
+                />
+                <SelectedMaleBreedings animalId={methods.watch('fatherId')} />
+              </>
             )}
             {isBreedingBirth && fatherId ? (
               <span>
@@ -213,22 +220,22 @@ const BirthForm = ({
                       {selectedMother?.earring || ' sin '}
                     </span>{' '}
                   </p>
-                  {farmValues.batch && (
+                  {formValues.batch && (
                     <p>
                       Lote:{' '}
-                      <span className="font-bold">{farmValues.batch}</span>
+                      <span className="font-bold">{formValues.batch}</span>
                     </p>
                   )}
                   <p>
                     Fecha del parto:{' '}
                     <span className="font-bold">
-                      {myFormatDate(farmValues.date, 'dd MMM yy')}
+                      {myFormatDate(formValues.date, 'dd MMM yy')}
                     </span>
                   </p>
                   <AnimalsCompatTable
-                    animals={farmValues.calfs}
+                    animals={formValues.calfs}
                     onRemove={(i) => {
-                      const aux = farmValues.calfs
+                      const aux = formValues.calfs
                       aux.splice(i, 1)
                       methods.setValue('calfs', aux)
                     }}
@@ -254,5 +261,68 @@ const BirthForm = ({
     </div>
   )
 }
+const SelectedMaleBreedings = ({ animalId }) => {
+  const [possibleMothers, setPossibleMothers] = useState<AnimalType[]>([])
+  const farmEvents = useSelector(selectFarmEvents)
 
+  const searchFatherActiveBreedings = (fatherId: AnimalType['id']) => {
+    return farmEvents.filter(
+      (e) =>
+        (e.type === 'BREEDING' && e.eventData?.breedingMale?.id === fatherId) ||
+        e?.eventData?.otherMales?.find((male) => male?.id === fatherId)
+    )
+  }
+  useEffect(() => {
+    const breedings = searchFatherActiveBreedings(animalId)
+    const femalesInBreeding: AnimalType[] = breedings
+      .map((breeding: any) =>
+        breeding.eventData.breedingBatch?.map((animal) => ({
+          id: animal.id,
+          earring: animal.earring,
+          breeding: {
+            id: breeding.id,
+            name: breeding.eventData.breedingId,
+            breedingData: breeding
+          }
+        }))
+      )
+      .flat()
+
+    setPossibleMothers(femalesInBreeding)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animalId])
+
+  const methods = useFormContext()
+  const handleSelectMother = (
+    motherId,
+    breeding: { id: string; name: string }
+  ) => {
+    methods.setValue('motherId', motherId)
+    methods.setValue('breeding', breeding)
+  }
+  console.log({ possibleMothers })
+  return (
+    <>
+      {possibleMothers && <h4 className="text-center">Posibles madres</h4>}
+      <div className="flex w-full flex-wrap justify-center">
+        {possibleMothers.map((animal, i) => (
+          <button
+            key={`${animal?.id}-${i}`}
+            className=" w-20 aspect-square text-center grid place-content-center m-0.5 rounded-md border-2 border-base-200 hover:border-base-content"
+            onClick={(e) => {
+              e.preventDefault()
+              handleSelectMother(animal.id, {
+                id: animal.breeding.id,
+                name: animal.breeding.name
+              })
+            }}
+          >
+            <span className="text-xs ">Monta: {animal.breeding.name}</span>
+            <span className="text-xs ">Madre: {animal.earring}</span>
+          </button>
+        ))}
+      </div>
+    </>
+  )
+}
 export default BirthForm
