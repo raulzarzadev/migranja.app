@@ -11,7 +11,7 @@ import FarmEvents from 'components/FarmEvents'
 import FarmTeam from 'components/FarmTeam'
 import BreedingForm from 'components/forms/BreedingForm'
 import OvinesTable from 'components/OvinesTable'
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
 import BirthForm from '@comps/BreedingsList/AnimalBreedingOptions/BirthForm'
 import AnimalsForm from '@comps/AnimalsForm'
@@ -221,9 +221,8 @@ const FarmMenu = (props: any) => {
           const menuKey = `${parent && parent + '.children.'}${key}`
 
           return (
-            <>
+            <Fragment key={i}>
               <SquareOption2
-                key={i}
                 iconName={menuItem.icon}
                 title={menuItem.label}
                 onClick={() => handleClick(menuKey)}
@@ -237,7 +236,7 @@ const FarmMenu = (props: any) => {
                   {renderMenu(menuItem.children, menuKey)}
                 </div>
               )}
-            </>
+            </Fragment>
           )
         })}
       </menu>
