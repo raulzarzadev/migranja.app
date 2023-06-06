@@ -26,7 +26,7 @@ const BirthEvents = () => {
   )?.id
 
   const motherId = event?.eventData.parents.mother?.id
-  const canRevert = birthId && breedingId && motherId
+  const canRevert = birthId //&& breedingId && motherId
   return (
     <div className="w-full">
       <MyTable

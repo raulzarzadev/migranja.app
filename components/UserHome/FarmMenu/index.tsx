@@ -232,13 +232,14 @@ const FarmMenu = (props: any) => {
   const renderMenu = (menuItems: MenuOptions, parent = '') => {
     return (
       <menu className={`grid w-min place-items-end gap-2 place-content-start `}>
-        {Object.keys(menuItems).map((key) => {
+        {Object.keys(menuItems).map((key, i) => {
           const menuItem = menuItems[key]
           const menuKey = `${parent && parent + '.children.'}${key}`
 
           return (
             <>
               <SquareOption2
+                key={i}
                 iconName={menuItem.icon}
                 title={menuItem.label}
                 onClick={() => handleClick(menuKey)}

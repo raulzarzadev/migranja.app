@@ -6,7 +6,10 @@ import { TypeBase } from 'types/base/TypeBase.model'
 const storage = getStorage(app)
 
 const errorCRUD = new FirebaseCRUD('errors', db, storage, 'number')
-export type Errors = 'CreateBreedingError' | 'CreateBirthError'
+export type Errors =
+  | 'CreateBreedingError'
+  | 'CreateBirthError'
+  | 'CreateRevertBirthError'
 export interface ErrorType extends TypeBase {
   message: string
   name: Errors

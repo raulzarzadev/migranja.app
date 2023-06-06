@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import { AnimalWeaningEvent } from 'types/base/AnimalWeaning.model'
 import { deleteAnimal, updateAnimal } from '@firebase/Animal/main'
+import { createError } from '@firebase/Errors/main'
 
 const useRevertBirth = ({
   birthId,
@@ -23,7 +24,10 @@ const useRevertBirth = ({
 
   const farmEvents = useSelector(selectFarmEvents)
   const farmAnimals = useSelector(selectFarmAnimals)
-  const { event: birthEvent } = useEvent({ eventId: birthId })
+
+  const birthEvent = farmEvents.find((e) => e.id === birthId)
+  const breedingEvent = farmEvents.find((e) => e.id === breedingId)
+  const mother = farmAnimals.find((a) => a.id === motherId)
 
   interface Calf {
     id: string
@@ -90,18 +94,23 @@ const useRevertBirth = ({
       await deleteCalfs(calfs)
       setProgress(50)
 
-      // ************************* update breeding to pending
-      await updateAnimalStatusInBreedingBatch({
-        eventId: breedingId,
-        eventType: 'PENDING',
-        animalId: motherId
-      })
+      // ************************* update breeding to pending if ids are provided
+      if (breedingEvent?.id && mother?.id) {
+        await updateAnimalStatusInBreedingBatch({
+          eventId: breedingEvent?.id,
+          eventType: 'PENDING',
+          animalId: mother?.id
+        })
+      }
       setProgress(80)
 
       // ************************* update mom to breeding
-      await updateAnimal(motherId as string, { state: 'FREE' })
+      if (mother?.id) {
+        await updateAnimal(mother?.id as string, { state: 'FREE' })
+      }
       setProgress(100)
     } catch (error) {
+      createError('CreateRevertBirthError', error)
       setProgress(0)
       console.error(error)
     }
