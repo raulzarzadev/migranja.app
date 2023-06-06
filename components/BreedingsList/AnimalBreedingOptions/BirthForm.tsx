@@ -118,7 +118,7 @@ const BirthForm = ({
               name="batch"
               type="text"
               label="Lote/Monta (opcional)"
-              disabled={!(isBreedingBirth && !defaultValues!.batch)}
+              disabled={isBreedingBirth && !!defaultValues!.batch}
             />
             {isBreedingBirth && motherId ? (
               <span>
