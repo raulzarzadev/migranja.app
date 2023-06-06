@@ -17,8 +17,8 @@ const useRevertBirth = ({
   motherId
 }: {
   birthId: FarmEvent['id']
-  breedingId: string
-  motherId: string
+  breedingId?: string
+  motherId?: string
 }) => {
   const [progress, setProgress] = useState(0)
 

@@ -10,8 +10,8 @@ const RevertBirthForm = ({
   motherId
 }: {
   birthEventId: string
-  breedingId: string
-  motherId: string
+  breedingId?: string
+  motherId?: string
 }) => {
   const { animal: mother } = useAnimal({ animalId: motherId })
   const { event: birthEvent } = useEvent({ eventId: birthEventId })
