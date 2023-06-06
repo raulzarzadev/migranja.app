@@ -26,7 +26,14 @@ import { getProperty, setProperty } from 'dot-prop'
 import SquareOption2 from '@comps/SquareOption2'
 import { EventsList } from '@comps/FarmEvents/EventsList'
 import CustomizedBreadcrumbs from '@comps/Breadcrumbs'
-import { Button, Drawer, Fab, useMediaQuery, useTheme } from '@mui/material'
+import {
+  Breadcrumbs,
+  Button,
+  Drawer,
+  Fab,
+  useMediaQuery,
+  useTheme
+} from '@mui/material'
 import useModal from '@comps/hooks/useModal'
 import Icon from '@comps/Icon'
 import useMaterialMediaQuery from '@comps/hooks/useMaterialMediaQuery'
@@ -278,13 +285,31 @@ const FarmMenu = (props: any) => {
         </>
       )}
       {getProperty(menu, selectedItem)?.component && (
-        <section className="bg-base-300 rounded-lg shadow-md ml-2 overflow-x-auto  w-full p-2 ">
-          <CustomizedBreadcrumbs
+        <section className="bg-base-300 rounded-lg shadow-md sm:ml-2 overflow-x-auto  w-full p-2 ">
+          <Breadcrumbs aria-label="breadcrumb">
+            {selectedItem
+              .replaceAll('children.', '')
+              .split('.')
+              .map((crumb) => (
+                <button
+                  key={crumb}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    console.log(crumb)
+                    setSelectedItem(`${selectedItem.split(crumb)[0]}${crumb}`)
+                    console.log(`${selectedItem.split(crumb)[0]}${crumb}`)
+                  }}
+                >
+                  {crumb}
+                </button>
+              ))}
+          </Breadcrumbs>
+          {/* <CustomizedBreadcrumbs
             crumbs={selectedItem
               .replaceAll('children.', '')
               .split('.')
               .map((item) => ({ label: item }))}
-          />
+          /> */}
 
           {/* <h2 className="text-2xl font-bold">
             {getProperty(menu, selectedItem)?.label}
