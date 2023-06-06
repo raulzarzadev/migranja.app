@@ -262,6 +262,7 @@ const FarmMenu = (props: any) => {
         <>
           <Fab
             onClick={modal.handleOpen}
+            sx={{ position: 'fixed' }}
             className="fixed bottom-4 right-4  bg-base-100"
           >
             <span className="">
