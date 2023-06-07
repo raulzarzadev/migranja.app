@@ -7,7 +7,6 @@ import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
 import { useSelector } from 'react-redux'
 import { selectFarmAnimals, selectFarmEvents } from 'store/slices/farmSlice'
 import ProgressButton from '@comps/ProgressButton'
-import SearchEarring from '@comps/SearchEarring'
 import Modal from '@comps/modal'
 import useModal from '@comps/hooks/useModal'
 import { myFormatDate } from 'utils/dates/myDateUtils'
@@ -16,6 +15,7 @@ import { createError } from '@firebase/Errors/main'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { useEffect, useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
+import SearchEarringController from '@comps/SearchEarring/SearchEarringController'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -134,8 +134,9 @@ const BirthForm = ({
               </span>
             ) : (
               <>
-                <SearchEarring
+                <SearchEarringController
                   justStallion
+                  name={'fatherId'}
                   relativeTo={
                     farmAnimals.find(
                       ({ id }) => methods.watch('motherId') === id
@@ -143,10 +144,10 @@ const BirthForm = ({
                   }
                   gender="male"
                   label="Padre"
-                  onEarringClick={(e) => {
-                    methods.setValue('fatherId', e.id)
-                  }}
-                  className="w-[250px] my-2 mx-auto"
+                  // onEarringClick={(e) => {
+                  //   methods.setValue('fatherId', e.id)
+                  // }}
+                  className="w-[250px] my-2"
                 />
                 <SelectedMaleBreedings animalId={methods.watch('fatherId')} />
               </>
@@ -156,17 +157,19 @@ const BirthForm = ({
                 Madre: <ModalAnimalDetails earring={selectedMother?.earring} />
               </span>
             ) : (
-              <SearchEarring
+              <SearchEarringController
+                justStallion
+                name={'motherId'}
                 relativeTo={
                   farmAnimals.find(({ id }) => methods.watch('fatherId') === id)
                     ?.earring
                 }
                 gender="female"
                 label="Madre"
-                onEarringClick={(e) => {
-                  methods.setValue('motherId', e.id)
-                }}
-                className="w-[250px] my-2 mx-auto"
+                // onEarringClick={(e) => {
+                //   methods.setValue('fatherId', e.id)
+                // }}
+                className="w-[250px] my-2"
               />
             )}
           </div>
