@@ -8,10 +8,11 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
-import Icon from '@comps/Icon'
+import { Controller, useFormContext } from 'react-hook-form'
+
 interface SearchEarring {
   omitEarrings?: string[]
-  onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
+  //onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
   gender?: 'male' | 'female' | 'all'
   placeholder?: string
   relativeTo?: AnimalType['earring']
@@ -20,9 +21,10 @@ interface SearchEarring {
   filterBy?: (animal: AnimalType) => any
   justStallion?: boolean
   onReset?: () => {}
+  name: string
 }
-const SearchEarring = ({
-  onEarringClick,
+const SearchEarringController = ({
+  // onEarringClick,
   omitEarrings = [],
   gender = 'all',
   placeholder = 'Buscar arete',
@@ -31,6 +33,7 @@ const SearchEarring = ({
   label,
   filterBy = (animal) => [],
   justStallion,
+  name,
   onReset
 }: SearchEarring) => {
   const [search, setSearch] = useState<string | number>('')
@@ -75,60 +78,68 @@ const SearchEarring = ({
       if (a.label < b.label) return -1
       return 0
     })
-
   return (
-    <>
-      <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        options={options}
-        // sx={{ width: 300 }}
-        className={` ${className} `}
-        renderInput={(params) => (
-          <TextField {...params} label={label} className="z-0 my-2" />
-        )}
-        renderOption={(props, option, { inputValue }) => {
-          const matches = match(option.label, inputValue, {
-            insideWords: true
-          })
-          const parts = parse(option.label, matches)
-          return (
-            <li
-              {...props}
-              className={`${props.className} 
-              ${isRelative(option.label) && ' bg-error text-white'} 
-              ${alreadyIn(option.label) && ' bg-slate-600 '}
-              `}
-            >
-              <div>
-                {parts.map((part, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      fontWeight: part.highlight ? 700 : 400
-                    }}
-                  >
-                    {part.text}
-                    <span className="ml-2">{isRelative(option.label)}</span>
-                    <span className="ml-2">
-                      {alreadyIn(option.label) && 'Ya esta en la lista'}
+    <Controller
+      name={name}
+      render={({ field, fieldState, formState }) => (
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={options}
+          // sx={{ width: 300 }}
+          className={` ${className} `}
+          renderInput={(params) => (
+            <TextField {...params} label={label} className="z-0 my-2" />
+          )}
+          renderOption={(props, option, { inputValue }) => {
+            const matches = match(option.label, inputValue, {
+              insideWords: true
+            })
+            const parts = parse(option.label, matches)
+            return (
+              <li
+                {...props}
+                className={`${props.className} 
+          ${isRelative(option.label) && ' bg-error text-white'} 
+          ${alreadyIn(option.label) && ' bg-slate-600 '}
+          `}
+              >
+                <div>
+                  {parts.map((part, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        fontWeight: part.highlight ? 700 : 400
+                      }}
+                    >
+                      {part.text}
+                      <span className="ml-2">{isRelative(option.label)}</span>
+                      <span className="ml-2">
+                        {alreadyIn(option.label) && 'Ya esta en la lista'}
+                      </span>
                     </span>
-                  </span>
-                ))}
-              </div>
-            </li>
-          )
-        }}
-        onChange={(e, newValue) =>
-          onEarringClick({
-            earring: newValue?.label || '',
-            id: newValue?.id || ''
-          })
-        }
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-      />
-    </>
+                  ))}
+                </div>
+              </li>
+            )
+          }}
+          onChange={(e, newValue) => {
+            field.onChange({
+              earring: newValue?.label || '',
+              id: newValue?.id || ''
+            })
+            // onEarringClick({
+            //   earring: newValue?.label || '',
+            //   id: newValue?.id || ''
+            // })
+          }}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+        />
+      )}
+    />
   )
 }
 
-export default SearchEarring
+export type SearchEarringController = typeof SearchEarringController
+
+export default SearchEarringController

@@ -14,6 +14,7 @@ import { myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalsCompatTable from '@comps/AnimalsCompatTable'
 import { createError } from '@firebase/Errors/main'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
+import SearchEarringController from '@comps/SearchEarring/SearchEarringController'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -125,8 +126,9 @@ const BirthForm = ({
                 Padre: <ModalAnimalDetails earring={selectedFather?.earring} />
               </span>
             ) : (
-              <SearchEarring
+              <SearchEarringController
                 justStallion
+                name={'fatherId'}
                 relativeTo={
                   farmAnimals.find(({ id }) => methods.watch('motherId') === id)
                     ?.earring
@@ -144,7 +146,8 @@ const BirthForm = ({
                 Madre: <ModalAnimalDetails earring={selectedMother?.earring} />
               </span>
             ) : (
-              <SearchEarring
+              <SearchEarringController
+                name={'motherId'}
                 relativeTo={
                   farmAnimals.find(({ id }) => methods.watch('fatherId') === id)
                     ?.earring
