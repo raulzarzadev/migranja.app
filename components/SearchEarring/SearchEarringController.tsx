@@ -78,6 +78,7 @@ const SearchEarringController = ({
       if (a.label < b.label) return -1
       return 0
     })
+
   return (
     <Controller
       name={name}
@@ -124,10 +125,11 @@ const SearchEarringController = ({
             )
           }}
           onChange={(e, newValue) => {
-            field.onChange({
-              earring: newValue?.label || '',
-              id: newValue?.id || ''
-            })
+            field.onChange(newValue?.id)
+            // field.onChange({
+            //   earring: newValue?.label || '',
+            //   id: newValue?.id || ''
+            // })
             // onEarringClick({
             //   earring: newValue?.label || '',
             //   id: newValue?.id || ''

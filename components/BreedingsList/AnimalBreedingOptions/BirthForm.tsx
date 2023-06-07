@@ -147,7 +147,7 @@ const BirthForm = ({
                   // onEarringClick={(e) => {
                   //   methods.setValue('fatherId', e.id)
                   // }}
-                  className="w-[250px] my-2"
+                  className="w-[250px] my-2 mx-auto"
                 />
                 <SelectedMaleBreedings animalId={methods.watch('fatherId')} />
               </>
@@ -167,9 +167,9 @@ const BirthForm = ({
                 gender="female"
                 label="Madre"
                 // onEarringClick={(e) => {
-                //   methods.setValue('fatherId', e.id)
+                //   methods.setValue('motherId', e.id)
                 // }}
-                className="w-[250px] my-2"
+                className="w-[250px] my-2 mx-auto"
               />
             )}
           </div>
