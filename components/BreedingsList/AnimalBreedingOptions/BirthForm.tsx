@@ -263,7 +263,7 @@ const BirthForm = ({
     </div>
   )
 }
-const SelectedMaleBreedings = ({ animalId }) => {
+const SelectedMaleBreedings = ({ animalId }: { animalId: string }) => {
   const [possibleMothers, setPossibleMothers] = useState<AnimalType[]>([])
   const farmEvents = useSelector(selectFarmEvents)
 
@@ -278,7 +278,7 @@ const SelectedMaleBreedings = ({ animalId }) => {
     const breedings = searchFatherActiveBreedings(animalId)
     const femalesInBreeding: AnimalType[] = breedings
       .map((breeding: any) =>
-        breeding.eventData.breedingBatch?.map((animal) => ({
+        breeding.eventData.breedingBatch?.map((animal: AnimalType) => ({
           id: animal.id,
           earring: animal.earring,
           breeding: {

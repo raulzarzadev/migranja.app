@@ -35,7 +35,6 @@ const ModalNewBirth = ({
           breedingId={breedingId}
           motherId={motherId}
           title={`Parto de monta`}
-          isBreedingBirth={isBreedingBirth}
         />
       </Modal>
     </div>
