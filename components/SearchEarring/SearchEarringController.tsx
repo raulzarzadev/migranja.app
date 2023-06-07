@@ -82,62 +82,59 @@ const SearchEarringController = ({
   return (
     <Controller
       name={name}
-      render={({ field, fieldState, formState }) => (
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={options}
-          // sx={{ width: 300 }}
-          className={` ${className} `}
-          renderInput={(params) => (
-            <TextField {...params} label={label} className="z-0 my-2" />
-          )}
-          renderOption={(props, option, { inputValue }) => {
-            const matches = match(option.label, inputValue, {
-              insideWords: true
-            })
-            const parts = parse(option.label, matches)
-            return (
-              <li
-                {...props}
-                className={`${props.className} 
-          ${isRelative(option.label) && ' bg-error text-white'} 
-          ${alreadyIn(option.label) && ' bg-slate-600 '}
-          `}
-              >
-                <div>
-                  {parts.map((part, index) => (
-                    <span
-                      key={index}
-                      style={{
-                        fontWeight: part.highlight ? 700 : 400
-                      }}
-                    >
-                      {part.text}
-                      <span className="ml-2">{isRelative(option.label)}</span>
-                      <span className="ml-2">
-                        {alreadyIn(option.label) && 'Ya esta en la lista'}
+      render={({ field, fieldState, formState }) => {
+        console.log(name, field)
+        return (
+          <Autocomplete
+            disablePortal
+            //id="combo-box-demo"
+            options={options}
+            onChange={(e, newValue) => {
+              field.onChange(newValue?.id)
+            }}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
+            // sx={{ width: 300 }}
+            className={` ${className} `}
+            renderInput={(params) => {
+              return (
+                <TextField {...params} label={label} className="z-0 my-2" />
+              )
+            }}
+            renderOption={(props, option, { inputValue }) => {
+              const matches = match(option.label, inputValue, {
+                insideWords: true
+              })
+              const parts = parse(option.label, matches)
+              return (
+                <li
+                  {...props}
+                  className={`${props.className} 
+        ${isRelative(option.label) && ' bg-error text-white'} 
+        ${alreadyIn(option.label) && ' bg-slate-600 '}
+        `}
+                >
+                  <div>
+                    {parts.map((part, index) => (
+                      <span
+                        key={index}
+                        style={{
+                          fontWeight: part.highlight ? 700 : 400
+                        }}
+                      >
+                        {part.text}
+                        <span className="ml-2">{isRelative(option.label)}</span>
+                        <span className="ml-2">
+                          {alreadyIn(option.label) && 'Ya esta en la lista'}
+                        </span>
                       </span>
-                    </span>
-                  ))}
-                </div>
-              </li>
-            )
-          }}
-          onChange={(e, newValue) => {
-            field.onChange(newValue?.id)
-            // field.onChange({
-            //   earring: newValue?.label || '',
-            //   id: newValue?.id || ''
-            // })
-            // onEarringClick({
-            //   earring: newValue?.label || '',
-            //   id: newValue?.id || ''
-            // })
-          }}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-        />
-      )}
+                    ))}
+                  </div>
+                </li>
+              )
+            }}
+          />
+        )
+      }}
     />
   )
 }

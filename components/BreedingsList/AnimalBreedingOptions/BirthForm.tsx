@@ -100,9 +100,7 @@ const BirthForm = ({
     methods.reset()
     setProgress(0)
   }
-  console.log(formValues)
   const isBreedingBirth = !!formValues.breeding.id
-  console.log({ isBreedingBirth })
   return (
     <div className="">
       {title && (
@@ -149,7 +147,7 @@ const BirthForm = ({
                   // }}
                   className="w-[250px] my-2 mx-auto"
                 />
-                <SelectedMaleBreedings animalId={methods.watch('fatherId')} />
+                <SelectedMaleBreedings maleId={methods.watch('fatherId')} />
               </>
             )}
             {isBreedingBirth && fatherId ? (
@@ -158,7 +156,6 @@ const BirthForm = ({
               </span>
             ) : (
               <SearchEarringController
-                justStallion
                 name={'motherId'}
                 relativeTo={
                   farmAnimals.find(({ id }) => methods.watch('fatherId') === id)
@@ -269,7 +266,7 @@ const BirthForm = ({
     </div>
   )
 }
-const SelectedMaleBreedings = ({ animalId }: { animalId: string }) => {
+const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
   const [possibleMothers, setPossibleMothers] = useState<AnimalType[]>([])
   const farmEvents = useSelector(selectFarmEvents)
 
@@ -281,7 +278,7 @@ const SelectedMaleBreedings = ({ animalId }: { animalId: string }) => {
     )
   }
   useEffect(() => {
-    const breedings = searchFatherActiveBreedings(animalId)
+    const breedings = searchFatherActiveBreedings(maleId)
     const femalesInBreeding: AnimalType[] = breedings
       .map((breeding: any) =>
         breeding.eventData.breedingBatch?.map((animal: AnimalType) => ({
@@ -300,7 +297,7 @@ const SelectedMaleBreedings = ({ animalId }: { animalId: string }) => {
     methods.setValue('motherId', '')
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animalId])
+  }, [maleId])
 
   const methods = useFormContext()
   const handleSelectMother = (
@@ -311,9 +308,13 @@ const SelectedMaleBreedings = ({ animalId }: { animalId: string }) => {
     methods.setValue('breeding', breeding)
     methods.setValue('batch', breeding.name)
   }
-  console.log({ possibleMothers })
+  console.log(methods.watch('motherId'))
+  const formValues = methods.watch()
+  const isSelected = (motherId: AnimalType['id'], breedingId: string) =>
+    formValues?.motherId === motherId && breedingId === formValues.breeding.id
 
   if (!possibleMothers.length) return <></>
+
   return (
     <>
       <h4 className="text-center">Posibles madres</h4>
@@ -321,7 +322,14 @@ const SelectedMaleBreedings = ({ animalId }: { animalId: string }) => {
         {possibleMothers.map((animal, i) => (
           <button
             key={`${animal?.id}-${i}`}
-            className=" w-20 aspect-square text-center grid place-content-center m-0.5 rounded-md border-2 border-base-200 hover:border-base-content"
+            className={`
+${
+  isSelected(animal.id, animal?.breeding?.id)
+    ? ' border-base-content '
+    : ' border-base-200 '
+}
+            w-20 aspect-square text-center grid place-content-center m-0.5 rounded-md border-2 hover:border-base-content
+            `}
             onClick={(e) => {
               e.preventDefault()
               handleSelectMother(animal.id, {
