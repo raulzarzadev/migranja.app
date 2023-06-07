@@ -22,13 +22,13 @@ export interface NewCalf extends NewAnimal {}
 const BirthForm = ({
   motherId = '',
   breedingId = '',
-  title,
-  isBreedingBirth
-}: {
+  title
+}: // isBreedingBirth
+{
   motherId?: string
   breedingId?: string
   title?: string
-  isBreedingBirth?: boolean
+  // isBreedingBirth?: boolean
 }) => {
   const { event } = useEvent({ eventId: breedingId })
   const fatherId = event?.eventData?.breedingMale?.id || ''
@@ -101,6 +101,8 @@ const BirthForm = ({
     setProgress(0)
   }
   console.log(formValues)
+  const isBreedingBirth = !!formValues.breeding.id
+  console.log({ isBreedingBirth })
   return (
     <div>
       {title && (
@@ -289,16 +291,19 @@ const SelectedMaleBreedings = ({ animalId }) => {
       .flat()
 
     setPossibleMothers(femalesInBreeding)
+    methods.setValue('motherId', '')
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animalId])
 
   const methods = useFormContext()
   const handleSelectMother = (
-    motherId,
+    motherId: string,
     breeding: { id: string; name: string }
   ) => {
     methods.setValue('motherId', motherId)
     methods.setValue('breeding', breeding)
+    methods.setValue('batch', breeding.name)
   }
   console.log({ possibleMothers })
   return (
