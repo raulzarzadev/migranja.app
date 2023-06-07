@@ -104,7 +104,7 @@ const BirthForm = ({
   const isBreedingBirth = !!formValues.breeding.id
   console.log({ isBreedingBirth })
   return (
-    <div>
+    <div className="">
       {title && (
         <h3 className="font-bold text-center">
           {title} <span>{selectedMother?.earring}</span>
@@ -112,19 +112,22 @@ const BirthForm = ({
       )}
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <div className="w-[250px] mx-auto">
+          <div className="">
             <InputContainer
               type="date"
               name="date"
               label="Fecha de nacimiento"
               //datesRangeColor={datesRangeColor}
+              containerClassName="w-[250px] mx-auto"
             />
             <InputContainer
               name="batch"
               type="text"
               label="Lote/Monta (opcional)"
               disabled={isBreedingBirth && !!defaultValues!.batch}
+              containerClassName="w-[250px] mx-auto"
             />
+
             {isBreedingBirth && motherId ? (
               <span>
                 Padre: <ModalAnimalDetails earring={selectedFather?.earring} />
@@ -143,7 +146,7 @@ const BirthForm = ({
                   onEarringClick={(e) => {
                     methods.setValue('fatherId', e.id)
                   }}
-                  className="w-[250px] my-2"
+                  className="w-[250px] my-2 mx-auto"
                 />
                 <SelectedMaleBreedings animalId={methods.watch('fatherId')} />
               </>
@@ -163,7 +166,7 @@ const BirthForm = ({
                 onEarringClick={(e) => {
                   methods.setValue('motherId', e.id)
                 }}
-                className="w-[250px] my-2"
+                className="w-[250px] my-2 mx-auto"
               />
             )}
           </div>
@@ -306,10 +309,12 @@ const SelectedMaleBreedings = ({ animalId }: { animalId: string }) => {
     methods.setValue('batch', breeding.name)
   }
   console.log({ possibleMothers })
+
+  if (!possibleMothers.length) return <></>
   return (
     <>
-      {possibleMothers && <h4 className="text-center">Posibles madres</h4>}
-      <div className="flex w-full flex-wrap justify-center">
+      <h4 className="text-center">Posibles madres</h4>
+      <div className="flex w-full flex-wrap justify-center max-w-lg mx-auto">
         {possibleMothers.map((animal, i) => (
           <button
             key={`${animal?.id}-${i}`}

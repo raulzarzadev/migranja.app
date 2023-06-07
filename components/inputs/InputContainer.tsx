@@ -55,6 +55,7 @@ export interface CustomInputTypes
     defaultChecked?: boolean
   }[]
   defaultValue?: string
+  containerClassName?: string
   // checked?: boolean
 }
 
@@ -73,6 +74,7 @@ const InputContainer = ({
   infoBadge,
   radioOpts,
   defaultValue = '',
+  containerClassName,
   // checked,
   ...rest
 }: CustomInputTypes) => {
@@ -85,7 +87,7 @@ const InputContainer = ({
         fieldState: { isTouched, isDirty, error },
         formState: { defaultValues }
       }) => (
-        <div className="my-2">
+        <div className={`my-2 ${containerClassName} `}>
           {['text'].includes(type) && (
             <>
               <TextField
