@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 
 interface SearchEarring {
   omitEarrings?: string[]
@@ -107,11 +107,12 @@ const SearchEarringController = ({
               const parts = parse(option.label, matches)
               return (
                 <li
+                  className={`
+                    ${props.className} 
+                    ${isRelative(option.label) && ' bg-error text-white'} 
+                    ${alreadyIn(option.label) && ' bg-slate-600 '}
+                  `}
                   {...props}
-                  className={`${props.className} 
-        ${isRelative(option.label) && ' bg-error text-white'} 
-        ${alreadyIn(option.label) && ' bg-slate-600 '}
-        `}
                 >
                   <div>
                     {parts.map((part, index) => (
