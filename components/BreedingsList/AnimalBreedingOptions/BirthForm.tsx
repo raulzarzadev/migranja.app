@@ -155,19 +155,23 @@ const BirthForm = ({
                 Madre: <ModalAnimalDetails earring={selectedMother?.earring} />
               </span>
             ) : (
-              <SearchEarringController
-                name={'motherId'}
-                relativeTo={
-                  farmAnimals.find(({ id }) => methods.watch('fatherId') === id)
-                    ?.earring
-                }
-                gender="female"
-                label="Madre"
-                // onEarringClick={(e) => {
-                //   methods.setValue('motherId', e.id)
-                // }}
-                className="w-[250px] my-2 mx-auto"
-              />
+              <>
+                <SearchEarringController
+                  name={'motherId'}
+                  relativeTo={
+                    farmAnimals.find(
+                      ({ id }) => methods.watch('fatherId') === id
+                    )?.earring
+                  }
+                  gender="female"
+                  label="Madre"
+                  // onEarringClick={(e) => {
+                  //   methods.setValue('motherId', e.id)
+                  // }}
+                  className="w-[250px] my-2 mx-auto"
+                />
+                <SelectedFemaleBreedings motherId={methods.watch('motherId')} />
+              </>
             )}
           </div>
 
@@ -266,8 +270,101 @@ const BirthForm = ({
     </div>
   )
 }
+
+const SelectedFemaleBreedings = ({ motherId }: { motherId: string }) => {
+  const [possibleFathers, setPossibleFathers] = useState<PossibleParent[]>([])
+  const farmEvents = useSelector(selectFarmEvents)
+  const methods = useFormContext()
+  const formValues = methods.watch()
+  const searchFatherActiveBreedings = (motherId: AnimalType['id']) => {
+    return farmEvents.filter(
+      (e) =>
+        e.type === 'BREEDING' &&
+        e.eventData?.breedingBatch.find((aml) => aml.id === motherId)
+    )
+  }
+  useEffect(() => {
+    const breedings = searchFatherActiveBreedings(motherId)
+    console.log({ breedings })
+    const breedingsInMales = breedings.map(
+      (
+        breeding
+      ): {
+        id: string
+        earring: string
+        breeding: { id: string; name: string; breedingData: any }
+      } => {
+        const animal = breeding?.eventData?.breedingMale
+        return {
+          id: animal?.id || '',
+          earring: animal?.earring || '',
+          breeding: {
+            id: breeding.id,
+            name: breeding.eventData.breedingId,
+            breedingData: breeding
+          }
+        }
+      }
+    )
+
+    setPossibleFathers(breedingsInMales)
+    methods.setValue('fatherId', '')
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [motherId])
+  const isSelected = (fatherId: AnimalType['id'], breedingId: string) =>
+    formValues?.fatherId === fatherId && breedingId === formValues.breeding.id
+
+  const handleSelectFather = (
+    fatherId: string,
+    breeding: { id: string; name: string }
+  ) => {
+    console.log({ fatherId, breeding })
+    methods.setValue('fatherId', fatherId)
+    // methods.setValue('breeding', breeding)
+    // methods.setValue('batch', breeding.name)
+  }
+  console.log({ formValues })
+
+  return (
+    <>
+      <h4 className="text-center">Posibles padres</h4>
+      <div className="flex w-full flex-wrap justify-center max-w-lg mx-auto">
+        {possibleFathers?.map((animal, i) => (
+          <button
+            key={`${animal?.id}-${i}`}
+            className={`
+            ${
+              isSelected(animal.id, animal?.breeding?.id)
+                ? ' border-base-content '
+                : ' border-base-200 '
+            }
+             w-20 aspect-square text-center grid place-content-center m-0.5 rounded-md border-2 hover:border-base-content
+        `}
+            onClick={(e) => {
+              e.preventDefault()
+              handleSelectFather(animal.id, {
+                id: animal.breeding.id,
+                name: animal.breeding.name
+              })
+            }}
+          >
+            <span className="text-xs ">Monta: {animal.breeding.name}</span>
+            <span className="text-xs ">Padre: {animal.earring}</span>
+          </button>
+        ))}
+      </div>
+    </>
+  )
+}
+interface PossibleParent {
+  id: string
+  earring: string
+  breeding: { id: string; name: string; breedingData: any }
+}
+
 const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
-  const [possibleMothers, setPossibleMothers] = useState<AnimalType[]>([])
+  const [possibleMothers, setPossibleMothers] = useState<PossibleParent[]>([])
   const farmEvents = useSelector(selectFarmEvents)
 
   const searchFatherActiveBreedings = (fatherId: AnimalType['id']) => {
@@ -279,7 +376,7 @@ const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
   }
   useEffect(() => {
     const breedings = searchFatherActiveBreedings(maleId)
-    const femalesInBreeding: AnimalType[] = breedings
+    const femalesInBreeding: PossibleParent[] = breedings
       .map((breeding: any) =>
         breeding.eventData.breedingBatch?.map((animal: AnimalType) => ({
           id: animal.id,
@@ -294,7 +391,7 @@ const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
       .flat()
 
     setPossibleMothers(femalesInBreeding)
-    methods.setValue('motherId', '')
+    //methods.setValue('motherId', '')
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maleId])
@@ -308,7 +405,6 @@ const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
     methods.setValue('breeding', breeding)
     methods.setValue('batch', breeding.name)
   }
-  console.log(methods.watch('motherId'))
   const formValues = methods.watch()
   const isSelected = (motherId: AnimalType['id'], breedingId: string) =>
     formValues?.motherId === motherId && breedingId === formValues.breeding.id
@@ -323,11 +419,11 @@ const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
           <button
             key={`${animal?.id}-${i}`}
             className={`
-${
-  isSelected(animal.id, animal?.breeding?.id)
-    ? ' border-base-content '
-    : ' border-base-200 '
-}
+                ${
+                  isSelected(animal.id, animal?.breeding?.id)
+                    ? ' border-base-content '
+                    : ' border-base-200 '
+                }
             w-20 aspect-square text-center grid place-content-center m-0.5 rounded-md border-2 hover:border-base-content
             `}
             onClick={(e) => {
