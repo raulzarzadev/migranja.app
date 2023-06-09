@@ -63,7 +63,10 @@ const SalesList = () => {
           price: sale.eventData.price,
           weightT: sale.eventData.totalWeight,
           cantU: sale.eventData.animalsQuantity,
-          total: sale.eventData.total
+          total: (
+            parseFloat(`${sale.eventData.totalWeight}`) *
+            parseFloat(`${sale.eventData.price}`)
+          ).toFixed(2)
         }))}
       />
       {openModal && (

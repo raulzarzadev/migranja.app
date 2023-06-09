@@ -46,7 +46,7 @@ const SellForm = ({
         type: 'onFoot',
         earrings: [] as any[],
         totalWeight: 0,
-        averageWeight: 0,
+        averageWeight: 10,
         animalsQuantity: 0,
         total: 0
       }
@@ -124,17 +124,26 @@ const SellForm = ({
     setAnimalsSelected(formValues.earrings)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
+  console.log(sale.eventData.totalWeight)
   useEffect(() => {
     if (animalsSelected?.length) {
-      methods.setValue('totalWeight', totalWeightFromEarringForm)
+      methods.setValue(
+        'totalWeight',
+        totalWeightFromEarringForm || sale.eventData.totalWeight
+      )
     }
     methods.setValue('animalsQuantity', animalsSelected?.length)
-  }, [animalsSelected?.length, methods, totalWeightFromEarringForm])
+  }, [
+    animalsSelected?.length,
+    methods,
+    sale.eventData.totalWeight,
+    totalWeightFromEarringForm
+  ])
 
   const areAnimalsSelected = !!animalsSelected?.length
   useEffect(() => {
     const totalPrice = formValues.price * formValues.totalWeight
+
     const averageWeight =
       parseInt(formValues.animalsQuantity) === 0
         ? 0
