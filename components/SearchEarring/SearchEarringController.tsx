@@ -83,7 +83,6 @@ const SearchEarringController = ({
     <Controller
       name={name}
       render={({ field, fieldState, formState }) => {
-        console.log(name, field)
         return (
           <Autocomplete
             disablePortal
