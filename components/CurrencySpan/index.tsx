@@ -3,7 +3,7 @@ const CurrencySpan = ({ quantity }: { quantity: number }) => {
     style: 'currency',
     currency: 'mxn'
   }).format(quantity)
-  return <span>{value}</span>
+  return <p className="text-end">{value}</p>
 }
 
 export default CurrencySpan

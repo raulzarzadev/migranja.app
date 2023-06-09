@@ -124,19 +124,18 @@ const SellForm = ({
     setAnimalsSelected(formValues.earrings)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log(sale.eventData.totalWeight)
   useEffect(() => {
     if (animalsSelected?.length) {
       methods.setValue(
         'totalWeight',
-        totalWeightFromEarringForm || sale.eventData.totalWeight
+        totalWeightFromEarringForm || sale?.eventData?.totalWeight || 0
       )
     }
     methods.setValue('animalsQuantity', animalsSelected?.length)
   }, [
     animalsSelected?.length,
     methods,
-    sale.eventData.totalWeight,
+    sale?.eventData?.totalWeight,
     totalWeightFromEarringForm
   ])
 

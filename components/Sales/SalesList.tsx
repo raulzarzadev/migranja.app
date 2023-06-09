@@ -42,10 +42,17 @@ const SalesList = () => {
             format: (props: any) => <CurrencySpan quantity={props} />
           },
           weightT: {
-            label: 'Peso(T)'
+            label: 'Peso(T)',
+            format: (props) => (
+              <p className="text-end">
+                {props}
+                {' kg'}
+              </p>
+            )
           },
           cantU: {
-            label: 'Cant(u)'
+            label: 'Cant(u)',
+            format: (props) => <p className="text-center">{props}</p>
           },
           total: {
             label: 'Total($)',
