@@ -58,6 +58,8 @@ const BirthForm = ({
   const defaultValues = {
     fatherId,
     motherId,
+    fatherEarring: '',
+    motherEarring: '',
     batch: event?.eventData.breedingId || '',
     breeding: {
       id: event?.id || '',
@@ -71,10 +73,13 @@ const BirthForm = ({
   })
   const formValues = methods.watch()
   const selectedFather = farmAnimals.find(
-    ({ earring }) => formValues?.fatherId && formValues?.fatherId === earring
+    ({ earring, id }) =>
+      id === formValues.fatherId || formValues.fatherEarring === earring
   )
+  console.log(formValues?.fatherId)
   const selectedMother = farmAnimals.find(
-    ({ earring }) => formValues?.motherId && formValues.motherId === earring
+    ({ earring, id }) =>
+      formValues?.motherId === id || formValues.motherEarring === earring
   )
   const { handleCreateBirth, status, progress, setProgress } = useCreateBirth({
     breedingId: formValues.breeding.id,
@@ -140,10 +145,10 @@ const BirthForm = ({
               <>
                 <SearchEarringController
                   justStallion
-                  name={'fatherId'}
+                  name={'fatherEarring'}
                   relativeTo={
                     farmAnimals.find(
-                      ({ id }) => methods.watch('motherId') === id
+                      ({ id }) => methods.watch('motherEarring') === id
                     )?.earring
                   }
                   gender="male"
@@ -154,7 +159,7 @@ const BirthForm = ({
                   className="w-[250px] my-2 mx-auto"
                 />
                 <SelectedMaleBreedings
-                  maleEarring={methods.watch('fatherId')}
+                  maleEarring={methods.watch('fatherEarring')}
                 />
               </>
             )}
@@ -165,10 +170,10 @@ const BirthForm = ({
             ) : (
               <>
                 <SearchEarringController
-                  name={'motherId'}
+                  name={'motherEarring'}
                   relativeTo={
                     farmAnimals.find(
-                      ({ id }) => methods.watch('fatherId') === id
+                      ({ id }) => methods.watch('fatherEarring') === id
                     )?.earring
                   }
                   gender="female"
@@ -179,7 +184,7 @@ const BirthForm = ({
                   className="w-[250px] my-2 mx-auto"
                 />
                 <SelectedFemaleBreedings
-                  motherEarring={methods.watch('motherId')}
+                  motherEarring={methods.watch('motherEarring')}
                 />
               </>
             )}
@@ -345,7 +350,7 @@ const SelectedFemaleBreedings = ({
     fatherEarring: string,
     breeding: { id: string; name: string }
   ) => {
-    methods.setValue('fatherId', fatherEarring)
+    methods.setValue('fatherEarring', fatherEarring)
     methods.setValue('breeding', breeding)
     methods.setValue('batch', breeding.name)
   }
@@ -433,7 +438,7 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
     motherId: string,
     breeding: { id: string; name: string }
   ) => {
-    methods.setValue('motherId', motherId)
+    methods.setValue('motherEarring', motherId)
     methods.setValue('breeding', breeding)
     methods.setValue('batch', breeding.name)
   }

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import {
   createEvent2,
   getFarmEvents,
+  removeAnimalFromBreeding,
   updateEventBreedingBatch
 } from '@firebase/Events/main'
 import { DateType } from 'types/base/TypeBase.model'
@@ -43,6 +44,7 @@ export type CreateBirthStatus =
   | 'UPDATING_MOTHER_STATE'
   | 'DONE'
   | 'ERROR'
+  | 'REMOVING_MOTHER_FROM_OTHERS_BREEDINGS'
 export const CreateBirthLabelStatus: Record<CreateBirthStatus, string> = {
   DONE: 'Hecho',
   READY: 'Listo',
@@ -51,7 +53,8 @@ export const CreateBirthLabelStatus: Record<CreateBirthStatus, string> = {
   CREATING_WEANING: 'Programando destetes',
   UPDATING_BREEDING: 'Actualizando monta',
   UPDATING_MOTHER_STATE: 'Actualizando estado de la madre',
-  ERROR: 'Ups! Algo salio mal.'
+  ERROR: 'Ups! Algo salio mal.',
+  REMOVING_MOTHER_FROM_OTHERS_BREEDINGS: 'Eliminado animal de otras montas'
 }
 export interface NewCalf extends NewAnimal {}
 const useCreateBirth = ({
@@ -183,7 +186,6 @@ const useCreateBirth = ({
       const calfsCreated = await Promise.all(createAnimalsPromises)
       setProgress(40)
       setStatus('CREATING_WEANING')
-      debugger
       // *************************************************  3. create animals weaning
       const newWeaningsPromises = calfs.map(async (calf) => {
         try {
@@ -226,7 +228,23 @@ const useCreateBirth = ({
         setProgress(80)
 
         // TODO: *************************************************  4.1. Remove mother from others breedings where appear as pending
-        const otherBreedings = []
+        if (motherData?.id) {
+          setStatus('REMOVING_MOTHER_FROM_OTHERS_BREEDINGS')
+
+          const otherBreedings = femalePendingBreedings({
+            femaleId: motherData?.id || ''
+          }).filter((event) => event.id !== breedingId)
+          for (let i = 0; i <= otherBreedings.length; i++) {
+            try {
+              await removeAnimalFromBreeding(
+                otherBreedings[i].id,
+                motherData.id
+              )
+            } catch (error) {
+              console.error(error)
+            }
+          }
+        }
       }
       // *************************************************  5. update mom state to SUCKLE
       setStatus('UPDATING_MOTHER_STATE')
@@ -244,7 +262,7 @@ const useCreateBirth = ({
   const femalePendingBreedings = ({ femaleId }: { femaleId: string }) => {
     return farmEvents.filter((breeding) =>
       breeding?.eventData?.breedingBatch?.find(
-        (animal) => animal.id === femaleId
+        (animal) => animal.id === femaleId && animal.status === 'PENDING'
       )
     )
   }
