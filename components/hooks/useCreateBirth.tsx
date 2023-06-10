@@ -2,10 +2,18 @@ import { AnimalType, ParentsType } from 'types/base/AnimalType.model'
 import useEvent from './useEvent'
 import { EventType } from '@firebase/Events/event.model'
 import { useEffect, useState } from 'react'
-import { createEvent2, updateEventBreedingBatch } from '@firebase/Events/main'
+import {
+  createEvent2,
+  getFarmEvents,
+  updateEventBreedingBatch
+} from '@firebase/Events/main'
 import { DateType } from 'types/base/TypeBase.model'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import {
+  selectFarmAnimals,
+  selectFarmEvents,
+  selectFarmState
+} from 'store/slices/farmSlice'
 import { createAnimal, updateAnimalState } from '@firebase/Animal/main'
 import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
@@ -54,6 +62,7 @@ const useCreateBirth = ({
   const farm = useSelector(selectFarmState)
   const { event } = useEvent({ eventId: breedingId })
   const farmAnimals = useSelector(selectFarmAnimals)
+  const farmEvents = useSelector(selectFarmEvents)
   const [motherData, setMotherData] = useState<AnimalType | null>(null)
   const [fatherData, setFatherData] = useState<AnimalType | null>(null)
 
@@ -217,6 +226,7 @@ const useCreateBirth = ({
         setProgress(80)
 
         // TODO: *************************************************  4.1. Remove mother from others breedings where appear as pending
+        const otherBreedings = []
       }
       // *************************************************  5. update mom state to SUCKLE
       setStatus('UPDATING_MOTHER_STATE')
@@ -230,7 +240,17 @@ const useCreateBirth = ({
       console.error(error)
     }
   }
+
+  const femalePendingBreedings = ({ femaleId }: { femaleId: string }) => {
+    return farmEvents.filter((breeding) =>
+      breeding?.eventData?.breedingBatch?.find(
+        (animal) => animal.id === femaleId
+      )
+    )
+  }
+
   return {
+    femalePendingBreedings,
     handleCreateBirth,
     progress,
     setProgress,

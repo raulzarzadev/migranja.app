@@ -1,4 +1,6 @@
+import { EventsList } from '@comps/FarmEvents/EventsList'
 import GeneticTree from '@comps/GeneticTree'
+import useCreateBirth from '@comps/hooks/useCreateBirth'
 import ImagesDisplay from '@comps/ImagesDisplay'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 import ModalGeneticTree from '@comps/modal/ModalGeneticTree'
@@ -17,7 +19,7 @@ import {
 } from 'firebase/types.model.ts/AnimalType.model'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
 import { AnimalState, AnimalStateType } from 'types/base/AnimalState.model'
@@ -254,9 +256,25 @@ export const AnimalDetails = ({
         </div>
       </main>
       <footer>
+        <PendingEvents animalId={animal.id} />
         <AnimalsOptions animalsEarrings={[animal?.earring || '']} />
         <EventsSection animalEarring={animal?.earring || ''} />
       </footer>
+    </div>
+  )
+}
+const PendingEvents = ({ animalId }: { animalId?: string }) => {
+  const { femalePendingBreedings } = useCreateBirth()
+  const [pendingEvents, setPendingEvents] = useState([])
+  useEffect(() => {
+    const breedings = femalePendingBreedings({ femaleId: animalId || '' })
+    setPendingEvents([...breedings])
+  }, [])
+  console.log({ pendingEvents })
+
+  return (
+    <div>
+      <EventsList events={pendingEvents} title="Pendientes" />
     </div>
   )
 }

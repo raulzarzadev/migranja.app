@@ -94,23 +94,7 @@ export const createGenericBreedingEvent = async <T>(
 ) => await eventsCRUD.createItem({ ...newItem })
 
 /** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
-export const discardAnimalFromBreedingBatch = async ({
-  eventId,
-  animalId
-}: {
-  animalId: AnimalType['id']
-  eventId: EventType['id']
-}) => {
-  const oldAnimal = await eventsCRUD.getItem(eventId).then((res) => {
-    // @ts-ignore
-    return res?.eventData?.breedingBatch.find(
-      (animal: { id: string }) => animal?.id === animalId
-    )
-  })
-  return await eventsCRUD.updateItem(eventId, {
-    'eventData.breedingBatch': arrayRemove(oldAnimal)
-  })
-}
+
 export const updateEventBreedingBatch = async ({
   eventId,
   animalId,
