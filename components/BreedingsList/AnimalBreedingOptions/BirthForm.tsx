@@ -317,26 +317,32 @@ const SelectedFemaleBreedings = ({
   }
   useEffect(() => {
     const breedings = searchFatherActiveBreedings(motherEarring)
-    const breedingsInMales = breedings.map(
-      (
-        breeding
-      ): {
-        id: string
-        earring: string
-        breeding: { id: string; name: string; breedingData: any }
-      } => {
-        const animal = breeding?.eventData?.breedingMale
-        return {
-          id: animal?.id || '',
-          earring: animal?.earring || '',
-          breeding: {
-            id: breeding.id,
-            name: breeding.eventData.breedingId,
-            breedingData: breeding
+    const breedingsInMales: PossibleParent[] = breedings
+      .map(
+        (
+          breeding
+        ): {
+          id: string
+          earring: string
+          breeding: { id: string; name: string; breedingData: any }
+        } => {
+          const animal = breeding?.eventData?.breedingMale
+          return {
+            id: animal?.id || '',
+            earring: animal?.earring || '',
+            status: breeding.eventData.breedingBatch.find(
+              (anml) => anml.earring === motherEarring
+            )?.status,
+            breeding: {
+              id: breeding.id,
+              name: breeding.eventData.breedingId,
+              breedingData: breeding
+            }
           }
         }
-      }
-    )
+      )
+      .filter((breeding) => breeding.status === 'PENDING')
+    console.log({ breedingsInMales })
 
     setPossibleFathers(breedingsInMales)
     //methods.setValue('fatherId', '')
@@ -344,7 +350,7 @@ const SelectedFemaleBreedings = ({
   }, [motherEarring])
 
   const isSelected = (fatherEarring: AnimalType['id'], breedingId: string) =>
-    formValues?.fatherId === fatherEarring &&
+    formValues?.fatherEarring === fatherEarring &&
     breedingId === formValues.breeding.id
   const handleSelectFather = (
     fatherEarring: string,
@@ -386,12 +392,6 @@ const SelectedFemaleBreedings = ({
     </>
   )
 }
-interface PossibleParent {
-  id: string
-  earring: string
-  status: string
-  breeding: { id: string; name: string; breedingData: any }
-}
 
 const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
   const [possibleMothers, setPossibleMothers] = useState<PossibleParent[]>([])
@@ -411,6 +411,7 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
   }
   useEffect(() => {
     const breedings = searchFatherActiveBreedings(maleEarring)
+
     const femalesInBreeding: PossibleParent[] = breedings
       .map((breeding: any) =>
         breeding.eventData.breedingBatch?.map((animal: AnimalType) => ({
@@ -425,6 +426,7 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
         }))
       )
       .flat()
+    console.log({ femalesInBreeding })
     setPossibleMothers(
       femalesInBreeding.filter((animal) => animal.status === 'PENDING')
     )
@@ -435,16 +437,17 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
 
   const methods = useFormContext()
   const handleSelectMother = (
-    motherId: string,
+    motherEarring: string,
     breeding: { id: string; name: string }
   ) => {
-    methods.setValue('motherEarring', motherId)
+    methods.setValue('motherEarring', motherEarring)
     methods.setValue('breeding', breeding)
     methods.setValue('batch', breeding.name)
   }
   const formValues = methods.watch()
-  const isSelected = (motherId: AnimalType['id'], breedingId: string) =>
-    formValues?.motherId === motherId && breedingId === formValues.breeding.id
+  const isSelected = (motherEarring: AnimalType['id'], breedingId: string) =>
+    formValues?.motherEarring === motherEarring &&
+    breedingId === formValues.breeding.id
 
   if (!possibleMothers.length) return <></>
 
@@ -478,5 +481,12 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
       </div>
     </>
   )
+}
+
+interface PossibleParent {
+  id: string
+  earring: string
+  status: string
+  breeding: { id: string; name: string; breedingData: any }
 }
 export default BirthForm

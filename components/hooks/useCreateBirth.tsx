@@ -217,11 +217,14 @@ const useCreateBirth = ({
           newCalfsIds: calfsCreated,
           calfsWeaningsIds: weaningCreated.map((weaning) => weaning?.res.id)
         }
+
         const breedingUpdated = await updateEventBreedingBatch({
           eventId: event?.id || '',
           animalId: motherData?.id as string,
           eventType: 'BIRTH',
           birthEventData
+        }).catch((err) => {
+          console.log(err)
         })
         console.log({ breedingUpdated })
 
@@ -234,22 +237,21 @@ const useCreateBirth = ({
           const otherBreedings = femalePendingBreedings({
             femaleId: motherData?.id || ''
           }).filter((event) => event.id !== breedingId)
-          for (let i = 0; i <= otherBreedings.length; i++) {
-            try {
-              await removeAnimalFromBreeding(
-                otherBreedings[i].id,
-                motherData.id
-              )
-            } catch (error) {
-              console.error(error)
-            }
+          for (let i = 0; i < otherBreedings.length; i++) {
+            console.log('remove animal from: ', otherBreedings[i]?.id, i)
+            await removeAnimalFromBreeding(
+              otherBreedings[i].id,
+              motherData.id
+            ).catch((err) => console.log(err))
           }
         }
       }
       // *************************************************  5. update mom state to SUCKLE
       setStatus('UPDATING_MOTHER_STATE')
       if (motherId)
-        await updateAnimalState(motherId, 'SUCKLE', motherData?.state)
+        await updateAnimalState(motherId, 'SUCKLE', motherData?.state).catch(
+          (err) => console.log(err)
+        )
       setProgress(100)
       setStatus('DONE')
     } catch (error) {
