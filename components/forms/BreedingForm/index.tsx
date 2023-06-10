@@ -22,7 +22,6 @@ import Modal from '@comps/modal'
 import useModal from '@comps/hooks/useModal'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { createError } from '@firebase/Errors/main'
-import { CreateBreedingError } from 'errorsHandlers/errors'
 import AnimalsCompatTable from '@comps/AnimalsCompatTable'
 
 const schema = yup.object().shape({
@@ -57,13 +56,19 @@ const BreedingForm = () => {
 
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
   const { progress, setProgress } = useProgress()
+
   const onSubmit = async (data: any) => {
     setLoading(true)
     setProgress(10)
     const breedingBatch = femalesFiltered
       ?.filter(({ earring }) => sheepSelected?.includes(earring))
       .map((animal: any) => {
-        return { ...animal, status: 'PENDING' }
+        return {
+          earring: animal.earring,
+          id: animal.id,
+          state: animal.state,
+          status: 'PENDING'
+        }
       })
     const breedingMale: AnimalType | null =
       males?.find(({ earring }) => earring === data.breedingMale) || null

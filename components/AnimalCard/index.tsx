@@ -41,7 +41,7 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
       </>
     )
   return (
-    <div className="p-2 ">
+    <div className="p-2  ">
       {editing ? (
         <AnimalForm animal={animal} setEditing={setEditing} checkFarmEarrings />
       ) : (
@@ -98,7 +98,7 @@ export const AnimalDetails = ({
 
   //useDebugInformation('AnimalDetails', animal)
   return (
-    <div className="">
+    <div className="font-normal">
       <div className="flex w-full justify-end ">
         {setEditing && id && (
           <>
@@ -272,31 +272,25 @@ const PendingEvents = ({ animalId }: { animalId?: string }) => {
   }, [])
   console.log({ pendingEvents })
 
-  return (
-    <div>
-      <EventsList events={pendingEvents} title="Pendientes" />
-    </div>
-  )
+  return <EventsList events={pendingEvents} title="Pendientes" />
 }
 const EventsSection = ({ animalEarring }: { animalEarring: string }) => {
   const [openEvents, setOpenEvents] = useState(false)
   const handleOpen = () => setOpenEvents(!openEvents)
   return (
     <div>
-      <div>
-        <button
-          className="btn btn-ghost w-full"
-          onClick={(e) => {
-            e.preventDefault()
-            setOpenEvents(!openEvents)
-          }}
-        >
-          {openEvents ? 'Ocultar events' : 'Mostrar eventos'}{' '}
-          <span className="ml-2">
-            <Icon name="event" />
-          </span>
-        </button>
-      </div>
+      <button
+        className="btn btn-ghost w-full"
+        onClick={(e) => {
+          e.preventDefault()
+          setOpenEvents(!openEvents)
+        }}
+      >
+        {openEvents ? 'Ocultar events' : 'Mostrar eventos'}{' '}
+        <span className="ml-2">
+          <Icon name="event" />
+        </span>
+      </button>
       {openEvents && (
         <Modal
           title={`Eventos de ${animalEarring}`}

@@ -236,7 +236,14 @@ const BirthForm = ({
                   <p>
                     Madre:
                     <span className="font-bold">
-                      {selectedMother?.earring || ' sin '}
+                      {selectedMother?.earring ? (
+                        <ModalAnimalDetails
+                          earring={selectedMother?.earring}
+                          size="md"
+                        />
+                      ) : (
+                        ' sin '
+                      )}
                     </span>{' '}
                   </p>
                   {formValues.batch && (
