@@ -1,6 +1,11 @@
 import useEvent from '@comps/hooks/useEvent'
 import useBreedingDates from '@comps/hooks/useBreedingDates'
-import { FormProvider, useForm, useFormContext } from 'react-hook-form'
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  useFormContext
+} from 'react-hook-form'
 import InputContainer from '@comps/inputs/InputContainer'
 import useCreateBirth from '@comps/hooks/useCreateBirth'
 import AnimalsForm, { NewAnimal } from '@comps/AnimalsForm'
@@ -16,6 +21,8 @@ import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { useEffect, useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
 import SearchEarringController from '@comps/SearchEarring/SearchEarringController'
+import { TextField } from '@mui/material'
+import { BreedingEvent, BreedingEventType } from '@firebase/Events/event.model'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -63,16 +70,21 @@ const BirthForm = ({
     defaultValues
   })
   const formValues = methods.watch()
-
+  const selectedFather = farmAnimals.find(
+    ({ earring }) => formValues?.fatherId && formValues?.fatherId === earring
+  )
+  const selectedMother = farmAnimals.find(
+    ({ earring }) => formValues?.motherId && formValues.motherId === earring
+  )
   const { handleCreateBirth, status, progress, setProgress } = useCreateBirth({
-    breedingId,
-    motherId: formValues.motherId,
-    fatherId: formValues.fatherId
+    breedingId: formValues.breeding.id,
+    motherId: selectedMother?.id,
+    fatherId: selectedFather?.id
   })
 
   const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
     console.log(data)
-    return
+
     try {
       await handleCreateBirth({
         calfs: data.calfs,
@@ -89,12 +101,6 @@ const BirthForm = ({
 
   const disabled = formValues?.calfs?.length <= 0 || progress === 100
   const modal = useModal()
-  const selectedFather = farmAnimals.find(
-    ({ id }) => formValues?.fatherId && formValues?.fatherId === id
-  )
-  const selectedMother = farmAnimals.find(
-    ({ id }) => formValues?.motherId && formValues.motherId === id
-  )
 
   const handleReset = () => {
     methods.reset()
@@ -115,7 +121,7 @@ const BirthForm = ({
               type="date"
               name="date"
               label="Fecha de nacimiento"
-              //datesRangeColor={datesRangeColor}
+              // datesRangeColor={datesRangeColor}
               containerClassName="w-[250px] mx-auto"
             />
             <InputContainer
@@ -147,7 +153,9 @@ const BirthForm = ({
                   // }}
                   className="w-[250px] my-2 mx-auto"
                 />
-                <SelectedMaleBreedings maleId={methods.watch('fatherId')} />
+                <SelectedMaleBreedings
+                  maleEarring={methods.watch('fatherId')}
+                />
               </>
             )}
             {isBreedingBirth && fatherId ? (
@@ -170,7 +178,9 @@ const BirthForm = ({
                   // }}
                   className="w-[250px] my-2 mx-auto"
                 />
-                <SelectedFemaleBreedings motherId={methods.watch('motherId')} />
+                <SelectedFemaleBreedings
+                  motherEarring={methods.watch('motherId')}
+                />
               </>
             )}
           </div>
@@ -250,8 +260,11 @@ const BirthForm = ({
                     }}
                   />
                   <p className="text-xs italic my-2">
-                    *Eventos relacionados: destete, cambios de estado de la
+                    * Eventos relacionados: destete, cambios de estado de la
                     madre, nuevos animales, etc.
+                  </p>
+                  <p className="text-xs italic my-2">
+                    ** Se descartara la madre de otras montas
                   </p>
                 </div>
                 <ProgressButton
@@ -271,21 +284,27 @@ const BirthForm = ({
   )
 }
 
-const SelectedFemaleBreedings = ({ motherId }: { motherId: string }) => {
+const SelectedFemaleBreedings = ({
+  motherEarring
+}: {
+  motherEarring: AnimalType['earring']
+}) => {
   const [possibleFathers, setPossibleFathers] = useState<PossibleParent[]>([])
   const farmEvents = useSelector(selectFarmEvents)
   const methods = useFormContext()
   const formValues = methods.watch()
-  const searchFatherActiveBreedings = (motherId: AnimalType['id']) => {
+
+  const searchFatherActiveBreedings = (
+    motherEarring: AnimalType['earring']
+  ) => {
     return farmEvents.filter(
       (e) =>
         e.type === 'BREEDING' &&
-        e.eventData?.breedingBatch.find((aml) => aml.id === motherId)
+        e.eventData?.breedingBatch.find((aml) => aml.earring === motherEarring)
     )
   }
   useEffect(() => {
-    const breedings = searchFatherActiveBreedings(motherId)
-    console.log({ breedings })
+    const breedings = searchFatherActiveBreedings(motherEarring)
     const breedingsInMales = breedings.map(
       (
         breeding
@@ -308,23 +327,21 @@ const SelectedFemaleBreedings = ({ motherId }: { motherId: string }) => {
     )
 
     setPossibleFathers(breedingsInMales)
-    methods.setValue('fatherId', '')
-
+    //methods.setValue('fatherId', '')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [motherId])
-  const isSelected = (fatherId: AnimalType['id'], breedingId: string) =>
-    formValues?.fatherId === fatherId && breedingId === formValues.breeding.id
+  }, [motherEarring])
 
+  const isSelected = (fatherEarring: AnimalType['id'], breedingId: string) =>
+    formValues?.fatherId === fatherEarring &&
+    breedingId === formValues.breeding.id
   const handleSelectFather = (
-    fatherId: string,
+    fatherEarring: string,
     breeding: { id: string; name: string }
   ) => {
-    console.log({ fatherId, breeding })
-    methods.setValue('fatherId', fatherId)
-    // methods.setValue('breeding', breeding)
-    // methods.setValue('batch', breeding.name)
+    methods.setValue('fatherId', fatherEarring)
+    methods.setValue('breeding', breeding)
+    methods.setValue('batch', breeding.name)
   }
-  console.log({ formValues })
 
   return (
     <>
@@ -335,7 +352,7 @@ const SelectedFemaleBreedings = ({ motherId }: { motherId: string }) => {
             key={`${animal?.id}-${i}`}
             className={`
             ${
-              isSelected(animal.id, animal?.breeding?.id)
+              isSelected(animal.earring, animal?.breeding?.id)
                 ? ' border-base-content '
                 : ' border-base-200 '
             }
@@ -343,7 +360,7 @@ const SelectedFemaleBreedings = ({ motherId }: { motherId: string }) => {
         `}
             onClick={(e) => {
               e.preventDefault()
-              handleSelectFather(animal.id, {
+              handleSelectFather(animal.earring, {
                 id: animal.breeding.id,
                 name: animal.breeding.name
               })
@@ -360,27 +377,34 @@ const SelectedFemaleBreedings = ({ motherId }: { motherId: string }) => {
 interface PossibleParent {
   id: string
   earring: string
+  status: string
   breeding: { id: string; name: string; breedingData: any }
 }
 
-const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
+const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
   const [possibleMothers, setPossibleMothers] = useState<PossibleParent[]>([])
   const farmEvents = useSelector(selectFarmEvents)
 
-  const searchFatherActiveBreedings = (fatherId: AnimalType['id']) => {
+  const searchFatherActiveBreedings = (
+    fatherEarring: AnimalType['earring']
+  ) => {
     return farmEvents.filter(
       (e) =>
-        (e.type === 'BREEDING' && e.eventData?.breedingMale?.id === fatherId) ||
-        e?.eventData?.otherMales?.find((male) => male?.id === fatherId)
+        (e.type === 'BREEDING' &&
+          e.eventData?.breedingMale?.earring === fatherEarring) ||
+        e?.eventData?.otherMales?.find(
+          (male) => male?.earring === fatherEarring
+        )
     )
   }
   useEffect(() => {
-    const breedings = searchFatherActiveBreedings(maleId)
+    const breedings = searchFatherActiveBreedings(maleEarring)
     const femalesInBreeding: PossibleParent[] = breedings
       .map((breeding: any) =>
         breeding.eventData.breedingBatch?.map((animal: AnimalType) => ({
           id: animal.id,
           earring: animal.earring,
+          status: animal.status,
           breeding: {
             id: breeding.id,
             name: breeding.eventData.breedingId,
@@ -389,12 +413,13 @@ const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
         }))
       )
       .flat()
-
-    setPossibleMothers(femalesInBreeding)
+    setPossibleMothers(
+      femalesInBreeding.filter((animal) => animal.status === 'PENDING')
+    )
     //methods.setValue('motherId', '')
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maleId])
+  }, [maleEarring])
 
   const methods = useFormContext()
   const handleSelectMother = (
@@ -420,7 +445,7 @@ const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
             key={`${animal?.id}-${i}`}
             className={`
                 ${
-                  isSelected(animal.id, animal?.breeding?.id)
+                  isSelected(animal.earring, animal?.breeding?.id)
                     ? ' border-base-content '
                     : ' border-base-200 '
                 }
@@ -428,7 +453,7 @@ const SelectedMaleBreedings = ({ maleId }: { maleId: string }) => {
             `}
             onClick={(e) => {
               e.preventDefault()
-              handleSelectMother(animal.id, {
+              handleSelectMother(animal.earring, {
                 id: animal.breeding.id,
                 name: animal.breeding.name
               })

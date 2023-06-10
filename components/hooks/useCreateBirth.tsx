@@ -174,7 +174,7 @@ const useCreateBirth = ({
       const calfsCreated = await Promise.all(createAnimalsPromises)
       setProgress(40)
       setStatus('CREATING_WEANING')
-
+      debugger
       // *************************************************  3. create animals weaning
       const newWeaningsPromises = calfs.map(async (calf) => {
         try {
@@ -215,6 +215,8 @@ const useCreateBirth = ({
         console.log({ breedingUpdated })
 
         setProgress(80)
+
+        // TODO: *************************************************  4.1. Remove mother from others breedings where appear as pending
       }
       // *************************************************  5. update mom state to SUCKLE
       setStatus('UPDATING_MOTHER_STATE')

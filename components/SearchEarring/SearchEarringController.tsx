@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 
 interface SearchEarring {
   omitEarrings?: string[]
@@ -36,10 +36,10 @@ const SearchEarringController = ({
   name,
   onReset
 }: SearchEarring) => {
-  const [search, setSearch] = useState<string | number>('')
+  //const [search, setSearch] = useState<string | number>('')
   const [matches, setMatches] = useState<AnimalType[]>([])
   const farmAnimals = useSelector(selectFarmAnimals)
-
+  const methods = useFormContext()
   useEffect(() => {
     const animals = farmAnimals
       //* Aply a custom filter i exist. Elseware retur all animals
@@ -50,16 +50,16 @@ const SearchEarringController = ({
       //* filter stallions
       .filter((a) => (justStallion ? a.isStallion === true : true))
       //* Aplay search filters
-      .filter(
-        (animal) =>
-          animal?.earring?.includes(`${search}`) ||
-          animal?.name?.includes(`${search}`)
-      )
+      //.filter(
+      //(animal) =>
+      //animal?.earring?.includes(`${search}`) ||
+      //animal?.name?.includes(`${search}`)
+      //)
 
       .sort((a: any, b: any) => a.earring - b.earring)
     setMatches(animals)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [farmAnimals, gender, search])
+  }, [farmAnimals, gender])
 
   const alreadyIn = (earring: string) => {
     return omitEarrings.includes(earring)
@@ -68,14 +68,10 @@ const SearchEarringController = ({
     relativeTo && findAnimalRelationships(earring, relativeTo, farmAnimals)
 
   const options = matches
-    .map((animal) => ({
-      label: animal.earring,
-      id: animal.id,
-      name: animal.name
-    }))
+    .map((animal) => animal.earring)
     .sort((a, b) => {
-      if (a.label > b.label) return 1
-      if (a.label < b.label) return -1
+      if (a > b) return 1
+      if (a < b) return -1
       return 0
     })
 
@@ -87,11 +83,12 @@ const SearchEarringController = ({
           <Autocomplete
             disablePortal
             //id="combo-box-demo"
-            options={options}
+            options={['Buscar', ...options]}
             onChange={(e, newValue) => {
-              field.onChange(newValue?.id)
+              field.onChange(newValue)
             }}
-            isOptionEqualToValue={(option, value) => option?.id === value?.id}
+            value={methods.watch(name) || 'Buscar'}
+            //isOptionEqualToValue={(option, value) => option === value}
             // sx={{ width: 300 }}
             className={` ${className} `}
             renderInput={(params) => {
@@ -100,16 +97,16 @@ const SearchEarringController = ({
               )
             }}
             renderOption={(props, option, { inputValue }) => {
-              const matches = match(option.label, inputValue, {
+              const matches = match(option, inputValue, {
                 insideWords: true
               })
-              const parts = parse(option.label, matches)
+              const parts = parse(option, matches)
               return (
                 <li
                   className={`
                     ${props.className} 
-                    ${isRelative(option.label) && ' bg-error text-white'} 
-                    ${alreadyIn(option.label) && ' bg-slate-600 '}
+                    ${isRelative(option) && ' bg-error text-white'} 
+                    ${alreadyIn(option) && ' bg-slate-600 '}
                   `}
                   {...props}
                 >
@@ -122,9 +119,9 @@ const SearchEarringController = ({
                         }}
                       >
                         {part.text}
-                        <span className="ml-2">{isRelative(option.label)}</span>
+                        <span className="ml-2">{isRelative(option)}</span>
                         <span className="ml-2">
-                          {alreadyIn(option.label) && 'Ya esta en la lista'}
+                          {alreadyIn(option) && 'Ya esta en la lista'}
                         </span>
                       </span>
                     ))}
