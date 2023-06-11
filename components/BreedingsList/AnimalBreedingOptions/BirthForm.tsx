@@ -21,6 +21,7 @@ import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { useEffect, useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
 import SearchEarringController from '@comps/SearchEarring/SearchEarringController'
+import { AnimalBreedingType } from 'types/base/FarmEvent.model'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -316,29 +317,22 @@ const SelectedFemaleBreedings = ({
   useEffect(() => {
     const breedings = searchFatherActiveBreedings(motherEarring)
     const breedingsInMales: PossibleParent[] = breedings
-      .map(
-        (
-          breeding
-        ): {
-          id: string
-          earring: string
-          breeding: { id: string; name: string; breedingData: any }
-        } => {
-          const animal = breeding?.eventData?.breedingMale
-          return {
-            id: animal?.id || '',
-            earring: animal?.earring || '',
-            status: breeding.eventData.breedingBatch.find(
+      .map((breeding) => {
+        const animal = breeding?.eventData?.breedingMale
+        return {
+          id: animal?.id || '',
+          earring: animal?.earring || '',
+          status:
+            breeding.eventData.breedingBatch.find(
               (anml) => anml.earring === motherEarring
-            )?.status,
-            breeding: {
-              id: breeding.id,
-              name: breeding.eventData.breedingId,
-              breedingData: breeding
-            }
+            )?.status || 'PENDING',
+          breeding: {
+            id: breeding.id,
+            name: breeding.eventData.breedingId,
+            breedingData: breeding
           }
         }
-      )
+      })
       .filter((breeding) => breeding.status === 'PENDING')
 
     setPossibleFathers(breedingsInMales)
@@ -498,7 +492,7 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
 interface PossibleParent {
   id: string
   earring: string
-  status: string
+  status: AnimalBreedingType['status']
   breeding: { id: string; name: string; breedingData: any }
 }
 export default BirthForm

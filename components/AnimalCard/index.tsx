@@ -23,6 +23,8 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
 import { AnimalState, AnimalStateType } from 'types/base/AnimalState.model'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { FarmEvent } from 'types/base/FarmEvent.model'
 import { ImageType } from 'types/base/ImageType.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -265,10 +267,13 @@ export const AnimalDetails = ({
 }
 const PendingEvents = ({ animalId }: { animalId?: string }) => {
   const { femalePendingBreedings } = useCreateBirth()
-  const [pendingEvents, setPendingEvents] = useState([])
+  const [pendingEvents, setPendingEvents] = useState<
+    AnimalFormattedWhitGenericEvenData[]
+  >([])
   useEffect(() => {
     const breedings = femalePendingBreedings({ femaleId: animalId || '' })
     setPendingEvents([...breedings])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   console.log({ pendingEvents })
 
