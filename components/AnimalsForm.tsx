@@ -70,6 +70,27 @@ const AnimalsForm = ({
       methods.reset()
     }
   }
+  const initialAnimalState: {
+    label: string
+    value: AnimalType['state']
+  }[] = [
+    {
+      label: 'Libre',
+      value: 'FREE'
+    },
+    {
+      label: 'Preñada',
+      value: 'PREGNANT'
+    },
+    {
+      label: 'Lactando',
+      value: 'LACTATING'
+    },
+    {
+      label: 'Muerto',
+      value: 'DEAD'
+    }
+  ]
   return (
     <div>
       <AnimalsCompatTable
@@ -97,17 +118,7 @@ const AnimalsForm = ({
                   type={'radios'}
                   label="Estado"
                   name="state"
-                  radioOpts={[
-                    {
-                      label: 'Lactando',
-                      value: 'LACTATING',
-                      defaultChecked: true
-                    },
-                    {
-                      label: 'Muerto',
-                      value: 'DEAD'
-                    }
-                  ]}
+                  radioOpts={initialAnimalState}
                   rules={{
                     required: true
                   }}

@@ -6,6 +6,7 @@ export const AnimalState = {
   LACTATING: 'lactante', //* lactante recien nacidas
   SUCKLE: 'lactando', //* amamantando lactando recien paridas
   FOR_SALE: 'en venta',
+  PREGNANT: 'Preñada',
   //* Inactive animals states
   SOLD: 'vendido',
   DEAD: 'muerto',

@@ -26,6 +26,7 @@ import Icon from '@comps/Icon'
 import useMaterialMediaQuery from '@comps/hooks/useMaterialMediaQuery'
 import useCurrentFarm from '@comps/hooks/useCurrentFarm'
 import { selectAuthState } from 'store/slices/authSlice'
+import AddMany from '@comps/AddMany'
 
 type MenuItem = {
   label: string
@@ -64,7 +65,7 @@ const FarmMenu = (props: any) => {
           label: 'Varios',
           icon: 'plus',
           showChildren: false,
-          component: <AnimalsForm />
+          component: <AddMany />
         },
         inventory: {
           label: 'Inventarios',
