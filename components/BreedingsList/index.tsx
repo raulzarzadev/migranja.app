@@ -120,7 +120,7 @@ const BreedingsList = () => {
 
   const [batchesFiltered, setBreedingFilter] = useState<any[]>([])
   const [finishedBreedings, setFinishedBreedings] = useState<any[]>([])
-
+  console.log({ search })
   useEffect(() => {
     const animalsFiltered = [...breedingsByAnimals].filter(
       (animal) =>
@@ -132,13 +132,22 @@ const BreedingsList = () => {
         filterField(animal?.batch || '', search.value)
     )
 
-    const batchesFiltered = [...breedingsByBatch].filter((batch) =>
-      // filter  by bull
-      filterField(batch.eventData.breedingMale?.earring || '', search.value)
+    const batchesFiltered = [...breedingsByBatch].filter(
+      (batch) =>
+        // filter  by bull
+        filterField(
+          batch.eventData.breedingMale?.earring || '',
+          search.value
+        ) ||
+        // filter by animal in batch
+        batch.eventData.breedingBatch.find((animal) =>
+          animal.earring
+            ?.toLocaleUpperCase()
+            ?.includes(search.value.toLocaleUpperCase())
+        )
     )
 
     setAnimalsFilter(animalsFiltered)
-
     setBreedingFilter(batchesFiltered)
   }, [breedingsByAnimals, breedingsByBatch, farmEvents, search.value])
 
