@@ -28,6 +28,7 @@ const AddMany = () => {
         await createAnimal({
           ...animals[i],
           weight: { atBirth: animals[i]?.weight || 0 },
+          //@ts-ignore
           farm,
           batch
         })

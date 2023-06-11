@@ -118,6 +118,7 @@ const AnimalsForm = ({
                   type={'radios'}
                   label="Estado"
                   name="state"
+                  //@ts-ignore
                   radioOpts={initialAnimalState}
                   rules={{
                     required: true
