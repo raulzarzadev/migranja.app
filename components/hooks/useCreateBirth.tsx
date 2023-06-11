@@ -2,10 +2,19 @@ import { AnimalType, ParentsType } from 'types/base/AnimalType.model'
 import useEvent from './useEvent'
 import { EventType } from '@firebase/Events/event.model'
 import { useEffect, useState } from 'react'
-import { createEvent2, updateEventBreedingBatch } from '@firebase/Events/main'
+import {
+  createEvent2,
+  getFarmEvents,
+  removeAnimalFromBreeding,
+  updateEventBreedingBatch
+} from '@firebase/Events/main'
 import { DateType } from 'types/base/TypeBase.model'
 import { useSelector } from 'react-redux'
-import { selectFarmAnimals, selectFarmState } from 'store/slices/farmSlice'
+import {
+  selectFarmAnimals,
+  selectFarmEvents,
+  selectFarmState
+} from 'store/slices/farmSlice'
 import { createAnimal, updateAnimalState } from '@firebase/Animal/main'
 import { creteAnimalWeaning } from '@firebase/Events/weaning.event'
 import { OVINE_DAYS } from 'FARM_CONFIG/FARM_DATES'
@@ -35,6 +44,7 @@ export type CreateBirthStatus =
   | 'UPDATING_MOTHER_STATE'
   | 'DONE'
   | 'ERROR'
+  | 'REMOVING_MOTHER_FROM_OTHERS_BREEDINGS'
 export const CreateBirthLabelStatus: Record<CreateBirthStatus, string> = {
   DONE: 'Hecho',
   READY: 'Listo',
@@ -43,7 +53,8 @@ export const CreateBirthLabelStatus: Record<CreateBirthStatus, string> = {
   CREATING_WEANING: 'Programando destetes',
   UPDATING_BREEDING: 'Actualizando monta',
   UPDATING_MOTHER_STATE: 'Actualizando estado de la madre',
-  ERROR: 'Ups! Algo salio mal.'
+  ERROR: 'Ups! Algo salio mal.',
+  REMOVING_MOTHER_FROM_OTHERS_BREEDINGS: 'Eliminado animal de otras montas'
 }
 export interface NewCalf extends NewAnimal {}
 const useCreateBirth = ({
@@ -54,6 +65,7 @@ const useCreateBirth = ({
   const farm = useSelector(selectFarmState)
   const { event } = useEvent({ eventId: breedingId })
   const farmAnimals = useSelector(selectFarmAnimals)
+  const farmEvents = useSelector(selectFarmEvents)
   const [motherData, setMotherData] = useState<AnimalType | null>(null)
   const [fatherData, setFatherData] = useState<AnimalType | null>(null)
 
@@ -79,75 +91,75 @@ const useCreateBirth = ({
     date: DateType
     batch: string
   }) => {
-    // debugger
-    const batchName = data.batch || breedingData?.name || ''
-    const newBirth: DTO_NewBirth = {
-      type: 'BIRTH',
-      farm: { id: farm?.id || '', name: farm?.name || '' },
-      eventData: {
-        date: data.date,
-        batch: batchName,
-        breeding: breedingData,
-        calfs: data.calfs,
-        parents: {
-          father: fatherData
-            ? {
-                inTheFarm: true,
-                earring: fatherData.earring,
-                id: fatherData.id,
-                name: fatherData.name || ''
-              }
-            : null,
-          mother: motherData
-            ? {
-                inTheFarm: true,
-                earring: motherData.earring,
-                id: motherData.id,
-                name: motherData.name || ''
-              }
-            : null
+    try {
+      const batchName = data.batch || breedingData?.name || ''
+      const newBirth: DTO_NewBirth = {
+        type: 'BIRTH',
+        farm: { id: farm?.id || '', name: farm?.name || '' },
+        eventData: {
+          date: data.date,
+          batch: batchName,
+          breeding: breedingData,
+          calfs: data.calfs,
+          parents: {
+            father: fatherData
+              ? {
+                  inTheFarm: true,
+                  earring: fatherData.earring,
+                  id: fatherData.id,
+                  name: fatherData.name || ''
+                }
+              : null,
+            mother: motherData
+              ? {
+                  inTheFarm: true,
+                  earring: motherData.earring,
+                  id: motherData.id,
+                  name: motherData.name || ''
+                }
+              : null
+          }
         }
       }
-    }
-    setProgress(10)
-    setStatus('CREATING_EVENT')
-    const parensBirthEvent = newBirth.eventData.parents
-    const motherBreed = parensBirthEvent.mother?.breed?.replaceAll(' ', '')
-    const fatherBreed = parensBirthEvent.father?.breed?.replaceAll(' ', '')
-    const breed =
-      (!motherBreed || !fatherBreed
-        ? motherBreed || fatherBreed
-        : fatherBreed === motherBreed
-        ? fatherBreed
-        : `(1/2${motherBreed}-1/2${fatherBreed})`) || ''
+      setProgress(10)
+      setStatus('CREATING_EVENT')
+      const parensBirthEvent = newBirth.eventData.parents
+      const motherBreed = parensBirthEvent.mother?.breed?.replaceAll(' ', '')
+      const fatherBreed = parensBirthEvent.father?.breed?.replaceAll(' ', '')
+      const breed =
+        (!motherBreed || !fatherBreed
+          ? motherBreed || fatherBreed
+          : fatherBreed === motherBreed
+          ? fatherBreed
+          : `(1/2${motherBreed}-1/2${fatherBreed})`) || ''
 
-    const newCalfsDefaultData: Omit<
-      AnimalType,
-      | 'earring'
-      | 'id'
-      | 'name'
-      | 'joinedAt'
-      | 'updatedAt'
-      | 'userId'
-      | 'createdAt'
-      | 'gender'
-    > = {
-      parents: parensBirthEvent || null,
-      birthType: newBirth.eventData.calfs.length || 0,
-      birthday: newBirth.eventData.date || 0,
-      batch: batchName,
-      type: 'ovine',
-      breed,
-      images: [],
-      farm: {
-        id: farm?.id,
-        name: farm?.name
+      const newCalfsDefaultData: Omit<
+        AnimalType,
+        | 'earring'
+        | 'id'
+        | 'name'
+        | 'joinedAt'
+        | 'updatedAt'
+        | 'userId'
+        | 'createdAt'
+        | 'gender'
+      > = {
+        parents: parensBirthEvent || null,
+        birthType: newBirth.eventData.calfs.length || 0,
+        birthday: newBirth.eventData.date || 0,
+        batch: batchName,
+        type: 'ovine',
+        breed,
+        images: [],
+        farm: {
+          id: farm?.id,
+          name: farm?.name
+        }
+        // weight:{
+        //   ...data.weight
+        // }
       }
-      // weight:{
-      //   ...data.weight
-      // }
-    }
-    try {
+
       // *************************************************  1. create birth
       const eventCreated = await createEvent2(newBirth)
 
@@ -157,24 +169,21 @@ const useCreateBirth = ({
       const calfs: AnimalType[] = data?.calfs
 
       const createAnimalsPromises = calfs.map(async (calf) => {
-        try {
-          return await createAnimal({
-            ...newCalfsDefaultData,
-            ...calf,
-            state: 'LACTATING',
-            weight: {
-              atBirth: (calf.weight as number) || 0
-            }
-          }).then((res) => res.res.id)
-        } catch (error) {
-          console.log(error)
-        }
+        return await createAnimal({
+          ...newCalfsDefaultData,
+          ...calf,
+          state: 'LACTATING',
+          weight: {
+            atBirth: (calf.weight as number) || 0
+          }
+        })
+          .then((res) => res.res.id)
+          .catch((err) => console.log(err))
       })
 
       const calfsCreated = await Promise.all(createAnimalsPromises)
       setProgress(40)
       setStatus('CREATING_WEANING')
-
       // *************************************************  3. create animals weaning
       const newWeaningsPromises = calfs.map(async (calf) => {
         try {
@@ -206,20 +215,39 @@ const useCreateBirth = ({
           newCalfsIds: calfsCreated,
           calfsWeaningsIds: weaningCreated.map((weaning) => weaning?.res.id)
         }
+
         const breedingUpdated = await updateEventBreedingBatch({
           eventId: event?.id || '',
           animalId: motherData?.id as string,
           eventType: 'BIRTH',
           birthEventData
+        }).catch((err) => {
+          console.log(err)
         })
-        console.log({ breedingUpdated })
-
         setProgress(80)
+
+        // *************************************************  4.1. Remove mother from others breedings where appear as pending
+        if (motherData?.id) {
+          setStatus('REMOVING_MOTHER_FROM_OTHERS_BREEDINGS')
+
+          const otherBreedings = femalePendingBreedings({
+            femaleId: motherData?.id || ''
+          }).filter((event) => event.id !== breedingId)
+
+          for (let i = 0; i < otherBreedings.length; i++) {
+            await removeAnimalFromBreeding(
+              otherBreedings[i].id,
+              motherData.id
+            ).catch((err) => console.log(err))
+          }
+        }
       }
       // *************************************************  5. update mom state to SUCKLE
       setStatus('UPDATING_MOTHER_STATE')
       if (motherId)
-        await updateAnimalState(motherId, 'SUCKLE', motherData?.state)
+        await updateAnimalState(motherId, 'SUCKLE', motherData?.state).catch(
+          (err) => console.log(err)
+        )
       setProgress(100)
       setStatus('DONE')
     } catch (error) {
@@ -228,7 +256,17 @@ const useCreateBirth = ({
       console.error(error)
     }
   }
+
+  const femalePendingBreedings = ({ femaleId }: { femaleId: string }) => {
+    return farmEvents.filter((breeding) =>
+      breeding?.eventData?.breedingBatch?.find(
+        (animal) => animal.id === femaleId && animal.status === 'PENDING'
+      )
+    )
+  }
+
   return {
+    femalePendingBreedings,
     handleCreateBirth,
     progress,
     setProgress,

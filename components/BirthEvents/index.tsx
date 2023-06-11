@@ -123,11 +123,15 @@ const BirthEvents = () => {
             <div>
               <span className="font-bold">Lote/Monta:</span>
               <div className="text-center my-2">
-                {event?.eventData.breedingId && (
-                  <ModalBreedingDetails
-                    breedingBatchId={event?.eventData.breedingId}
-                  />
-                )}
+                {event?.eventData.breedingId ||
+                  (event?.eventData.batch && (
+                    <ModalBreedingDetails
+                      breedingBatchId={
+                        event?.eventData.breedingId ||
+                        (event?.eventData.batch as string)
+                      }
+                    />
+                  ))}
               </div>
             </div>
             <div>

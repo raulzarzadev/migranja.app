@@ -22,7 +22,6 @@ const AnimalsCompatTable = ({
   const haveSimpleWeight = animals.every(
     (animals) => typeof animals?.weight === 'number'
   )
-  console.log({ animals })
   return (
     <div className="my-4">
       {title && <h3 className="font-bold text-center text-xl">{title}</h3>}

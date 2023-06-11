@@ -15,13 +15,19 @@ import WeaningDetails from '@comps/WeaningDetails'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { AnimalType } from 'types/base/AnimalType.model'
 
-export const EventsList = ({ events }: { events: FarmState['events'] }) => {
+export const EventsList = ({
+  events,
+  title = 'Eventos'
+}: {
+  events: FarmState['events']
+  title?: string
+}) => {
   const modal = useModal()
   const [event, setEvent] = useState<FarmEvent | null>(null)
   return (
     <div role="events-list">
       <MyTable
-        title="Todos los eventos"
+        title={title}
         headers={{
           type: {
             label: 'Tipo',

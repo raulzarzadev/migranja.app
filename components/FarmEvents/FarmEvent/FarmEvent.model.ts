@@ -49,7 +49,12 @@ export interface EmptyDetailsEvent {
 }
 export interface BreedingDetailsEvent {
   breedingId: string
-  breedingBatch: Partial<AnimalType>[]
+  breedingBatch: Partial<{
+    earring: string
+    id: string
+    state: string
+    status: string
+  }>[]
   breedingMale: Partial<AnimalType> | null
   parents?: ShortParentsType
   startAt: number | string

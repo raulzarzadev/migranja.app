@@ -94,6 +94,7 @@ export const createGenericBreedingEvent = async <T>(
 ) => await eventsCRUD.createItem({ ...newItem })
 
 /** ************** EDIT BREEDING EVENT, REMOVE ANIMAL FROM BREEDING BATCH, AND ADD TO BREEDING BIRTHS ********** */
+
 export const updateEventBreedingBatch = async ({
   eventId,
   animalId,

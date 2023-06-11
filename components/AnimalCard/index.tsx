@@ -1,4 +1,6 @@
+import { EventsList } from '@comps/FarmEvents/EventsList'
 import GeneticTree from '@comps/GeneticTree'
+import useCreateBirth from '@comps/hooks/useCreateBirth'
 import ImagesDisplay from '@comps/ImagesDisplay'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 import ModalGeneticTree from '@comps/modal/ModalGeneticTree'
@@ -17,10 +19,12 @@ import {
 } from 'firebase/types.model.ts/AnimalType.model'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
 import { AnimalState, AnimalStateType } from 'types/base/AnimalState.model'
+import { AnimalFormattedWhitGenericEvenData } from 'types/base/AnimalType.model'
+import { FarmEvent } from 'types/base/FarmEvent.model'
 import { ImageType } from 'types/base/ImageType.model'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 
@@ -39,7 +43,7 @@ const AnimalCard = ({ animalId }: { animalId?: string }) => {
       </>
     )
   return (
-    <div className="p-2 ">
+    <div className="p-2  ">
       {editing ? (
         <AnimalForm animal={animal} setEditing={setEditing} checkFarmEarrings />
       ) : (
@@ -96,7 +100,7 @@ export const AnimalDetails = ({
 
   //useDebugInformation('AnimalDetails', animal)
   return (
-    <div className="">
+    <div className="font-normal">
       <div className="flex w-full justify-end ">
         {setEditing && id && (
           <>
@@ -254,31 +258,44 @@ export const AnimalDetails = ({
         </div>
       </main>
       <footer>
+        <PendingEvents animalId={animal.id} />
         <AnimalsOptions animalsEarrings={[animal?.earring || '']} />
         <EventsSection animalEarring={animal?.earring || ''} />
       </footer>
     </div>
   )
 }
+const PendingEvents = ({ animalId }: { animalId?: string }) => {
+  const { femalePendingBreedings } = useCreateBirth()
+  const [pendingEvents, setPendingEvents] = useState<
+    AnimalFormattedWhitGenericEvenData[]
+  >([])
+  useEffect(() => {
+    const breedings = femalePendingBreedings({ femaleId: animalId || '' })
+    setPendingEvents([...breedings])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  console.log({ pendingEvents })
+
+  return <EventsList events={pendingEvents} title="Pendientes" />
+}
 const EventsSection = ({ animalEarring }: { animalEarring: string }) => {
   const [openEvents, setOpenEvents] = useState(false)
   const handleOpen = () => setOpenEvents(!openEvents)
   return (
     <div>
-      <div>
-        <button
-          className="btn btn-ghost w-full"
-          onClick={(e) => {
-            e.preventDefault()
-            setOpenEvents(!openEvents)
-          }}
-        >
-          {openEvents ? 'Ocultar events' : 'Mostrar eventos'}{' '}
-          <span className="ml-2">
-            <Icon name="event" />
-          </span>
-        </button>
-      </div>
+      <button
+        className="btn btn-ghost w-full"
+        onClick={(e) => {
+          e.preventDefault()
+          setOpenEvents(!openEvents)
+        }}
+      >
+        {openEvents ? 'Ocultar events' : 'Mostrar eventos'}{' '}
+        <span className="ml-2">
+          <Icon name="event" />
+        </span>
+      </button>
       {openEvents && (
         <Modal
           title={`Eventos de ${animalEarring}`}

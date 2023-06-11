@@ -9,7 +9,18 @@ import Autocomplete from '@mui/material/Autocomplete'
 import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
 import Icon from '@comps/Icon'
-
+interface SearchEarring {
+  omitEarrings?: string[]
+  onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
+  gender?: 'male' | 'female' | 'all'
+  placeholder?: string
+  relativeTo?: AnimalType['earring']
+  label?: string
+  className?: string
+  filterBy?: (animal: AnimalType) => any
+  justStallion?: boolean
+  onReset?: () => {}
+}
 const SearchEarring = ({
   onEarringClick,
   omitEarrings = [],
@@ -21,18 +32,7 @@ const SearchEarring = ({
   filterBy = (animal) => [],
   justStallion,
   onReset
-}: {
-  omitEarrings?: string[]
-  onEarringClick: ({ earring, id }: { earring: string; id: string }) => void
-  gender?: 'male' | 'female' | 'all'
-  placeholder?: string
-  relativeTo?: AnimalType['earring']
-  label?: string
-  className?: string
-  filterBy?: (animal: AnimalType) => any
-  justStallion?: boolean
-  onReset?: () => {}
-}) => {
+}: SearchEarring) => {
   const [search, setSearch] = useState<string | number>('')
   const [matches, setMatches] = useState<AnimalType[]>([])
   const farmAnimals = useSelector(selectFarmAnimals)
