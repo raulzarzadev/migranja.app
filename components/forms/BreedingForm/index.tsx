@@ -23,6 +23,7 @@ import useModal from '@comps/hooks/useModal'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 import { createError } from '@firebase/Errors/main'
 import AnimalsCompatTable from '@comps/AnimalsCompatTable'
+import SearchEarringController from '@comps/SearchEarring/SearchEarringController'
 
 const schema = yup.object().shape({
   breedingMale: yup.string().required('Este campo es necesario*')
@@ -88,7 +89,12 @@ const BreedingForm = () => {
         eventData: {
           breedingBatch: breedingBatch,
           breedingId: data.batch,
-          breedingMale,
+          breedingMale: {
+            id: breedingMale?.id,
+            earring: breedingMale?.earring,
+            name: breedingMale?.name,
+            state: breedingMale?.state
+          },
           finishAt: data.finishAt,
           startAt: data.startAt,
           date: data.startAt
@@ -173,7 +179,14 @@ const BreedingForm = () => {
           />
 
           <div className="">
-            <SearchEarring
+            <SearchEarringController
+              justStallion
+              label="Buscar macho"
+              placeholder="Buscar macho"
+              gender="male"
+              name="breedingMale"
+            />
+            {/* <SearchEarring
               justStallion
               label="Buscar macho"
               placeholder="Buscar macho"
@@ -181,7 +194,7 @@ const BreedingForm = () => {
               onEarringClick={(e) =>
                 methods.setValue('breedingMale', e.earring)
               }
-            />
+            /> */}
           </div>
           {/* ******************************************** 
                 Write the batch name               
@@ -315,7 +328,7 @@ const BreedingForm = () => {
                 <ProgressButton
                   buttonLabel="Crear monta"
                   progress={progress}
-                  successButtonLabel="Monta creada"
+                  successButtonLabel="Cerrar"
                   onSuccess={() => {
                     modal.handleOpen()
                     handleClear()

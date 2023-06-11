@@ -21,8 +21,6 @@ import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { useEffect, useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
 import SearchEarringController from '@comps/SearchEarring/SearchEarringController'
-import { TextField } from '@mui/material'
-import { BreedingEvent, BreedingEventType } from '@firebase/Events/event.model'
 
 export interface NewCalf extends NewAnimal {}
 
@@ -76,7 +74,6 @@ const BirthForm = ({
     ({ earring, id }) =>
       id === formValues.fatherId || formValues.fatherEarring === earring
   )
-  console.log(formValues?.fatherId)
   const selectedMother = farmAnimals.find(
     ({ earring, id }) =>
       formValues?.motherId === id || formValues.motherEarring === earring
@@ -88,8 +85,6 @@ const BirthForm = ({
   })
 
   const onSubmit = async (data: { batch?: string; calfs: any; date: any }) => {
-    console.log(data)
-
     try {
       await handleCreateBirth({
         calfs: data.calfs,
@@ -98,7 +93,6 @@ const BirthForm = ({
       })
       setProgress(101)
     } catch (error) {
-      console.log({ error })
       createError('CreateBirthError', error)
       setProgress(-1)
     }
@@ -279,12 +273,16 @@ const BirthForm = ({
                     ** Se descartara la madre de otras montas
                   </p>
                 </div>
+                {progress === 100 && (
+                  <p className="text-center">Parto creado exitosamente</p>
+                )}
                 <ProgressButton
                   progress={progress}
                   disabled={disabled}
-                  successButtonLabel="Nuevo parto"
+                  successButtonLabel="Cerrar"
                   onSuccess={() => {
                     handleReset()
+                    modal.handleOpen()
                   }}
                 />
               </Modal>
@@ -342,7 +340,6 @@ const SelectedFemaleBreedings = ({
         }
       )
       .filter((breeding) => breeding.status === 'PENDING')
-    console.log({ breedingsInMales })
 
     setPossibleFathers(breedingsInMales)
     //methods.setValue('fatherId', '')
@@ -384,8 +381,16 @@ const SelectedFemaleBreedings = ({
               })
             }}
           >
-            <span className="text-xs ">Monta: {animal.breeding.name}</span>
-            <span className="text-xs ">Padre: {animal.earring}</span>
+            <span className="text-xs ">
+              Padre:{' '}
+              <p className="font-bold whitespace-pre-wrap">{animal.earring}</p>{' '}
+            </span>
+            <span className="text-xs ">
+              Monta:{' '}
+              <p className="font-bold whitespace-pre-wrap">
+                {animal.breeding.name}
+              </p>
+            </span>
           </button>
         ))}
       </div>
@@ -426,7 +431,6 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
         }))
       )
       .flat()
-    console.log({ femalesInBreeding })
     setPossibleMothers(
       femalesInBreeding.filter((animal) => animal.status === 'PENDING')
     )
@@ -474,8 +478,16 @@ const SelectedMaleBreedings = ({ maleEarring }: { maleEarring: string }) => {
               })
             }}
           >
-            <span className="text-xs ">Monta: {animal.breeding.name}</span>
-            <span className="text-xs ">Madre: {animal.earring}</span>
+            <span className="text-xs ">
+              Madre:{' '}
+              <p className="font-bold whitespace-pre-wrap">{animal.earring}</p>
+            </span>
+            <span className="text-xs ">
+              Monta:{' '}
+              <p className="font-bold whitespace-pre-wrap">
+                {animal.breeding.name}
+              </p>{' '}
+            </span>
           </button>
         ))}
       </div>

@@ -91,75 +91,75 @@ const useCreateBirth = ({
     date: DateType
     batch: string
   }) => {
-    // debugger
-    const batchName = data.batch || breedingData?.name || ''
-    const newBirth: DTO_NewBirth = {
-      type: 'BIRTH',
-      farm: { id: farm?.id || '', name: farm?.name || '' },
-      eventData: {
-        date: data.date,
-        batch: batchName,
-        breeding: breedingData,
-        calfs: data.calfs,
-        parents: {
-          father: fatherData
-            ? {
-                inTheFarm: true,
-                earring: fatherData.earring,
-                id: fatherData.id,
-                name: fatherData.name || ''
-              }
-            : null,
-          mother: motherData
-            ? {
-                inTheFarm: true,
-                earring: motherData.earring,
-                id: motherData.id,
-                name: motherData.name || ''
-              }
-            : null
+    try {
+      const batchName = data.batch || breedingData?.name || ''
+      const newBirth: DTO_NewBirth = {
+        type: 'BIRTH',
+        farm: { id: farm?.id || '', name: farm?.name || '' },
+        eventData: {
+          date: data.date,
+          batch: batchName,
+          breeding: breedingData,
+          calfs: data.calfs,
+          parents: {
+            father: fatherData
+              ? {
+                  inTheFarm: true,
+                  earring: fatherData.earring,
+                  id: fatherData.id,
+                  name: fatherData.name || ''
+                }
+              : null,
+            mother: motherData
+              ? {
+                  inTheFarm: true,
+                  earring: motherData.earring,
+                  id: motherData.id,
+                  name: motherData.name || ''
+                }
+              : null
+          }
         }
       }
-    }
-    setProgress(10)
-    setStatus('CREATING_EVENT')
-    const parensBirthEvent = newBirth.eventData.parents
-    const motherBreed = parensBirthEvent.mother?.breed?.replaceAll(' ', '')
-    const fatherBreed = parensBirthEvent.father?.breed?.replaceAll(' ', '')
-    const breed =
-      (!motherBreed || !fatherBreed
-        ? motherBreed || fatherBreed
-        : fatherBreed === motherBreed
-        ? fatherBreed
-        : `(1/2${motherBreed}-1/2${fatherBreed})`) || ''
+      setProgress(10)
+      setStatus('CREATING_EVENT')
+      const parensBirthEvent = newBirth.eventData.parents
+      const motherBreed = parensBirthEvent.mother?.breed?.replaceAll(' ', '')
+      const fatherBreed = parensBirthEvent.father?.breed?.replaceAll(' ', '')
+      const breed =
+        (!motherBreed || !fatherBreed
+          ? motherBreed || fatherBreed
+          : fatherBreed === motherBreed
+          ? fatherBreed
+          : `(1/2${motherBreed}-1/2${fatherBreed})`) || ''
 
-    const newCalfsDefaultData: Omit<
-      AnimalType,
-      | 'earring'
-      | 'id'
-      | 'name'
-      | 'joinedAt'
-      | 'updatedAt'
-      | 'userId'
-      | 'createdAt'
-      | 'gender'
-    > = {
-      parents: parensBirthEvent || null,
-      birthType: newBirth.eventData.calfs.length || 0,
-      birthday: newBirth.eventData.date || 0,
-      batch: batchName,
-      type: 'ovine',
-      breed,
-      images: [],
-      farm: {
-        id: farm?.id,
-        name: farm?.name
+      const newCalfsDefaultData: Omit<
+        AnimalType,
+        | 'earring'
+        | 'id'
+        | 'name'
+        | 'joinedAt'
+        | 'updatedAt'
+        | 'userId'
+        | 'createdAt'
+        | 'gender'
+      > = {
+        parents: parensBirthEvent || null,
+        birthType: newBirth.eventData.calfs.length || 0,
+        birthday: newBirth.eventData.date || 0,
+        batch: batchName,
+        type: 'ovine',
+        breed,
+        images: [],
+        farm: {
+          id: farm?.id,
+          name: farm?.name
+        }
+        // weight:{
+        //   ...data.weight
+        // }
       }
-      // weight:{
-      //   ...data.weight
-      // }
-    }
-    try {
+
       // *************************************************  1. create birth
       const eventCreated = await createEvent2(newBirth)
 
@@ -169,18 +169,16 @@ const useCreateBirth = ({
       const calfs: AnimalType[] = data?.calfs
 
       const createAnimalsPromises = calfs.map(async (calf) => {
-        try {
-          return await createAnimal({
-            ...newCalfsDefaultData,
-            ...calf,
-            state: 'LACTATING',
-            weight: {
-              atBirth: (calf.weight as number) || 0
-            }
-          }).then((res) => res.res.id)
-        } catch (error) {
-          console.log(error)
-        }
+        return await createAnimal({
+          ...newCalfsDefaultData,
+          ...calf,
+          state: 'LACTATING',
+          weight: {
+            atBirth: (calf.weight as number) || 0
+          }
+        })
+          .then((res) => res.res.id)
+          .catch((err) => console.log(err))
       })
 
       const calfsCreated = await Promise.all(createAnimalsPromises)
@@ -226,19 +224,17 @@ const useCreateBirth = ({
         }).catch((err) => {
           console.log(err)
         })
-        console.log({ breedingUpdated })
-
         setProgress(80)
 
-        // TODO: *************************************************  4.1. Remove mother from others breedings where appear as pending
+        // *************************************************  4.1. Remove mother from others breedings where appear as pending
         if (motherData?.id) {
           setStatus('REMOVING_MOTHER_FROM_OTHERS_BREEDINGS')
 
           const otherBreedings = femalePendingBreedings({
             femaleId: motherData?.id || ''
           }).filter((event) => event.id !== breedingId)
+
           for (let i = 0; i < otherBreedings.length; i++) {
-            console.log('remove animal from: ', otherBreedings[i]?.id, i)
             await removeAnimalFromBreeding(
               otherBreedings[i].id,
               motherData.id
