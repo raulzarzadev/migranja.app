@@ -5,7 +5,7 @@ import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { updateAnimal } from '@firebase/Animal/main'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { AnimalState } from 'types/base/AnimalState.model'
+import { AnimalState, AnimalStateType } from 'types/base/AnimalState.model'
 import { myFormatDate } from 'utils/dates/myDateUtils'
 export interface EarringsSelected {
   id: string
@@ -31,6 +31,12 @@ const FormEarringsSelected = ({
   const [updates, setUpdates] = useState({})
   const formValues = methods.getValues()
 
+  type Fields = 'state' | 'birthday'
+
+  const FIELDS_LABELS: Record<Fields, string> = {
+    state: 'Nuevo estado',
+    birthday: 'Fecha de nacimiento'
+  }
   useEffect(() => {
     const _updates: Record<string, any> = {}
     Object.entries(formValues).forEach(([key, value]) => {
@@ -41,7 +47,6 @@ const FormEarringsSelected = ({
     setUpdates(_updates)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValues.birthday, formValues.state])
-
   const handleSave = async (): Promise<boolean | number> => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -103,6 +108,8 @@ const FormEarringsSelected = ({
                 type="select"
                 selectOptions={animalStates}
                 label="Estado actual"
+                size="small"
+                fullWidth
               />
             }
             showText="Editar estado actual"
@@ -119,20 +126,28 @@ const FormEarringsSelected = ({
               modalTitle={'Guardar cambios'}
               canOpen={!formHasSomeErrors}
             >
-              Estos cambios se aplicaran a todos los animales seleccionados:
+              <p className="text-center my-4">
+                Estos cambios se aplicaran a todos los animales seleccionados:
+              </p>
               <div className="grid place-content-center">
                 {Object.entries(updates).map(([key, value]) => (
                   <div key={key} className="text-center">
                     <span>
-                      {key}:
-                      {isDate(value)
-                        ? myFormatDate(value as any, 'dd MMM yy')
-                        : `${value}`}
+                      {FIELDS_LABELS[key as Fields]}:
+                      {isDate(value) ? (
+                        myFormatDate(value as any, 'dd MMM yy')
+                      ) : (
+                        <span className="font-bold">{` ${
+                          AnimalState[value as AnimalStateType]
+                        } `}</span>
+                      )}
                     </span>
                   </div>
                 ))}
               </div>
-              <div>Animales selecciondos:</div>
+              <p className="text-center font-bold my-4">
+                Animales seleccionados:
+              </p>
               <div
                 className="flex w-full justify-evenly flex-wrap mb-4
       "
@@ -165,10 +180,10 @@ const ShowHiddenInput = ({
 }) => {
   const [showInput, setShowInput] = useState(false)
   return (
-    <div className="flex items-end w-full mx-auto justify-center gap-2">
+    <div className="flex items-center w-full mx-auto justify-center gap-2 flex-col  ">
       {showInput ? (
         <>
-          {input}
+          <div className="w-64">{input}</div>
           <span>
             <button
               className="btn btn-outline btn-sm"

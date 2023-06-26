@@ -9,7 +9,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField
+  TextField,
+  TextFieldProps
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers'
@@ -77,7 +78,7 @@ const InputContainer = ({
   containerClassName,
   // checked,
   ...rest
-}: CustomInputTypes) => {
+}: CustomInputTypes & Partial<Pick<TextFieldProps, 'size' | 'fullWidth'>>) => {
   return (
     <Controller
       rules={rules}

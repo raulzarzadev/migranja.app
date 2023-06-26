@@ -1,16 +1,16 @@
 export const AnimalState = {
-  FREE: 'libre',
-  BREEDING: 'en monta',
-  FOR_BELLY: 'cordera', //* Para vientre
-  FATTEN: 'engorda',
-  LACTATING: 'lactante', //* lactante recien nacidas
-  SUCKLE: 'lactando', //* amamantando lactando recien paridas
-  FOR_SALE: 'en venta',
-  PREGNANT: 'Preñada',
+  FREE: 'Libre',
+  PREGNANT: 'Gestante',
+  BREEDING: 'En monta',
+  FOR_BELLY: 'Cordera', //* Para vientre
+  FATTEN: 'Engorda',
+  LACTATING: 'Lactante', //* lactante recien nacidas
+  SUCKLE: 'Lactando', //* amamantando lactando recien paridas
+  FOR_SALE: 'En venta',
   //* Inactive animals states
-  SOLD: 'vendido',
-  DEAD: 'muerto',
-  LOST: 'perdido'
+  SOLD: 'Vendido',
+  DEAD: 'Muerto',
+  LOST: 'Perdido'
 }
 
 export const inactiveAnimalsStates: AnimalStateType[] = ['SOLD', 'LOST', 'DEAD']
