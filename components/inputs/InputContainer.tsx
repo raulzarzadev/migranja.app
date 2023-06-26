@@ -180,6 +180,8 @@ const InputContainer = ({
                   ref={ref}
                   value={value}
                   defaultChecked={defaultChecked}
+                  disabled={rest.disabled}
+                  checked={rest.checked}
                   // checked={checked}
                   //{...rest}
                 />
