@@ -4,6 +4,7 @@ export const animalCurrentStatusLabels: Record<
   NonNullable<AnimalType['currentStatus']>,
   string
 > = {
+  //! Deprecated file, DO NOT USE, see AnimalState file
   PENDING: 'Pendiente',
   ACTIVE: 'Activa',
   PREGNANT: 'Cargada',
