@@ -114,7 +114,6 @@ const FarmForm = ({
                   title: 'Granja pública',
                   text: 'Esta granja sera visible para otros usuarios, podra ser encontrada por otros ususarios y podras publicar en la tienda (Próximamente)'
                 }}
-                className="flex justify-between "
               />
               <InputContainer
                 type="checkbox"

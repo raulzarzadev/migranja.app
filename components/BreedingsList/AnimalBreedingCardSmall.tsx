@@ -2,13 +2,13 @@ import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import IconBreedingStatus from 'components/IconBreedingStatus'
 import { ReactNode, useState } from 'react'
 import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
-import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import IconStatus from '@comps/IconStatus'
 import ModalBirthDetails from '@comps/modal/ModalBirthDetails'
 import React from 'react'
 import ModalAnimalBreedingOptions from '@comps/modal/ModalAnimalBreedingOptions'
 import { EventType } from '@firebase/Events/event.model'
 import useEvents from '@comps/hooks/useEvents'
+import { AnimalState } from 'types/base/AnimalState.model'
 
 const AnimalBreedingCardSmall = ({
   animal,
@@ -75,7 +75,7 @@ const AnimalBreedingCardSmall = ({
           <span>
             <span className="mx-4">
               <span className="mx-2">
-                {animalCurrentStatusLabels[breedingFemale.status || 'PENDING']}
+                {AnimalState[breedingFemale.status || 'PENDING']}
               </span>
 
               {animal.status === 'BIRTH' && <IconStatus status="success" />}

@@ -75,19 +75,19 @@ const AnimalsForm = ({
     value: AnimalType['state']
   }[] = [
     {
-      label: 'Libre',
+      label: AnimalState.FREE,
       value: 'FREE'
     },
     {
-      label: 'Preñada',
+      label: AnimalState.PREGNANT,
       value: 'PREGNANT'
     },
     {
-      label: 'Lactando',
+      label: AnimalState.LACTATING,
       value: 'LACTATING'
     },
     {
-      label: 'Muerto',
+      label: AnimalState.DEAD,
       value: 'DEAD'
     }
   ]

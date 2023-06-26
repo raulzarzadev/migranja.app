@@ -5,7 +5,10 @@ import { Controller, ControllerProps } from 'react-hook-form'
 import React from 'react'
 import { InfoBadgeType } from '@comps/Badges/InfoBadge'
 import {
+  Checkbox,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   InputLabel,
   MenuItem,
   Select,
@@ -178,10 +181,22 @@ const InputContainer = ({
                   value={value}
                   defaultChecked={defaultChecked}
                   // checked={checked}
-                  {...rest}
+                  //{...rest}
                 />
                 <span className="bg-transparent">{label}</span>
               </label>
+              {/* <FormControlLabel
+                control={<Checkbox />}
+                size="small"
+                defaultChecked={defaultChecked}
+                onChange={onChange}
+                onBlur={onBlur}
+                name={name}
+                value={rest?.checked}
+                ref={ref}
+                label={label}
+                {...rest}
+              /> */}
             </>
           )}
           {type === 'textarea' && (
@@ -219,7 +234,7 @@ const InputContainer = ({
                       value={radio.value}
                       checked={value === radio.value}
                       //defaultChecked={radio?.defaultChecked}
-                      {...rest}
+                      //{...rest}
                     />
                   </span>
                 ))}

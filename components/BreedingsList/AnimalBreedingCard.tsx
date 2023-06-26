@@ -6,7 +6,7 @@ import { AnimalBreedingEventCard } from 'types/base/FarmEvent.model'
 import { animalCurrentStatusLabels } from 'types/base/LABELS_TYPES/AnimalCurrentStatus'
 import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import AnimalBreedingOptions from './AnimalBreedingOptions'
-import useDebugInformation from '@comps/hooks/useDebugInformation'
+import { AnimalState } from 'types/base/AnimalState.model'
 
 const AnimalBreedingCard = ({
   animal
@@ -98,9 +98,7 @@ const AnimalBreedingCard = ({
                 <ModalAnimalDetails earring={breedingFemale.earring} />
               </span>
             </span>
-            <span>
-              {animalCurrentStatusLabels[animal?.status || 'PENDING']}
-            </span>
+            <span>{AnimalState[animal?.status || 'PENDING']}</span>
 
             <span className="text-xs">
               <span className="">{breedingFemale.breed}</span>
