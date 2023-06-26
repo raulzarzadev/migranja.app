@@ -56,33 +56,39 @@ const FarmNumbers = () => {
     Hembras: [
       {
         title: 'Lactando',
-        subTitle: 'Recien paridas',
+        subTitle: ' Hembras recien paridas',
         animals: activeFemales.filter(({ state }) => state === 'SUCKLE')
       },
       {
         title: 'Lactantes',
-        subTitle: 'Recien nacidas',
+        subTitle: 'Hembras recien nacidas',
         animals: activeFemales.filter(({ state }) => state === 'LACTATING')
+      },
+
+      {
+        title: 'Gestates',
+        subTitle: 'Hembras diagnosticadas como gestates',
+        animals: activeFemales.filter(({ state }) => state === 'PREGNANT')
       },
       {
         title: 'Corderas ',
-        subTitle: 'Para monta pero muy jovenes',
+        subTitle: 'Hembras para monta pero muy jovenes',
         animals: activeFemales.filter(({ state }) => state === 'FOR_BELLY')
       },
       {
         title: 'Libres',
-        subTitle: 'Listas para monta',
+        subTitle: 'Hembras listas para monta',
         animals: activeFemales.filter(({ state }) => state === 'FREE')
       },
       {
         title: 'En monta',
-        subTitle: 'Preñadas o no',
+        subTitle: 'Hembras en montas pero sin verificar estado',
         animals: activeFemales.filter(({ state }) => state === 'BREEDING')
       },
 
       {
         title: 'Engorda',
-        subTitle: 'En edad pero sin compromisos',
+        subTitle: 'Hembras destinadas a engorda',
         animals: activeFemales.filter(({ state }) => state === 'FATTEN')
       },
 
@@ -99,7 +105,7 @@ const FarmNumbers = () => {
       },
       {
         title: 'Para venta',
-        subTitle: 'Listas para venderse',
+        subTitle: 'Hembras listas para venderse',
         animals: activeFemales.filter(({ state }) => state === 'FOR_SALE')
       }
       // {
@@ -241,7 +247,8 @@ const FarmNumbers = () => {
           {cardStats.map((stat) => (
             <StatCardWithModalAnimalsList
               key={stat.title}
-              title={`${stat.title} ${key}`}
+              //* Title of each number square
+              title={`${key[0]}-${stat.title} `}
               animals={stat.animals}
               description={stat.subTitle}
             />

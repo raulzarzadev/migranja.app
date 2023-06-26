@@ -38,12 +38,9 @@ const StatCardWithModalAnimalsList = ({
         />
       </div>
       {openList && (
-        <Modal
-          open={openList}
-          handleOpen={handleOpenList}
-          title={`Lista de aretes: ${title} `}
-        >
+        <Modal open={openList} handleOpen={handleOpenList} title={`${title} `}>
           <div className="relative">
+            <p>{description}</p>
             <PrintableAnimalsNumberList
               animals={animals}
               title={title}
@@ -81,8 +78,8 @@ export const AnimalsList = ({
   const earringsWithSuffix = animals?.filter((a) => a?.earring?.includes('-'))
 
   const sortByNumber = (a: any, b: any) => {
-    const aEarring = parseFloat(a?.earring.split('-')[0] || '0')
-    const bEarring = parseFloat(b?.earring.split('-')[0] || '0')
+    const aEarring = parseFloat(a?.earring?.split('-')[0] || '0')
+    const bEarring = parseFloat(b?.earring?.split('-')[0] || '0')
 
     if (aEarring < bEarring) return -1
     if (aEarring > bEarring) return 1
