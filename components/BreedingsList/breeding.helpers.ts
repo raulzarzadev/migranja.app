@@ -159,7 +159,6 @@ export const formatBreedingsGenericEvent = (
         date: date || ''
       }
 
-      console.log(formattedBreeding)
       return formattedBreeding
     }
   )

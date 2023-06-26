@@ -46,7 +46,7 @@ const BatchTable = ({
   const [progress, setProgress] = useState(0)
   const currentFarm = useSelector(selectFarmState)
   const handleSaveBatch = async () => {
-    console.log('save', { animalsData })
+    //console.log('save', { animalsData })
     setLoading(true)
     setProgress(1)
     const farmData = {

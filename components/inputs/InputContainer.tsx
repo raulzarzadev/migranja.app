@@ -160,7 +160,7 @@ const InputContainer = ({
                   //  label={placeholder || 'Seleccionar'}
                 >
                   {selectOptions?.map(({ value, label }: SelectOption) => (
-                    <MenuItem key={label} value={value}>
+                    <MenuItem key={value} value={value}>
                       {label}
                     </MenuItem>
                   ))}

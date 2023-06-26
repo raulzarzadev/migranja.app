@@ -45,13 +45,13 @@ const useFarmState = () => {
         dispatch(setFarmAnimals(res))
       })
       listenFarmEvents(farmId as string, (res: any[]) => {
-        console.log('ask events')
+        console.info('ask events')
         dispatch(setFarmEvents(res))
       })
     }
   }, [dispatch, farmId, user])
 
-  useDebugInformation('useFarmState', { farmId, user })
+  //useDebugInformation('useFarmState', { farmId, user })
 
   return {}
 }

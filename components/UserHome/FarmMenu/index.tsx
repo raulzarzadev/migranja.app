@@ -280,7 +280,6 @@ const FarmMenu = (props: any) => {
                   key={crumb}
                   onClick={(e) => {
                     e.preventDefault()
-                    console.log(crumb)
                     setSelectedItem(`${selectedItem.split(crumb)[0]}${crumb}`)
                     console.log(`${selectedItem.split(crumb)[0]}${crumb}`)
                   }}

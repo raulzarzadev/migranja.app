@@ -58,7 +58,7 @@ const FarmForm = ({
     if (farmId)
       return deleteFarm(farmId)
         .then((res) => console.log(res))
-        .catch((err) => console.log(err))
+        .catch((err) => console.error(err))
   }
   const [openDelete, setOpenDelete] = useState(false)
   const handleOpenDelete = () => {

@@ -52,7 +52,7 @@ const AnimalBreedingOptions = ({
   const handleRemove = () => {
     removeAnimalFromBreeding(breedingId, animalId || '')
       .then(async (res) => {
-        console.log(res)
+        //console.log(res)
         //* * * * * * * * * * * * * * * * update (revert) animal state
         if (animalId)
           await updateAnimalState(
@@ -64,7 +64,7 @@ const AnimalBreedingOptions = ({
       .then((err) => console.log(err))
   }
 
-  console.log({ event })
+  // console.log({ event })
 
   return (
     <>

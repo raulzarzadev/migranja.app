@@ -120,7 +120,6 @@ const BreedingsList = () => {
 
   const [batchesFiltered, setBreedingFilter] = useState<any[]>([])
   const [finishedBreedings, setFinishedBreedings] = useState<any[]>([])
-  console.log({ search })
   useEffect(() => {
     const animalsFiltered = [...breedingsByAnimals].filter(
       (animal) =>

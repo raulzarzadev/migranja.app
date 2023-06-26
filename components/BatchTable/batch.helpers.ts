@@ -36,7 +36,7 @@ export const handleSetDuplicatedAnimal = (
     }
     delete newAnimal.newEarring
     animalAux.splice(animalIndex, 1, newAnimal)
-    console.log({ animalAux })
+    //console.log({ animalAux })
     return [...animalAux]
   }
 

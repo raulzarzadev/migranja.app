@@ -15,7 +15,6 @@ const GeneticTree = ({
   }
   onClick?: (element: GeneticTreeElement) => void
 }) => {
-  console.log({ parents })
   const mother = parents?.mother
   const father = parents?.father
   return (

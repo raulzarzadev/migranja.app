@@ -11,10 +11,9 @@ const FarmTeamTable = ({ farm }: { farm: FarmType | null }) => {
       const res = await updateFarm(farm?.id as string, {
         [`team.${id}`]: deleteField()
       })
-      console.log(res)
       return true
     } catch (err) {
-      console.log(err)
+      console.error(err)
       return false
     }
   }

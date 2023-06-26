@@ -37,7 +37,6 @@ const ModalBreedingOptions = ({
     //* * * * * * * * * * * * * * * * * * * * * * * * * * update breeding animals state
     try {
       if (shouldUpdateAnimalState) {
-        console.log('updating animals state')
         for (let i = 0; i < breedingAnimals?.length; i++) {
           const animal = breedingAnimals[i]
           if (animal?.id)
@@ -53,7 +52,7 @@ const ModalBreedingOptions = ({
       const res = await deleteEvent(breeding?.id)
       return console.log(res)
     } catch (error) {
-      console.log({ error })
+      console.error({ error })
     }
   }
 
@@ -160,10 +159,11 @@ const AddBreedingMaleTo = ({
       })
       setProgress(100)
 
-      console.log(res)
+      // console.log(res)
     } catch (error) {
       setProgress(0)
-      console.log({ error })
+
+      console.error({ error })
     }
   }
 
@@ -191,7 +191,7 @@ const AddBreedingMaleTo = ({
       //console.log({ res })
       return res
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
   return (
@@ -300,7 +300,7 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
       //* Update Breeding adding an animal in the batch
       addAnimalToBreedingBatchEvent(breeding.id, animal)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
   const [animalsAdded, setAnimalsAdded] = useState<any[]>([])

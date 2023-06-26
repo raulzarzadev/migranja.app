@@ -59,7 +59,7 @@ const useEmptyAnimal = () => {
       setProgress(100)
     } catch (error) {
       setProgress(-1)
-      console.log(error)
+      console.error(error)
     }
   }
 

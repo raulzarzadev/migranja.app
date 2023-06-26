@@ -23,7 +23,7 @@ const BreedingDetails = ({ breedingId }: { breedingId: FarmEvent['id'] }) => {
   ])[0]
   // console.log({ breedingFormatted, breeding })
   if (!breedingFormatted) {
-    console.log('error formatting breedig')
+    console.error('error formatting breedig')
     return <></>
   }
 

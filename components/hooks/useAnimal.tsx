@@ -40,10 +40,9 @@ const useAnimal = ({ animalId, earring }: UseAnimal = {}) => {
   const handleDelete = async (id?: string): Promise<boolean> => {
     try {
       const res = await deleteAnimal(id || (animalId as string))
-      console.log(res)
       return true
     } catch (err) {
-      console.log(err)
+      console.error(err)
       return false
     }
   }

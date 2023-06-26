@@ -81,10 +81,9 @@ const DropOutForm = ({
 
       // crear evento
       const res = await createDropOutEvent({ ...event })
-      console.log({ event, res })
       setProgress(100)
     } catch (error) {
-      console.log({ error })
+      console.error({ error })
     }
     //console.log({ data })
     //console.log(event)

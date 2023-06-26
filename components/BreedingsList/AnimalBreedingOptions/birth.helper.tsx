@@ -204,9 +204,9 @@ function formatEventData<T>(
     return data as T
   }
   if (eventType === 'REMOVE') {
-    console.log('not remove event tye valid')
+    console.error('not remove event tye valid')
     return {} as T
   }
-  console.log('no event tye valid')
+  console.error('no event tye valid')
   return {} as T
 }

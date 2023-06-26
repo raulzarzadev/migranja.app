@@ -1,5 +1,4 @@
 import { EventsList } from '@comps/FarmEvents/EventsList'
-import GeneticTree from '@comps/GeneticTree'
 import useCreateBirth from '@comps/hooks/useCreateBirth'
 import ImagesDisplay from '@comps/ImagesDisplay'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
@@ -18,7 +17,6 @@ import {
   GenderOptions
 } from 'firebase/types.model.ts/AnimalType.model'
 
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectFarmOvines } from 'store/slices/farmSlice'
@@ -84,7 +82,6 @@ export const AnimalDetails = ({
   // const { handleDelete } = useAnimal()
   const handleDelete = async () => {
     const res = await deleteAnimal(id as string)
-    console.log(res)
     return res
   }
   const handleSetImages = (images: string[]) => {
@@ -275,7 +272,6 @@ const PendingEvents = ({ animalId }: { animalId?: string }) => {
     setPendingEvents([...breedings])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log({ pendingEvents })
 
   return <EventsList events={pendingEvents} title="Pendientes" />
 }

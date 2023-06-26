@@ -29,9 +29,8 @@ const FarmTeamForm = ({
       })
         .then((res) => {
           reset()
-          console.log(res)
         })
-        .catch((err) => console.log(err))
+        .catch((err) => console.error(err))
     handleReset()
   }
 

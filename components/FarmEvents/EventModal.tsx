@@ -15,7 +15,7 @@ export const EventModal = ({ event }: { event: FarmStateAnimalEvent }) => {
     event.id &&
       (await deleteEvent(event.id)
         .then((res) => {
-          console.log(res)
+          //console.log(res)
           return res
         })
         .catch((err) => console.log(err)))

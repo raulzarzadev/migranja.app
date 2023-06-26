@@ -22,7 +22,6 @@ const AddMany = () => {
     batch: string
     farm: AnimalType['farm']
   }) => {
-    console.log(data)
     try {
       for (let i = 0; i <= animals.length; i++) {
         await createAnimal({
@@ -36,7 +35,7 @@ const AddMany = () => {
       }
       setProgress(101)
     } catch (error) {
-      console.log({ error })
+      console.error({ error })
     }
   }
   const handleClear = () => {

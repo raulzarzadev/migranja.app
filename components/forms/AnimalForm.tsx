@@ -108,7 +108,6 @@ export const AnimalForm = ({
       updateAnimal(id, data)
         .then((res: any) => {
           setEditing?.(false)
-          console.log(res)
         })
         .catch((err: any) => {
           setError({ type: err, message: 'Hubo un error' })
@@ -127,9 +126,8 @@ export const AnimalForm = ({
           setValue('id', res?.id)
           setIsANewAnimal(true)
           setEditing?.(false)
-          console.log(res)
         })
-        .catch((err: any) => console.log(err))
+        .catch((err: any) => console.error(err))
         .finally(() => {
           {
             setEditing?.(false)
@@ -150,7 +148,7 @@ export const AnimalForm = ({
     if (id)
       updateAnimal(id, { images: auxImages })
         .then((res) => console.log({ res }))
-        .catch((err) => console.log({ err }))
+        .catch((err) => console.error({ err }))
   }
 
   const { handleDelete } = useAnimal()
@@ -402,7 +400,6 @@ export const AnimalForm = ({
                       label="Arete*"
                       rules={{
                         validate: (val) => {
-                          console.log({ val })
                           return false
                         }
                       }}

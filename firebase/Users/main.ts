@@ -49,11 +49,10 @@ export const listenUser = async (itemId: string, cb: CallableFunction) =>
   await usersCRUD.listenItem(itemId, cb)
 
 export function authStateChanged(cb: CallableFunction) {
-  console.log({ cb })
   onAuthStateChanged(auth, async (user) => {
     // FIXME: this function is called multiple times
     if (!user) {
-      console.log(user)
+      //console.log(user)
       // console.log('not logged');
       return cb(null)
     } else {

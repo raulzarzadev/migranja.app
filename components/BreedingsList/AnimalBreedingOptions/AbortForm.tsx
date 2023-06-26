@@ -67,7 +67,7 @@ const AbortForm = ({ animal }: { animal: AnimalBreedingEventCard }) => {
 
       setProgress(100)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

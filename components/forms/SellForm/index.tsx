@@ -98,16 +98,15 @@ const SellForm = ({
           })
           setProgress(50 + (40 * (i + 1)) / animalsSold.length)
         } else {
-          console.log('not found')
+          console.info('not found')
         }
       }
       setProgress(100)
       methods.reset()
       onFinishSale?.()
-      console.log(res)
     } catch (error) {
       setProgress(0)
-      console.log(error)
+      console.error(error)
     }
   }
 
