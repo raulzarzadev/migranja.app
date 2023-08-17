@@ -1,5 +1,8 @@
+import { EventType } from '@firebase/Events/event.model'
 import { AnimalType as AnimalMainType } from 'types/base/AnimalType.model'
-export interface AnimalType extends AnimalMainType {}
+export interface AnimalType extends AnimalMainType {
+  pregnantFrom?: EventType['id']
+}
 
 export interface GenderOptions {
   id?: 'male' | 'female'

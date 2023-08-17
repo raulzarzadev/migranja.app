@@ -6,6 +6,7 @@ import ProgressButton from '@comps/ProgressButton'
 import useProgress from '@comps/hooks/useProgress'
 import useEvent from '@comps/hooks/useEvent'
 import ModalAnimalDetails from '../ModalAnimalDetails'
+import { setBreedingAnimalToPregnantState } from '@firebase/Events/main'
 
 const ModalSetPregnant = ({
   motherId,
@@ -18,12 +19,10 @@ const ModalSetPregnant = ({
   const { event } = useEvent({ eventId: breedingId })
   const male = event?.eventData.breedingMale
   const mother = event?.eventData.breedingBatch.find((a) => a.id === motherId)
-  const handleSetPregnant = () => {
-    console.log('set pregnant')
-    console.log('evento', event)
-    console.log('// update animal breeding state ')
-    console.log('// update animal state ')
-    console.log('// set animal pregnant ')
+  const handleSetPregnant = async () => {
+    setProgress(20)
+    await setBreedingAnimalToPregnantState({ animalId: motherId, breedingId })
+    setProgress(100)
   }
   const { progress, setProgress } = useProgress()
 
@@ -42,11 +41,14 @@ const ModalSetPregnant = ({
         <h4 className="text-center font-bold text-xl my-4">
           ¿Confirmar gesta?
         </h4>
-        <p>
-          Madre :{' '}
+        <p className="text-center">
+          Madre:{' '}
           <strong>
             <ModalAnimalDetails animalId={motherId} />
           </strong>
+        </p>
+        <p className="text-center">
+          Padre: <ModalAnimalDetails animalId={male?.id} />
         </p>
         <section className="flex w-full justify-center my-4">
           <ProgressButton

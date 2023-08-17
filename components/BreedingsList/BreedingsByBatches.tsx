@@ -157,6 +157,11 @@ const BreedingCardBody = ({
       _setBreeding(res)
     )
   }, [breeding.id])
+  console.log({
+    _breeding: _breeding.eventData.breedingBatch.find(
+      (a) => a.earring === '002-100-2'
+    )
+  })
 
   const animals: AnimalBreedingEventCard[] = _breeding?.eventData?.breedingBatch
     ?.map((animal) => {
@@ -186,6 +191,7 @@ const BreedingCardBody = ({
   const abortAnimals = animals?.filter(({ status }) => status === 'ABORT')
   const birthAnimals = animals?.filter(({ status }) => status === 'BIRTH')
   const emptyAnimals = animals?.filter(({ status }) => status === 'EMPTY')
+  const pregnantAnimals = animals?.filter(({ status }) => status === 'PREGNANT')
 
   const handleSetView = (newView: ViewBatchesType) => {
     if (newView === view) {
@@ -197,7 +203,7 @@ const BreedingCardBody = ({
 
   return (
     <main className="p-2">
-      <div className="flex w-full justify-evenly">
+      <div className="flex w-full justify-evenly overflow-x-auto">
         <span>
           <button
             onClick={() => handleSetView('ALL')}
@@ -206,6 +212,7 @@ const BreedingCardBody = ({
             Todos {`(${animals?.length || 0})`}
           </button>
         </span>
+
         <span>
           <button
             onClick={() => handleSetView('PENDING')}
@@ -214,6 +221,16 @@ const BreedingCardBody = ({
             }`}
           >
             Espera {`(${pendingAnimals?.length || 0})`}
+          </button>
+        </span>
+        <span>
+          <button
+            onClick={() => handleSetView('PREGNANT')}
+            className={` rounded-t-md p-2 ${
+              view == 'PREGNANT' && 'bg-base-100'
+            }`}
+          >
+            Gestates {`(${pregnantAnimals?.length || 0})`}
           </button>
         </span>
         <span>
@@ -281,6 +298,15 @@ const BreedingCardBody = ({
             ))}
           {view === 'EMPTY' &&
             emptyAnimals?.map((animal, i) => (
+              <AnimalBreedingCardSmall
+                key={i}
+                animal={animal}
+                hiddenEvents={hiddenBirths}
+                breedingId={breeding.id}
+              />
+            ))}
+          {view === 'PREGNANT' &&
+            pregnantAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
                 animal={animal}

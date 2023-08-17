@@ -12,6 +12,7 @@ export type TypeOfFarmEvent =
   | 'DONE'
   | 'CANCELLED'
   | 'WEANING_DONE'
+  | 'PREGNANT'
 
 export const labelsOfFarmEventTypes: Record<TypeOfFarmEvent, string> = {
   BREEDING: 'Monta',
@@ -26,10 +27,16 @@ export const labelsOfFarmEventTypes: Record<TypeOfFarmEvent, string> = {
   DONE: 'Completado',
   SELL: 'Venta',
   CANCELLED: 'Cancelado',
-  WEANING_DONE: 'Destete Completo'
+  WEANING_DONE: 'Destete Completo',
+  PREGNANT: 'Gestante'
 }
 
 export type StatusOfFarmEvent = 'PENDING' | 'DONE' | 'CANCELLED' | 'PAST'
 export type EventStatus = StatusOfFarmEvent
 
-export type AnimalBreedingStatus = 'PENDING' | 'ABORT' | 'BIRTH' | 'EMPTY'
+export type AnimalBreedingStatus =
+  | 'PENDING'
+  | 'ABORT'
+  | 'BIRTH'
+  | 'EMPTY'
+  | 'PREGNANT'

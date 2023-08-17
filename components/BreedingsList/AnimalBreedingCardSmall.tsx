@@ -85,6 +85,7 @@ const AnimalBreedingCardSmall = ({
                   startInDays={breedingDates?.birthStartInDays}
                 />
               )}
+              {animal.status === 'PREGNANT' && <IconStatus status="warning" />}
             </span>
           </span>
         </div>

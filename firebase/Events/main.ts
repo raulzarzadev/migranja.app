@@ -20,6 +20,8 @@ import {
 import { BirthEventDataType } from 'types/base/BirtEventDataType.model'
 import { DateType } from 'types/base/TypeBase.model.js'
 import { ParentsType } from 'types/base/AnimalType.model.js'
+import { updateAnimal, updateAnimalState } from '@firebase/Animal/main'
+
 const storage = getStorage(app)
 const TARGET_FORMAT_DATE = 'number'
 
@@ -126,29 +128,6 @@ export const updateEventBreedingBatch = async ({
   return await Promise.all([oldAnimal, removeOldAnimal, setNewAnimal])
 }
 
-// export const updateBreedingEventBatch = async ({
-//   animalId,
-//   eventType,
-//   eventData
-// }: {
-//   animalId?: string
-//   eventType: BaseFarmEvent['type']
-//   eventData: any
-// }) => {
-//   const oldAnimal = [...(eventData?.breedingBatch || [])].find(
-//     (animal) => animal?.id === animalId
-//   )
-//   console.log({ oldAnimal, eventType, eventData })
-
-//   // const removeOldAnimal = await eventsCRUD.updateItem(eventId, {
-//   //   'eventData.breedingBatch': arrayRemove(oldAnimal)
-//   // })
-//   // const newAnimal = { ...oldAnimal, status: eventType }
-//   // const setNewAnimal = await eventsCRUD.updateItem(eventId, {
-//   //   'eventData.breedingBatch': arrayUnion(newAnimal)
-//   // })
-//   //return await Promise.all([removeOldAnimal, setNewAnimal])
-// }
 export const updateAnimalStatusInBreedingBatch = async ({
   eventId,
   animalId,
@@ -271,3 +250,29 @@ export interface CreateEvent {
 
 export const createEvent2 = async (newItem: CreateEvent) =>
   await eventsCRUD.createItem(newItem)
+
+export const setBreedingAnimalToPregnantState = async ({
+  animalId,
+  breedingId
+}: {
+  animalId: string
+  breedingId: string
+}) => {
+  try {
+    //* update animal breeding state
+    await updateAnimalStatusInBreedingBatch({
+      eventId: breedingId,
+      animalId,
+      eventType: 'PREGNANT'
+    })
+
+    //* set animal pregnant info state and info
+    await updateAnimal(animalId, {
+      pregnantFrom: breedingId,
+      state: 'PREGNANT',
+      pastState: 'BREEDING'
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
