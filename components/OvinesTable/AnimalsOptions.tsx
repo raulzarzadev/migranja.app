@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { selectFarmAnimals } from 'store/slices/farmSlice'
 import FormEarringsSelected from '../forms/FormEarringsSelected'
 import WeaningAnimals, { WeaningAnimal } from './WeaningAnimals'
+import ModalNewBirth from '@comps/modal/ModalNewBirth/indext'
 
 const AnimalsOptions = ({
   animalsEarrings,

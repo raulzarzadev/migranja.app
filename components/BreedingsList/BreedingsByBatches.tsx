@@ -157,11 +157,6 @@ const BreedingCardBody = ({
       _setBreeding(res)
     )
   }, [breeding.id])
-  console.log({
-    _breeding: _breeding.eventData.breedingBatch.find(
-      (a) => a.earring === '002-100-2'
-    )
-  })
 
   const animals: AnimalBreedingEventCard[] = _breeding?.eventData?.breedingBatch
     ?.map((animal) => {

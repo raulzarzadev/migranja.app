@@ -3,6 +3,7 @@ import useCreateBirth from '@comps/hooks/useCreateBirth'
 import ImagesDisplay from '@comps/ImagesDisplay'
 import ModalBreedingDetails from '@comps/modal/ModalBreedingDetails'
 import ModalGeneticTree from '@comps/modal/ModalGeneticTree'
+import ModalNewBirth from '@comps/modal/ModalNewBirth/indext'
 import AnimalsOptions from '@comps/OvinesTable/AnimalsOptions'
 import { deleteAnimal, updateAnimal } from '@firebase/Animal/main'
 import AnimalEvents from 'components/AnimalEvents'
@@ -255,6 +256,13 @@ export const AnimalDetails = ({
         </div>
       </main>
       <footer>
+        {animal.state === 'PREGNANT' && animal.pregnantFrom && (
+          <ModalNewBirth
+            breedingId={animal.pregnantFrom}
+            motherId={animal.id || ''}
+            isBreedingBirth
+          />
+        )}
         <PendingEvents animalId={animal.id} />
         <AnimalsOptions animalsEarrings={[animal?.earring || '']} />
         <EventsSection animalEarring={animal?.earring || ''} />
