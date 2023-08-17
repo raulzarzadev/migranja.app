@@ -6,6 +6,7 @@ import { EventType } from '@firebase/Events/event.model'
 import { ReactNode } from 'react'
 import ModalEmptyBirth from '../ModalEmptyBirth'
 import ModalDiscardAnimal from './ModalDiscardAnimal'
+import ModalSetPregnant from '../ModalSetPregnant'
 
 const ModalAnimalBreedingOptions = ({
   children,
@@ -45,6 +46,7 @@ const ModalAnimalBreedingOptions = ({
 
             <ModalEmptyBirth motherId={motherId} breedingId={breedingId} />
             <ModalDiscardAnimal motherId={motherId} breedingId={breedingId} />
+            <ModalSetPregnant motherId={motherId} breedingId={breedingId} />
           </div>
         </Modal>
       )}

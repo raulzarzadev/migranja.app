@@ -15,8 +15,11 @@ const ModalAnimalDetails = ({
   animalId?: AnimalType['id']
 }) => {
   const [openAnimalDetails, setOpenAnimalDetails] = useState(false)
-  const [animal, setAnimal] = useState<AnimalType | undefined>(undefined)
   const farmAnimals = useSelector(selectFarmAnimals)
+  const animalInfo = farmAnimals.find(
+    (a) => a.id === animalId || a.earring === earring
+  )
+  const [animal, setAnimal] = useState<AnimalType | undefined>(animalInfo)
 
   const handleOpenAnimalDetails = () => {
     setOpenAnimalDetails(!openAnimalDetails)
@@ -45,7 +48,7 @@ const ModalAnimalDetails = ({
           handleOpenAnimalDetails()
         }}
       >
-        {earring}
+        {animalInfo?.earring || earring}
       </span>
       {openAnimalDetails && (
         <Modal
