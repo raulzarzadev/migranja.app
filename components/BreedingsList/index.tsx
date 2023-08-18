@@ -94,11 +94,12 @@ const BreedingsList = () => {
       event?.eventData?.breedingBatch?.map((animal) => animal)
     )
     setBreedingsByAnimals(
-      asAnimals.flat().filter((animal) => animal?.status === 'PENDING')
+      asAnimals.flat()
+      //.filter((animal) => ['PREGNANT', 'PENDING'].includes(animal?.status))
     )
     const pendingBirthsInBreeding = formattedBreeding?.filter((event) =>
-      event?.eventData?.breedingBatch?.find(
-        (animal) => animal?.status === 'PENDING'
+      event?.eventData?.breedingBatch?.find((animal) =>
+        ['PREGNANT', 'PENDING'].includes(animal.status)
       )
     )
     // @ts-ignore
@@ -107,8 +108,8 @@ const BreedingsList = () => {
     setFinishedBreedings(
       formattedBreeding.filter(
         (event) =>
-          !event?.eventData?.breedingBatch?.find(
-            (animal) => animal.status === 'PENDING'
+          !event?.eventData?.breedingBatch?.find((animal) =>
+            ['PREGNANT', 'PENDING'].includes(animal.status)
           )
       )
     )
@@ -119,6 +120,9 @@ const BreedingsList = () => {
   )
 
   const [batchesFiltered, setBreedingFilter] = useState<any[]>([])
+  const [finishedBreedingsFiltered, setFinishedBreedingsFilter] = useState<
+    any[]
+  >([])
   const [finishedBreedings, setFinishedBreedings] = useState<any[]>([])
   useEffect(() => {
     const animalsFiltered = [...breedingsByAnimals].filter(
@@ -146,8 +150,24 @@ const BreedingsList = () => {
         )
     )
 
+    const finishedFiltered = [...finishedBreedings].filter(
+      (batch) =>
+        // filter  by bull
+        filterField(
+          batch.eventData.breedingMale?.earring || '',
+          search.value
+        ) ||
+        // filter by animal in batch
+        batch.eventData.breedingBatch.find((animal) =>
+          animal.earring
+            ?.toLocaleUpperCase()
+            ?.includes(search.value.toLocaleUpperCase())
+        )
+    )
+
     setAnimalsFilter(animalsFiltered)
     setBreedingFilter(batchesFiltered)
+    setFinishedBreedingsFilter(finishedFiltered)
   }, [breedingsByAnimals, breedingsByBatch, farmEvents, search.value])
 
   return (
@@ -195,7 +215,7 @@ const BreedingsList = () => {
         <BreedingsByBatches breedings={batchesFiltered} />
       )}
       {view === 'finish' && (
-        <BreedingsByBatches breedings={finishedBreedings} />
+        <BreedingsByBatches breedings={finishedBreedingsFiltered} />
       )}
     </div>
   )
