@@ -158,7 +158,7 @@ const BreedingsList = () => {
           search.value
         ) ||
         // filter by animal in batch
-        batch.eventData.breedingBatch.find((animal) =>
+        batch.eventData.breedingBatch.find((animal: { earring: string }) =>
           animal.earring
             ?.toLocaleUpperCase()
             ?.includes(search.value.toLocaleUpperCase())
@@ -168,7 +168,13 @@ const BreedingsList = () => {
     setAnimalsFilter(animalsFiltered)
     setBreedingFilter(batchesFiltered)
     setFinishedBreedingsFilter(finishedFiltered)
-  }, [breedingsByAnimals, breedingsByBatch, farmEvents, search.value])
+  }, [
+    breedingsByAnimals,
+    breedingsByBatch,
+    farmEvents,
+    finishedBreedings,
+    search.value
+  ])
 
   return (
     <div className="w-full">

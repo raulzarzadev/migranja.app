@@ -24,7 +24,6 @@ const AnimalBreedingCardSmall = ({
   breedingId: EventType['id']
 }) => {
   const { event: breeding } = useEvent({ eventId: breedingId })
-  const { animal } = useAnimal({ animalId })
   const breedingAnimal = breeding?.eventData.breedingBatch.find(
     (a) => a.id === animalId
   )
@@ -32,7 +31,6 @@ const AnimalBreedingCardSmall = ({
     finishAt: Number(breeding?.eventData.finishAt),
     startAt: Number(breeding?.eventData.startAt)
   })
-  console.log(breeding)
   const modal = useModal()
   return (
     <section
