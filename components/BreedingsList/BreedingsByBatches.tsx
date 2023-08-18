@@ -62,19 +62,25 @@ export const BreedingCard = ({
   const atLeastOnePending = breeding.eventData.breedingBatch
     ?.map((animal) => animal?.status)
     ?.some((status) => status === 'PENDING')
+  const atLeastOneIsPregnant = breeding.eventData.breedingBatch
+    ?.map((animal) => animal?.status)
+    ?.some((status) => status === 'PREGNANT')
+  const atLeastOneIsBirth = breeding.eventData.breedingBatch
+    ?.map((animal) => animal?.status)
+    ?.some((status) => status === 'BIRTH')
+  const BirthdayIsPast = Number(breedingDates?.birthFinishInDays) < 0
+
   return (
     <div className="bg-base-200 rounded-md my-1 mt-4">
       <header>
         {/* BADGES */}
         <div className="relative">
           <span className="absolute left-0 -top-2 ">
-            {!atLeastOnePending ? (
-              <IconStatus status="success" />
-            ) : (
-              <IconBreedingStatus
-                startInDays={breedingDates?.birthStartInDays as number}
-                finishInDays={breedingDates?.birthFinishInDays as number}
-              />
+            {atLeastOneIsBirth && <IconStatus status="success" />}
+            {atLeastOnePending && <IconStatus status="info" />}
+            {atLeastOneIsPregnant && <IconStatus status="warning" />}
+            {BirthdayIsPast && atLeastOnePending && (
+              <IconStatus status="error" />
             )}
           </span>
           <span className="absolute right-0 -top-2">
