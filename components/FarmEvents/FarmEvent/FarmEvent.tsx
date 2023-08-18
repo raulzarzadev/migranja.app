@@ -68,6 +68,10 @@ export const detailsOptions = ({ event }: { event: FarmStateAnimalEvent }) => {
       WEANING_DONE: {
         label: 'Destete hecho ',
         Component: <span>Destete hecho</span>
+      },
+      PREGNANT: {
+        label: 'Gestante ',
+        Component: <span>Gestante</span>
       }
     }
   return DETAILS_OPTIONS[event.type || 'NULL']
