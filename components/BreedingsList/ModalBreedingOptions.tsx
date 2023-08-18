@@ -61,7 +61,7 @@ const ModalBreedingOptions = ({
   return (
     <div>
       <button
-        className="btn btn-circle btn-xs btn-warning"
+        className="btn btn-circle btn-xs "
         onClick={(e) => {
           e.preventDefault()
           handleOpenOptions()
