@@ -359,7 +359,7 @@ const AddEarringTo = ({ breeding }: { breeding: BreedingEventCardDetails }) => {
             {breeding?.eventData?.breedingBatch?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
-                animal={{ ...animal, eventData: breeding.eventData }}
+                animalId={animal.id || ''}
                 //hiddenEvents={hiddenBirths}
                 breedingId={breeding.id}
               />

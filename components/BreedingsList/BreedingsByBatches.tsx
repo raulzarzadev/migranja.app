@@ -137,8 +137,7 @@ const BreedingDatesInfo = ({
 export interface BreedingCardBody extends BreedingFormatted {}
 
 const BreedingCardBody = ({
-  breeding,
-  hiddenBirths
+  breeding
 }: {
   breeding: BreedingEventCardDetails
   hiddenBirths?: boolean
@@ -254,13 +253,12 @@ const BreedingCardBody = ({
         </span>
       </div>
       <div className="bg-base-100 p-1   pt-1 rounded-md">
-        <div className="">
+        <div className="grid gap-2">
           {view === 'ALL' &&
             animals?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
-                animal={animal}
-                hiddenEvents={hiddenBirths}
+                animalId={animal.id || ''}
                 breedingId={breeding.id}
               />
             ))}
@@ -268,8 +266,7 @@ const BreedingCardBody = ({
             pendingAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
-                animal={animal}
-                hiddenEvents={hiddenBirths}
+                animalId={animal.id || ''}
                 breedingId={breeding.id}
               />
             ))}
@@ -277,8 +274,7 @@ const BreedingCardBody = ({
             abortAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
-                animal={animal}
-                hiddenEvents={hiddenBirths}
+                animalId={animal.id || ''}
                 breedingId={breeding.id}
               />
             ))}
@@ -286,8 +282,7 @@ const BreedingCardBody = ({
             birthAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
-                animal={animal}
-                hiddenEvents={hiddenBirths}
+                animalId={animal.id || ''}
                 breedingId={breeding.id}
               />
             ))}
@@ -295,8 +290,7 @@ const BreedingCardBody = ({
             emptyAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
-                animal={animal}
-                hiddenEvents={hiddenBirths}
+                animalId={animal.id || ''}
                 breedingId={breeding.id}
               />
             ))}
@@ -304,8 +298,7 @@ const BreedingCardBody = ({
             pregnantAnimals?.map((animal, i) => (
               <AnimalBreedingCardSmall
                 key={i}
-                animal={animal}
-                hiddenEvents={hiddenBirths}
+                animalId={animal.id || ''}
                 breedingId={breeding.id}
               />
             ))}

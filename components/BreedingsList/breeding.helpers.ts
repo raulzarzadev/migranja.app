@@ -64,10 +64,14 @@ export const calculatePossibleBirthStartAndFinish = ({
   finishAt,
   otherMales
 }: {
-  startAt: number | Date
-  finishAt: number | Date
+  startAt?: number | Date
+  finishAt?: number | Date
   otherMales?: any[]
-}): BreedingDatesType => {
+}): BreedingDatesType | undefined => {
+  if (!startAt || !finishAt) {
+    console.error('finishAt or startAt breeding dates are not defined')
+    return undefined
+  }
   let _finishAt = finishAt
 
   //* Determinate if other males exist in breeding and define possible birth dates in that
