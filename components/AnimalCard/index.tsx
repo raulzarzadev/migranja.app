@@ -203,7 +203,7 @@ export const AnimalDetails = ({
                 <span>{genderLabel?.[gender || 'male']?.label}</span>
               </div>
               <div>
-                <span>Parto: </span>
+                <span>Hermanos: </span>
                 <span>{birthType ?? 0}</span>
               </div>
             </div>
