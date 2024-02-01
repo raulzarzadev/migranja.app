@@ -31,7 +31,16 @@ const AnimalBreedingCardSmall = ({
     finishAt: Number(breeding?.eventData.finishAt),
     startAt: Number(breeding?.eventData.startAt)
   })
+
+  const { animal } = useAnimal({ animalId })
   const modal = useModal()
+
+  if (breedingAnimal?.earring === '236') {
+    console.log({ animal })
+    console.log({ breedingAnimal })
+  }
+
+  const isDead = animal?.status === 'DEAD'
   return (
     <section
       onClick={(e) => {
@@ -40,25 +49,39 @@ const AnimalBreedingCardSmall = ({
       className="grid grid-cols-2 place-content-center  w-full bg-base-200 rounded-md p-2 "
     >
       <Modal {...modal} title="Opciones de monta">
-        <AnimalBreedingOptions breedingId={breedingId} motherId={animalId} />
+        <AnimalBreedingOptions
+          breedingId={breedingId}
+          motherId={animalId}
+          isDead={isDead}
+        />
       </Modal>
       <div>
         Arete:
         <ModalAnimalDetails animalId={animalId} />
       </div>
       <div className="flex items-center">
-        {breedingAnimal?.status === 'BIRTH' && <IconStatus status="success" />}
-        {breedingAnimal?.status === 'PENDING' && (
-          <IconBreedingStatus
-            finishInDays={breedingDates?.birthFinishInDays}
-            startInDays={breedingDates?.birthStartInDays}
-          />
-        )}
-        {breedingAnimal?.status === 'PREGNANT' && (
-          <IconStatus status="warning" />
+        {isDead ? (
+          <IconStatus status="error" />
+        ) : (
+          <>
+            {breedingAnimal?.status === 'BIRTH' && (
+              <IconStatus status="success" />
+            )}
+            {breedingAnimal?.status === 'PENDING' && (
+              <IconBreedingStatus
+                finishInDays={breedingDates?.birthFinishInDays}
+                startInDays={breedingDates?.birthStartInDays}
+              />
+            )}
+            {breedingAnimal?.status === 'PREGNANT' && (
+              <IconStatus status="warning" />
+            )}
+          </>
         )}
         <span className="ml-2">
-          {AnimalState[breedingAnimal?.status || 'PENDING']}
+          {isDead
+            ? AnimalState.DEAD
+            : AnimalState[breedingAnimal?.status || 'PENDING']}
         </span>
       </div>
     </section>

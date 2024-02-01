@@ -55,7 +55,9 @@ const DropOutForm = ({
       for (let i = 0; i < animals.length; i++) {
         const element = animals[i]
         await updateAnimal(element.id, {
-          state: 'DEAD'
+          state: 'DEAD',
+          currentStatus: 'DEAD',
+          status: 'DEAD'
         })
       }
       setAnimals?.([])

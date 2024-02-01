@@ -9,14 +9,17 @@ import ModalBirthDetails from '../ModalBirthDetails'
 import useEvent from '@comps/hooks/useEvent'
 import BirthDetails from '@comps/BirthDetails'
 import ModalRevertBirth from '../ModalRevertBirth'
+import { is } from 'date-fns/locale'
 
 const AnimalBreedingOptions = ({
   breedingId,
-  motherId
+  motherId,
+  isDead
 }: {
   motherId: AnimalType['id']
   breedingId: EventType['id']
   children?: ReactNode
+  isDead?: boolean
 }) => {
   const { event } = useEvent({ eventId: breedingId })
   const animalEvent = event?.eventData.breedingBatch.find(
@@ -24,7 +27,9 @@ const AnimalBreedingOptions = ({
   )
 
   const birthId = animalEvent?.birthEventData?.birthEventId
-
+  if (isDead) {
+    return <ModalDiscardAnimal motherId={motherId} breedingId={breedingId} />
+  }
   if (animalEvent?.status === 'BIRTH')
     return (
       <div>
