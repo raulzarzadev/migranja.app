@@ -40,7 +40,7 @@ const AnimalBreedingCardSmall = ({
     console.log({ breedingAnimal })
   }
 
-  const isDead = animal?.status === 'DEAD'
+  const isDead = animal?.state === 'DEAD'
   return (
     <section
       onClick={(e) => {

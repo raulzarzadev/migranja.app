@@ -14,6 +14,7 @@ import BreedingDetails from '@comps/BreedingDetails'
 import WeaningDetails from '@comps/WeaningDetails'
 import ModalAnimalDetails from '@comps/modal/ModalAnimalDetails'
 import { AnimalType } from 'types/base/AnimalType.model'
+import CardEventDropOut from '@comps/CardEventDropOut'
 
 export const EventsList = ({
   events,
@@ -24,6 +25,7 @@ export const EventsList = ({
 }) => {
   const modal = useModal()
   const [event, setEvent] = useState<FarmEvent | null>(null)
+  console.log({ event })
   return (
     <div role="events-list">
       <MyTable
@@ -110,6 +112,7 @@ export const EventsList = ({
           labelsOfFarmEventTypes[event?.type as TypeOfFarmEvent]
         }`}
       >
+        {event?.type === 'DROP_OUT' && <CardEventDropOut eventId={event.id} />}
         {event?.type === 'BIRTH' && <BirthDetails birthId={event.id} />}
         {event?.type === 'BREEDING' && (
           <BreedingDetails breedingId={event?.id} />

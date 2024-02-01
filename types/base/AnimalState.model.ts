@@ -7,6 +7,7 @@ export const AnimalState = {
   LACTATING: 'Lactante', //* lactante recien nacidas
   SUCKLE: 'Lactando', //* amamantando lactando recien paridas
   FOR_SALE: 'En venta',
+  DROP_OUT: 'Baja',
   SICK: 'Enfermo',
   STOLEN: 'Robado',
   MISSED: 'Perdido',
