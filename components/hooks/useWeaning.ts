@@ -102,6 +102,7 @@ const useWeaning = () => {
       }
 
       //* - Update animal weight
+      //@ts-ignore
       await updateAnimal(_animal?.id || '', { 'weight.atWeaning': weight })
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
