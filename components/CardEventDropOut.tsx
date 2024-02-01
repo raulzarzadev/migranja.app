@@ -4,6 +4,7 @@ import { Button } from '@mui/material'
 import useAnimal from './hooks/useAnimal'
 import { updateAnimal } from '@firebase/Animal/main'
 import { deleteEvent } from '@firebase/Events/main'
+import { AnimalType } from 'types/base/AnimalType.model'
 
 const CardEventDropOut = ({ eventId }: { eventId: string }) => {
   const { event } = useEvent({ eventId })
@@ -14,7 +15,7 @@ const CardEventDropOut = ({ eventId }: { eventId: string }) => {
   return (
     <div>
       <h1>Baja</h1>
-      {event?.eventData.animals.map((animal) => (
+      {event?.eventData?.animals?.map((animal: AnimalType) => (
         <AnimalEventRow
           key={animal.id}
           animalId={animal.id}
