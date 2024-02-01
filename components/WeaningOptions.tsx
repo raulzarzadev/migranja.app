@@ -2,9 +2,10 @@ import { AnimalType } from 'types/base/AnimalType.model'
 import useWeaning, { WeaningTypes } from './hooks/useWeaning'
 import { FarmEvent } from 'types/base/FarmEvent.model'
 import useProgress from './hooks/useProgress'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ProgressButton from './ProgressButton'
 import ProgressBar from './ProgressBar'
+import { TextField } from '@mui/material'
 
 const WeaningOptions = ({
   animalId,
@@ -21,6 +22,8 @@ const WeaningOptions = ({
     onWeaning: ({ weaningType }: { weaningType: WeaningTypes }) => any
   }
 
+  const [weight, setWeight] = useState(0)
+
   const {
     handleWeaning,
     progress: weaningProgress,
@@ -35,7 +38,7 @@ const WeaningOptions = ({
           handleWeaningAnimals({ animalsIds, weaningType })
         }
         if (!!animalId) {
-          await handleWeaning({ animalId, weaningType })
+          await handleWeaning({ animalId, weaningType, weight })
         }
       }
     },
@@ -47,7 +50,7 @@ const WeaningOptions = ({
           handleWeaningAnimals({ animalsIds, weaningType })
         }
         if (!!animalId) {
-          await handleWeaning({ animalId, weaningType })
+          await handleWeaning({ animalId, weaningType, weight })
         }
       }
     },
@@ -59,14 +62,30 @@ const WeaningOptions = ({
           handleWeaningAnimals({ animalsIds, weaningType })
         }
         if (!!animalId) {
-          await handleWeaning({ animalId, weaningType })
+          await handleWeaning({ animalId, weaningType, weight })
         }
       }
     }
   }
+
   return (
     <div>
       <ProgressBar progress={weaningProgress} />
+      <div>
+        {!animalsIds.length ? (
+          <TextField
+            placeholder="Peso"
+            onChange={(e) => {
+              setWeight(Number(e.target.value))
+            }}
+          ></TextField>
+        ) : (
+          <p className="max-w-sm mx-auto text-error text-sm">
+            ¡Para agregar el peso, deberas destetar animal por animal en la
+            sección destetes!
+          </p>
+        )}
+      </div>
       <div className="flex flex-col sm:flex-row w-full justify-evenly items-center">
         {Object.entries(options).map(([type, describe]) => (
           <ButtonOption

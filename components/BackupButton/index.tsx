@@ -52,16 +52,22 @@ const BackupButton = () => {
           deleteFarmData: true,
           newFarmData: { id: currantFarm?.id, name: currantFarm?.name },
           deleteId: true
-        }).then((res) => {
-          // console.log(res)
-          setLoading(false)
-          if (res.ok) {
-            setDone(true)
-          } else {
-            setDone(false)
-            setError(true)
-          }
         })
+          .then((res) => {
+            // console.log(res)
+            setLoading(false)
+            if (res.ok) {
+              setDone(true)
+            } else {
+              setDone(false)
+              setError(true)
+            }
+          })
+          .catch((err) => {
+            console.error(err)
+            setLoading(false)
+            setError(true)
+          })
       }
     }
   }

@@ -1,4 +1,4 @@
-import { updateAnimalState } from '@firebase/Animal/main'
+import { updateAnimal, updateAnimalState } from '@firebase/Animal/main'
 import { useState } from 'react'
 import { AnimalType } from 'types/base/AnimalType.model'
 import useAnimal from './useAnimal'
@@ -50,11 +50,13 @@ const useWeaning = () => {
   const handleWeaning = async ({
     animalId,
     eventId,
-    weaningType
+    weaningType,
+    weight = null
   }: {
     animalId?: AnimalType['id']
     eventId?: FarmEvent['id']
     weaningType: WeaningTypes
+    weight?: number | null
   }) => {
     setProgress(10)
     //* Search event and animal, if do not exist any search in other
@@ -98,6 +100,11 @@ const useWeaning = () => {
       if (_animal?.state === 'LACTATING') {
         await updateAnimalState(_animal.id, weaningType, _animal.state)
       }
+
+      //* - Update animal weight
+      await updateAnimal(_animal?.id || '', { 'weight.atWeaning': weight })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
 
       //* - Update mother state SUCKLE to FREE
       const motherId = _animal?.parents?.mother?.id

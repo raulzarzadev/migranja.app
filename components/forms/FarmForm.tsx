@@ -28,7 +28,8 @@ const FarmForm = ({
   const defaultValues = farm || {
     haveATeam: false,
     isPublic: false,
-    name: 'Nueva granja'
+    name: 'Nueva granja',
+    healthRecordActive: false
   }
   const methods = useForm({ defaultValues })
   const { handleSubmit, setValue } = methods
