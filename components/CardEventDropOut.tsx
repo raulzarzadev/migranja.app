@@ -45,7 +45,7 @@ const AnimalEventRow = ({
           console.log('Revertir baja')
           updateAnimal(animalId, {
             pastState: 'DROP_OUT',
-            state: 'BREEDING'
+            state: animal?.pastState || 'ACTIVE'
           })
             .then((res) => {
               console.log(res)
