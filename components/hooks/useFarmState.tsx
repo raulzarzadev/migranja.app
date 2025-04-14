@@ -46,6 +46,7 @@ const useFarmState = () => {
       })
       listenFarmEvents(farmId as string, (res: any[]) => {
         console.info('ask events')
+
         dispatch(setFarmEvents(res))
       })
     }

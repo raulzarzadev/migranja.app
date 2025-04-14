@@ -188,10 +188,7 @@ export const listenFarmEvents = async (
   cb: CallableFunction,
   options?: ListenFarmEventsOptions
 ) => {
-  eventsCRUD.listenItems(
-    [where('farm.id', '==', farmId), limit(options?.limit || 999)],
-    cb
-  )
+  eventsCRUD.listenItems([where('farm.id', '==', farmId)], cb)
 }
 
 export const addAnimalToBreedingBatchEvent = async (

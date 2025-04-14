@@ -25,6 +25,8 @@ import AnimalCard from 'components/AnimalCard'
 import AnimalsTableFilter from '@comps/Filters/AnimalsTableFilter'
 import { AnimalState } from 'types/base/AnimalState.model'
 import useDebugInformation from '@comps/hooks/useDebugInformation'
+import { selectFarmEvents } from 'store/slices/farmSlice'
+import { useSelector } from 'react-redux'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -114,10 +116,7 @@ const AnimalsTable = ({
         </div>
       )
     }),
-    // columnHelper.accessor('currentStatus', {
-    //   header: 'Status',
-    //   cell: (props) => <span>{props.getValue() ? props.getValue() : '-'}</span>
-    // }),
+
     columnHelper.accessor('state', {
       header: 'Estado',
       cell: (props) => (
@@ -126,8 +125,27 @@ const AnimalsTable = ({
           {!!props.getValue() ? AnimalState[props.getValue()] : '-'}
         </span>
       )
+    }),
+    columnHelper.accessor('events', {
+      header: 'Partos',
+      cell: (props) => {
+        const events = props.getValue() as any[]
+        const births = events.filter((e) => e.type === 'BIRTH')
+        if (!births) return '0'
+        if (births?.length === 0) return '0'
+        return (
+          <div className="flex flex-col">
+            {births.map((birth: any, i: number) => (
+              <span key={i} className="text-xs">
+                {birth?.earring}
+              </span>
+            ))}
+          </div>
+        )
+      }
     })
   ]
+  console.log({ animals })
 
   const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     // Rank the item
@@ -186,20 +204,6 @@ const AnimalsTable = ({
     )
   }
 
-  // useEffect(() => {
-  //   let rows: Record<number, boolean> = {}
-  //   selectedRows?.forEach((earring) => {
-  //     const index = animalsData.findIndex(
-  //       (animal) => animal.earring === earring
-  //     )
-  //     rows[index] = true
-  //   })
-  //   setRowSelection(rows)
-  //   return () => {
-  //     setRowSelection([])
-  //   }
-  // }, [animalsData, selectedRows])
-
   useEffect(() => {
     let rows: string[] = []
     setSelectedRows?.(rows)
@@ -220,7 +224,6 @@ const AnimalsTable = ({
   }, [rowSelection])
 
   const [globalFilter, setGlobalFilter] = useState('')
-
   const table = useReactTable({
     data: [...animals] as any,
     columns: [...extraCols, ...columns],
@@ -308,8 +311,8 @@ const AnimalsTable = ({
         )}
         <table className="mx-aut table table-compact mx-auto w-full  ">
           <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
+            {table.getHeaderGroups().map((headerGroup, i) => (
+              <tr key={`${headerGroup.id}-${i}`}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
@@ -338,7 +341,7 @@ const AnimalsTable = ({
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => {
+            {table?.getRowModel()?.rows?.map((row, i) => {
               const relationshipGrade = row.original?.relationship?.grade
               const itemEarring = row.original.earring
               const itemId = row.original.id
@@ -352,7 +355,7 @@ const AnimalsTable = ({
 
               return (
                 <tr
-                  key={row.id}
+                  key={`${row.id}-${i}`}
                   className={`border-2 border-transparent hover cursor-pointer `}
                   onClick={(e) => {
                     e.preventDefault()
