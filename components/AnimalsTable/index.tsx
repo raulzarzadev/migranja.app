@@ -12,7 +12,7 @@ import {
 import GENDER_OPTIONS from 'components/CONSTANTS/GENDER_OPTIONS'
 import Icon from 'components/Icon'
 import { SetStateAction, useEffect, useState } from 'react'
-import { fromNow } from 'utils/dates/myDateUtils'
+import { fromNow, myFormatDate } from 'utils/dates/myDateUtils'
 import { AnimalType } from '../../firebase/types.model.ts/AnimalType.model'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import ParentModal from 'components/ParentModal/index'
@@ -27,6 +27,8 @@ import { AnimalState } from 'types/base/AnimalState.model'
 import useDebugInformation from '@comps/hooks/useDebugInformation'
 import { selectFarmEvents } from 'store/slices/farmSlice'
 import { useSelector } from 'react-redux'
+import { EventType } from '@firebase/Events/event.model'
+import { EventData } from 'types/base/FarmEvent.model'
 export interface RowSelectedType {
   id?: string
   earring?: string
@@ -126,26 +128,57 @@ const AnimalsTable = ({
         </span>
       )
     }),
-    columnHelper.accessor('events', {
-      header: 'Partos',
+    columnHelper.accessor('births', {
+      header: 'Partos/Hijos/Vivos',
       cell: (props) => {
-        const events = props.getValue() as any[]
-        const births = events.filter((e) => e.type === 'BIRTH')
+        const births = props.getValue() as EventType &
+          { eventData: EventData }[]
         if (!births) return '0'
         if (births?.length === 0) return '0'
+        const calfs = births.map((b) => b.eventData.calfs || []).flat()
+        const birthAlive = calfs.filter(
+          (c) => c.state === 'LACTATING' || c.state === 'ACTIVE'
+        )
+
+        return (
+          <div className="flex justify-evenly">
+            <div>{births.length}</div> <div>{calfs.length}</div>{' '}
+            <div>{birthAlive.length}</div>
+          </div>
+        )
+      }
+    }),
+    // columnHelper.accessor('lastBirth', {
+    //   header: 'Ultimo parto',
+    //   cell: (props) => {
+    //     const lastBirth = props.getValue() as EventType & {
+    //       eventData: EventData
+    //     }
+    //     if (!lastBirth) return '-'
+    //     const lastBirthDate = new Date(lastBirth.eventData.date)
+    //     const date = myFormatDate(lastBirthDate, 'dd/MM/yyyy')
+    //     const time = fromNow(lastBirthDate, { unit: 'day', addSuffix: true })
+    //     return (
+    //       <div className="flex flex-col">
+    //         <p>{date}</p>
+    //         <p className="text-xs italic">{time}</p>
+    //       </div>
+    //     )
+    //   }
+    // })
+    columnHelper.accessor('lastBirthAgo', {
+      header: 'Ultimo parto',
+      cell: (props) => {
+        const lastBirthAgo = props.getValue() as string
+        if (lastBirthAgo === '') return '-'
         return (
           <div className="flex flex-col">
-            {births.map((birth: any, i: number) => (
-              <span key={i} className="text-xs">
-                {birth?.earring}
-              </span>
-            ))}
+            <p>Hace {lastBirthAgo} días</p>
           </div>
         )
       }
     })
   ]
-  console.log({ animals })
 
   const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     // Rank the item

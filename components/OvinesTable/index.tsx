@@ -11,17 +11,27 @@ const OvinesTable = () => {
   const events = useSelector(selectFarmEvents)
   const formattedAnimalsWithBirths = farmAnimals.map((animal) => {
     const animalEvents = events.filter(
-      (e) => e.eventData.earring === animal.earring
+      (e) =>
+        e.eventData.earring === animal.earring ||
+        e.eventData?.parents?.father?.earring === animal.earring ||
+        e.eventData?.parents?.mother?.earring === animal.earring
     )
+    animal.earring === '241' && console.log({ animalEvents })
+    const births = animalEvents.filter((e) => e.type === 'BIRTH')
+    const lastBirth = births.sort(
+      (a, b) =>
+        new Date(b?.eventData.date).getTime() -
+        new Date(a?.eventData.date).getTime()
+    )[0]
+    const lastBirthAgo = getDaysFromNow(lastBirth?.eventData.date)
     return {
       ...animal,
-      events: animalEvents
+      births,
+      lastBirth,
+      lastBirthAgo
     }
   })
-  console.log(
-    '241 events',
-    events.filter((e) => e.eventData.earring === '241')
-  )
+
   const [selectedRows, setSelectedRows] = useState<string[] | null>(null)
   return (
     <>
@@ -52,3 +62,12 @@ const OvinesTable = () => {
 }
 
 export default OvinesTable
+export function getDaysFromNow(dateString: string | number | Date): string {
+  if (!dateString) {
+    return ''
+  }
+  const now = new Date()
+  const targetDate = new Date(dateString)
+  const diffInMs = now.getTime() - targetDate.getTime()
+  return `${Math.floor(diffInMs / (1000 * 60 * 60 * 24))}`
+}

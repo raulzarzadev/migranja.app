@@ -19,7 +19,9 @@ export const animalsBetweenDays = (
 ) =>
   animals.filter(({ birthday }) => {
     return (
+      //@ts-ignore FIXME: have no idea why this is not working
       birthday < subDays(new Date(), startAt).getTime() &&
+      //@ts-ignore FIXME: have no idea why this is not working
       birthday > subDays(new Date(), endAt).getTime()
     )
   })
