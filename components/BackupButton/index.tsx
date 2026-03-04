@@ -95,6 +95,26 @@ const BackupButton = () => {
       </div>
       <Modal open={openBackup} handleOpen={handleOpenBackup} title="Respaldos">
         <div className=" text-center">
+          {farmAnimals.length > 0 && (
+            <div className="text-left mb-4 p-3 border border-base-300 rounded-lg">
+              <p className="font-bold mb-2">Resumen del respaldo:</p>
+              <ul className="text-sm space-y-1 list-disc list-inside">
+                <li>Total de animales: {farmAnimals.length}</li>
+                <li>
+                  Machos:{' '}
+                  {farmAnimals.filter((a) => a.gender === 'male').length} /
+                  Hembras:{' '}
+                  {farmAnimals.filter((a) => a.gender === 'female').length}
+                </li>
+                <li>
+                  Ovinos:{' '}
+                  {farmAnimals.filter((a) => a.type === 'ovine').length}
+                  {farmAnimals.some((a) => a.type === 'bovine') &&
+                    ` / Bovinos: ${farmAnimals.filter((a) => a.type === 'bovine').length}`}
+                </li>
+              </ul>
+            </div>
+          )}
           <button
             className="btn btn-outline m-2 "
             onClick={(e) => {
