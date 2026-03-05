@@ -38,6 +38,7 @@ const BACKUP_SCHEMA = {
         at6Month: 'number | null (kg)',
         at12Month: 'number | null (kg)'
       },
+      isStallion: 'boolean | undefined (true si es semental)',
       state:
         "'FREE' | 'PREGNANT' | 'BREEDING' | 'FOR_BELLY' | 'FATTEN' | 'LACTATING' | 'SUCKLE' | 'FOR_SALE' | 'DROP_OUT' | 'SICK' | 'STOLEN' | 'MISSED' | 'SOLD' | 'DEAD' | 'LOST'",
       images: '[{ url, name }]',
@@ -50,7 +51,8 @@ const BACKUP_SCHEMA = {
       type: "'BREEDING' | 'BIRTH' | 'ABORT' | 'EMPTY' | 'WEANING' | 'SELL' | 'DROP_OUT' | 'DROP_IN'",
       status: "'PENDING' | 'DONE' | 'CANCELLED' | 'PAST'",
       farm: '{ id, name }',
-      eventData: 'object (varía según el tipo de evento)',
+      eventData:
+        "object (varía según el tipo de evento). BREEDING: { breedingId, breedingMale, breedingBatch, startAt, finishAt, otherMales }. BIRTH: { date, parents, calfs, breedingId }",
       createdAt: 'number (timestamp)',
       updatedAt: 'number (timestamp)'
     },
@@ -183,9 +185,13 @@ const BackupButton = () => {
               <li>
                 Animales: {farmAnimals.length}
                 {farmAnimals.length > 0 &&
-                  ` (${farmAnimals.filter((a) => a.gender === 'male').length} machos, ${farmAnimals.filter((a) => a.gender === 'female').length} hembras)`}
+                  ` (${farmAnimals.filter((a) => a.gender === 'male').length} machos, ${farmAnimals.filter((a) => a.gender === 'female').length} hembras, ${farmAnimals.filter((a) => a.isStallion).length} sementales)`}
               </li>
-              <li>Eventos: {farmEvents.length}</li>
+              <li>
+                Eventos: {farmEvents.length}
+                {farmEvents.length > 0 &&
+                  ` (${farmEvents.filter((e) => e.type === 'BREEDING').length} montas, ${farmEvents.filter((e) => e.type === 'BIRTH').length} partos)`}
+              </li>
               <li>Inventarios: {inventories.length}</li>
               <li>Configuración de granja: {currantFarm?.name || 'N/A'}</li>
             </ul>

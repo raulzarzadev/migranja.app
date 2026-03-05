@@ -91,7 +91,9 @@ export const BreedingCard = ({
         <div className="grid text-center text-xs">
           <span className="font-bold">
             <span className="font-normal">Monta:</span>{' '}
-            {breeding.eventData?.breedingId}
+            {breeding.eventData?.breedingId || (
+              <span className="badge badge-sm badge-ghost">Sin ID</span>
+            )}
           </span>
           <span>
             Creada:{' '}

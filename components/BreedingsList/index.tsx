@@ -187,7 +187,11 @@ const BreedingsList = () => {
         />
         <div className="whitespace-nowrap ml-1">
           Encontrados{' '}
-          {view === 'animals' ? animalsFiltered.length : batchesFiltered.length}
+          {view === 'animals'
+            ? animalsFiltered.length
+            : view === 'finish'
+              ? finishedBreedingsFiltered.length
+              : batchesFiltered.length}
         </div>
       </div>
       <div className="flex justify-evenly w-full my-4">
@@ -198,6 +202,7 @@ const BreedingsList = () => {
           onClick={() => setView('breeding')}
         >
           Por Montas
+          <span className="badge badge-sm">{batchesFiltered.length}</span>
         </button>
         <button
           className={`btn btn-sm btn-outline ${
@@ -206,6 +211,7 @@ const BreedingsList = () => {
           onClick={() => setView('animals')}
         >
           Por Animales
+          <span className="badge badge-sm">{animalsFiltered.length}</span>
         </button>
         <button
           className={`btn btn-sm btn-outline ${
@@ -214,6 +220,9 @@ const BreedingsList = () => {
           onClick={() => setView('finish')}
         >
           Terminadas
+          <span className="badge badge-sm">
+            {finishedBreedingsFiltered.length}
+          </span>
         </button>
       </div>
       {view === 'animals' && <BreedingsByAnimals animals={animalsFiltered} />}

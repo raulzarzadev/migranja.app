@@ -58,6 +58,14 @@ const BreedingForm = () => {
   const [sheepSelected, setSheepSelected] = useState<string[] | null>([])
   const { progress, setProgress } = useProgress()
 
+  const generateBreedingId = (startDate: string) => {
+    if (!startDate) return ''
+    const date = new Date(startDate)
+    const formatted = myFormatDate(date, 'dd-MMM-yy')
+    const suffix = Math.floor(Math.random() * 100)
+    return `${formatted}-${suffix}`
+  }
+
   const onSubmit = async (data: any) => {
     setLoading(true)
     setProgress(10)
@@ -73,6 +81,7 @@ const BreedingForm = () => {
       })
     const breedingMale: AnimalType | null =
       males?.find(({ earring }) => earring === data.breedingMale) || null
+    const breedingId = data.batch || generateBreedingId(data.startAt)
     try {
       setProgress(20)
       // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * Edit breadingBatch animals state
@@ -88,7 +97,7 @@ const BreedingForm = () => {
       const res = await createGenericBreedingEvent<BreedingDetailsEvent>({
         eventData: {
           breedingBatch: breedingBatch,
-          breedingId: data.batch,
+          breedingId: breedingId,
           breedingMale: {
             id: breedingMale?.id,
             earring: breedingMale?.earring,

@@ -69,7 +69,15 @@ const AnimalsTable = ({
 
   const columns = [
     columnHelper.accessor('earring', {
-      header: 'Arete'
+      header: 'Arete',
+      cell: (props) => (
+        <div className="flex items-center gap-1">
+          <span>{props.getValue()}</span>
+          {props.row.original.isStallion && (
+            <span className="badge badge-xs badge-primary">S</span>
+          )}
+        </div>
+      )
     }),
     columnHelper.accessor('batch', {
       header: 'Lote'
@@ -121,12 +129,23 @@ const AnimalsTable = ({
 
     columnHelper.accessor('state', {
       header: 'Estado',
-      cell: (props) => (
-        <span className="capitalize">
-          {/* @ts-ignore */}
-          {!!props.getValue() ? AnimalState[props.getValue()] : '-'}
-        </span>
-      )
+      cell: (props) => {
+        const isStallion = props.row.original.isStallion
+        const gender = props.row.original.gender
+        if (isStallion && gender === 'male') {
+          return (
+            <span className="capitalize font-bold text-primary">
+              Reproductiva
+            </span>
+          )
+        }
+        return (
+          <span className="capitalize">
+            {/* @ts-ignore */}
+            {!!props.getValue() ? AnimalState[props.getValue()] : '-'}
+          </span>
+        )
+      }
     }),
     columnHelper.accessor('births', {
       header: 'Partos/Hijos/Vivos',
